@@ -3,6 +3,7 @@
 ### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 Author: [MarkenJaden](https://github.com/MarkenJaden)
+
 Content:
 
 * Unknown creator of [GSAR](https://www.curseforge.com/minecraft/mc-mods/gsar-german-signals-at-rails)
@@ -19,6 +20,9 @@ Adds many different signals in different designs, so far without a consistent re
 ## Usage
 
 **TBA**
+<br>
+<br>
+<br>
 
 ### Legal
 
