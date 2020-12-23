@@ -2,16 +2,18 @@
 
 ### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
-Author: @MarkenJaden
+Author: [MarkenJaden](https://github.com/MarkenJaden)
 
-**Content:**
+Content:
 
 * Unknown creator of [GSAR](https://www.curseforge.com/minecraft/mc-mods/gsar-german-signals-at-rails)
 * Skyman_Luna#2484 (Discord)
 
+<br> 
 
-* Huge thanks to @cam72cam for creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which
-  makes the whole thing possible here
+* Huge thanks to [cam72cam](https://github.com/cam72cam) for
+  creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
+  possible here
 
 Adds many different signals in different designs, so far without a consistent recognizable pattern or organization.
 
