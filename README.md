@@ -15,6 +15,7 @@ Content:
   creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
   possible here
 
+<br>
 Adds many different signals in different designs, so far without a consistent recognizable pattern or organization.
 
 ## Usage
@@ -24,7 +25,7 @@ Adds many different signals in different designs, so far without a consistent re
 <br>
 <br>
 
-### Legal
+## Legal
 
 I am **not** the creator of any 3D models, textures or other assets. All these contents belong to their honorable
 original creators. If the mod contains any content that is unwanted or have any other concerns, please contact me by
