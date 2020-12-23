@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+license="TODO"
+
+[[mods]]
+modId="learnumc"
+version="${file.jarVersion}"
+displayName="Learn UMC"
+
+[[dependencies.learnumc]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.learnumc]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.4]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.learnumc]]
+    modId="universalmodcore"
+    mandatory=true
+    versionRange="[1.0,1.1)"
+    ordering="BEFORE"
+    side="BOTH"
