@@ -66,9 +66,9 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
                 ItemRender.register(LOSItems.ITEM_VR_0_HV_VORSIGNAL, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/vr0_hv_vorsignal.obj"), new Vec3d(0.5, 0, 0.5), 1));
 
-                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get(LOSBlocks.BLOCK_GROUND_VORSIGNAL), new Vec3d(0.5, 0, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listGroundModels.get(LOSBlocks.BLOCK_GROUND_VORSIGNAL_MAST), new Vec3d(0.5, 0, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listGroundModels.get(LOSBlocks.BLOCK_GROUND_VORSIGNAL_KOPF), new Vec3d(0.5, 0, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -1.2, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL_MAST")._1(), new Vec3d(0.5, -1.2, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -1.2, 0.5), 1));
                 break;
         }
     }

@@ -7,7 +7,7 @@ import net.landofrails.landofsignals.tile.TileGround;
 public class BlockGround extends BlockTypeEntity {
 
     private float rot;
-    private BlockGround block;
+    private String block;
 
     public BlockGround(String modID, String name) {
         super(modID, name);
@@ -22,7 +22,8 @@ public class BlockGround extends BlockTypeEntity {
         this.rot = rot;
     }
 
-    public void setBlock(BlockGround block) {
+    public void setBlock(String block) {
         this.block = block;
     }
+    
 }

@@ -6,6 +6,7 @@ import net.landofrails.landofsignals.blocks.BlockSignalLever;
 import net.landofrails.landofsignals.blocks.BlockSignalSO12;
 import net.landofrails.landofsignals.blocks.BlockVr0_Hv_Vorsignal;
 import net.landofrails.landofsignals.utils.Static;
+import scala.Tuple2;
 
 public class LOSBlocks {
     public static final BlockSignalSO12 BLOCK_SIGNAL_SO_12 = new BlockSignalSO12(LandOfSignals.MODID, "BlockSignalSO12");
@@ -25,8 +26,8 @@ public class LOSBlocks {
         // loads static classes and ctrs
 
         //Register in list
-        Static.listGroundModels.put(BLOCK_GROUND_VORSIGNAL, new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/boden/vorsignal_boden.obj"));
-        Static.listGroundModels.put(BLOCK_GROUND_VORSIGNAL_MAST, new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"));
-        Static.listGroundModels.put(BLOCK_GROUND_VORSIGNAL_KOPF, new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"));
+        Static.listGroundModels.put("BLOCK_GROUND_VORSIGNAL", new Tuple2(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/boden/vorsignal_boden.obj"), BLOCK_GROUND_VORSIGNAL));
+        Static.listGroundModels.put("BLOCK_GROUND_VORSIGNAL_MAST", new Tuple2(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"), BLOCK_GROUND_VORSIGNAL_MAST));
+        Static.listGroundModels.put("BLOCK_GROUND_VORSIGNAL_KOPF", new Tuple2(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_GROUND_VORSIGNAL_KOPF));
     }
 }

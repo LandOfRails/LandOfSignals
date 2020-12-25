@@ -11,9 +11,9 @@ public class LOSItems {
     public static final ItemVr0_Hv_Vorsignal ITEM_VR_0_HV_VORSIGNAL = new ItemVr0_Hv_Vorsignal(LandOfSignals.MODID, "ItemVr0_Hv_Vorsignal");
 
     //GroundItems
-    public static final ItemGround ITEM_GROUND_VORSIGNAL = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignal", LOSBlocks.BLOCK_GROUND_VORSIGNAL);
-    public static final ItemGround ITEM_GROUND_VORSIGNAL_MAST = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignalMast", LOSBlocks.BLOCK_GROUND_VORSIGNAL_MAST);
-    public static final ItemGround ITEM_GROUND_VORSIGNAL_KOPF = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignalKopf", LOSBlocks.BLOCK_GROUND_VORSIGNAL_KOPF);
+    public static final ItemGround ITEM_GROUND_VORSIGNAL = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignal", "BLOCK_GROUND_VORSIGNAL");
+    public static final ItemGround ITEM_GROUND_VORSIGNAL_MAST = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignalMast", "BLOCK_GROUND_VORSIGNAL_MAST");
+    public static final ItemGround ITEM_GROUND_VORSIGNAL_KOPF = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignalKopf", "BLOCK_GROUND_VORSIGNAL_KOPF");
 
     //MidItems
 

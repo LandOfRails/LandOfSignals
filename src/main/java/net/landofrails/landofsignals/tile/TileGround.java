@@ -5,23 +5,30 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.landofsignals.blocks.BlockGround;
 
 public class TileGround extends BlockEntity {
     private double fullHeight = 0;
     private double fullWidth = 0;
     private double fullLength = 0;
 
+    @TagField("blockRotation")
     private float blockRotate;
-    private BlockGround block;
+    @TagField("blockName")
+    private String block;
 
     private boolean activated = false;
 
-    public TileGround(float rot, BlockGround block) {
+    public TileGround(float rot, String block) {
         this.blockRotate = rot;
         this.block = block;
+//        try {
+//            save(new TagCompound().setString("blockName", block));
+//        } catch (SerializationException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -31,7 +38,8 @@ public class TileGround extends BlockEntity {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
+//        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -61,7 +69,7 @@ public class TileGround extends BlockEntity {
         this.blockRotate = blockRotate;
     }
 
-    public BlockGround getBlock() {
+    public String getBlock() {
         return block;
     }
 }
