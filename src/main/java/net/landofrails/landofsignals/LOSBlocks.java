@@ -8,6 +8,7 @@ import scala.Tuple3;
 public class LOSBlocks {
     public static final BlockSignalSO12 BLOCK_SIGNAL_SO_12 = new BlockSignalSO12(LandOfSignals.MODID, "BlockSignalSO12");
     public static final BlockSignalLever BLOCK_SIGNAL_LEVER = new BlockSignalLever(LandOfSignals.MODID, "BlockSignalLever");
+    public static final BlockTicketMachineDB BLOCK_TICKET_MACHINE_DB = new BlockTicketMachineDB(LandOfSignals.MODID, "BlockTicketMachineDB");
 
     //GroundBlocks
     public static final BlockGround BLOCK_GROUND_VORSIGNAL = new BlockGround(LandOfSignals.MODID, "BlockGroundVorsignal");

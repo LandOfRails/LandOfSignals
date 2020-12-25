@@ -8,6 +8,8 @@ Content:
 
 * Unknown creator of [GSAR](https://www.curseforge.com/minecraft/mc-mods/gsar-german-signals-at-rails)
 * Skyman_Luna#2484 (Discord)
+* Captain Skipper#3662 (Discord)
+* [SebastianD334](https://github.com/SebastianD334)
 
 <br> 
 

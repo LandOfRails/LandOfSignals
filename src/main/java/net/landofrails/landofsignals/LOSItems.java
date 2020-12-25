@@ -5,6 +5,7 @@ import net.landofrails.landofsignals.items.*;
 public class LOSItems {
     public static final ItemSignalSO12 ITEM_SIGNALSO12 = new ItemSignalSO12(LandOfSignals.MODID, "ItemSignalSO12");
     public static final ItemSignalLever ITEM_SIGNAL_LEVER = new ItemSignalLever(LandOfSignals.MODID, "ItemSignalLever");
+    public static final ItemTicketMachineDB ITEM_TICKET_MACHINE_DB = new ItemTicketMachineDB(LandOfSignals.MODID, "ItemTicketMachineDB");
 
     //GroundItems
     public static final ItemGround ITEM_GROUND_VORSIGNAL = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignal", "BLOCK_GROUND_VORSIGNAL");

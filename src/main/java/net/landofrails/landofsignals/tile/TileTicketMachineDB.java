@@ -1,6 +1,6 @@
 package net.landofrails.landofsignals.tile;
 
-import cam72cam.mod.block.BlockEntityTickable;
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
@@ -9,19 +9,15 @@ import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
 
-public class TileSignalLever extends BlockEntityTickable {
+public class TileTicketMachineDB extends BlockEntity {
     private double fullHeight = 0;
     private double fullWidth = 0;
     private double fullLength = 0;
 
-    private long ticks;
-    private int leverRotate = 0;
     @TagField("Rotation")
     private float blockRotate;
 
-    private boolean activated = false;
-
-    public TileSignalLever(float rot) {
+    public TileTicketMachineDB(float rot) {
         this.blockRotate = rot;
     }
 
@@ -32,27 +28,12 @@ public class TileSignalLever extends BlockEntityTickable {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK;
+        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
     }
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        activated = !activated;
-//        this.markDirty();
         return true;
-    }
-
-    @Override
-    public void update() {
-        if (activated && leverRotate < 40) {
-            leverRotate++;
-        } else if (!activated && leverRotate > 0) {
-            leverRotate--;
-        }
-    }
-
-    public long getLeverRotate() {
-        return this.leverRotate;
     }
 
     public void setFullHeight(double fullHeight) {
