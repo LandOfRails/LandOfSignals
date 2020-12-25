@@ -1,41 +1,42 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.util.Facing;
-import net.landofrails.landofsignals.LOSItems;
+import cam72cam.mod.serialization.TagField;
+import net.landofrails.landofsignals.utils.Static;
 
-public class TileVr0_Hv_Vorsignal extends BlockEntity {
+public class TileMid extends BlockEntity {
     private double fullHeight = 0;
     private double fullWidth = 0;
     private double fullLength = 0;
 
+    @TagField("blockRotation")
     private float blockRotate;
+    @TagField("blockName")
+    private String block;
 
     private boolean activated = false;
 
-    public TileVr0_Hv_Vorsignal(float rot) {
+    public TileMid(float rot, String block) {
         this.blockRotate = rot;
+        this.block = block;
+//        try {
+//            save(new TagCompound().setString("blockName", block));
+//        } catch (SerializationException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
     public ItemStack onPick() {
-        return new ItemStack(LOSItems.ITEM_VR_0_HV_VORSIGNAL, 1);
+        return new ItemStack(Static.listMidModels.get(block)._3(), 1);
     }
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
-    }
-
-    @Override
-    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        activated = !activated;
-//        this.markDirty();
-        return true;
+//        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
+        return IBoundingBox.BLOCK;
     }
 
     public void setFullHeight(double fullHeight) {
@@ -56,5 +57,9 @@ public class TileVr0_Hv_Vorsignal extends BlockEntity {
 
     public void setBlockRotate(float blockRotate) {
         this.blockRotate = blockRotate;
+    }
+
+    public String getBlock() {
+        return block;
     }
 }

@@ -4,7 +4,7 @@ import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
-import net.landofrails.landofsignals.tile.TileGround;
+import net.landofrails.landofsignals.tile.TileMid;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 import scala.Tuple2;
@@ -14,20 +14,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileGroundRender {
+public class TileMidRender {
 
     private static final List<String> groupNames = Arrays.asList(new String[]{"all"});
     private static Map<String, Tuple2<OBJModel, OBJRender>> cache = new HashMap<>();
 
-    public static StandardModel render(TileGround ts) {
+    public static StandardModel render(TileMid ts) {
         return new StandardModel().addCustom(() -> renderStuff(ts));
     }
 
-    private static void renderStuff(TileGround ts) {
+    private static void renderStuff(TileMid ts) {
         String blockName = ts.getBlock();
         if (!cache.containsKey(blockName)) {
             try {
-                OBJModel model = new OBJModel(Static.listGroundModels.get(blockName)._1(), 0);
+                OBJModel model = new OBJModel(Static.listMidModels.get(blockName)._1(), 0);
                 OBJRender renderer = new OBJRender(model);
                 cache.put(blockName, new Tuple2(model, renderer));
             } catch (Exception e) {

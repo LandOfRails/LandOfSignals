@@ -9,16 +9,16 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.blocks.BlockGround;
+import net.landofrails.landofsignals.blocks.BlockTop;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ItemGround extends CustomItem {
+public class ItemTop extends CustomItem {
     private String blockName;
 
-    public ItemGround(String modID, String name, String block) {
+    public ItemTop(String modID, String name, String block) {
         super(modID, name);
         this.blockName = block;
     }
@@ -30,7 +30,7 @@ public class ItemGround extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        BlockGround block = Static.listGroundModels.get(blockName)._2();
+        BlockTop block = Static.listTopModels.get(blockName)._2();
         int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         block.setBlock(blockName);
         block.setRot(rot);
