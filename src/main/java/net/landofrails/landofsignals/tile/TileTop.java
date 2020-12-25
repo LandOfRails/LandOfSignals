@@ -1,9 +1,12 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagField;
+import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.utils.Static;
 
 public class TileTop extends BlockEntity {
@@ -37,6 +40,11 @@ public class TileTop extends BlockEntity {
     public IBoundingBox getBoundingBox() {
 //        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
         return IBoundingBox.BLOCK;
+    }
+
+    @Override
+    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+        return true;
     }
 
     public void setFullHeight(double fullHeight) {

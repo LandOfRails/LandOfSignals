@@ -10,6 +10,8 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.blocks.BlockMid;
+import net.landofrails.landofsignals.tile.TileGround;
+import net.landofrails.landofsignals.tile.TileMid;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.Collections;
@@ -30,8 +32,17 @@ public class ItemMid extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        float rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        TileGround groundEntity = world.getBlockEntity(pos, TileGround.class);
+        if (groundEntity == null) {
+            TileMid midEntity = world.getBlockEntity(pos, TileMid.class);
+            if (midEntity != null) {
+                rot = midEntity.getBlockRotate();
+            }
+        } else {
+            rot = groundEntity.getBlockRotate();
+        }
         BlockMid block = Static.listMidModels.get(blockName)._2();
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         block.setBlock(blockName);
         block.setRot(rot);
         world.setBlock(pos.offset(facing), block);

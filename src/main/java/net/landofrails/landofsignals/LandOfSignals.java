@@ -58,9 +58,9 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
                 ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
 
-                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -1.2, 0.5), 0.63f));
-                ItemRender.register(LOSItems.ITEM_MID_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_MID_VORSIGNAL_MAST")._1(), new Vec3d(0.5, -1.2, 0.5), 0.63f));
-                ItemRender.register(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -1.2, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_MID_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listMidModels.get("BLOCK_MID_VORSIGNAL_MAST")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
                 break;
         }
     }
