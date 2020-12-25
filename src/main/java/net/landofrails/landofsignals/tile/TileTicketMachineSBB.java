@@ -9,7 +9,7 @@ import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
 
-public class TileTicketMachineDB extends BlockEntity {
+public class TileTicketMachineSBB extends BlockEntity {
     private double fullHeight = 0;
     private double fullWidth = 0;
     private double fullLength = 0;
@@ -17,13 +17,13 @@ public class TileTicketMachineDB extends BlockEntity {
     @TagField("Rotation")
     private float blockRotate;
 
-    public TileTicketMachineDB(float rot) {
+    public TileTicketMachineSBB(float rot) {
         this.blockRotate = rot;
     }
 
     @Override
     public ItemStack onPick() {
-        return new ItemStack(LOSItems.ITEM_TICKET_MACHINE_DB, 1);
+        return new ItemStack(LOSItems.ITEM_TICKET_MACHINE_SBB, 1);
     }
 
     @Override
