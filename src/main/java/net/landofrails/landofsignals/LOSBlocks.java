@@ -4,12 +4,16 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.utils.Static;
 import scala.Tuple3;
+import scala.Tuple4;
+
+import java.util.HashMap;
 
 public class LOSBlocks {
     public static final BlockSignalSO12 BLOCK_SIGNAL_SO_12 = new BlockSignalSO12(LandOfSignals.MODID, "BlockSignalSO12");
     public static final BlockSignalLever BLOCK_SIGNAL_LEVER = new BlockSignalLever(LandOfSignals.MODID, "BlockSignalLever");
     public static final BlockTicketMachineDB BLOCK_TICKET_MACHINE_DB = new BlockTicketMachineDB(LandOfSignals.MODID, "BlockTicketMachineDB");
     public static final BlockTicketMachineSBB BLOCK_TICKET_MACHINE_SBB = new BlockTicketMachineSBB(LandOfSignals.MODID, "BlockTicketMachineSBB");
+    public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
 
     //GroundBlocks
     public static final BlockGround BLOCK_GROUND_VORSIGNAL = new BlockGround(LandOfSignals.MODID, "BlockGroundVorsignal");
@@ -30,6 +34,9 @@ public class LOSBlocks {
         Static.listMidModels.put("BLOCK_MID_VORSIGNAL_MAST", new Tuple3(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"), BLOCK_MID_VORSIGNAL_MAST, LOSItems.ITEM_MID_VORSIGNAL_MAST));
 
         //Register in list TOP
-        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple3(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF));
+        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple4(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new HashMap<String, String>() {{
+            put("standard", "vorsignal_kopf.png");
+            put("GREEN", "./green/vorsignal_kopf.png");
+        }}));
     }
 }

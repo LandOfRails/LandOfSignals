@@ -35,7 +35,8 @@ public class TileTopRender {
             }
         }
         OBJRender renderer = cache.get(blockName)._2();
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(ts.getTexturePath())) {
+//            System.out.println(ts.getTexturePath());
             GL11.glScaled(0.63, 0.63, 0.63);
             GL11.glTranslated(0.77, -1.2, 0.77);
             GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);

@@ -1,12 +1,9 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagField;
-import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.utils.Static;
 
 public class TileTop extends BlockEntity {
@@ -18,17 +15,18 @@ public class TileTop extends BlockEntity {
     private float blockRotate;
     @TagField("blockName")
     private String block;
+    @TagField("texturePath")
+    private String texturePath = "standard";
+    @TagField("UUID")
+    private java.util.UUID UUID = java.util.UUID.randomUUID();
 
     private boolean activated = false;
 
     public TileTop(float rot, String block) {
         this.blockRotate = rot;
         this.block = block;
-//        try {
-//            save(new TagCompound().setString("blockName", block));
-//        } catch (SerializationException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println(UUID.toString());
+        Static.listTopBlocks.put(this.UUID, this);
     }
 
     @Override
@@ -38,13 +36,17 @@ public class TileTop extends BlockEntity {
 
     @Override
     public IBoundingBox getBoundingBox() {
-//        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
         return IBoundingBox.BLOCK;
     }
 
-    @Override
-    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        return true;
+    public String getTexturePath() {
+        return texturePath;
+    }
+
+    public void setTexturePath(String texturePath) {
+        System.out.println(texturePath);
+        this.texturePath = texturePath;
+        markDirty();
     }
 
     public void setFullHeight(double fullHeight) {
@@ -69,5 +71,9 @@ public class TileTop extends BlockEntity {
 
     public String getBlock() {
         return block;
+    }
+
+    public java.util.UUID getUUID() {
+        return UUID;
     }
 }
