@@ -28,14 +28,14 @@ public class TileTopRender {
         if (!cache.containsKey(blockName)) {
             try {
                 OBJModel model = new OBJModel(Static.listTopModels.get(blockName)._1(), 0);
-                OBJRender renderer = new OBJRender(model);
+                OBJRender renderer = new OBJRender(model, Static.listTopModels.get(blockName)._4().values());
                 cache.put(blockName, new Tuple2(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         OBJRender renderer = cache.get(blockName)._2();
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(ts.getTexturePath())) {
+        try (OpenGL.With tex = renderer.bindTexture(ts.getTexturePath())) {
 //            System.out.println(ts.getTexturePath());
             GL11.glScaled(0.63, 0.63, 0.63);
             GL11.glTranslated(0.77, -1.2, 0.77);

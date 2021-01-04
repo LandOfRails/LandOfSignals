@@ -1,11 +1,11 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
-import cam72cam.mod.block.IRedstoneProvider;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSGuis;
@@ -14,7 +14,7 @@ import net.landofrails.landofsignals.utils.Static;
 
 import java.util.UUID;
 
-public class TileSignalBox extends BlockEntity implements IRedstoneProvider {
+public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
     private UUID UUIDTileTop;
@@ -36,18 +36,15 @@ public class TileSignalBox extends BlockEntity implements IRedstoneProvider {
     }
 
     @Override
-    public int getStrongPower(Facing from) {
-        return 0;
-    }
-
-    @Override
-    public int getWeakPower(Facing from) {
+    public void onNeighborChange(Vec3i neighbor) {
         if (UUIDTileTop != null) {
-            System.out.println(UUIDTileTop);
             TileTop entity = Static.listTopBlocks.get(UUIDTileTop);
-            entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("GREEN"));
+            if (getWorld().getRedstone(neighbor) != 0) {
+                entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("GREEN"));
+            } else {
+                entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("standard"));
+            }
         }
-        return 0;
     }
 
     public void setUUID(UUID uuid) {

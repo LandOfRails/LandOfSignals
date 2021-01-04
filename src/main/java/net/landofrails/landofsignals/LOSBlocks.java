@@ -35,8 +35,8 @@ public class LOSBlocks {
 
         //Register in list TOP
         Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple4(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new HashMap<String, String>() {{
-            put("standard", "vorsignal_kopf.png");
-            put("GREEN", "./green/vorsignal_kopf.png");
+            put("standard", null);
+            put("GREEN", "green");
         }}));
     }
 }

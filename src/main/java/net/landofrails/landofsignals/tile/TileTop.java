@@ -16,7 +16,7 @@ public class TileTop extends BlockEntity {
     @TagField("blockName")
     private String block;
     @TagField("texturePath")
-    private String texturePath = "standard";
+    private String texturePath = null;
     @TagField("UUID")
     private java.util.UUID UUID = java.util.UUID.randomUUID();
 
@@ -25,9 +25,14 @@ public class TileTop extends BlockEntity {
     public TileTop(float rot, String block) {
         this.blockRotate = rot;
         this.block = block;
-        System.out.println(UUID.toString());
         Static.listTopBlocks.put(this.UUID, this);
     }
+
+//    @Override
+//    public void load(TagCompound nbt) throws SerializationException {
+//        this.UUID = nbt.getUUID("UUID");
+//        this.block = nbt.getString("blockName");
+//    }
 
     @Override
     public ItemStack onPick() {
@@ -44,7 +49,6 @@ public class TileTop extends BlockEntity {
     }
 
     public void setTexturePath(String texturePath) {
-        System.out.println(texturePath);
         this.texturePath = texturePath;
         markDirty();
     }
