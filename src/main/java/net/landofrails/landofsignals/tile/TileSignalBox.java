@@ -38,11 +38,15 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public void onNeighborChange(Vec3i neighbor) {
         if (UUIDTileTop != null) {
-            TileTop entity = Static.listTopBlocks.get(UUIDTileTop);
-            if (getWorld().getRedstone(neighbor) != 0) {
-                entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("GREEN"));
+            TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
+            if (entity != null) {
+                if (getWorld().getRedstone(neighbor) > 0) {
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("GREEN"));
+                } else {
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("standard"));
+                }
             } else {
-                entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("standard"));
+                System.out.println(Static.listTopBlocks.get(UUIDTileTop).toString());
             }
         }
     }

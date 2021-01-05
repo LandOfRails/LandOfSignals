@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.tile;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -22,10 +23,10 @@ public class TileTop extends BlockEntity {
 
     private boolean activated = false;
 
-    public TileTop(float rot, String block) {
+    public TileTop(float rot, String block, Vec3i pos) {
         this.blockRotate = rot;
         this.block = block;
-        Static.listTopBlocks.put(this.UUID, this);
+        Static.listTopBlocks.put(this.UUID, pos);
     }
 
 //    @Override
@@ -45,11 +46,15 @@ public class TileTop extends BlockEntity {
     }
 
     public String getTexturePath() {
-        return texturePath;
+        if (texturePath != null && texturePath.equals("null")) {
+            return null;
+        } else
+            return texturePath;
     }
 
     public void setTexturePath(String texturePath) {
-        this.texturePath = texturePath;
+        if (texturePath == null) this.texturePath = "null";
+        else this.texturePath = texturePath;
         markDirty();
     }
 

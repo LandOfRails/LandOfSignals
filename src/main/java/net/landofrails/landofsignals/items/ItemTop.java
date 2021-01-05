@@ -45,6 +45,7 @@ public class ItemTop extends CustomItem {
         BlockTop block = Static.listTopModels.get(blockName)._2();
         block.setBlock(blockName);
         block.setRot(rot);
+        block.setPos(pos.offset(facing));
         world.setBlock(pos.offset(facing), block);
         return ClickResult.ACCEPTED;
     }
