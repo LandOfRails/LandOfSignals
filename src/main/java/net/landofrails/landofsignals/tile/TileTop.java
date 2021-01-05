@@ -4,6 +4,8 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -16,6 +18,8 @@ public class TileTop extends BlockEntity {
     private float blockRotate;
     @TagField("blockName")
     private String block;
+    @TagField("pos")
+    private Vec3i pos;
     @TagField("texturePath")
     private String texturePath = null;
     @TagField("UUID")
@@ -26,14 +30,15 @@ public class TileTop extends BlockEntity {
     public TileTop(float rot, String block, Vec3i pos) {
         this.blockRotate = rot;
         this.block = block;
-        Static.listTopBlocks.put(this.UUID, pos);
+        this.pos = pos;
     }
 
-//    @Override
-//    public void load(TagCompound nbt) throws SerializationException {
-//        this.UUID = nbt.getUUID("UUID");
-//        this.block = nbt.getString("blockName");
-//    }
+    @Override
+    public void load(TagCompound nbt) throws SerializationException {
+        super.load(nbt);
+        this.UUID = nbt.getUUID("UUID");
+        Static.listTopBlocks.put(this.UUID, this.pos);
+    }
 
     @Override
     public ItemStack onPick() {
