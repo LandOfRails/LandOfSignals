@@ -31,8 +31,10 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        LOSGuis.SIGNAL_BOX.open(player);
-        return true;
+        if (UUIDTileTop != null) {
+            LOSGuis.SIGNAL_BOX.open(player, getPos());
+            return true;
+        } else return false;
     }
 
     @Override
@@ -53,5 +55,9 @@ public class TileSignalBox extends BlockEntity {
 
     public void setUUID(UUID uuid) {
         this.UUIDTileTop = uuid;
+    }
+
+    public UUID getUUIDTileTop() {
+        return UUIDTileTop;
     }
 }
