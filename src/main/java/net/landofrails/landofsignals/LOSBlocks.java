@@ -6,7 +6,7 @@ import net.landofrails.landofsignals.utils.Static;
 import scala.Tuple3;
 import scala.Tuple4;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class LOSBlocks {
     public static final BlockSignalSO12 BLOCK_SIGNAL_SO_12 = new BlockSignalSO12(LandOfSignals.MODID, "BlockSignalSO12");
@@ -34,9 +34,9 @@ public class LOSBlocks {
         Static.listMidModels.put("BLOCK_MID_VORSIGNAL_MAST", new Tuple3(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"), BLOCK_MID_VORSIGNAL_MAST, LOSItems.ITEM_MID_VORSIGNAL_MAST));
 
         //Register in list TOP
-        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple4(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new HashMap<String, String>() {{
-            put("standard", null);
-            put("GREEN", "green");
+        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple4(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new ArrayList<String>() {{
+            add(null);
+            add("green");
         }}));
     }
 }

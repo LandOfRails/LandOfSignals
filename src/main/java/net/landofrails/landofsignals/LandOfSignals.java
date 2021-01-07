@@ -66,7 +66,7 @@ public class LandOfSignals extends ModCore.Mod {
 
                 ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
                 ItemRender.register(LOSItems.ITEM_MID_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listMidModels.get("BLOCK_MID_VORSIGNAL_MAST")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
-                ItemRender.register(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -0.9, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._4(), 0.63f));
                 break;
         }
     }

@@ -19,6 +19,9 @@ public class TileSignalBox extends BlockEntity {
     @TagField("UuidTileTop")
     private UUID UUIDTileTop;
 
+    private int redstone = 0;
+    private int noRedstone = 0;
+
     @Override
     public ItemStack onPick() {
         return new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1);
@@ -43,9 +46,11 @@ public class TileSignalBox extends BlockEntity {
             TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
             if (entity != null) {
                 if (getWorld().getRedstone(neighbor) > 0) {
-                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("GREEN"));
+                    //Redstone
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(redstone));
                 } else {
-                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get("standard"));
+                    //No redstone
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(noRedstone));
                 }
             } else {
                 System.out.println(Static.listTopBlocks.get(UUIDTileTop).toString());
@@ -55,9 +60,28 @@ public class TileSignalBox extends BlockEntity {
 
     public void setUUID(UUID uuid) {
         this.UUIDTileTop = uuid;
+        markDirty();
     }
 
     public UUID getUUIDTileTop() {
         return UUIDTileTop;
+    }
+
+    public int getRedstone() {
+        return redstone;
+    }
+
+    public void setRedstone(int redstone) {
+        System.out.println(redstone);
+        this.redstone = redstone;
+        System.out.println(this.redstone);
+    }
+
+    public int getNoRedstone() {
+        return noRedstone;
+    }
+
+    public void setNoRedstone(int noRedstone) {
+        this.noRedstone = noRedstone;
     }
 }

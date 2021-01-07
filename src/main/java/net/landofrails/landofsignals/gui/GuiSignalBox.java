@@ -15,28 +15,47 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiSignalBox implements IScreen {
 
-    private Button switchWithoutRedstoneButton;
-    private Button switchWithRedstoneButton;
-    private ItemStack itemStack;
+    private Button switchWithoutRedstoneButton, switchWithRedstoneButton;
+    private ItemStack itemStackRight, itemStackLeft;
     private TileTop tt;
+    private TileSignalBox ts;
+    private static String textureName = null, textureNameRight = null, textureNameLeft = null;
+    private int stateRight = 0, stateLeft = 0;
+
+    private String[] listTexureNames;
 
     public GuiSignalBox(TileSignalBox ts) {
+        this.ts = ts;
         this.tt = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.listTopBlocks.get(ts.getUUIDTileTop()), TileTop.class);
-        itemStack = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
+        itemStackLeft = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
+        itemStackRight = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
+        listTexureNames = Static.listTopModels.get(tt.getBlock())._4().toArray(new String[0]);
+        stateLeft = ts.getNoRedstone();
+        stateRight = ts.getRedstone();
+        textureNameLeft = listTexureNames[stateLeft];
+        textureNameRight = listTexureNames[stateRight];
     }
 
     @Override
     public void init(IScreenBuilder screen) {
-        switchWithoutRedstoneButton = new Button(screen, 0 - 100, 0, "Without redstone") {
+        switchWithoutRedstoneButton = new Button(screen, 0 - 100, 0, "<-- Without redstone") {
             @Override
             public void onClick(Player.Hand hand) {
-
+                stateLeft++;
+                if (stateLeft == listTexureNames.length) {
+                    stateLeft = 0;
+                }
+                textureNameLeft = listTexureNames[stateLeft];
             }
         };
-        switchWithRedstoneButton = new Button(screen, 0 - 100, 0 + 50, "With redstone") {
+        switchWithRedstoneButton = new Button(screen, 0 - 100, 0 + 50, "With redstone -->") {
             @Override
             public void onClick(Player.Hand hand) {
-
+                stateRight++;
+                if (stateRight == listTexureNames.length) {
+                    stateRight = 0;
+                }
+                textureNameRight = listTexureNames[stateRight];
             }
         };
     }
@@ -48,16 +67,29 @@ public class GuiSignalBox implements IScreen {
 
     @Override
     public void onClose() {
-
+        textureName = null;
+        ts.setRedstone(stateRight);
+        ts.setNoRedstone(stateLeft);
     }
 
     @Override
     public void draw(IScreenBuilder builder) {
         int scale = 8;
+        textureName = textureNameRight;
         try (OpenGL.With matrix = OpenGL.matrix()) {
             GL11.glTranslated(GUIHelpers.getScreenWidth() / 2 + builder.getWidth() / 4, builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStack, 0, 0);
+            GUIHelpers.drawItem(itemStackRight, 0, 0);
         }
+        textureName = textureNameLeft;
+        try (OpenGL.With matrix = OpenGL.matrix()) {
+            GL11.glTranslated((GUIHelpers.getScreenWidth() / 2 - builder.getWidth() / 4) - 120, builder.getHeight() / 4, 0);
+            GL11.glScaled(scale, scale, 1);
+            GUIHelpers.drawItem(itemStackLeft, 0, 0);
+        }
+    }
+
+    public static String getTexureName() {
+        return textureName;
     }
 }

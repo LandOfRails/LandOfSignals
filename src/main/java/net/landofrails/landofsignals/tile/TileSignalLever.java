@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntityTickable;
+import cam72cam.mod.block.IRedstoneProvider;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
@@ -9,7 +10,7 @@ import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
 
-public class TileSignalLever extends BlockEntityTickable {
+public class TileSignalLever extends BlockEntityTickable implements IRedstoneProvider {
     private double fullHeight = 0;
     private double fullWidth = 0;
     private double fullLength = 0;
@@ -19,6 +20,7 @@ public class TileSignalLever extends BlockEntityTickable {
     @TagField("Rotation")
     private float blockRotate;
 
+    @TagField("Activated")
     private boolean activated = false;
 
     public TileSignalLever(float rot) {
@@ -73,5 +75,19 @@ public class TileSignalLever extends BlockEntityTickable {
 
     public void setBlockRotate(float blockRotate) {
         this.blockRotate = blockRotate;
+    }
+
+    @Override
+    public int getStrongPower(Facing from) {
+        if (activated) {
+            return 15;
+        } else return 0;
+    }
+
+    @Override
+    public int getWeakPower(Facing from) {
+        if (activated) {
+            return 15;
+        } else return 0;
     }
 }

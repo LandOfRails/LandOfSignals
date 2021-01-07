@@ -28,7 +28,7 @@ public class TileTopRender {
         if (!cache.containsKey(blockName)) {
             try {
                 OBJModel model = new OBJModel(Static.listTopModels.get(blockName)._1(), 0);
-                OBJRender renderer = new OBJRender(model, Static.listTopModels.get(blockName)._4().values());
+                OBJRender renderer = new OBJRender(model, Static.listTopModels.get(blockName)._4());
                 cache.put(blockName, new Tuple2(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
