@@ -39,7 +39,7 @@ public class GuiSignalBox implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        switchWithoutRedstoneButton = new Button(screen, 0 - 100, 0, "<-- Without redstone") {
+        switchWithoutRedstoneButton = new Button(screen, 0 - 100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 stateLeft++;
@@ -49,7 +49,7 @@ public class GuiSignalBox implements IScreen {
                 textureNameLeft = listTexureNames[stateLeft];
             }
         };
-        switchWithRedstoneButton = new Button(screen, 0 - 100, 0 + 50, "With redstone -->") {
+        switchWithRedstoneButton = new Button(screen, 0 - 100, 0 + 50, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
                 stateRight++;

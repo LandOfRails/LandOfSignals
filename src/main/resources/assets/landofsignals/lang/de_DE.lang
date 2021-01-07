@@ -1,0 +1,11 @@
+gui.landofsignals:signalbox.redstone=Mit Redstone
+gui.landofsignals:signalbox.noredstone=Ohne Redstone
+
+item.landofsignals:ItemSignalSO12.name=SO12
+item.landofsignals:BlockSignalLever.name=Signalhebel
+item.landofsignals:BlockTicketMachineDB.name=Ticketautomat (Deutsche Bahn)
+item.landofsignals:BlockTicketMachineSBB.name=Ticketautomat (SBB)
+item.landofsignals:BlockSignalBox.name=Signal
+item.landofsignals:BlockGroundVorsignal.name=Approach signal (Base)
+item.landofsignals:BlockMidVorsignalMast.name=Approach signal (Pole)
+item.landofsignals:BlockTopVorsignalKopf.name=Approach signal (Signal)

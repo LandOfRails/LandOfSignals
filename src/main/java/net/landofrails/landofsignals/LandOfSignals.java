@@ -20,7 +20,7 @@ public class LandOfSignals extends ModCore.Mod {
 
     static {
         try {
-            ModCore.register(new net.landofrails.landofsignals.LandOfSignals());
+            ModCore.register(new LandOfSignals());
         } catch (Exception e) {
             throw new RuntimeException("Could not load mod " + MODID, e);
         }
