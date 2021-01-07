@@ -8,6 +8,7 @@ import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
+import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileTop;
 import net.landofrails.landofsignals.utils.Static;
@@ -30,8 +31,8 @@ public class GuiSignalBox implements IScreen {
         itemStackLeft = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
         itemStackRight = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
         listTexureNames = Static.listTopModels.get(tt.getBlock())._4().toArray(new String[0]);
-        stateLeft = ts.getNoRedstone();
         stateRight = ts.getRedstone();
+        stateLeft = ts.getNoRedstone();
         textureNameLeft = listTexureNames[stateLeft];
         textureNameRight = listTexureNames[stateRight];
     }
@@ -68,8 +69,8 @@ public class GuiSignalBox implements IScreen {
     @Override
     public void onClose() {
         textureName = null;
-        ts.setRedstone(stateRight);
-        ts.setNoRedstone(stateLeft);
+        SignalBoxGuiPacket packet = new SignalBoxGuiPacket(stateRight, stateLeft, ts.getPos());
+        packet.sendToServer();
     }
 
     @Override

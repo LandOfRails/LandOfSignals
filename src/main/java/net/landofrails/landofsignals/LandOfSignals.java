@@ -3,9 +3,12 @@ package net.landofrails.landofsignals;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.net.Packet;
+import cam72cam.mod.net.PacketDirection;
 import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
@@ -36,6 +39,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
                 LOSBlocks.register();
                 LOSItems.register();
+                Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
         }
 
     }
