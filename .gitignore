@@ -4,6 +4,11 @@
 umc.gradle
 UMC.md
 
+# Eclipse
+.classpath
+.project
+.settings/
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,forgegradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,java,gradle,forgegradle
@@ -146,3 +151,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,forgegradle
+/bin/

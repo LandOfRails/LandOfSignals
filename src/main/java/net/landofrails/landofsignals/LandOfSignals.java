@@ -13,6 +13,7 @@ import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.stellwand.Stellwand;
 
 @net.minecraftforge.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.1", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.12,1.13)")
 public class LandOfSignals extends ModCore.Mod {
@@ -37,6 +38,7 @@ public class LandOfSignals extends ModCore.Mod {
         switch (event) {
             case CONSTRUCT:
                 ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
+                Stellwand.commonEvent();
                 LOSBlocks.register();
                 LOSItems.register();
                 Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
@@ -49,6 +51,9 @@ public class LandOfSignals extends ModCore.Mod {
         switch (event) {
             case CONSTRUCT:
                 ModCore.Mod.info("Starting client construct...");
+                // Stellwand
+                Stellwand.clientEvent();
+                
                 //Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_LEVER, TileSignalLeverRender::render, TileSignalLever.class);
