@@ -3,6 +3,7 @@
 ### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 Author: [MarkenJaden](https://github.com/MarkenJaden)
+<br>
 Author: [Danielxs01](https://github.com/Danielxs01)
 
 Content:
