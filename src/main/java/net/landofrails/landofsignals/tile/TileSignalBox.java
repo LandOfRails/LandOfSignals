@@ -19,7 +19,9 @@ public class TileSignalBox extends BlockEntity {
     @TagField("UuidTileTop")
     private UUID UUIDTileTop;
 
+    @TagField("redstone")
     private int redstone = 0;
+    @TagField("noRedstone")
     private int noRedstone = 0;
 
     @Override
@@ -72,9 +74,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     public void setRedstone(int redstone) {
-        System.out.println(redstone);
         this.redstone = redstone;
-        System.out.println(this.redstone);
     }
 
     public int getNoRedstone() {
