@@ -11,9 +11,10 @@ public class CustomTabs {
 
 	}
 
-	public static final CreativeTab STELLWAND_TAB;
+	@SuppressWarnings("java:S3008")
+	public static CreativeTab STELLWAND_TAB;
 
-	static {
+	public static void register() {
 		STELLWAND_TAB = new CreativeTab(LandOfSignals.MODID + ".stellwand",
 				() -> new ItemStack(CustomItems.ITEMCONNECTOR1, 1));
 	}

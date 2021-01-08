@@ -11,10 +11,10 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.stellwand.content.blocks.others.BlockFiller;
 import net.landofrails.stellwand.content.blocks.others.BlockFiller2;
-import net.landofrails.stellwand.utils.AItemBlock;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 import net.landofrails.stellwand.utils.UselessEntity;
+import net.landofrails.stellwand.utils.compact.AItemBlock;
 
 public class CustomBlocks {
 
