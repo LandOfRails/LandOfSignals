@@ -1,3 +1,5 @@
+itemGroup.landofsignals.stellwand="LOS | Stellwand"
+
 gui.landofsignals:signalbox.redstone=With redstone
 gui.landofsignals:signalbox.noredstone=Without redstone
 
