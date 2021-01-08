@@ -11,3 +11,5 @@ item.landofsignals:BlockSignalBox.name=Signal Box
 item.landofsignals:BlockGroundVorsignal.name=Approach signal (Base)
 item.landofsignals:BlockMidVorsignalMast.name=Approach signal (Pole)
 item.landofsignals:BlockTopVorsignalKopf.name=Approach signal (Signal)
+
+item.landofsignals:stellwand.itemblockfiller2.name=Filler
