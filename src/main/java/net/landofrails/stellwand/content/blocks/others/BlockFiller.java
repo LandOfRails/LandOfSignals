@@ -1,56 +1,65 @@
 package net.landofrails.stellwand.content.blocks.others;
 
-import org.lwjgl.opengl.GL11;
-
-import cam72cam.mod.block.BlockEntity;
-import cam72cam.mod.block.BlockTypeEntity;
-import cam72cam.mod.block.Material;
-import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
-import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
-import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.LandOfSignals;
+import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3d;
+import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.UselessEntity;
+import net.landofrails.stellwand.utils.compact.AItemBlock;
+import net.landofrails.stellwand.utils.compact.BlockItem;
 
-public class BlockFiller extends BlockTypeEntity {
+public class BlockFiller2 extends AItemBlock<BlockItem, UselessEntity> {
 
-	private static OBJRender renderer;
-	private static OBJModel model;
+	// Instance of the ITEM
+	private BlockItem item;
 
-	public BlockFiller() {
-		super(LandOfSignals.MODID, "stellwand.blockFiller");
+	// Block name
+	public BlockFiller2() {
+		super("stellwand.blockFiller2");
 	}
 
-	public StandardModel render(UselessEntity uselessEntity) {
-		return new StandardModel().addCustom(() -> renderStuff(uselessEntity));
-	}
-
-	private static void renderStuff(UselessEntity uselessEntity) {
-		if (renderer == null || model == null) {
-			try {
-				model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/stellwand/blockfiller.obj"), 0);
-				renderer = new OBJRender(model);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		if (renderer == null)
-			return;
-		try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-			GL11.glTranslated(0.5, 0, 0.5);
-			renderer.draw();
-		}
-	}
-
+	// Block/Item Translation
 	@Override
-	public Material getMaterial() {
-		return Material.METAL;
+	public Vec3d getTranslate(BlockItemType type) {
+		return type == BlockItemType.BLOCK ? new Vec3d(0, 0, 0) : new Vec3d(0.5, 0.25, 0.5);
 	}
 
+	// Block/Item Scale
 	@Override
-	protected BlockEntity constructBlockEntity() {
-		return new UselessEntity();
+	public float getScale(BlockItemType type) {
+		return type == BlockItemType.BLOCK ? 0 : 0.5f;
+	}
+
+	// Block/Item Rotation
+	@Override
+	public Vec3d getRotation(BlockItemType type) {
+		return type == BlockItemType.BLOCK ? new Vec3d(0, 0, 0) : new Vec3d(30, 30, 0);
+	}
+
+	// Block/Item (OBJ-)Path
+	@Override
+	public String getPath(BlockItemType type) {
+		return "models/block/stellwand/blockfiller.obj";
+	}
+
+	// The BlockEntity
+	@Override
+	protected UselessEntity constructBlockEntity() {
+		return new UselessEntity(new ItemStack(getItem(), 1));
+	}
+
+	// Return of ITEM Instance
+	@Override
+	public BlockItem getItem() {
+		if (item == null)
+			item = new BlockItem(this, "stellwand.itemBlockFiller2", CustomTabs.STELLWAND_TAB);
+		return item;
+	}
+
+	// BlockEntity Class
+	@Override
+	public Class<UselessEntity> getBlockEntityClass() {
+		return UselessEntity.class;
 	}
 
 }
