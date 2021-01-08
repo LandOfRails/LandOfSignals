@@ -18,6 +18,10 @@ import net.landofrails.stellwand.utils.UselessEntity;
 
 public class CustomBlocks {
 
+	private CustomBlocks() {
+
+	}
+
 	private static final List<AItemBlock<?, ?>> itemBlocks = new ArrayList<>();
 
 	public static final BlockFiller BLOCKFILLER = new BlockFiller();
@@ -29,7 +33,7 @@ public class CustomBlocks {
 
 	public static void registerItemRenderers() {
 		for (AItemBlock<?, ?> itemBlock : itemBlocks) {
-			ICustomRenderer renderer = (ICustomRenderer) itemBlock;
+			ICustomRenderer renderer = itemBlock;
 
 			String path = renderer.getPath(BlockItemType.ITEM);
 			Vec3d translate = renderer.getTranslate(BlockItemType.ITEM);

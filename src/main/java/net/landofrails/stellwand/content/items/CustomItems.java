@@ -16,22 +16,26 @@ import net.landofrails.stellwand.utils.ICustomTexturePath;
 
 public class CustomItems {
 
-	protected static List<CustomItem> customItems = new ArrayList<>();
+	private CustomItems() {
+
+	}
+
+	protected static List<CustomItem> itemList = new ArrayList<>();
 	public static final ItemConnector ITEMCONNECTOR1 = new ItemConnector(1);
 	public static final ItemConnector ITEMCONNECTOR2 = new ItemConnector(2);
 	public static final ItemConnector ITEMCONNECTOR3 = new ItemConnector(3);
 	public static final ItemBlockFiller ITEMBLOCKFILLER = new ItemBlockFiller();
 
 	public static void register() {
-		customItems.add(ITEMCONNECTOR1);
-		customItems.add(ITEMCONNECTOR2);
-		customItems.add(ITEMCONNECTOR3);
-		customItems.add(ITEMBLOCKFILLER);
+		itemList.add(ITEMCONNECTOR1);
+		itemList.add(ITEMCONNECTOR2);
+		itemList.add(ITEMCONNECTOR3);
+		itemList.add(ITEMBLOCKFILLER);
 	}
 
 	// Clientsided
 	public static void registerRenderers() {
-		for (CustomItem item : customItems) {
+		for (CustomItem item : itemList) {
 			if (item instanceof ICustomTexturePath) {
 				ICustomTexturePath path = (ICustomTexturePath) item;
 				ItemRender.register(item, new Identifier(LandOfSignals.MODID, path.getTexturePath()));

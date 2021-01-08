@@ -35,6 +35,8 @@ public class BlockFiller extends BlockTypeEntity {
 				e.printStackTrace();
 			}
 		}
+		if (renderer == null)
+			return;
 		try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
 			GL11.glTranslated(0.5, 0, 0.5);
 			renderer.draw();

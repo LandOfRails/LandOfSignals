@@ -7,7 +7,11 @@ import net.landofrails.stellwand.content.items.CustomItems;
 
 public class CustomTabs {
 
-	public static CreativeTab STELLWAND_TAB;
+	private CustomTabs() {
+
+	}
+
+	public static final CreativeTab STELLWAND_TAB;
 
 	static {
 		STELLWAND_TAB = new CreativeTab(LandOfSignals.MODID + ".stellwand",

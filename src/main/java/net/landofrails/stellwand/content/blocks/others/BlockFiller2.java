@@ -24,7 +24,7 @@ import net.landofrails.stellwand.utils.UselessEntity;
 public class BlockFiller2 extends AItemBlock<ItemBlockFiller2, UselessEntity> {
 
 	// Instance of the ITEM
-	private static ItemBlockFiller2 ITEM = new ItemBlockFiller2();
+	private static final ItemBlockFiller2 ITEM = new ItemBlockFiller2();
 
 	// Block name
 	public BlockFiller2() {
