@@ -36,6 +36,10 @@ public class GuiSignalBox implements IScreen {
         listTexureNames = Static.listTopModels.get(tt.getBlock())._4().toArray(new String[0]);
         stateRight = ts.getRedstone();
         stateLeft = ts.getNoRedstone();
+        if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {
+            stateRight = 0;
+            stateLeft = 0;
+        }
         textureNameLeft = listTexureNames[stateLeft];
         textureNameRight = listTexureNames[stateRight];
     }

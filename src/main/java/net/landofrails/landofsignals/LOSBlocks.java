@@ -53,17 +53,20 @@ public class LOSBlocks {
             add(null);
             add("green");
             add("greenyellow");
+            add("off");
         }}, new Vec3d(0.63, 0.63, 0.63), new Vec3d(0.77, -1.2, 0.77)));
         Static.listTopModels.put("BLOCK_TOP_GAMERTV_VORSIGNAL", new Tuple6<>(new Identifier(LandOfSignals.MODID, "models/block/gamertv/vorsignal/hv_vr.obj"), BLOCK_TOP_GAMERTV_VORSIGNAL, LOSItems.ITEM_TOP_GAMERTV_VORSIGNAL, new ArrayList<String>() {{
             add(null);
             add("gruen");
             add("gruenorange");
+            add("off");
         }}, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
         Static.listTopModels.put("BLOCK_TOP_GAMERTV_HVHP", new Tuple6<>(new Identifier(LandOfSignals.MODID, "models/block/gamertv/kopf/hv_hp.obj"), BLOCK_TOP_GAMERTV_HVHP, LOSItems.ITEM_TOP_GAMERTV_HVHP, new ArrayList<String>() {{
             add(null);
             add("hp1");
             add("hp2");
             add("sh1");
+            add("off");
         }}, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
         Static.listTopModels.put("BLOCK_TOP_GAMERTV_HVERSATZ", new Tuple6<>(new Identifier(LandOfSignals.MODID, "models/block/gamertv/ersatzsignal/hv_ersatzsignal.obj"), BLOCK_TOP_GAMERTV_HVERSATZ, LOSItems.ITEM_TOP_GAMERTV_HVERSATZ, new ArrayList<String>() {{
             add(null);

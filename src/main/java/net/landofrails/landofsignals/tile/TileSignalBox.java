@@ -48,6 +48,10 @@ public class TileSignalBox extends BlockEntity {
         if (getWorld().isServer && UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
             TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
             if (entity != null) {
+                if (redstone >= Static.listTopModels.get(entity.getBlock())._4().size() || noRedstone >= Static.listTopModels.get(entity.getBlock())._4().size()) {
+                    redstone = 0;
+                    noRedstone = 0;
+                }
                 if (getWorld().getRedstone(neighbor) > 0) {
                     //Redstone
                     entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(redstone));
