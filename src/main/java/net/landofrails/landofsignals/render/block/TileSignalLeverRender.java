@@ -13,36 +13,39 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("java:S3878")
 public class TileSignalLeverRender {
+
+    private TileSignalLeverRender() {
+
+    }
 
     private static OBJRender renderer;
     private static OBJModel model;
     private static final List<String> groupNames = Arrays.asList(new String[]{"Base01_B01", "Hebelwerk01_H01", "Hebelwerk02_H02"});
 
     public static StandardModel render(TileSignalLever ts) {
-        return new StandardModel().addCustom((partialTicks) -> renderStuff(ts, partialTicks));
+        return new StandardModel().addCustom(partialTicks -> renderStuff(ts, partialTicks));
     }
 
+    @SuppressWarnings("java:S1172")
     private static void renderStuff(TileSignalLever ts, float partialTicks) {
-        if (renderer == null || model == null) {
-            try {
+        try {
+            if (renderer == null || model == null) {
                 model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/signalslever/signalslever.obj"), 0);
                 renderer = new OBJRender(model);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-            GL11.glTranslated(0.5, 0.6, 0.5);
-            GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
-            renderer.drawGroups(Collections.singleton(groupNames.get(0)));
+            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+                GL11.glTranslated(0.5, 0.6, 0.5);
+                GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
+                renderer.drawGroups(Collections.singleton(groupNames.get(0)));
 
-            //Animation
-            GL11.glRotated((ts.getLeverRotate() * 2), 1, 0, 0);
-            renderer.drawGroups(groupNames.subList(1, groupNames.size() - 1));
+                //Animation
+                GL11.glRotated((ts.getLeverRotate() * 2), 1, 0, 0);
+                renderer.drawGroups(groupNames.subList(1, groupNames.size() - 1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        ts.setFullHeight(model.heightOfGroups(groupNames));
-        ts.setFullWidth(model.widthOfGroups(groupNames));
-        ts.setFullLength(model.lengthOfGroups(groupNames));
     }
 }

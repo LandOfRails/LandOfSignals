@@ -15,7 +15,11 @@ import java.util.Map;
 
 public class TileTopRender {
 
-    private static Map<String, Tuple2<OBJModel, OBJRender>> cache = new HashMap<>();
+    private TileTopRender() {
+
+    }
+
+    private static final Map<String, Tuple2<OBJModel, OBJRender>> cache = new HashMap<>();
 
     public static StandardModel render(TileTop ts) {
         return new StandardModel().addCustom(() -> renderStuff(ts));
@@ -27,13 +31,13 @@ public class TileTopRender {
             try {
                 OBJModel model = new OBJModel(Static.listTopModels.get(blockName)._1(), 0);
                 OBJRender renderer = new OBJRender(model, Static.listTopModels.get(blockName)._4());
-                cache.put(blockName, new Tuple2(model, renderer));
+                cache.put(blockName, new Tuple2<>(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         OBJRender renderer = cache.get(blockName)._2();
-        try (OpenGL.With tex = renderer.bindTexture(ts.getTexturePath())) {
+        try (OpenGL.With ignored = renderer.bindTexture(ts.getTexturePath())) {
             Vec3d scale = Static.listTopModels.get(blockName)._5();
             GL11.glScaled(scale.x, scale.y, scale.z);
             Vec3d trans = Static.listTopModels.get(blockName)._6();
@@ -41,6 +45,5 @@ public class TileTopRender {
             GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
             renderer.draw();
         }
-        OBJModel model = cache.get(blockName)._1();
     }
 }

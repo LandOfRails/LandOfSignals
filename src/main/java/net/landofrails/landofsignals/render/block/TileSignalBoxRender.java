@@ -9,12 +9,12 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class TileSignalBoxRender {
 
-    private static final List<String> groupNames = Arrays.asList(new String[]{"all"});
+    private TileSignalBoxRender() {
+
+    }
+
     private static OBJRender renderer;
     private static OBJModel model;
 
@@ -22,19 +22,20 @@ public class TileSignalBoxRender {
         return new StandardModel().addCustom(() -> renderStuff(ts));
     }
 
+    @SuppressWarnings("java:S1172")
     private static void renderStuff(TileSignalBox ts) {
-        if (renderer == null || model == null) {
-            try {
+        try {
+            if (renderer == null || model == null) {
                 model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/signalbox/untitled.obj"), 0);
                 renderer = new OBJRender(model);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-            GL11.glScaled(0.30, 0.30, 0.30);
-            GL11.glTranslated(1.5, 0, 1.5);
-            renderer.draw();
+            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+                GL11.glScaled(0.30, 0.30, 0.30);
+                GL11.glTranslated(1.5, 0, 1.5);
+                renderer.draw();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -15,6 +15,10 @@ import java.util.Map;
 
 public class TileGroundRender {
 
+    private TileGroundRender() {
+
+    }
+
     private static Map<String, Tuple2<OBJModel, OBJRender>> cache = new HashMap<>();
 
     public static StandardModel render(TileGround ts) {
@@ -27,7 +31,7 @@ public class TileGroundRender {
             try {
                 OBJModel model = new OBJModel(Static.listGroundModels.get(blockName)._1(), 0);
                 OBJRender renderer = new OBJRender(model);
-                cache.put(blockName, new Tuple2(model, renderer));
+                cache.put(blockName, new Tuple2<>(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -41,6 +45,5 @@ public class TileGroundRender {
             GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
             renderer.draw();
         }
-        OBJModel model = cache.get(blockName)._1();
     }
 }

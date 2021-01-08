@@ -9,23 +9,20 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.utils.Static;
 
+@SuppressWarnings("java:S116")
 public class TileTop extends BlockEntity {
-    private double fullHeight = 0;
-    private double fullWidth = 0;
-    private double fullLength = 0;
 
     @TagField("blockRotation")
     private float blockRotate;
     @TagField("blockName")
-    private String block;
+    private final String block;
     @TagField("pos")
-    private Vec3i pos;
+    private final Vec3i pos;
     @TagField("texturePath")
     private String texturePath = null;
     @TagField("UUID")
     private java.util.UUID UUID = java.util.UUID.randomUUID();
 
-    private boolean activated = false;
 
     public TileTop(float rot, String block, Vec3i pos) {
         this.blockRotate = rot;
@@ -48,7 +45,7 @@ public class TileTop extends BlockEntity {
     @Override
     public void onBreak() {
         super.onBreak();
-        if (Static.listTopBlocks.containsKey(UUID)) Static.listTopBlocks.remove(UUID);
+        Static.listTopBlocks.remove(UUID);
     }
 
     @Override
@@ -67,18 +64,6 @@ public class TileTop extends BlockEntity {
         if (texturePath == null) this.texturePath = "null";
         else this.texturePath = texturePath;
         markDirty();
-    }
-
-    public void setFullHeight(double fullHeight) {
-        this.fullHeight = fullHeight;
-    }
-
-    public void setFullWidth(double fullWidth) {
-        this.fullWidth = fullWidth;
-    }
-
-    public void setFullLength(double fullLength) {
-        this.fullLength = fullLength;
     }
 
     public float getBlockRotate() {

@@ -3,9 +3,9 @@ loaderVersion="[31,)"
 license="TODO"
 
 [[mods]]
-modId="learnumc"
+modId="landofsignals"
 version="${file.jarVersion}"
-displayName="Learn UMC"
+displayName="LandOfSignals"
 
 [[dependencies.learnumc]]
     modId="forge"

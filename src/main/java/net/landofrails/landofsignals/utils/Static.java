@@ -19,10 +19,14 @@ import java.util.UUID;
 
 public class Static {
 
+    private Static() {
+
+    }
+
     //Vec3d = scale, Vec3d = translation
-    public static Map<String, Tuple5<Identifier, BlockGround, ItemGround, Vec3d, Vec3d>> listGroundModels = new HashMap<>();
-    public static Map<String, Tuple5<Identifier, BlockMid, ItemMid, Vec3d, Vec3d>> listMidModels = new HashMap<>();
-    public static Map<String, Tuple6<Identifier, BlockTop, ItemTop, List<String>, Vec3d, Vec3d>> listTopModels = new HashMap<>();
+    public static final Map<String, Tuple5<Identifier, BlockGround, ItemGround, Vec3d, Vec3d>> listGroundModels = new HashMap<>();
+    public static final Map<String, Tuple5<Identifier, BlockMid, ItemMid, Vec3d, Vec3d>> listMidModels = new HashMap<>();
+    public static final Map<String, Tuple6<Identifier, BlockTop, ItemTop, List<String>, Vec3d, Vec3d>> listTopModels = new HashMap<>();
     public static Map<UUID, Vec3i> listTopBlocks = new HashMap<>();
 
 }

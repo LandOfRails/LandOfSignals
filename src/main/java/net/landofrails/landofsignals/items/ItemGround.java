@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemGround extends CustomItem {
-    private String blockName;
+    private final String blockName;
 
     public ItemGround(String modID, String name, String block) {
         super(modID, name);

@@ -6,7 +6,7 @@ import net.landofrails.landofsignals.LandOfSignals;
 public enum GuiText {
     LABEL_REDSTONE("signalbox.redstone"),
     LABEL_NOREDSTONE("signalbox.noredstone");
-    private String value;
+    private final String value;
 
     GuiText(String value) {
         this.value = value;

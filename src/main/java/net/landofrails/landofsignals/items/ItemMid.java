@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemMid extends CustomItem {
-    private String blockName;
+    private final String blockName;
 
     public ItemMid(String modID, String name, String block) {
         super(modID, name);
@@ -32,7 +32,7 @@ public class ItemMid extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        float rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        float rot = (float) -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         TileGround groundEntity = world.getBlockEntity(pos, TileGround.class);
         if (groundEntity == null) {
             TileMid midEntity = world.getBlockEntity(pos, TileMid.class);

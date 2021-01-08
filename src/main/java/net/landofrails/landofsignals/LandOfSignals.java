@@ -15,8 +15,10 @@ import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.Static;
 import net.landofrails.stellwand.Stellwand;
 
+@SuppressWarnings("java:S112")
 @net.minecraftforge.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.1", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.12,1.13)")
 public class LandOfSignals extends ModCore.Mod {
+    @SuppressWarnings("java:S1845")
     public static final String MODID = "landofsignals";
 
     static {
@@ -35,13 +37,12 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
-        switch (event) {
-            case CONSTRUCT:
-                ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-                Stellwand.commonEvent();
-                LOSBlocks.register();
-                LOSItems.register();
-                Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
+        if (event == ModEvent.CONSTRUCT) {
+            ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
+            Stellwand.commonEvent();
+            LOSBlocks.register();
+            LOSItems.register();
+            Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
         }
 
     }
@@ -91,11 +92,17 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_TOP_GAMERTV_HVHP, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVHP")._1(), new Vec3d(0.5, 0, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVHP")._4(), 1f));
                 ItemRender.register(LOSItems.ITEM_TOP_GAMERTV_HVERSATZ, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVERSATZ")._1(), new Vec3d(0.5, 0, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVERSATZ")._4(), 1f));
                 break;
+            case INITIALIZE:
+            case SETUP:
+            case RELOAD:
+            case START:
+            case FINALIZE:
+                break;
         }
     }
 
     @Override
     public void serverEvent(ModEvent event) {
-
+        //Do nothing for now
     }
 }

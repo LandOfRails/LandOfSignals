@@ -10,9 +10,6 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
 
 public class TileTicketMachineSBB extends BlockEntity {
-    private double fullHeight = 0;
-    private double fullWidth = 0;
-    private double fullLength = 0;
 
     @TagField("Rotation")
     private float blockRotate;
@@ -29,24 +26,11 @@ public class TileTicketMachineSBB extends BlockEntity {
     @Override
     public IBoundingBox getBoundingBox() {
         return IBoundingBox.BLOCK.expand(new Vec3d(0, 1, 0));
-//        return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
     }
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         return true;
-    }
-
-    public void setFullHeight(double fullHeight) {
-        this.fullHeight = fullHeight;
-    }
-
-    public void setFullWidth(double fullWidth) {
-        this.fullWidth = fullWidth;
-    }
-
-    public void setFullLength(double fullLength) {
-        this.fullLength = fullLength;
     }
 
     public float getBlockRotate() {

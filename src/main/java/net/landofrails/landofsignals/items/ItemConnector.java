@@ -39,8 +39,6 @@ public class ItemConnector extends CustomItem {
             if (blockEntityBox == null) {
                 blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
             }
-            System.out.println(blockEntityTop);
-            System.out.println(blockEntityBox);
             if (blockEntityBox != null && blockEntityTop != null) {
                 blockEntityBox.setUUID(blockEntityTop.getUUID());
                 blockEntityTop = null;

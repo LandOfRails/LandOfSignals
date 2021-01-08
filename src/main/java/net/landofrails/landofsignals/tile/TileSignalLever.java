@@ -11,11 +11,7 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSItems;
 
 public class TileSignalLever extends BlockEntityTickable implements IRedstoneProvider {
-    private double fullHeight = 0;
-    private double fullWidth = 0;
-    private double fullLength = 0;
 
-    private long ticks;
     private int leverRotate = 0;
     @TagField("Rotation")
     private float blockRotate;
@@ -40,7 +36,6 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         activated = !activated;
-//        this.markDirty();
         return true;
     }
 
@@ -55,18 +50,6 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
 
     public long getLeverRotate() {
         return this.leverRotate;
-    }
-
-    public void setFullHeight(double fullHeight) {
-        this.fullHeight = fullHeight;
-    }
-
-    public void setFullWidth(double fullWidth) {
-        this.fullWidth = fullWidth;
-    }
-
-    public void setFullLength(double fullLength) {
-        this.fullLength = fullLength;
     }
 
     public float getBlockRotate() {

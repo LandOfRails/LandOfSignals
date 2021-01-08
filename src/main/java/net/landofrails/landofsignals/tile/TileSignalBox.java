@@ -14,6 +14,7 @@ import net.landofrails.landofsignals.utils.Static;
 
 import java.util.UUID;
 
+@SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
@@ -44,19 +45,15 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
-        if (getWorld().isServer) {
-            if (UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
-                TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
-                if (entity != null) {
-                    if (getWorld().getRedstone(neighbor) > 0) {
-                        //Redstone
-                        entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(redstone));
-                    } else {
-                        //No redstone
-                        entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(noRedstone));
-                    }
+        if (getWorld().isServer && UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
+            TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
+            if (entity != null) {
+                if (getWorld().getRedstone(neighbor) > 0) {
+                    //Redstone
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(redstone));
                 } else {
-                    System.out.println(Static.listTopBlocks.get(UUIDTileTop).toString());
+                    //No redstone
+                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(noRedstone));
                 }
             }
         }

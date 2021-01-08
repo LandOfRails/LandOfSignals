@@ -7,30 +7,28 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 
 public class GuiTicketMachine implements IScreen {
 
-    private Button buyButton;
-
     @Override
     public void init(IScreenBuilder screen) {
-        buyButton = new Button(screen, 0 - 100, -24 + 0 * 22, "Kaufen") {
+        new Button(screen, -100, -24, "Kaufen") {
             @Override
             public void onClick(Player.Hand hand) {
-                
+                //TODO
             }
         };
     }
 
     @Override
     public void onEnterKey(IScreenBuilder builder) {
-
+        //TODO
     }
 
     @Override
     public void onClose() {
-
+        //TODO
     }
 
     @Override
     public void draw(IScreenBuilder builder) {
-
+        //TODO
     }
 }

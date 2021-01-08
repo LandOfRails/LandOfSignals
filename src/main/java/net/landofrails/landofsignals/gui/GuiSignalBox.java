@@ -16,18 +16,21 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiSignalBox implements IScreen {
 
-    private Button switchWithoutRedstoneButton, switchWithRedstoneButton;
-    private ItemStack itemStackRight, itemStackLeft;
-    private TileTop tt;
-    private TileSignalBox ts;
-    private static String textureName = null, textureNameRight = null, textureNameLeft = null;
-    private int stateRight = 0, stateLeft = 0;
+    private final ItemStack itemStackRight;
+    private final ItemStack itemStackLeft;
+    private final TileSignalBox ts;
+    private static String textureName = null;
+    private static String textureNameRight = null;
+    private static String textureNameLeft = null;
+    private int stateRight;
+    private int stateLeft;
 
-    private String[] listTexureNames;
+    private final String[] listTexureNames;
 
+    @SuppressWarnings("java:S3010")
     public GuiSignalBox(TileSignalBox ts) {
         this.ts = ts;
-        this.tt = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.listTopBlocks.get(ts.getUUIDTileTop()), TileTop.class);
+        TileTop tt = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.listTopBlocks.get(ts.getUUIDTileTop()), TileTop.class);
         itemStackLeft = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
         itemStackRight = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
         listTexureNames = Static.listTopModels.get(tt.getBlock())._4().toArray(new String[0]);
@@ -37,9 +40,10 @@ public class GuiSignalBox implements IScreen {
         textureNameRight = listTexureNames[stateRight];
     }
 
+    @SuppressWarnings("java:S2696")
     @Override
     public void init(IScreenBuilder screen) {
-        switchWithoutRedstoneButton = new Button(screen, 0 - 100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
+        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 stateLeft++;
@@ -49,7 +53,7 @@ public class GuiSignalBox implements IScreen {
                 textureNameLeft = listTexureNames[stateLeft];
             }
         };
-        switchWithRedstoneButton = new Button(screen, 0 - 100, 0 + 50, GuiText.LABEL_REDSTONE.toString() + " -->") {
+        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
                 stateRight++;
@@ -66,6 +70,7 @@ public class GuiSignalBox implements IScreen {
         builder.close();
     }
 
+    @SuppressWarnings("java:S2696")
     @Override
     public void onClose() {
         textureName = null;
@@ -75,18 +80,19 @@ public class GuiSignalBox implements IScreen {
         packet.sendToServer();
     }
 
+    @SuppressWarnings("java:S2696")
     @Override
     public void draw(IScreenBuilder builder) {
         int scale = 8;
         textureName = textureNameRight;
-        try (OpenGL.With matrix = OpenGL.matrix()) {
-            GL11.glTranslated(GUIHelpers.getScreenWidth() / 2 + builder.getWidth() / 4, builder.getHeight() / 4, 0);
+        try (OpenGL.With ignored = OpenGL.matrix()) {
+            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackRight, 0, 0);
         }
         textureName = textureNameLeft;
-        try (OpenGL.With matrix = OpenGL.matrix()) {
-            GL11.glTranslated((GUIHelpers.getScreenWidth() / 2 - builder.getWidth() / 4) - 120, builder.getHeight() / 4, 0);
+        try (OpenGL.With ignored = OpenGL.matrix()) {
+            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackLeft, 0, 0);
         }
