@@ -4,11 +4,11 @@ import cam72cam.mod.math.Vec3d;
 
 public interface ICustomRenderer {
 
-	public Vec3d getTranslate();
+	public Vec3d getTranslate(BlockItemType type);
 
-	public float getScale();
+	public float getScale(BlockItemType type);
 
-	public Vec3d getRotation();
+	public Vec3d getRotation(BlockItemType type);
 
-	public String getPath();
+	public String getPath(BlockItemType type);
 }

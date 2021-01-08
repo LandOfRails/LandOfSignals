@@ -11,12 +11,13 @@ public class Stellwand {
 
 	public static void commonEvent() {
 		CustomItems.register();
-		CustomBlocks.register();
+		CustomBlocks.registerBlocks();
 	}
 
 	public static void clientEvent() {
 		CustomItems.registerRenderers();
-		CustomBlocks.registerRenderers();
+		CustomBlocks.registerItemRenderers();
+		CustomBlocks.registerBlockRenderers();
 	}
 
 }

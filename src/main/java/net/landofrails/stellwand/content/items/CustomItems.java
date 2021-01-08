@@ -10,6 +10,7 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.stellwand.content.items.blocks.ItemBlockFiller;
+import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
 
@@ -37,10 +38,10 @@ public class CustomItems {
 			} else if (item instanceof ICustomRenderer) {
 				ICustomRenderer renderer = (ICustomRenderer) item;
 
-				String path = renderer.getPath();
-				Vec3d translate = renderer.getTranslate();
-				Vec3d rotation = renderer.getRotation();
-				float scale = renderer.getScale();
+				String path = renderer.getPath(BlockItemType.ITEM);
+				Vec3d translate = renderer.getTranslate(BlockItemType.ITEM);
+				Vec3d rotation = renderer.getRotation(BlockItemType.ITEM);
+				float scale = renderer.getScale(BlockItemType.ITEM);
 
 				ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, path),
 						translate, rotation, null, scale));

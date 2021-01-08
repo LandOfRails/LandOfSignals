@@ -15,6 +15,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 
 public class ItemBlockFiller extends CustomItem implements ICustomRenderer {
@@ -29,17 +30,17 @@ public class ItemBlockFiller extends CustomItem implements ICustomRenderer {
 	}
 
 	@Override
-	public Vec3d getTranslate() {
-		return new Vec3d(0.5, 0, 0.5);
+	public Vec3d getTranslate(BlockItemType type) {
+		return new Vec3d(0.5, 0.25, 0.5);
 	}
 
 	@Override
-	public float getScale() {
+	public float getScale(BlockItemType type) {
 		return 0.5f;
 	}
 
 	@Override
-	public String getPath() {
+	public String getPath(BlockItemType type) {
 		return "models/block/stellwand/blockfiller.obj";
 	}
 
@@ -50,7 +51,7 @@ public class ItemBlockFiller extends CustomItem implements ICustomRenderer {
 	}
 
 	@Override
-	public Vec3d getRotation() {
+	public Vec3d getRotation(BlockItemType type) {
 		return new Vec3d(45, 45, 0);
 	}
 
