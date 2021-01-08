@@ -12,6 +12,7 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.blocks.BlockTop;
 import net.landofrails.landofsignals.tile.TileGround;
 import net.landofrails.landofsignals.tile.TileMid;
+import net.landofrails.landofsignals.tile.TileTop;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.Collections;
@@ -38,6 +39,11 @@ public class ItemTop extends CustomItem {
             TileGround groundEntity = world.getBlockEntity(pos, TileGround.class);
             if (groundEntity != null) {
                 rot = groundEntity.getBlockRotate();
+            } else {
+                TileTop topEntity = world.getBlockEntity(pos, TileTop.class);
+                if (topEntity != null) {
+                    rot = topEntity.getBlockRotate();
+                }
             }
         } else {
             rot = midEntity.getBlockRotate();
