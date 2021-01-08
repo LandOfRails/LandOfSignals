@@ -69,6 +69,8 @@ public class GuiSignalBox implements IScreen {
     @Override
     public void onClose() {
         textureName = null;
+        ts.setNoRedstone(stateLeft);
+        ts.setRedstone(stateRight);
         SignalBoxGuiPacket packet = new SignalBoxGuiPacket(stateRight, stateLeft, ts.getPos());
         packet.sendToServer();
     }

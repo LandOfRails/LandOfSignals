@@ -1,10 +1,11 @@
 package net.landofrails.landofsignals;
 
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.utils.Static;
-import scala.Tuple3;
-import scala.Tuple4;
+import scala.Tuple5;
+import scala.Tuple6;
 
 import java.util.ArrayList;
 
@@ -17,26 +18,50 @@ public class LOSBlocks {
 
     //GroundBlocks
     public static final BlockGround BLOCK_GROUND_VORSIGNAL = new BlockGround(LandOfSignals.MODID, "BlockGroundVorsignal");
+    public static final BlockGround BLOCK_GROUND_GAMERTV = new BlockGround(LandOfSignals.MODID, "BlockGroundGamerTV");
 
     //MidBlocks
     public static final BlockMid BLOCK_MID_VORSIGNAL_MAST = new BlockMid(LandOfSignals.MODID, "BlockMidVorsignalMast");
+    public static final BlockMid BLOCK_MID_GAMERTV = new BlockMid(LandOfSignals.MODID, "BlockMidGamerTV");
 
     //TopBlocks
     public static final BlockTop BLOCK_TOP_VORSIGNAL_KOPF = new BlockTop(LandOfSignals.MODID, "BlockTopVorsignalKopf");
+    public static final BlockTop BLOCK_TOP_GAMERTV_VORSIGNAL = new BlockTop(LandOfSignals.MODID, "BlockTopGamertvVorsignal");
+    public static final BlockTop BLOCK_TOP_GAMERTV_HVHP = new BlockTop(LandOfSignals.MODID, "BlockTopGamertvHvhp");
+    public static final BlockTop BLOCK_TOP_GAMERTV_HVERSATZ = new BlockTop(LandOfSignals.MODID, "BlockTopGamertvHversatz");
 
     public static void register() {
         // loads static classes and ctrs
 
+        //Vec3d = scale, Vec3d = translation
+
         //Register in list GROUND
-        Static.listGroundModels.put("BLOCK_GROUND_VORSIGNAL", new Tuple3(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/boden/vorsignal_boden.obj"), BLOCK_GROUND_VORSIGNAL, LOSItems.ITEM_GROUND_VORSIGNAL));
+        Static.listGroundModels.put("BLOCK_GROUND_VORSIGNAL", new Tuple5(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/boden/vorsignal_boden.obj"), BLOCK_GROUND_VORSIGNAL, LOSItems.ITEM_GROUND_VORSIGNAL, new Vec3d(0.63, 0.63, 0.63), new Vec3d(0.77, -1.2, 0.77)));
+        Static.listGroundModels.put("BLOCK_GROUND_GAMERTV", new Tuple5(new Identifier(LandOfSignals.MODID, "models/block/gamertv/boden/hv_boden.obj"), BLOCK_GROUND_GAMERTV, LOSItems.ITEM_GROUND_GAMERTV, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
 
         //Register in list MID
-        Static.listMidModels.put("BLOCK_MID_VORSIGNAL_MAST", new Tuple3(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"), BLOCK_MID_VORSIGNAL_MAST, LOSItems.ITEM_MID_VORSIGNAL_MAST));
+        Static.listMidModels.put("BLOCK_MID_VORSIGNAL_MAST", new Tuple5(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/mast/vorsignal_mast.obj"), BLOCK_MID_VORSIGNAL_MAST, LOSItems.ITEM_MID_VORSIGNAL_MAST, new Vec3d(0.63, 0.63, 0.63), new Vec3d(0.77, -1.2, 0.77)));
+        Static.listMidModels.put("BLOCK_MID_GAMERTV", new Tuple5(new Identifier(LandOfSignals.MODID, "models/block/gamertv/mast/hv_mast.obj"), BLOCK_MID_GAMERTV, LOSItems.ITEM_MID_GAMERTV, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
 
         //Register in list TOP
-        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple4(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new ArrayList<String>() {{
+        Static.listTopModels.put("BLOCK_TOP_VORSIGNAL_KOPF", new Tuple6(new Identifier(LandOfSignals.MODID, "models/block/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj"), BLOCK_TOP_VORSIGNAL_KOPF, LOSItems.ITEM_TOP_VORSIGNAL_KOPF, new ArrayList<String>() {{
             add(null);
             add("green");
-        }}));
+        }}, new Vec3d(0.63, 0.63, 0.63), new Vec3d(0.77, -1.2, 0.77)));
+        Static.listTopModels.put("BLOCK_TOP_GAMERTV_VORSIGNAL", new Tuple6(new Identifier(LandOfSignals.MODID, "models/block/gamertv/vorsignal/hv_vr.obj"), BLOCK_TOP_GAMERTV_VORSIGNAL, LOSItems.ITEM_TOP_GAMERTV_VORSIGNAL, new ArrayList<String>() {{
+            add(null);
+            add("gruen");
+            add("gruenorange");
+        }}, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
+        Static.listTopModels.put("BLOCK_TOP_GAMERTV_HVHP", new Tuple6(new Identifier(LandOfSignals.MODID, "models/block/gamertv/kopf/hv_hp.obj"), BLOCK_TOP_GAMERTV_HVHP, LOSItems.ITEM_TOP_GAMERTV_HVHP, new ArrayList<String>() {{
+            add(null);
+            add("hp1");
+            add("hp2");
+            add("sh1");
+        }}, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
+        Static.listTopModels.put("BLOCK_TOP_GAMERTV_HVERSATZ", new Tuple6(new Identifier(LandOfSignals.MODID, "models/block/gamertv/ersatzsignal/hv_ersatzsignal.obj"), BLOCK_TOP_GAMERTV_HVERSATZ, LOSItems.ITEM_TOP_GAMERTV_HVERSATZ, new ArrayList<String>() {{
+            add(null);
+            add("an");
+        }}, new Vec3d(1, 1, 1), new Vec3d(0.5, 0, 0.5)));
     }
 }

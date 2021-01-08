@@ -46,6 +46,12 @@ public class TileTop extends BlockEntity {
     }
 
     @Override
+    public void onBreak() {
+        super.onBreak();
+        if (Static.listTopBlocks.containsKey(UUID)) Static.listTopBlocks.remove(UUID);
+    }
+
+    @Override
     public IBoundingBox getBoundingBox() {
         return IBoundingBox.BLOCK;
     }

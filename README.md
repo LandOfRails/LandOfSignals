@@ -12,6 +12,7 @@ Content:
 * Skyman_Luna#2484 (Discord)
 * Captain Skipper#3662 (Discord)
 * [SebastianD334](https://github.com/SebastianD334)
+* gamerTV/Titus#1306 (Discord)
 
 <br> 
 

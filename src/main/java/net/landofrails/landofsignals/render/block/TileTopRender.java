@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals.render.block;
 
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
@@ -9,14 +10,11 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 import scala.Tuple2;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TileTopRender {
 
-    private static final List<String> groupNames = Arrays.asList(new String[]{"all"});
     private static Map<String, Tuple2<OBJModel, OBJRender>> cache = new HashMap<>();
 
     public static StandardModel render(TileTop ts) {
@@ -36,14 +34,13 @@ public class TileTopRender {
         }
         OBJRender renderer = cache.get(blockName)._2();
         try (OpenGL.With tex = renderer.bindTexture(ts.getTexturePath())) {
-            GL11.glScaled(0.63, 0.63, 0.63);
-            GL11.glTranslated(0.77, -1.2, 0.77);
+            Vec3d scale = Static.listTopModels.get(blockName)._5();
+            GL11.glScaled(scale.x, scale.y, scale.z);
+            Vec3d trans = Static.listTopModels.get(blockName)._6();
+            GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
             renderer.draw();
         }
         OBJModel model = cache.get(blockName)._1();
-        ts.setFullHeight(model.heightOfGroups(groupNames));
-        ts.setFullWidth(model.widthOfGroups(groupNames));
-        ts.setFullLength(model.lengthOfGroups(groupNames));
     }
 }

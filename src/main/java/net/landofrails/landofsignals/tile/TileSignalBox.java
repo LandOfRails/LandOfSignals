@@ -36,7 +36,7 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (UUIDTileTop != null) {
+        if (UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
             LOSGuis.SIGNAL_BOX.open(player, getPos());
             return true;
         } else return false;
@@ -45,7 +45,7 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public void onNeighborChange(Vec3i neighbor) {
         if (getWorld().isServer) {
-            if (UUIDTileTop != null) {
+            if (UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
                 TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
                 if (entity != null) {
                     if (getWorld().getRedstone(neighbor) > 0) {

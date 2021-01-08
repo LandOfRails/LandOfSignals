@@ -12,12 +12,17 @@ public class LOSItems {
 
     //GroundItems
     public static final ItemGround ITEM_GROUND_VORSIGNAL = new ItemGround(LandOfSignals.MODID, "ItemGroundVorsignal", "BLOCK_GROUND_VORSIGNAL");
+    public static final ItemGround ITEM_GROUND_GAMERTV = new ItemGround(LandOfSignals.MODID, "ItemGroundGamerTV", "BLOCK_GROUND_GAMERTV");
 
     //MidItems
     public static final ItemMid ITEM_MID_VORSIGNAL_MAST = new ItemMid(LandOfSignals.MODID, "ItemMidVorsignalMast", "BLOCK_MID_VORSIGNAL_MAST");
+    public static final ItemMid ITEM_MID_GAMERTV = new ItemMid(LandOfSignals.MODID, "ItemMidGamerTV", "BLOCK_MID_GAMERTV");
 
     //TopItems
     public static final ItemTop ITEM_TOP_VORSIGNAL_KOPF = new ItemTop(LandOfSignals.MODID, "ItemTopVorsignalKopf", "BLOCK_TOP_VORSIGNAL_KOPF");
+    public static final ItemTop ITEM_TOP_GAMERTV_VORSIGNAL = new ItemTop(LandOfSignals.MODID, "ItemTopGamertvVorsignal", "BLOCK_TOP_GAMERTV_VORSIGNAL");
+    public static final ItemTop ITEM_TOP_GAMERTV_HVHP = new ItemTop(LandOfSignals.MODID, "ItemTopGamertvHvhp", "BLOCK_TOP_GAMERTV_HVHP");
+    public static final ItemTop ITEM_TOP_GAMERTV_HVERSATZ = new ItemTop(LandOfSignals.MODID, "ItemTopGamertvHversatz", "BLOCK_TOP_GAMERTV_HVERSATZ");
 
     public static void register() {
         // loads static classes and ctrs
