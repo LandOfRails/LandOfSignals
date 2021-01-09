@@ -1,5 +1,6 @@
 itemGroup.landofsignals.stellwand=LOS | Stellwand
-itemGroup.landofsignals.main=LOS | Signale
+itemGroup.landofsignals.signals=LOS | Signale
+itemGroup.landofsignals.assets=LOS | Assets
 
 gui.landofsignals:signalbox.redstone=Mit redstone
 gui.landofsignals:signalbox.noredstone=Ohne redstone

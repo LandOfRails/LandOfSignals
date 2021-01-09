@@ -25,7 +25,7 @@ public class ItemGround extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.MAIN_TAB);
+        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override

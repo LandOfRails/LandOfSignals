@@ -27,18 +27,14 @@ public class ItemConnector extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.MAIN_TAB);
+        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         if (world.isServer) {
-            if (blockEntityTop == null) {
-                blockEntityTop = world.getBlockEntity(pos, TileTop.class);
-            }
-            if (blockEntityBox == null) {
-                blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
-            }
+            if (blockEntityTop == null) blockEntityTop = world.getBlockEntity(pos, TileTop.class);
+            if (blockEntityBox == null) blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
             if (blockEntityBox != null && blockEntityTop != null) {
                 blockEntityBox.setUUID(blockEntityTop.getUUID());
                 blockEntityTop = null;
@@ -51,10 +47,17 @@ public class ItemConnector extends CustomItem {
             } else if (blockEntityBox != null) {
                 player.sendMessage(PlayerMessage.direct("Pairing started with SignalBox"));
                 return ClickResult.ACCEPTED;
-            } else {
-                return ClickResult.REJECTED;
             }
         }
         return ClickResult.REJECTED;
+    }
+
+    @Override
+    public void onClickAir(Player player, World world, Player.Hand hand) {
+        if (world.isServer && player.isCrouching()) {
+            blockEntityBox = null;
+            blockEntityTop = null;
+            player.sendMessage(PlayerMessage.direct("Pairing canceled."));
+        }
     }
 }

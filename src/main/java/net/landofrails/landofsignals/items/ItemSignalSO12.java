@@ -21,7 +21,7 @@ public class ItemSignalSO12 extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.MAIN_TAB);
+        return Collections.singletonList(LOSTabs.ASSETS_TAB);
     }
 
     @Override

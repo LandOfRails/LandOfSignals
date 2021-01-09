@@ -9,10 +9,12 @@ public class LOSTabs {
 
     }
 
-    public static final CreativeTab MAIN_TAB;
+    public static final CreativeTab SIGNALS_TAB;
+    public static final CreativeTab ASSETS_TAB;
 
     static {
-        MAIN_TAB = new CreativeTab(LandOfSignals.MODID + ".main", () -> new ItemStack(net.landofrails.landofsignals.LOSItems.ITEM_SIGNALSO12, 1));
+        SIGNALS_TAB = new CreativeTab(LandOfSignals.MODID + ".signals", () -> new ItemStack(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, 1));
+        ASSETS_TAB = new CreativeTab(LandOfSignals.MODID + ".assets", () -> new ItemStack(LOSItems.ITEM_TICKET_MACHINE_DB, 1));
     }
 
 }
