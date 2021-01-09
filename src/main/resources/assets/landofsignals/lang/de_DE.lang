@@ -1,16 +1,26 @@
-itemGroup.landofsignals.stellwand=LOS | Signalbox
-itemGroup.immersiverailroading.main=LOS | Signals
+itemGroup.landofsignals.stellwand=LOS | Stellwand
+itemGroup.landofsignals.main=LOS | Signale
 
-gui.landofsignals:signalbox.redstone=With redstone
-gui.landofsignals:signalbox.noredstone=Without redstone
+gui.landofsignals:signalbox.redstone=Mit redstone
+gui.landofsignals:signalbox.noredstone=Ohne redstone
 
-item.landofsignals:itemsignalso12.name=SO12
-item.landofsignals:blocksignallever.name=Signal Lever
-item.landofsignals:blockticketmachinedb.name=Ticket Machine (Deutsche Bahn)
-item.landofsignals:blockticketmachinesbb.name=Ticket Machine (SBB)
-item.landofsignals:blocksignalbox.name=Signal Box
-item.landofsignals:blockgroundvorsignal.name=Approach signal (Base)
-item.landofsignals:blockmidvorsignalmast.name=Approach signal (Pole)
-item.landofsignals:blocktopvorsignalkopf.name=Approach signal (Signal)
+item.landofsignals:item_signal_so12.name=SO12
+item.landofsignals:item_signal_lever.name=Signalhebel
+item.landofsignals:item_ticket_machine_db.name=Ticketautomat (Deutsche Bahn)
+item.landofsignals:item_ticket_machine_sbb.name=Ticketautomat (SBB)
+item.landofsignals:item_signal_box.name=Signalsteuerungsbox
+item.landofsignals:item_connector.name=Verbindungstool
+
+#gamerTV
+item.landofsignals:item_top_gamertv_hvhp.name=Hauptsignal (Signal)
+item.landofsignals:item_top_gamertv_vorsignal.name=Vorsignal (Signal)
+item.landofsignals:item_top_gamertv_hversatz.name=Ersatzsignal (Signal)
+item.landofsignals:item_ground_gamertv.name=Signal (Stütze)
+item.landofsignals:item_mid_gamertv.name=Signal (Mast)
+
+#Skyman_Luna
+item.landofsignals:item_ground_vorsignal.name=Vorsignalsignal (Stütze)
+item.landofsignals:item_mid_vorsignal_mast.name=Vorsignalsignal (Mast)
+item.landofsignals:item_top_vorsignal_kopf.name=Vorsignalsignal (Signal)
 
 item.landofsignals:stellwand.itemblockfiller2.name=Filler
