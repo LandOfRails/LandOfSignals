@@ -7,7 +7,6 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
-import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 
 public class TileTicketMachineDB extends BlockEntity {
@@ -31,8 +30,7 @@ public class TileTicketMachineDB extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        LOSGuis.TICKET_MACHINE_DB.open(player);
-        return true;
+        return false;
     }
 
     public float getBlockRotate() {

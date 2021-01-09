@@ -30,7 +30,7 @@ public class TileTicketMachineSBB extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        return true;
+        return false;
     }
 
     public float getBlockRotate() {

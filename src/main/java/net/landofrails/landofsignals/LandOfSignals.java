@@ -79,7 +79,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
                 ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
-                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/katanagear"));
+                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
 
                 ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
                 ItemRender.register(LOSItems.ITEM_GROUND_GAMERTV, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_GAMERTV")._1(), new Vec3d(0.5, 0, 0.5), 1f));

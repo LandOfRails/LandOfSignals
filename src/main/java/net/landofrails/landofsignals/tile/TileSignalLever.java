@@ -36,6 +36,7 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         activated = !activated;
+        markDirty();
         return true;
     }
 
@@ -60,11 +61,13 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
         this.blockRotate = blockRotate;
     }
 
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
     @Override
     public int getStrongPower(Facing from) {
-        if (activated) {
-            return 15;
-        } else return 0;
+        return 0;
     }
 
     @Override
