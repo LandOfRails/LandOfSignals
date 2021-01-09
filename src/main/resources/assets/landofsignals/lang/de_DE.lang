@@ -1,9 +1,16 @@
-gui.landofsignals:signalbox.redstone=Mit Redstone
-gui.landofsignals:signalbox.noredstone=Ohne Redstone
+itemGroup.landofsignals.stellwand=LOS | Signalbox
+itemGroup.immersiverailroading.main=LOS | Signals
 
-item.landofsignals:ItemSignalSO12.name=SO12
-item.landofsignals:BlockSignalLever.name=Signalhebel
-item.landofsignals:BlockTicketMachineDB.name=Ticketautomat (Deutsche Bahn)
-item.landofsignals:BlockTicketMachineSBB.name=Ticketautomat (SBB)
-item.landofsignals:BlockSignalBox.name=Signalverbindungskiste (oder so)
-item.landofsignals:BlockGroundVorsignal.name=Approach signal (Base)
+gui.landofsignals:signalbox.redstone=With redstone
+gui.landofsignals:signalbox.noredstone=Without redstone
+
+item.landofsignals:itemsignalso12.name=SO12
+item.landofsignals:blocksignallever.name=Signal Lever
+item.landofsignals:blockticketmachinedb.name=Ticket Machine (Deutsche Bahn)
+item.landofsignals:blockticketmachinesbb.name=Ticket Machine (SBB)
+item.landofsignals:blocksignalbox.name=Signal Box
+item.landofsignals:blockgroundvorsignal.name=Approach signal (Base)
+item.landofsignals:blockmidvorsignalmast.name=Approach signal (Pole)
+item.landofsignals:blocktopvorsignalkopf.name=Approach signal (Signal)
+
+item.landofsignals:stellwand.itemblockfiller2.name=Filler
