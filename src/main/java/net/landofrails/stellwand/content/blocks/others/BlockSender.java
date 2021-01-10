@@ -2,27 +2,27 @@ package net.landofrails.stellwand.content.blocks.others;
 
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import net.landofrails.stellwand.content.blocks.others.BlockFiller.BlockEntityFiller;
+import net.landofrails.stellwand.content.blocks.others.BlockSender.BlockEntitySender;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.compact.AItemBlock;
 import net.landofrails.stellwand.utils.compact.AItemBlockEntity;
 import net.landofrails.stellwand.utils.compact.BlockItem;
 
-public class BlockFiller extends AItemBlock<BlockItem, BlockEntityFiller> {
+public class BlockSender extends AItemBlock<BlockItem, BlockEntitySender> {
 
 	// Instance of the ITEM
 	private BlockItem item;
 
 	// Block name
-	public BlockFiller() {
-		super("stellwand.blockFiller");
+	public BlockSender() {
+		super("stellwand.blockSender");
 	}
 
 	// Block/Item Translation
 	@Override
 	public Vec3d getTranslate(BlockItemType type) {
-		return type == BlockItemType.BLOCK ? new Vec3d(0.5, 0, 0.5) : new Vec3d(0.5, 0.15, 0.5);
+		return type == BlockItemType.BLOCK ? new Vec3d(0.5, 0.5, 0.5) : new Vec3d(0.5, 0.5, 0.5);
 	}
 
 	// Block/Item Scale
@@ -40,24 +40,24 @@ public class BlockFiller extends AItemBlock<BlockItem, BlockEntityFiller> {
 	// Block/Item (OBJ-)Path
 	@Override
 	public String getPath(BlockItemType type) {
-		return "models/block/stellwand/blockfiller.obj";
+		return "models/block/stellwand/blocksender.obj";
 	}
 
 	// The BlockEntity
 	@Override
-	protected BlockEntityFiller constructBlockEntity() {
-		return new BlockEntityFiller();
+	protected BlockEntitySender constructBlockEntity() {
+		return new BlockEntitySender();
 	}
 
 	// Return of ITEM Instance
 	@Override
 	public BlockItem getItem() {
 		if (item == null)
-			item = new BlockItem(this, "stellwand.itemBlockFiller", CustomTabs.STELLWAND_TAB);
+			item = new BlockItem(this, "stellwand.itemBlockSender", CustomTabs.STELLWAND_TAB);
 		return item;
 	}
 
-	public class BlockEntityFiller extends AItemBlockEntity {
+	public class BlockEntitySender extends AItemBlockEntity {
 		@Override
 		public ItemStack onPick() {
 			return new ItemStack(getItem(), 1);

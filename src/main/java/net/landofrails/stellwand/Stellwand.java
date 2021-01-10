@@ -11,6 +11,9 @@ public class Stellwand {
 	}
 
 	public static void commonEvent() {
+
+		// Loader.init();
+
 		CustomTabs.register();
 		CustomItems.register();
 		CustomBlocks.registerBlocks();

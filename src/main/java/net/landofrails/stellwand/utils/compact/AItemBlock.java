@@ -2,9 +2,11 @@ package net.landofrails.stellwand.utils.compact;
 
 import org.lwjgl.opengl.GL11;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.item.CustomItem;
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
@@ -17,8 +19,8 @@ import net.landofrails.stellwand.utils.ICustomRenderer;
 public abstract class AItemBlock<I extends CustomItem, T extends BlockEntity> extends BlockTypeEntity
 		implements ICustomRenderer {
 
-	private OBJRender renderer;
-	private OBJModel model;
+	protected OBJRender renderer;
+	protected OBJModel model;
 
 	public AItemBlock(String name) {
 		super(LandOfSignals.MODID, name);
@@ -27,7 +29,10 @@ public abstract class AItemBlock<I extends CustomItem, T extends BlockEntity> ex
 	@Override
 	protected abstract T constructBlockEntity();
 
-	public abstract Class<T> getBlockEntityClass();
+	@SuppressWarnings("unchecked")
+	public Class<T> getBlockEntityClass() {
+		return (Class<T>) this.constructBlockEntity().getClass();
+	}
 
 	public abstract I getItem();
 
@@ -39,7 +44,9 @@ public abstract class AItemBlock<I extends CustomItem, T extends BlockEntity> ex
 
 		if (renderer == null || model == null) {
 			try {
-				model = new OBJModel(new Identifier(LandOfSignals.MODID, aItemBlock.getPath(BlockItemType.BLOCK)), 0);
+				ModCore.Mod.info("Registering OBJ: " + this.getPath(BlockItemType.BLOCK),
+						this.getPath(BlockItemType.BLOCK));
+				model = new OBJModel(new Identifier(LandOfSignals.MODID, this.getPath(BlockItemType.BLOCK)), 0);
 				renderer = new OBJRender(model);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -48,9 +55,13 @@ public abstract class AItemBlock<I extends CustomItem, T extends BlockEntity> ex
 		if (renderer == null)
 			return;
 		try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-			GL11.glTranslated(0.5, 0, 0.5);
+			Vec3d translate = this.getTranslate(BlockItemType.BLOCK);
+			GL11.glTranslated(translate.x, translate.y, translate.z);
+			Vec3d rotation = this.getRotation(BlockItemType.BLOCK);
+			GL11.glRotated(1, rotation.x, rotation.y, rotation.z);
 			renderer.draw();
 		}
+
 	}
 
 }

@@ -31,6 +31,10 @@ public class BlockItem extends CustomItem {
 	public ClickResult onClickBlock(Player player, World world, Vec3i pos, Hand hand, Facing facing, Vec3d inBlockPos) {
 
 		Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+
+		if (isStandingInBlock(player.getBlockPosition().subtract(target)))
+			return ClickResult.REJECTED;
+
 		if (world.isAir(target) || world.isReplaceable(target)) {
 			world.setBlock(target, block);
 			BlockEntity blockEntity = world.getBlockEntity(target, block.getBlockEntityClass());
@@ -38,10 +42,15 @@ public class BlockItem extends CustomItem {
 				IRotatableBlockEntity rot = (IRotatableBlockEntity) blockEntity;
 				rot.setRotation(player.getRotationYawHead());
 			}
+
 			return ClickResult.ACCEPTED;
 		}
 
 		return ClickResult.REJECTED;
+	}
+
+	private boolean isStandingInBlock(Vec3i vec3i) {
+		return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
 	}
 
 	@Override

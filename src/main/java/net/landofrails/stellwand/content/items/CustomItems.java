@@ -9,7 +9,6 @@ import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.stellwand.content.items.blocks.ItemBlockFiller;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
@@ -24,13 +23,11 @@ public class CustomItems {
 	public static final ItemConnector ITEMCONNECTOR1 = new ItemConnector(1);
 	public static final ItemConnector ITEMCONNECTOR2 = new ItemConnector(2);
 	public static final ItemConnector ITEMCONNECTOR3 = new ItemConnector(3);
-	public static final ItemBlockFiller ITEMBLOCKFILLER = new ItemBlockFiller();
 
 	public static void register() {
 		itemList.add(ITEMCONNECTOR1);
 		itemList.add(ITEMCONNECTOR2);
 		itemList.add(ITEMCONNECTOR3);
-		itemList.add(ITEMBLOCKFILLER);
 	}
 
 	// Clientsided

@@ -10,11 +10,11 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.stellwand.content.blocks.others.BlockFiller;
-import net.landofrails.stellwand.content.blocks.others.BlockFiller2;
+import net.landofrails.stellwand.content.blocks.others.BlockSender;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
-import net.landofrails.stellwand.utils.UselessEntity;
 import net.landofrails.stellwand.utils.compact.AItemBlock;
+import net.landofrails.stellwand.utils.exceptions.DuplicateBlockEntitiesException;
 
 public class CustomBlocks {
 
@@ -25,10 +25,11 @@ public class CustomBlocks {
 	private static final List<AItemBlock<?, ?>> itemBlocks = new ArrayList<>();
 
 	public static final BlockFiller BLOCKFILLER = new BlockFiller();
-	public static final BlockFiller2 BLOCKFILLER2 = new BlockFiller2();
+	public static final BlockSender BLOCKSENDER = new BlockSender();
 
 	public static void registerBlocks() {
-		itemBlocks.add(BLOCKFILLER2);
+		itemBlocks.add(BLOCKSENDER);
+		itemBlocks.add(BLOCKFILLER);
 	}
 
 	public static void registerItemRenderers() {
@@ -46,7 +47,18 @@ public class CustomBlocks {
 	}
 
 	public static void registerBlockRenderers() {
-		BlockRender.register(BLOCKFILLER, BLOCKFILLER::render, UselessEntity.class);
+
+		List<Class<?>> classes = new ArrayList<>();
+		for (AItemBlock<?, ?> itemBlock : itemBlocks) {
+			Class<?> c = itemBlock.getBlockEntityClass();
+			if (!classes.contains(c))
+				classes.add(c);
+			else {
+				throw new DuplicateBlockEntitiesException("BlockEntity is used multiple times: " + c.getName());
+			}
+		}
+
+		classes.clear();
 
 		// AItemBlocks
 		for (AItemBlock<?, ?> itemBlock : itemBlocks) {
