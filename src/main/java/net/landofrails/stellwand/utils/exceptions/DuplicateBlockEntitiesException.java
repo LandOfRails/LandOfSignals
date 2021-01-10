@@ -2,13 +2,13 @@ package net.landofrails.stellwand.utils.exceptions;
 
 public class DuplicateBlockEntitiesException extends RuntimeException {
 
-	public DuplicateBlockEntitiesException(String text) {
-		super(text);
-	}
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3614572754847464769L;
+
+	public DuplicateBlockEntitiesException(String text) {
+		super(text);
+	}
 
 }
