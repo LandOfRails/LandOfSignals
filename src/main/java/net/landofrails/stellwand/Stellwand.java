@@ -2,6 +2,7 @@ package net.landofrails.stellwand;
 
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.loader.Loader;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 
 public class Stellwand {
@@ -12,7 +13,7 @@ public class Stellwand {
 
 	public static void commonEvent() {
 
-		// Loader.init();
+		Loader.init();
 
 		CustomTabs.register();
 		CustomItems.register();

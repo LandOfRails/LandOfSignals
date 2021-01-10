@@ -16,7 +16,7 @@ public class BlockSender extends AItemBlock<BlockItem, BlockEntitySender> {
 
 	// Block name
 	public BlockSender() {
-		super("stellwand.blockSender");
+		super("stellwand.blocksender");
 	}
 
 	// Block/Item Translation
@@ -53,7 +53,7 @@ public class BlockSender extends AItemBlock<BlockItem, BlockEntitySender> {
 	@Override
 	public BlockItem getItem() {
 		if (item == null)
-			item = new BlockItem(this, "stellwand.itemBlockSender", CustomTabs.STELLWAND_TAB);
+			item = new BlockItem(this, "stellwand.itemblocksender", CustomTabs.STELLWAND_TAB);
 		return item;
 	}
 

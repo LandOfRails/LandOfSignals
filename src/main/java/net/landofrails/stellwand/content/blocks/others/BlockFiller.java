@@ -16,7 +16,7 @@ public class BlockFiller extends AItemBlock<BlockItem, BlockEntityFiller> {
 
 	// Block name
 	public BlockFiller() {
-		super("stellwand.blockFiller");
+		super("stellwand.blockfiller");
 	}
 
 	// Block/Item Translation
@@ -53,7 +53,7 @@ public class BlockFiller extends AItemBlock<BlockItem, BlockEntityFiller> {
 	@Override
 	public BlockItem getItem() {
 		if (item == null)
-			item = new BlockItem(this, "stellwand.itemBlockFiller", CustomTabs.STELLWAND_TAB);
+			item = new BlockItem(this, "stellwand.itemblockfiller", CustomTabs.STELLWAND_TAB);
 		return item;
 	}
 

@@ -33,7 +33,7 @@ public class Loader {
 			return;
 		}
 
-		File assetFolder = new File("./mods/stellwand");
+		File assetFolder = new File("./config/stellwand");
 		if (assetFolder.exists()) {
 			ModCore.Mod.info("Searching for assets..", "information1");
 
@@ -57,11 +57,13 @@ public class Loader {
 
 	}
 
+	// Run: 1
 	private static void loadAsset(File asset) {
 		ModCore.Mod.info("Loading Asset: " + asset.getAbsolutePath(), "information4");
 
 		try {
 			ZipFile zip = new ZipFile(asset);
+
 			ModCore.Mod.warn("Loaded: " + asset.getName(), "warn");
 		} catch (ZipException zipException) {
 			ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error2");

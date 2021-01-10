@@ -22,7 +22,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 	}
 
 	public ItemConnector(int variation) {
-		super(LandOfSignals.MODID, "stellwand.itemConnector" + variation);
+		super(LandOfSignals.MODID, "stellwand.itemconnector" + variation);
 		this.variation = variation;
 	}
 
