@@ -28,7 +28,7 @@ public class TileTicketMachineSBBRender {
     private static void renderStuff(TileTicketMachineSBB ts, float partialTicks) {
         try {
             if (renderer == null || model == null) {
-                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_sbb/ticketautomat.obj"), 0);
+                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), 0);
                 renderer = new OBJRender(model);
             }
             try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {

@@ -32,7 +32,7 @@ public class TileTicketMachineDBRender {
     private static void renderStuff(TileTicketMachineDB ts, float partialTicks) {
         try {
             if (renderer == null || model == null) {
-                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_db/fahrkartenautomat_db.obj"), 0);
+                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), 0);
                 renderer = new OBJRender(model);
             }
             try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {

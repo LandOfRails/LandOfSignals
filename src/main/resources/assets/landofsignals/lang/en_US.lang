@@ -21,7 +21,10 @@ item.landofsignals:item_mid_gamertv.name=Signal (Pole)
 
 #Skyman_Luna
 item.landofsignals:item_ground_vorsignal.name=Approach signal (Base)
-item.landofsignals:item_mid_vorsignal_mast.name=Approach signal (Pole)
+item.landofsignals:item_mid_vorsignal_mast.name=Signal (Pole)
 item.landofsignals:item_top_vorsignal_kopf.name=Approach signal (Signal)
+item.landofsignals:item_ground_hauptsignal.name=Main signal (Base)
+item.landofsignals:item_mid_hauptsignal_schild.name=Main signal (Sign)
+item.landofsignals:item_top_hauptsignal_kopf.name=Main signal (Signal)
 
 item.landofsignals:stellwand.itemblockfiller2.name=Filler

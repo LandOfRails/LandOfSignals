@@ -13,10 +13,13 @@ import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
-@net.minecraftforge.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.1", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.12,1.13)")
+//1.7.10
+//@cpw.mods.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.2", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.7.10,1.10)")
+
+//1.12.2
+@net.minecraftforge.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.2", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.12,1.13)")
 public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings("java:S1845")
     public static final String MODID = "landofsignals";
@@ -39,7 +42,7 @@ public class LandOfSignals extends ModCore.Mod {
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-            Stellwand.commonEvent();
+//            Stellwand.commonEvent();
             LOSBlocks.register();
             LOSItems.register();
             Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
@@ -53,7 +56,7 @@ public class LandOfSignals extends ModCore.Mod {
             case CONSTRUCT:
                 ModCore.Mod.info("Starting client construct...");
                 // Stellwand
-                Stellwand.clientEvent();
+//                Stellwand.clientEvent();
 
                 //Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
@@ -63,31 +66,37 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
 
                 BlockRender.register(LOSBlocks.BLOCK_GROUND_VORSIGNAL, TileGroundRender::render, TileGround.class);
+                BlockRender.register(LOSBlocks.BLOCK_GROUND_HAUPTSIGNAL, TileGroundRender::render, TileGround.class);
                 BlockRender.register(LOSBlocks.BLOCK_GROUND_GAMERTV, TileGroundRender::render, TileGround.class);
 
                 BlockRender.register(LOSBlocks.BLOCK_MID_VORSIGNAL_MAST, TileMidRender::render, TileMid.class);
+                BlockRender.register(LOSBlocks.BLOCK_MID_HAUPTSIGNAL_SCHILD, TileMidRender::render, TileMid.class);
                 BlockRender.register(LOSBlocks.BLOCK_MID_GAMERTV, TileMidRender::render, TileMid.class);
 
                 BlockRender.register(LOSBlocks.BLOCK_TOP_VORSIGNAL_KOPF, TileTopRender::render, TileTop.class);
+                BlockRender.register(LOSBlocks.BLOCK_TOP_HAUPTSIGNAL_KOPF, TileTopRender::render, TileTop.class);
                 BlockRender.register(LOSBlocks.BLOCK_TOP_GAMERTV_VORSIGNAL, TileTopRender::render, TileTop.class);
                 BlockRender.register(LOSBlocks.BLOCK_TOP_GAMERTV_HVHP, TileTopRender::render, TileTop.class);
                 BlockRender.register(LOSBlocks.BLOCK_TOP_GAMERTV_HVERSATZ, TileTopRender::render, TileTop.class);
 
                 //Items
-                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
+                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
+                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
 
                 ItemRender.register(LOSItems.ITEM_GROUND_VORSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_VORSIGNAL")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_GROUND_HAUPTSIGNAL, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_HAUPTSIGNAL")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
                 ItemRender.register(LOSItems.ITEM_GROUND_GAMERTV, ObjItemRender.getModelFor(Static.listGroundModels.get("BLOCK_GROUND_GAMERTV")._1(), new Vec3d(0.5, 0, 0.5), 1f));
 
                 ItemRender.register(LOSItems.ITEM_MID_VORSIGNAL_MAST, ObjItemRender.getModelFor(Static.listMidModels.get("BLOCK_MID_VORSIGNAL_MAST")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
+                ItemRender.register(LOSItems.ITEM_MID_HAUPTSIGNAL_SCHILD, ObjItemRender.getModelFor(Static.listMidModels.get("BLOCK_MID_HAUPTSIGNAL_SCHILD")._1(), new Vec3d(0.5, -0.9, 0.5), 0.63f));
                 ItemRender.register(LOSItems.ITEM_MID_GAMERTV, ObjItemRender.getModelFor(Static.listMidModels.get("BLOCK_MID_GAMERTV")._1(), new Vec3d(0.5, 0, 0.5), 1f));
 
                 ItemRender.register(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._1(), new Vec3d(0.5, -0.9, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_VORSIGNAL_KOPF")._4(), 0.63f));
+                ItemRender.register(LOSItems.ITEM_TOP_HAUPTSIGNAL_KOPF, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_HAUPTSIGNAL_KOPF")._1(), new Vec3d(0.5, -0.9, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_HAUPTSIGNAL_KOPF")._4(), 0.63f));
                 ItemRender.register(LOSItems.ITEM_TOP_GAMERTV_VORSIGNAL, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_GAMERTV_VORSIGNAL")._1(), new Vec3d(0.5, 0, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_GAMERTV_VORSIGNAL")._4(), 1f));
                 ItemRender.register(LOSItems.ITEM_TOP_GAMERTV_HVHP, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVHP")._1(), new Vec3d(0.5, 0, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVHP")._4(), 1f));
                 ItemRender.register(LOSItems.ITEM_TOP_GAMERTV_HVERSATZ, ObjItemRender.getModelFor(Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVERSATZ")._1(), new Vec3d(0.5, 0, 0.5), Vec3d.ZERO, Static.listTopModels.get("BLOCK_TOP_GAMERTV_HVERSATZ")._4(), 1f));

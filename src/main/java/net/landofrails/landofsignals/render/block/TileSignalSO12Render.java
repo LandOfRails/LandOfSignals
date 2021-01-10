@@ -30,7 +30,7 @@ public class TileSignalSO12Render {
     private static void renderStuff(TileSignalSO12 ts) {
         try {
             if (renderer == null || model == null) {
-                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/so12/signalso12.obj"), 0);
+                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), 0);
                 renderer = new OBJRender(model);
             }
             ts.setFullHeight(model.heightOfGroups(groupNames));

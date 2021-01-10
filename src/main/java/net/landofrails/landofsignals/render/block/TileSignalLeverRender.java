@@ -32,7 +32,7 @@ public class TileSignalLeverRender {
     private static void renderStuff(TileSignalLever ts, float partialTicks) {
         try {
             if (renderer == null || model == null) {
-                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/signalslever/signalslever.obj"), 0);
+                model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), 0);
                 renderer = new OBJRender(model);
             }
             try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
