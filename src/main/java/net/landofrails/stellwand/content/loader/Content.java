@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cam72cam.mod.ModCore;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.content.loader.ContentPack.ContentPackEntry;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Content {
@@ -16,71 +18,38 @@ public class Content {
 
 	private static List<ContentPack> contentPacks = new ArrayList<>();
 
+	// model = new OBJModel(new Identifier(LandOfSignals.MODID,
+	// this.getPath(BlockItemType.BLOCK)), 0);
+	// renderer = new OBJRender(model);
+
 	public static void addContentPack(ContentPack pack) {
 
 		if (contentPacks.contains(pack))
-			throw new ContentPackException("Pack already exists: " + pack.packName);
+			throw new ContentPackException("Pack already exists: " + pack.getName());
 
 		for (ContentPack p : contentPacks) {
-			if (p.packName.equalsIgnoreCase(pack.getPackName()))
-				throw new ContentPackException("Pack with the same name  already exists: " + pack.packName);
+			if (p.getName().equalsIgnoreCase(pack.getName()) && p.getAuthor().equalsIgnoreCase(pack.getAuthor()))
+				throw new ContentPackException("Pack with the same name  already exists: " + pack.getName());
 		}
 
 		// @formatter:off
-		if (!LandOfSignals.VERSION.equalsIgnoreCase(pack.modVersion))
-			throw new ContentPackException("[" + pack.getPackName() + "] Excepted ModVersion: " + LandOfSignals.VERSION + ", but found:" + pack.modVersion);
+		if (!LandOfSignals.VERSION.equalsIgnoreCase(pack.getModversion()))
+			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + LandOfSignals.VERSION + ", but found:" + pack.getModversion());
 		// @formatter:on
 
 		contentPacks.add(pack);
+
+		ModCore.Mod.info("Content Pack loaded: " + pack.getName() + " v" + pack.getPackversion());
+
 	}
 
-	public static class ContentPack {
-
-		private String modVersion = "";
-
-		private String packName = "";
-		private String packVersion = "";
-		private String author = "";
-
-		private Map<String, String> blockSignals = new HashMap<>();
-
-		public ContentPack(String modVersion, String packName, String packVersion, String author) {
-			this.modVersion = modVersion;
-			this.packName = packName;
-			this.packVersion = packVersion;
-			this.author = author;
+	public static Map<ContentPackEntry, String> getEntries() {
+		Map<ContentPackEntry, String> entries = new HashMap<>();
+		for (ContentPack pack : contentPacks) {
+			for (ContentPackEntry entry : pack.getContent())
+				entries.put(entry, pack.getId());
 		}
-
-		/**
-		 * 
-		 * Entry: Name, Texture (OBJ)
-		 * 
-		 * @param blockSignals
-		 */
-		public void setBlockSignals(Map<String, String> blockSignals) {
-			this.blockSignals = blockSignals;
-		}
-
-		public String getModVersion() {
-			return modVersion;
-		}
-
-		public String getPackName() {
-			return packName;
-		}
-
-		public String getPackVersion() {
-			return packVersion;
-		}
-
-		public String getAuthor() {
-			return author;
-		}
-
-		public Map<String, String> getBlockSignals() {
-			return blockSignals;
-		}
-
+		return entries;
 	}
 
 }

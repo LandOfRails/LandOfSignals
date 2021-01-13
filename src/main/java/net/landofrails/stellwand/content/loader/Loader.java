@@ -2,12 +2,17 @@ package net.landofrails.stellwand.content.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.stellwand.utils.StellwandUtils;
+import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Loader {
 
@@ -57,14 +62,23 @@ public class Loader {
 
 	}
 
-	// Run: 1
+	// Run: 4
 	private static void loadAsset(File asset) {
 		ModCore.Mod.info("Loading Asset: " + asset.getAbsolutePath(), "information4");
 
-		try {
-			ZipFile zip = new ZipFile(asset);
+		try (ZipFile zip = new ZipFile(asset)) {
 
-			ModCore.Mod.warn("Loaded: " + asset.getName(), "warn");
+			List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
+			Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("stellwand.json"))
+					.findFirst();
+			if (stellwandJson.isPresent()) {
+				ContentPack contentPack = ContentPack
+						.fromJson(zip.getInputStream(zip.getEntry(stellwandJson.get().getName())));
+				Content.addContentPack(contentPack);
+			} else {
+				throw new ContentPackException("[" + asset.getName() + "] Missing stellwand.json");
+			}
+
 		} catch (ZipException zipException) {
 			ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error2");
 			ModCore.Mod.error("Error: " + zipException.getMessage(), "error2");
@@ -73,6 +87,11 @@ public class Loader {
 			ModCore.Mod.error("Error: " + e.getMessage(), "error3");
 		}
 
+	}
+
+	// For method references
+	private static <T> Predicate<T> not(Predicate<T> t) {
+		return t.negate();
 	}
 
 }
