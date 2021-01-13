@@ -2,6 +2,7 @@ package net.landofrails.stellwand.content.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -72,9 +73,7 @@ public class Loader {
 			Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("stellwand.json"))
 					.findFirst();
 			if (stellwandJson.isPresent()) {
-				ContentPack contentPack = ContentPack
-						.fromJson(zip.getInputStream(zip.getEntry(stellwandJson.get().getName())));
-				Content.addContentPack(contentPack);
+				load(zip, stellwandJson.get());
 			} else {
 				throw new ContentPackException("[" + asset.getName() + "] Missing stellwand.json");
 			}
@@ -87,6 +86,36 @@ public class Loader {
 			ModCore.Mod.error("Error: " + e.getMessage(), "error3");
 		}
 
+	}
+
+	private static void load(ZipFile zip, ZipEntry stellwandJson) {
+
+		try {
+			ContentPack contentPack = ContentPack.fromJson(zip.getInputStream(zip.getEntry(stellwandJson.getName())));
+			// @formatter:off
+			List<ZipEntry> files = zip.stream().
+					filter(not(ZipEntry::isDirectory)).
+					filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("stellwand.json")).collect(Collectors.toList());
+			// @formatter:on
+
+			List<ContentPackEntry> contentPackEntries = new ArrayList<>();
+
+			ModCore.info("Content for " + contentPack.getId() + ": ");
+			for (String contentName : contentPack.getContent()) {
+				for (ZipEntry entry : files) {
+					if (entry.getName().equalsIgnoreCase(contentName)) {
+						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry));
+						ModCore.info("Block: " + contentPackEntry.getName());
+						contentPackEntries.add(contentPackEntry);
+					}
+				}
+			}
+			contentPack.setEntries(contentPackEntries);
+
+			Content.addContentPack(contentPack);
+		} catch (IOException e) {
+			ModCore.Mod.error(e.getMessage());
+		}
 	}
 
 	// For method references

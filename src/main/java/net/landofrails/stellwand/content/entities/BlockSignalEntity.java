@@ -1,7 +1,8 @@
 package net.landofrails.stellwand.content.entities;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,8 +21,8 @@ import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.loader.Content;
-import net.landofrails.stellwand.content.loader.ContentPack.ContentPackEntry;
-import net.landofrails.stellwand.content.loader.ContentPack.ContentPackEntry.ContentPackEntryBlock;
+import net.landofrails.stellwand.content.loader.ContentPackEntry;
+import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
 
 public class BlockSignalEntity extends BlockEntity {
 
@@ -46,6 +47,7 @@ public class BlockSignalEntity extends BlockEntity {
 	private float[] translation;
 
 	public BlockSignalEntity() {
+
 		if (models.isEmpty() && renderers.isEmpty()) {
 			try {
 				Identifier id = new Identifier(LandOfSignals.MODID, "");
@@ -162,7 +164,10 @@ public class BlockSignalEntity extends BlockEntity {
 				if (mode == null) {
 					renderer.draw();
 				} else {
-					renderer.drawGroups(Collections.singleton("general"));
+					List<String> groups = new ArrayList<>();
+					groups.add("general");
+					groups.add(mode);
+					renderer.drawGroups(groups);
 				}
 			}
 		} catch (Exception e) {

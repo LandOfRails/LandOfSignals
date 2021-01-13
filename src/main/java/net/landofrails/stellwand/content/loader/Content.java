@@ -7,7 +7,6 @@ import java.util.Map;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.stellwand.content.loader.ContentPack.ContentPackEntry;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Content {
@@ -46,7 +45,7 @@ public class Content {
 	public static Map<ContentPackEntry, String> getEntries() {
 		Map<ContentPackEntry, String> entries = new HashMap<>();
 		for (ContentPack pack : contentPacks) {
-			for (ContentPackEntry entry : pack.getContent())
+			for (ContentPackEntry entry : pack.getEntries())
 				entries.put(entry, pack.getId());
 		}
 		return entries;

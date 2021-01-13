@@ -23,11 +23,14 @@ public class CustomItems {
 	public static final ItemConnector ITEMCONNECTOR1 = new ItemConnector(1);
 	public static final ItemConnector ITEMCONNECTOR2 = new ItemConnector(2);
 	public static final ItemConnector ITEMCONNECTOR3 = new ItemConnector(3);
+	public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
 
 	public static void register() {
 		itemList.add(ITEMCONNECTOR1);
 		itemList.add(ITEMCONNECTOR2);
 		itemList.add(ITEMCONNECTOR3);
+
+		itemList.add(ITEMBLOCKSIGNAL);
 	}
 
 	// Clientsided
