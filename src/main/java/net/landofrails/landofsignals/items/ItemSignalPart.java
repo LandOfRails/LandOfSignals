@@ -12,6 +12,7 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.Collections;
@@ -34,28 +35,15 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        if (!LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player)) return ClickResult.REJECTED;
 
-        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
-
-        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
-            return ClickResult.REJECTED;
-
-        if (world.isAir(target) || world.isReplaceable(target)) {
-            int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
-            TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-            if (tileSignalPart != null && !player.isCrouching())
-                rot = tileSignalPart.getBlockRotate();
-            block.setRot(rot);
-            block.setPos(pos.offset(facing));
-            world.setBlock(pos.offset(facing), block);
-            return ClickResult.ACCEPTED;
-        }
-
-        return ClickResult.REJECTED;
-    }
-
-    private boolean isStandingInBlock(Vec3i vec3i) {
-        return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
+        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
+        if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
+        block.setRot(rot);
+        block.setPos(pos.offset(facing));
+        world.setBlock(pos.offset(facing), block);
+        return ClickResult.ACCEPTED;
     }
 
     public BlockSignalPart getBlock() {

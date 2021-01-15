@@ -11,6 +11,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.blocks.BlockSignalLever;
+import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ItemSignalLever extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        if (!LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player)) return ClickResult.REJECTED;
         BlockSignalLever block = LOSBlocks.BLOCK_SIGNAL_LEVER;
         block.setRot(-player.getRotationYawHead() + 180);
         world.setBlock(pos.offset(facing), block);
