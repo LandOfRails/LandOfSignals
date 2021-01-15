@@ -29,19 +29,33 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
-        TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-        if (tileSignalPart != null && !player.isCrouching())
-            rot = tileSignalPart.getBlockRotate();
-        block.setRot(rot);
-        block.setPos(pos.offset(facing));
-        world.setBlock(pos.offset(facing), block);
-        return ClickResult.ACCEPTED;
+
+        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+
+        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
+            return ClickResult.REJECTED;
+
+        if (world.isAir(target) || world.isReplaceable(target)) {
+            int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+            TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
+            if (tileSignalPart != null && !player.isCrouching())
+                rot = tileSignalPart.getBlockRotate();
+            block.setRot(rot);
+            block.setPos(pos.offset(facing));
+            world.setBlock(pos.offset(facing), block);
+            return ClickResult.ACCEPTED;
+        }
+
+        return ClickResult.REJECTED;
+    }
+
+    private boolean isStandingInBlock(Vec3i vec3i) {
+        return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
     }
 
     public BlockSignalPart getBlock() {

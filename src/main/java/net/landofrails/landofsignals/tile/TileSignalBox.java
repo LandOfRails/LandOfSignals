@@ -38,7 +38,7 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (player.getWorld().isClient && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
+        if (!player.isCrouching() && player.getWorld().isClient && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
             LOSGuis.SIGNAL_BOX.open(player, getPos());
             return true;
         } else return false;

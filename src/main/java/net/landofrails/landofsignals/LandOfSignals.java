@@ -85,7 +85,9 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
-                
+
+                ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/katanagear"));
+
                 //SignalPart : Block
                 for (Map.Entry<String, BlockSignalPart> entry : Static.blockSignalPartList.entrySet()) {
                     BlockRender.register(entry.getValue(), TileSignalPartRender::render, TileSignalPart.class);

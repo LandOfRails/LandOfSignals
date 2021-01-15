@@ -34,7 +34,6 @@ public class GuiSignalBox implements IScreen {
         itemStackLeft = new ItemStack(tsp.getBlock().getItem(), 1);
         itemStackRight = new ItemStack(tsp.getBlock().getItem(), 1);
         listTexureNames = tsp.getBlock().getStates().toArray(new String[0]);
-        for (String s : listTexureNames) System.out.println(s);
         stateRight = ts.getRedstone();
         stateLeft = ts.getNoRedstone();
         if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {
@@ -66,7 +65,6 @@ public class GuiSignalBox implements IScreen {
                     stateRight = 0;
                 }
                 textureNameRight = listTexureNames[stateRight];
-                System.out.println(textureNameRight);
             }
         };
     }
