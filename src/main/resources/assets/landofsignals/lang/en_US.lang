@@ -13,19 +13,20 @@ item.landofsignals:item_signal_box.name=Signal Box
 item.landofsignals:item_connector.name=Connector tool
 
 #gamerTV
-item.landofsignals:item_top_gamertv_hvhp.name=Main signal (Signal)
-item.landofsignals:item_top_gamertv_vorsignal.name=Approach signal (Signal)
-item.landofsignals:item_top_gamertv_hversatz.name=Replacement signal (Signal)
-item.landofsignals:item_ground_gamertv.name=Signal (Base)
-item.landofsignals:item_mid_gamertv.name=Signal (Pole)
+item.landofsignals:item_signal_part_gamertv_hvhp.name=Main signal (Signal)
+item.landofsignals:item_signal_part_gamertv_vorsignal.name=Approach signal (Signal)
+item.landofsignals:item_signal_part_gamertv_hversatz.name=Replacement signal (Signal)
+item.landofsignals:item_signal_part_gamertv_base.name=Signal (Base)
+item.landofsignals:item_signal_part_gamertv_mast.name=Signal (Pole)
 
 #Skyman_Luna
-item.landofsignals:item_ground_vorsignal.name=Approach signal (Base)
-item.landofsignals:item_mid_vorsignal_mast.name=Signal (Pole)
-item.landofsignals:item_top_vorsignal_kopf.name=Approach signal (Signal)
-item.landofsignals:item_ground_hauptsignal.name=Main signal (Base)
-item.landofsignals:item_mid_hauptsignal_schild.name=Main signal (Sign)
-item.landofsignals:item_top_hauptsignal_kopf.name=Main signal (Signal)
+item.landofsignals:item_signal_part_skymanluna_sperrsignal_sh0.name=Lock/Block(?) signal
+item.landofsignals:item_signal_part_skymanluna_vorsignal_base.name=Approach signal (Base)
+item.landofsignals:item_signal_part_skymanluna_mast.name=Signal (Pole)
+item.landofsignals:item_signal_part_skymanluna_vorsignal_kopf.name=Approach signal (Signal)
+item.landofsignals:item_signal_part_skymanluna_hauptsignal_base.name=Main signal (Base)
+item.landofsignals:item_signal_part_skymanluna_hauptsignal_schild.name=Main signal (Sign)
+item.landofsignals:item_signal_part_skymanluna_hauptsignal_kopf.name=Main signal (Signal)
 
 
 
