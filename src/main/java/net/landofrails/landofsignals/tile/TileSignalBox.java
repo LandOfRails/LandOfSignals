@@ -12,13 +12,14 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.utils.Static;
 
+import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
-    private UUID UUIDTileTop;
+    private UUID UUIDTileSignalPart;
 
     @TagField("redstone")
     private int redstone = 0;
@@ -37,7 +38,7 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
+        if (player.getWorld().isClient && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
             LOSGuis.SIGNAL_BOX.open(player, getPos());
             return true;
         } else return false;
@@ -45,31 +46,31 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
-        if (getWorld().isServer && UUIDTileTop != null && Static.listTopBlocks.containsKey(UUIDTileTop)) {
-            TileTop entity = getWorld().getBlockEntity(Static.listTopBlocks.get(UUIDTileTop), TileTop.class);
+        if (getWorld().isServer && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
+            TileSignalPart entity = getWorld().getBlockEntity(Static.changingSignalPartList.get(UUIDTileSignalPart), TileSignalPart.class);
             if (entity != null) {
-                if (redstone >= Static.listTopModels.get(entity.getBlock())._4().size() || noRedstone >= Static.listTopModels.get(entity.getBlock())._4().size()) {
+                List<String> states = entity.getBlock().getStates();
+                if (redstone >= states.size() || noRedstone >= states.size()) {
                     redstone = 0;
                     noRedstone = 0;
                 }
-                if (getWorld().getRedstone(neighbor) > 0) {
+                if (getWorld().getRedstone(neighbor) > 0)
                     //Redstone
-                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(redstone));
-                } else {
+                    entity.setTexturePath(states.get(redstone));
+                else
                     //No redstone
-                    entity.setTexturePath(Static.listTopModels.get(entity.getBlock())._4().get(noRedstone));
-                }
+                    entity.setTexturePath(states.get(noRedstone));
             }
         }
     }
 
     public void setUUID(UUID uuid) {
-        this.UUIDTileTop = uuid;
+        this.UUIDTileSignalPart = uuid;
         markDirty();
     }
 
-    public UUID getUUIDTileTop() {
-        return UUIDTileTop;
+    public UUID getUUIDTileSignalPart() {
+        return UUIDTileSignalPart;
     }
 
     public int getRedstone() {

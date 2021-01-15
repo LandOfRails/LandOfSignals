@@ -15,23 +15,6 @@ public class LOSItems {
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemConnector ITEM_CONNECTOR = new ItemConnector(LandOfSignals.MODID, "item_connector");
 
-    //GroundItems
-    public static final ItemGround ITEM_GROUND_VORSIGNAL = new ItemGround(LandOfSignals.MODID, "item_ground_vorsignal", "BLOCK_GROUND_VORSIGNAL");
-    public static final ItemGround ITEM_GROUND_HAUPTSIGNAL = new ItemGround(LandOfSignals.MODID, "item_ground_hauptsignal", "BLOCK_GROUND_HAUPTSIGNAL");
-    public static final ItemGround ITEM_GROUND_GAMERTV = new ItemGround(LandOfSignals.MODID, "item_ground_gamertv", "BLOCK_GROUND_GAMERTV");
-
-    //MidItems
-    public static final ItemMid ITEM_MID_VORSIGNAL_MAST = new ItemMid(LandOfSignals.MODID, "item_mid_vorsignal_mast", "BLOCK_MID_VORSIGNAL_MAST");
-    public static final ItemMid ITEM_MID_HAUPTSIGNAL_SCHILD = new ItemMid(LandOfSignals.MODID, "item_mid_hauptsignal_schild", "BLOCK_MID_HAUPTSIGNAL_SCHILD");
-    public static final ItemMid ITEM_MID_GAMERTV = new ItemMid(LandOfSignals.MODID, "item_mid_gamertv", "BLOCK_MID_GAMERTV");
-
-    //TopItems
-    public static final ItemTop ITEM_TOP_VORSIGNAL_KOPF = new ItemTop(LandOfSignals.MODID, "item_top_vorsignal_kopf", "BLOCK_TOP_VORSIGNAL_KOPF");
-    public static final ItemTop ITEM_TOP_HAUPTSIGNAL_KOPF = new ItemTop(LandOfSignals.MODID, "item_top_hauptsignal_kopf", "BLOCK_TOP_HAUPTSIGNAL_KOPF");
-    public static final ItemTop ITEM_TOP_GAMERTV_HVHP = new ItemTop(LandOfSignals.MODID, "item_top_gamertv_hvhp", "BLOCK_TOP_GAMERTV_HVHP");
-    public static final ItemTop ITEM_TOP_GAMERTV_VORSIGNAL = new ItemTop(LandOfSignals.MODID, "item_top_gamertv_vorsignal", "BLOCK_TOP_GAMERTV_VORSIGNAL");
-    public static final ItemTop ITEM_TOP_GAMERTV_HVERSATZ = new ItemTop(LandOfSignals.MODID, "item_top_gamertv_hversatz", "BLOCK_TOP_GAMERTV_HVERSATZ");
-
     public static void register() {
         // loads static classes and ctrs
     }

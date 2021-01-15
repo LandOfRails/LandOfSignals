@@ -10,7 +10,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileTop;
+import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -30,10 +30,11 @@ public class GuiSignalBox implements IScreen {
     @SuppressWarnings("java:S3010")
     public GuiSignalBox(TileSignalBox ts) {
         this.ts = ts;
-        TileTop tt = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.listTopBlocks.get(ts.getUUIDTileTop()), TileTop.class);
-        itemStackLeft = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
-        itemStackRight = new ItemStack(Static.listTopModels.get(tt.getBlock())._3(), 1);
-        listTexureNames = Static.listTopModels.get(tt.getBlock())._4().toArray(new String[0]);
+        TileSignalPart tsp = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.changingSignalPartList.get(ts.getUUIDTileSignalPart()), TileSignalPart.class);
+        itemStackLeft = new ItemStack(tsp.getBlock().getItem(), 1);
+        itemStackRight = new ItemStack(tsp.getBlock().getItem(), 1);
+        listTexureNames = tsp.getBlock().getStates().toArray(new String[0]);
+        for (String s : listTexureNames) System.out.println(s);
         stateRight = ts.getRedstone();
         stateLeft = ts.getNoRedstone();
         if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {
@@ -65,6 +66,7 @@ public class GuiSignalBox implements IScreen {
                     stateRight = 0;
                 }
                 textureNameRight = listTexureNames[stateRight];
+                System.out.println(textureNameRight);
             }
         };
     }

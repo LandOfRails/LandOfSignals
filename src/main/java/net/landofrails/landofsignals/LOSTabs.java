@@ -13,7 +13,7 @@ public class LOSTabs {
     public static final CreativeTab ASSETS_TAB;
 
     static {
-        SIGNALS_TAB = new CreativeTab(LandOfSignals.MODID + ".signals", () -> new ItemStack(LOSItems.ITEM_TOP_VORSIGNAL_KOPF, 1));
+        SIGNALS_TAB = new CreativeTab(LandOfSignals.MODID + ".signals", () -> new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1));
         ASSETS_TAB = new CreativeTab(LandOfSignals.MODID + ".assets", () -> new ItemStack(LOSItems.ITEM_TICKET_MACHINE_DB, 1));
     }
 
