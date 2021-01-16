@@ -7,6 +7,7 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.IInventory;
 import cam72cam.mod.item.ItemStack;
 import net.landofrails.landofsignals.items.ItemSignalPart;
+import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.ArrayList;
@@ -22,13 +23,16 @@ public class GuiSelectSignal implements IScreen {
             IInventory inv = MinecraftClient.getPlayer().getInventory();
             for (int i = 0; i != inv.getSlotCount(); i++) {
                 if (inv.get(i).isEmpty()) {
-                    inv.set(i, itemStack);
+                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), i, false);
+                    packet.sendToServer();
                     intoInv = true;
                     break;
                 }
             }
-            if (!intoInv)
-                MinecraftClient.getPlayer().getWorld().dropItem(itemStack, MinecraftClient.getPlayer().getPosition());
+            if (!intoInv) {
+                SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), 0, true);
+                packet.sendToServer();
+            }
             screen.close();
         });
         gui.show();

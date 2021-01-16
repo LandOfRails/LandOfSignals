@@ -11,6 +11,7 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.items.ItemSignalPart;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
+import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
@@ -58,6 +59,7 @@ public class LandOfSignals extends ModCore.Mod {
             LOSBlocks.register();
             LOSItems.register();
             Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
         }
 
     }

@@ -59,7 +59,7 @@ public class ObjItemRender {
                 textureName = GuiSignalBox.getTexureName();
             else
                 textureName = null;
-            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName, true)) {
+            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
                 GL11.glRotated(rotation.x, 1, 0, 0);
                 GL11.glRotated(rotation.y, 0, 1, 0);
