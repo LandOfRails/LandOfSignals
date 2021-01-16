@@ -22,23 +22,10 @@ import net.landofrails.stellwand.Stellwand;
 import java.util.Map;
 
 @SuppressWarnings("java:S112")
-//1.7.10
-//@cpw.mods.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = "0.0.2", dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.7.10,1.10)")
-
-//1.12.2
-@net.minecraftforge.fml.common.Mod(modid = LandOfSignals.MODID, name = "LandOfSignals", version = LandOfSignals.VERSION, dependencies = "required-after:universalmodcore@[1.0,1.1)", acceptedMinecraftVersions = "[1.12,1.13)")
 public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings("java:S1845")
     public static final String MODID = "landofsignals";
     public static final String VERSION = "0.0.2";
-
-    static {
-        try {
-            ModCore.register(new LandOfSignals());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not load mod " + MODID, e);
-        }
-    }
 
     @Override
     public String modID() {

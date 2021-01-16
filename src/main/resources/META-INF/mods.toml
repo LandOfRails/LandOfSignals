@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+license="TODO"
+
+[[mods]]
+modId="landofsignals"
+version="${file.jarVersion}"
+displayName="LandOfSignals"
+
+[[dependencies.landofsignals]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.landofsignals]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.4]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.landofsignals]]
+    modId="universalmodcore"
+    mandatory=true
+    versionRange="[1.0,1.1)"
+    ordering="BEFORE"
+    side="BOTH"
