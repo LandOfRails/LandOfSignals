@@ -85,7 +85,7 @@ public class LandOfSignals extends ModCore.Mod {
                 //SignalPart : Item
                 for (ItemSignalPart item : Static.itemSignalPartList) {
                     BlockSignalPart block = item.getBlock();
-                    ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(MODID, block.getPath()), block.getTranslation(), Vec3d.ZERO, block.getStates(), (float) block.getScaling().x));
+                    ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(MODID, block.getPath()), block.getItemTranslation(), Vec3d.ZERO, block.getStates(), (float) block.getScaling().x));
                 }
                 break;
             case INITIALIZE:

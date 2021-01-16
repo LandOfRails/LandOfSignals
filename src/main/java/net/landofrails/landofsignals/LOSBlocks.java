@@ -18,30 +18,22 @@ public class LOSBlocks {
     public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
 
     //Signal
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_SPERRSIGNAL_SH0 = new BlockSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_SPERRSIGNAL_SH0 = new BlockSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
         add(null);
         add("white");
         add("off");
     }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_VORSIGNAL_BASE = new BlockSignalPart("block_signal_part_skymanluna_vorsignal_base", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/boden/vorsignal_boden.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
-        add(null);
-    }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_MAST = new BlockSignalPart("block_signal_part_skymanluna_mast", "models/block/landofsignals/skyman_luna/mast/vorsignal_mast.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
-        add(null);
-    }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_VORSIGNAL_KOPF = new BlockSignalPart("block_signal_part_skymanluna_vorsignal_kopf", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_VORSIGNAL_BASE = new BlockSignalPart("block_signal_part_skymanluna_vorsignal_base", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/boden/vorsignal_boden.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63));
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_MAST = new BlockSignalPart("block_signal_part_skymanluna_mast", "models/block/landofsignals/skyman_luna/mast/vorsignal_mast.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63));
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_VORSIGNAL_KOPF = new BlockSignalPart("block_signal_part_skymanluna_vorsignal_kopf", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
         add(null);
         add("green");
         add("greenyellow");
         add("off");
     }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_BASE = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_base", "models/block/landofsignals/skyman_luna/hv_hauptsignal/boden/hauptsignal_boden.obj", new Vec3d(0.77, -0.4, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
-        add(null);
-    }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_SCHILD = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_schild", "models/block/landofsignals/skyman_luna/hv_hauptsignal/schild/hauptsignal_schild.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
-        add(null);
-    }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_KOPF = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_kopf", "models/block/landofsignals/skyman_luna/hv_hauptsignal/kopf/hauptsignal_kopf.obj", new Vec3d(0.77, -0.4, 0.77), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_BASE = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_base", "models/block/landofsignals/skyman_luna/hv_hauptsignal/boden/hauptsignal_boden.obj", new Vec3d(0.77, -0.4, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63));
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_SCHILD = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_schild", "models/block/landofsignals/skyman_luna/hv_hauptsignal/schild/hauptsignal_schild.obj", new Vec3d(0.77, -1.2, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63));
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_SKYMANLUNA_HAUPTSIGNAL_KOPF = new BlockSignalPart("block_signal_part_skymanluna_hauptsignal_kopf", "models/block/landofsignals/skyman_luna/hv_hauptsignal/kopf/hauptsignal_kopf.obj", new Vec3d(0.77, -0.4, 0.77), new Vec3d(0.5, -0.9, 0.5), new Vec3d(0.63, 0.63, 0.63), new ArrayList<String>() {{
         add(null);
         add("hp1");
         add("hp2");
@@ -50,12 +42,8 @@ public class LOSBlocks {
         add("off");
     }});
 
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_GAMERTV_BASE = new BlockSignalPart("block_signal_part_gamertv_base", "models/block/landofsignals/gamertv/boden/hv_boden.obj", new Vec3d(0.5, 0, 0.5), new Vec3d(1, 1, 1), new ArrayList<String>() {{
-        add("null");
-    }});
-    public static final BlockSignalPart BLOCK_SIGNAL_PART_GAMERTV_MAST = new BlockSignalPart("block_signal_part_gamertv_mast", "models/block/landofsignals/gamertv/mast/hv_mast.obj", new Vec3d(0.5, 0, 0.5), new Vec3d(1, 1, 1), new ArrayList<String>() {{
-        add("null");
-    }});
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_GAMERTV_BASE = new BlockSignalPart("block_signal_part_gamertv_base", "models/block/landofsignals/gamertv/boden/hv_boden.obj", new Vec3d(0.5, 0, 0.5), new Vec3d(1, 1, 1));
+    public static final BlockSignalPart BLOCK_SIGNAL_PART_GAMERTV_MAST = new BlockSignalPart("block_signal_part_gamertv_mast", "models/block/landofsignals/gamertv/mast/hv_mast.obj", new Vec3d(0.5, 0, 0.5), new Vec3d(1, 1, 1));
     public static final BlockSignalPart BLOCK_SIGNAL_PART_GAMERTV_VORSIGNAL = new BlockSignalPart("block_signal_part_gamertv_vorsignal", "models/block/landofsignals/gamertv/vorsignal/hv_vr.obj", new Vec3d(0.5, 0, 0.5), new Vec3d(1, 1, 1), new ArrayList<String>() {{
         add(null);
         add("gruen");

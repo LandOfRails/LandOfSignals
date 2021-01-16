@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ItemSignalPart extends CustomItem {
 
-    private BlockSignalPart block;
+    private final BlockSignalPart block;
 
     public ItemSignalPart(String name, BlockSignalPart block) {
         super(LandOfSignals.MODID, name);
