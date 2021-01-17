@@ -30,7 +30,8 @@ public class CustomItems {
 		itemList.add(ITEMCONNECTOR2);
 		itemList.add(ITEMCONNECTOR3);
 
-		itemList.add(ITEMBLOCKSIGNAL);
+		ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
+
 	}
 
 	// Clientsided

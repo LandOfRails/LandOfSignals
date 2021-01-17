@@ -51,4 +51,8 @@ public class Content {
 		return entries;
 	}
 
+	public static String getNameForId(String itemId) {
+		return itemId.split(":")[1];
+	}
+
 }
