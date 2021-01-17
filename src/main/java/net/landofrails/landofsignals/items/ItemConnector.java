@@ -11,14 +11,14 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileTop;
+import net.landofrails.landofsignals.tile.TileSignalPart;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ItemConnector extends CustomItem {
 
-    TileTop blockEntityTop;
+    TileSignalPart blockEntitySignalPart;
     TileSignalBox blockEntityBox;
 
     public ItemConnector(String modID, String name) {
@@ -33,16 +33,24 @@ public class ItemConnector extends CustomItem {
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         if (world.isServer) {
-            if (blockEntityTop == null) blockEntityTop = world.getBlockEntity(pos, TileTop.class);
+            if (blockEntitySignalPart == null) blockEntitySignalPart = world.getBlockEntity(pos, TileSignalPart.class);
             if (blockEntityBox == null) blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
-            if (blockEntityBox != null && blockEntityTop != null) {
-                blockEntityBox.setUUID(blockEntityTop.getUUID());
-                blockEntityTop = null;
+            if (blockEntityBox != null && blockEntitySignalPart != null) {
+                if (blockEntitySignalPart.getBlock().getStates().size() <= 1) {
+                    blockEntitySignalPart = null;
+                    return ClickResult.REJECTED;
+                }
+                blockEntityBox.setUUID(blockEntitySignalPart.getUUID());
+                blockEntitySignalPart = null;
                 blockEntityBox = null;
                 player.sendMessage(PlayerMessage.direct("Signal paired."));
                 return ClickResult.ACCEPTED;
-            } else if (blockEntityTop != null) {
-                player.sendMessage(PlayerMessage.direct("Pairing started with " + blockEntityTop.getBlock()));
+            } else if (blockEntitySignalPart != null) {
+                if (blockEntitySignalPart.getBlock().getStates().size() <= 1) {
+                    blockEntitySignalPart = null;
+                    return ClickResult.REJECTED;
+                }
+                player.sendMessage(PlayerMessage.direct("Pairing started with " + blockEntitySignalPart.getBlock()));
                 return ClickResult.ACCEPTED;
             } else if (blockEntityBox != null) {
                 player.sendMessage(PlayerMessage.direct("Pairing started with SignalBox"));
@@ -56,7 +64,7 @@ public class ItemConnector extends CustomItem {
     public void onClickAir(Player player, World world, Player.Hand hand) {
         if (world.isServer && player.isCrouching()) {
             blockEntityBox = null;
-            blockEntityTop = null;
+            blockEntitySignalPart = null;
             player.sendMessage(PlayerMessage.direct("Pairing canceled."));
         }
     }
