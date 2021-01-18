@@ -51,12 +51,12 @@ public class ItemBlockSignal extends CustomItem {
 		if (renderers.isEmpty()) {
 			try {
 				// TODO CHANGE TEXTURE
-				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj");
+				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
 				OBJModel model = new OBJModel(id, 0);
 				models.put(MISSING, model);
 				// Renderers in render function
-				rotations.put(MISSING, new float[] { 0, 0, 0 });
-				translations.put(MISSING, new float[] { 0, 0, 0 });
+				rotations.put(MISSING, new float[] { 45, 45, 0 });
+				translations.put(MISSING, new float[] { 0.5f, 0.5f, 0.5f });
 				modes.put(MISSING, null);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -128,6 +128,8 @@ public class ItemBlockSignal extends CustomItem {
 
 		return (world, stack) -> new StandardModel().addCustom(() -> {
 
+			ItemBlockSignal.init();
+
 			TagCompound tag = stack.getTagCompound();
 			String itemId = tag.getString("itemId");
 			if (itemId == null || !models.containsKey(itemId)) {
@@ -144,7 +146,7 @@ public class ItemBlockSignal extends CustomItem {
 			float[] translate = translations.get(itemId);
 			float[] rotation = rotations.get(itemId);
 			String mode = modes.get(itemId);
-			int scale = 1;
+			float scale = 0.7f;
 			try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
 				GL11.glTranslated(translate[0], translate[1], translate[2]);
 				GL11.glRotated(1, rotation[0], rotation[1], rotation[2]);
@@ -152,7 +154,9 @@ public class ItemBlockSignal extends CustomItem {
 				if (mode == null) {
 					renderer.draw();
 				} else {
-					renderer.drawGroups(Arrays.asList("general", mode));
+					renderer.draw();
+					// TODO:
+					// renderer.drawGroups(Arrays.asList("general", mode));
 				}
 			}
 		});

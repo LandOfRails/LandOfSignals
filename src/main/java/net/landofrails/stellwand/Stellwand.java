@@ -5,7 +5,6 @@ import cam72cam.mod.net.PacketDirection;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.items.ItemBlockSignal;
 import net.landofrails.stellwand.content.loader.Loader;
 import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -29,7 +28,6 @@ public class Stellwand {
 	}
 
 	public static void clientEvent() {
-		ItemBlockSignal.init();
 
 		CustomItems.registerRenderers();
 		CustomBlocks.registerItemRenderers();
