@@ -30,6 +30,8 @@ public class TileSignalPart extends BlockEntity {
         this.blockName = blockName;
         this.pos = pos;
         block = Static.blockSignalPartList.get(blockName);
+        if (block.getStates().size() > 1)
+            Static.changingSignalPartList.put(this.UUID, this.pos);
     }
 
     @Override
