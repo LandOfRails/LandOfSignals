@@ -2,14 +2,16 @@ package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
-public class TileSignalPart extends BlockEntity {
+public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @TagField("blockRotation")
     private int blockRotate;
@@ -17,6 +19,10 @@ public class TileSignalPart extends BlockEntity {
     private String blockName;
     @TagField("texturePath")
     private String texturePath = null;
+
+
+    @TagField("offset")
+    private Vec3d offset = Vec3d.ZERO;
 
     @TagField("pos")
     private final Vec3i pos;
@@ -30,8 +36,10 @@ public class TileSignalPart extends BlockEntity {
         this.blockName = blockName;
         this.pos = pos;
         block = Static.blockSignalPartList.get(blockName);
-        if (block.getStates().size() > 1)
-            Static.changingSignalPartList.put(this.UUID, this.pos);
+    }
+
+    public void setChanging() {
+        Static.changingSignalPartList.put(this.UUID, this.pos);
     }
 
     @Override
@@ -76,5 +84,15 @@ public class TileSignalPart extends BlockEntity {
 
     public java.util.UUID getUUID() {
         return UUID;
+    }
+
+    @Override
+    public void setOffset(Vec3d vec) {
+        offset = offset.add(vec);
+    }
+
+    @Override
+    public Vec3d getOffset() {
+        return offset;
     }
 }

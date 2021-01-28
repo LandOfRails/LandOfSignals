@@ -14,6 +14,7 @@ public class LOSItems {
     public static final ItemTicketMachineSBB ITEM_TICKET_MACHINE_SBB = new ItemTicketMachineSBB(LandOfSignals.MODID, "item_ticket_machine_sbb");
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemConnector ITEM_CONNECTOR = new ItemConnector(LandOfSignals.MODID, "item_connector");
+    public static final ItemManipulator ITEM_MANIPULATOR = new ItemManipulator(LandOfSignals.MODID, "item_manipulator");
 
     public static final ItemSignalSelector ITEM_SIGNAL_SELECTOR = new ItemSignalSelector(LandOfSignals.MODID, "item_signal_connector");
 

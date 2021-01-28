@@ -6,10 +6,13 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.net.PacketDirection;
 import cam72cam.mod.render.BlockRender;
+import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.items.ItemSignalPart;
+import net.landofrails.landofsignals.packet.ManipulatorPacket;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
 import net.landofrails.landofsignals.render.block.*;
@@ -47,6 +50,7 @@ public class LandOfSignals extends ModCore.Mod {
             LOSItems.register();
             Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
+            Packet.register(ManipulatorPacket::new, PacketDirection.ServerToClient);
         }
 
     }
@@ -74,6 +78,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
+                ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
 
                 ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/katanagear"));
 
@@ -90,6 +95,9 @@ public class LandOfSignals extends ModCore.Mod {
                 break;
             case INITIALIZE:
             case SETUP:
+                GlobalRender.registerOverlay(pt -> {
+                    new ManipualtorOverlay().draw();
+                });
             case RELOAD:
             case START:
             case FINALIZE:
