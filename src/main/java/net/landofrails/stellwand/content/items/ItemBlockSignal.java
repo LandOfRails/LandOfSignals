@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.CreativeTab;
@@ -138,6 +139,13 @@ public class ItemBlockSignal extends CustomItem {
 
 			if (renderers.get(itemId) == null) {
 				OBJModel model = models.get(itemId);
+
+				ModCore.Mod.info("Groups for " + itemId + ":");
+				for (String g : model.groups()) {
+
+					ModCore.Mod.info("Group found: " + g);
+				}
+
 				renderers.put(itemId, new OBJRender(model));
 			}
 
@@ -147,6 +155,7 @@ public class ItemBlockSignal extends CustomItem {
 			float[] rotation = rotations.get(itemId);
 			String mode = modes.get(itemId);
 			float scale = 0.7f;
+			OBJModel model = models.get(itemId);
 			try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
 				GL11.glTranslated(translate[0], translate[1], translate[2]);
 				GL11.glRotated(1, rotation[0], rotation[1], rotation[2]);
@@ -154,9 +163,10 @@ public class ItemBlockSignal extends CustomItem {
 				if (mode == null) {
 					renderer.draw();
 				} else {
-					renderer.draw();
-					// TODO:
-					// renderer.drawGroups(Arrays.asList("general", mode));
+					if (model.groups().contains(mode))
+						renderer.drawGroups(Arrays.asList("general", mode));
+					else
+						renderer.drawGroups(model.groups());
 				}
 			}
 		});
