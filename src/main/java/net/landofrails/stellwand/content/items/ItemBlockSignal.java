@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
 
@@ -163,10 +164,18 @@ public class ItemBlockSignal extends CustomItem {
 				if (mode == null) {
 					renderer.draw();
 				} else {
-					if (model.groups().contains(mode))
-						renderer.drawGroups(Arrays.asList("general", mode));
-					else
+
+					ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
+							.collect(Collectors.toCollection(ArrayList::new));
+
+					if (modes.isEmpty()) {
+						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
+								.collect(Collectors.toCollection(ArrayList::new));
+						modes.addAll(generals);
+						renderer.drawGroups(modes);
+					} else {
 						renderer.drawGroups(model.groups());
+					}
 				}
 			}
 		});
