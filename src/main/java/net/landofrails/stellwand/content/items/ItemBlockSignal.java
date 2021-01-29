@@ -11,11 +11,15 @@ import java.util.stream.Collectors;
 import org.lwjgl.opengl.GL11;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
+import cam72cam.mod.item.ClickResult;
 import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.OpenGL;
@@ -23,8 +27,11 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
+import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.content.entities.BlockSignalEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
@@ -52,12 +59,11 @@ public class ItemBlockSignal extends CustomItem {
 	public static void init() {
 		if (renderers.isEmpty()) {
 			try {
-				// TODO CHANGE TEXTURE
 				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
 				OBJModel model = new OBJModel(id, 0);
 				models.put(MISSING, model);
 				// Renderers in render function
-				rotations.put(MISSING, new float[] { 45, 45, 0 });
+				rotations.put(MISSING, new float[] { 30, 30, 30 });
 				translations.put(MISSING, new float[] { 0.5f, 0.5f, 0.5f });
 				modes.put(MISSING, null);
 			} catch (Exception e) {
@@ -101,7 +107,6 @@ public class ItemBlockSignal extends CustomItem {
 		List<ItemStack> itemStackList = new ArrayList<>();
 
 		itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
-		itemStackList.add(new ItemStack(CustomItems.ITEMCONNECTOR1, 1));
 
 		for (Entry<ContentPackEntry, String> entry : Content.getEntries().entrySet()) {
 
@@ -159,16 +164,19 @@ public class ItemBlockSignal extends CustomItem {
 			OBJModel model = models.get(itemId);
 			try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
 				GL11.glTranslated(translate[0], translate[1], translate[2]);
-				GL11.glRotated(1, rotation[0], rotation[1], rotation[2]);
+				GL11.glRotatef(1, rotation[0], rotation[1], rotation[2]);
 				GL11.glScaled(scale, scale, scale);
+
 				if (mode == null) {
+
 					renderer.draw();
+
 				} else {
 
 					ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
 							.collect(Collectors.toCollection(ArrayList::new));
 
-					if (modes.isEmpty()) {
+					if (!modes.isEmpty()) {
 						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
 								.collect(Collectors.toCollection(ArrayList::new));
 						modes.addAll(generals);
@@ -176,9 +184,45 @@ public class ItemBlockSignal extends CustomItem {
 					} else {
 						renderer.drawGroups(model.groups());
 					}
+
 				}
 			}
 		});
+	}
+
+	@Override
+	public ClickResult onClickBlock(Player player, World world, Vec3i pos, Hand hand, Facing facing, Vec3d inBlockPos) {
+		Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+
+		if (isStandingInBlock(player.getBlockPosition().subtract(target)))
+			return ClickResult.REJECTED;
+
+		if (world.isAir(target) || world.isReplaceable(target)) {
+
+			BlockTypeEntity block = CustomBlocks.BLOCKSIGNAL;
+
+			world.setBlock(target, block);
+			BlockSignalEntity blockEntity = world.getBlockEntity(target, BlockSignalEntity.class);
+			// Set ContentPackBlockId
+			ItemStack item = player.getHeldItem(hand);
+			TagCompound tag = item.getTagCompound();
+			if (blockEntity != null) {
+				if (tag != null && !tag.isEmpty())
+					blockEntity.setContentBlockId(tag.hasKey("itemId") ? tag.getString("itemId") : MISSING);
+				else
+					blockEntity.setContentBlockId(MISSING);
+				blockEntity.setRotation(player.getRotationYawHead());
+			}
+			//
+
+			return ClickResult.ACCEPTED;
+		}
+
+		return ClickResult.REJECTED;
+	}
+
+	private boolean isStandingInBlock(Vec3i vec3i) {
+		return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
 	}
 
 	@Override

@@ -2,9 +2,9 @@ package net.landofrails.stellwand.content.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -23,8 +23,9 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
+import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
-public class BlockSignalEntity extends BlockEntity {
+public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEntity {
 
 	// Static values
 	public static final String MISSING = "missing";
@@ -36,49 +37,19 @@ public class BlockSignalEntity extends BlockEntity {
 
 	// Storing data
 	@TagField
-	private String contentPackBlockId;
-	@Nullable
-	private String mode;
-
+	private String contentPackBlockId = MISSING;
+	@TagField
+	private float rot = 0;
 	// Rendering
 	private OBJModel model;
 	private OBJRender renderer;
 	private float[] rotation;
 	private float[] translation;
+	@Nullable
+	private String mode;
 
 	public BlockSignalEntity() {
 
-		if (models.isEmpty() && renderers.isEmpty()) {
-			try {
-				Identifier id = new Identifier(LandOfSignals.MODID, "");
-				OBJModel m = new OBJModel(id, 0);
-				models.put(MISSING, m);
-				renderers.put(MISSING, new OBJRender(m));
-				rotations.put(MISSING, new float[] { 0, 0, 0 });
-				translations.put(MISSING, new float[] { 0, 0, 0 });
-			} catch (Exception e) {
-				ModCore.Mod.error(e.getMessage());
-			}
-			// Add contentpack stuff
-			for (Entry<ContentPackEntry, String> entry : Content.getEntries().entrySet()) {
-				try {
-					ContentPackEntry cpe = entry.getKey();
-					String packId = entry.getValue();
-					String blockId = cpe.getBlockId(packId);
-					ContentPackEntryBlock block = cpe.getBlock();
-					String objPath = cpe.getModel();
-					Identifier id = new Identifier("stellwand", objPath);
-					OBJModel m = new OBJModel(id, 0);
-					models.put(blockId, m);
-					renderers.put(blockId, new OBJRender(m));
-					rotations.put(blockId, block.getRotation());
-					translations.put(blockId, block.getTranslation());
-					modes.put(blockId, block.getModes());
-				} catch (Exception e) {
-					ModCore.Mod.error(e.getMessage());
-				}
-			}
-		}
 	}
 
 	public OBJModel getModel() {
@@ -144,8 +115,44 @@ public class BlockSignalEntity extends BlockEntity {
 		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
 	}
 
+	public static void check() {
+		if (models.isEmpty() && renderers.isEmpty()) {
+			try {
+				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
+				OBJModel m = new OBJModel(id, 0);
+				models.put(MISSING, m);
+				renderers.put(MISSING, new OBJRender(m));
+				rotations.put(MISSING, new float[] { 0, 0, 0 });
+				translations.put(MISSING, new float[] { 0.5f, 0.5f, 0.5f });
+			} catch (Exception e) {
+				ModCore.Mod.error(e.getMessage());
+			}
+			// Add contentpack stuff
+			for (Entry<ContentPackEntry, String> entry : Content.getEntries().entrySet()) {
+				try {
+					ContentPackEntry cpe = entry.getKey();
+					String packId = entry.getValue();
+					String blockId = cpe.getBlockId(packId);
+					ContentPackEntryBlock block = cpe.getBlock();
+					String objPath = cpe.getModel();
+					Identifier id = new Identifier("stellwand", objPath);
+					OBJModel m = new OBJModel(id, 0);
+					models.put(blockId, m);
+					renderers.put(blockId, new OBJRender(m));
+					rotations.put(blockId, block.getRotation());
+					translations.put(blockId, block.getTranslation());
+					modes.put(blockId, block.getModes());
+				} catch (Exception e) {
+					ModCore.Mod.error(e.getMessage());
+				}
+			}
+		}
+	}
+
 	@SuppressWarnings("java:S1172")
 	private static void renderStuff(BlockSignalEntity entity, float partialTicks) {
+
+		check();
 
 		OBJModel model = entity.getModel();
 		OBJRender renderer = entity.getRenderer();
@@ -155,24 +162,47 @@ public class BlockSignalEntity extends BlockEntity {
 
 		try {
 			if (renderer == null || model == null) {
+				ModCore.warn("Block has no renderer!!");
 				return;
 			}
 			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
 				GL11.glTranslated(translation[0], translation[1], translation[2]);
-				GL11.glRotated(1, rotation[0], rotation[1], rotation[2]);
+				GL11.glRotated(1, rotation[0], rotation[1] + entity.getRot(), rotation[2]);
 
 				if (mode == null) {
 					renderer.draw();
 				} else {
-					List<String> groups = new ArrayList<>();
-					groups.add("general");
-					groups.add(mode);
-					renderer.drawGroups(groups);
+
+					ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
+							.collect(Collectors.toCollection(ArrayList::new));
+
+					if (!modes.isEmpty()) {
+						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
+								.collect(Collectors.toCollection(ArrayList::new));
+						modes.addAll(generals);
+						renderer.drawGroups(modes);
+					} else {
+						renderer.drawGroups(model.groups());
+					}
+
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public float getRot() {
+		return rot;
+	}
+
+	@Override
+	public void setRotation(float rotationYawHead) {
+		rot = -(Math.round(rotationYawHead / 10) * 10) + 180;
+	}
+
+	public void setContentBlockId(String id) {
+		this.contentPackBlockId = id;
 	}
 
 }

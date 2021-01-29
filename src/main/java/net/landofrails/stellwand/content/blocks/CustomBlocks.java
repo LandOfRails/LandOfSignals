@@ -11,6 +11,8 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.stellwand.content.blocks.others.BlockFiller;
 import net.landofrails.stellwand.content.blocks.others.BlockSender;
+import net.landofrails.stellwand.content.blocks.others.BlockSignal;
+import net.landofrails.stellwand.content.entities.BlockSignalEntity;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 import net.landofrails.stellwand.utils.compact.AItemBlock;
@@ -26,6 +28,7 @@ public class CustomBlocks {
 
 	public static final BlockFiller BLOCKFILLER = new BlockFiller();
 	public static final BlockSender BLOCKSENDER = new BlockSender();
+	public static final BlockSignal BLOCKSIGNAL = new BlockSignal();
 
 	public static void registerBlocks() {
 		itemBlocks.add(BLOCKSENDER);
@@ -64,6 +67,9 @@ public class CustomBlocks {
 		for (AItemBlock<?, ?> itemBlock : itemBlocks) {
 			BlockRender.register(itemBlock, itemBlock::render, itemBlock.getBlockEntityClass());
 		}
+
+		// Others
+		BlockRender.register(BLOCKSIGNAL, BlockSignalEntity::render, BlockSignalEntity.class);
 
 	}
 
