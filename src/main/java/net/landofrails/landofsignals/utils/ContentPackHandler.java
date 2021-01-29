@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
-import static com.google.common.base.Predicates.not;
 
 public class ContentPackHandler {
 
@@ -95,6 +94,11 @@ public class ContentPackHandler {
                 System.out.println(entry.getName());
             }
         }
+    }
+
+    // For method references
+    private static <T> Predicate<T> not(Predicate<T> t) {
+        return t.negate();
     }
 
 }
