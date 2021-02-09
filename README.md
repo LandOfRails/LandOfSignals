@@ -1,5 +1,13 @@
 # LandOfSignals (MC Forge 1.7.10, 1.10.2 - 1.16.4)
 
+[
+![Curseforge Downloads](https://cf.way2muchnoise.eu/full_434307_downloads.svg)
+![Curseforge Versions](https://cf.way2muchnoise.eu/versions/434307.svg)
+](https://www.curseforge.com/minecraft/mc-mods/landofsignals)
+[
+![Discord](https://img.shields.io/discord/797514319410495503?logo=discord)
+](https://discord.gg/ykAqHKYjVM)
+
 ### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 Author: [MarkenJaden](https://github.com/MarkenJaden)
