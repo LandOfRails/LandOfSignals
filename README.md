@@ -14,7 +14,15 @@ Author: [MarkenJaden](https://github.com/MarkenJaden)
 <br>
 Author: [Danielxs01](https://github.com/Danielxs01)
 
-Content:
+<br>
+Adds many different signals in different designs, so far without a consistent recognizable pattern or organization.
+<br>
+<br>
+
+<details>
+<summary>Content</summary>
+
+## Content:
 
 * Unknown creator of [GSAR](https://www.curseforge.com/minecraft/mc-mods/gsar-german-signals-at-rails)
 * Skyman_Luna#2484 (Discord)
@@ -27,9 +35,8 @@ Content:
 * Huge thanks to [cam72cam](https://github.com/cam72cam) for
   creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
   possible here
-
-<br>
-Adds many different signals in different designs, so far without a consistent recognizable pattern or organization.
+  
+</details>
 
 ## Usage
 
