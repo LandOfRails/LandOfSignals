@@ -50,6 +50,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         if (block.getStates().size() > 1)
             Static.changingSignalPartList.put(this.UUID, this.pos);
     }
+    
 
     @Override
     public ItemStack onPick() {
@@ -88,11 +89,21 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @Override
     public void setOffset(Vec3d vec) {
-        offset = offset.add(vec);
+        offset = vec;
     }
 
     @Override
     public Vec3d getOffset() {
         return offset;
+    }
+
+    @Override
+    public void setRotation(int rotation) {
+        this.blockRotate = rotation;
+    }
+
+    @Override
+    public int getRotation() {
+        return blockRotate;
     }
 }

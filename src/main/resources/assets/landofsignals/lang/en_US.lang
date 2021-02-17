@@ -4,6 +4,12 @@ itemGroup.landofsignals.assets=LOS | Assets
 
 gui.landofsignals:signalbox.redstone=With redstone
 gui.landofsignals:signalbox.noredstone=Without redstone
+gui.landofsignals:manipulator.unattach=Press shift to return to GUI
+gui.landofsignals:manipulator.editingame=Edit ingame
+gui.landofsignals:manipulator.editposition=Edit position
+gui.landofsignals:manipulator.editrotation=Edit rotation
+gui.landofsignals:manipulator.edithitbox=Edit hitbox
+gui.landofsignals:manipulator.rotationslider=Rotation
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signal Lever
@@ -11,6 +17,8 @@ item.landofsignals:item_ticket_machine_db.name=Ticket Machine (Deutsche Bahn)
 item.landofsignals:item_ticket_machine_sbb.name=Ticket Machine (SBB)
 item.landofsignals:item_signal_box.name=Signal Box
 item.landofsignals:item_connector.name=Connector tool
+item.landofsignals:item_manipulator.name=Manipulator tool
+item.landofsignals:item_signal_selector.name=Signal selector tool
 
 #gamerTV
 item.landofsignals:item_signal_part_gamertv_hvhp.name=Main signal (Signal)
@@ -27,8 +35,6 @@ item.landofsignals:item_signal_part_skymanluna_vorsignal_kopf.name=Approach sign
 item.landofsignals:item_signal_part_skymanluna_hauptsignal_base.name=Main signal (Base)
 item.landofsignals:item_signal_part_skymanluna_hauptsignal_schild.name=Main signal (Sign)
 item.landofsignals:item_signal_part_skymanluna_hauptsignal_kopf.name=Main signal (Signal)
-
-
 
 ## Stellwand
 

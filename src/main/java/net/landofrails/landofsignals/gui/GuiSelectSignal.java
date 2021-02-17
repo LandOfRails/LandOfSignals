@@ -19,19 +19,21 @@ public class GuiSelectSignal implements IScreen {
         List<ItemStack> itemStackList = new ArrayList<>();
         for (ItemSignalPart i : Static.itemSignalPartList) itemStackList.add(new ItemStack(i, 1));
         ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
-            boolean intoInv = false;
-            IInventory inv = MinecraftClient.getPlayer().getInventory();
-            for (int i = 0; i != inv.getSlotCount(); i++) {
-                if (inv.get(i).isEmpty()) {
-                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), i, false);
-                    packet.sendToServer();
-                    intoInv = true;
-                    break;
+            if (itemStack != null) {
+                boolean intoInv = false;
+                IInventory inv = MinecraftClient.getPlayer().getInventory();
+                for (int i = 0; i != inv.getSlotCount(); i++) {
+                    if (inv.get(i).isEmpty()) {
+                        SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), i, false);
+                        packet.sendToServer();
+                        intoInv = true;
+                        break;
+                    }
                 }
-            }
-            if (!intoInv) {
-                SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), 0, true);
-                packet.sendToServer();
+                if (!intoInv) {
+                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), 0, true);
+                    packet.sendToServer();
+                }
             }
             screen.close();
         });

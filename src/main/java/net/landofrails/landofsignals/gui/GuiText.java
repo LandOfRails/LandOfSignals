@@ -4,8 +4,19 @@ import cam72cam.mod.text.TextUtil;
 import net.landofrails.landofsignals.LandOfSignals;
 
 public enum GuiText {
+
+    //Signalbox
     LABEL_REDSTONE("signalbox.redstone"),
-    LABEL_NOREDSTONE("signalbox.noredstone");
+    LABEL_NOREDSTONE("signalbox.noredstone"),
+
+    //ManipulatorOverlay
+    LABEL_UNATTACH("manipulator.unattach"),
+    LABEL_EDITINGAME("manipulator.editingame"),
+    LABEL_EDITROTATION("manipulator.editrotation"),
+    LABEL_EDITHITBOX("manipulator.edithitbox"),
+    LABEL_ROTATIONSLIDER("manipulator.rotationslider"),
+    LABEL_EDITPOSITION("manipulator.editposition");
+
     private final String value;
 
     GuiText(String value) {

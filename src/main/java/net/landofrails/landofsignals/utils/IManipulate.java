@@ -11,4 +11,8 @@ public interface IManipulate {
 
     Vec3d getOffset();
 
+    void setRotation(int rotation);
+
+    int getRotation();
+
 }

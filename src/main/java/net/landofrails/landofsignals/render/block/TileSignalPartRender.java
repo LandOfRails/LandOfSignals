@@ -53,9 +53,6 @@ public class TileSignalPartRender {
             GL11.glScaled(scale.x, scale.y, scale.z);
             Vec3d trans = block.getTranslation().add(tsp.getOffset());
             Vec3d offset = tsp.getOffset();
-//            System.out.println(offset.x);
-//            System.out.println(offset.z);
-//            System.out.println("\n");
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.draw();

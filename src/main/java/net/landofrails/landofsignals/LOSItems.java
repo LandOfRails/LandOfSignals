@@ -16,7 +16,7 @@ public class LOSItems {
     public static final ItemConnector ITEM_CONNECTOR = new ItemConnector(LandOfSignals.MODID, "item_connector");
     public static final ItemManipulator ITEM_MANIPULATOR = new ItemManipulator(LandOfSignals.MODID, "item_manipulator");
 
-    public static final ItemSignalSelector ITEM_SIGNAL_SELECTOR = new ItemSignalSelector(LandOfSignals.MODID, "item_signal_connector");
+    public static final ItemSignalSelector ITEM_SIGNAL_SELECTOR = new ItemSignalSelector(LandOfSignals.MODID, "item_signal_selector");
 
     public static void register() {
         // loads static classes and ctrs

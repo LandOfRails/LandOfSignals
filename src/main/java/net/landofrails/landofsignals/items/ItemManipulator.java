@@ -10,6 +10,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.utils.IManipulate;
 
@@ -20,6 +21,8 @@ public class ItemManipulator extends CustomItem {
 
     private BlockEntity block;
     private Vec3d playerMainPos;
+    public static boolean editIngame = false;
+    public static boolean editHeight = false;
 
     public ItemManipulator(String modID, String name) {
         super(modID, name);
@@ -32,14 +35,15 @@ public class ItemManipulator extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        if (world.isServer) {
-            BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
-            if (block instanceof IManipulate) {
-                this.block = block;
-                this.playerMainPos = MinecraftClient.getPlayer().getPosition();
-            } else return ClickResult.REJECTED;
+        BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
+        if (block instanceof IManipulate) {
+            this.block = block;
+            this.playerMainPos = MinecraftClient.getPlayer().getPosition();
         }
-        return ClickResult.REJECTED;
+        if (world.isClient) {
+            LOSGuis.MANIPULATOR.open(player, block.getPos());
+            return ClickResult.ACCEPTED;
+        } else return ClickResult.REJECTED;
     }
 
     public BlockEntity getBlock() {
@@ -48,6 +52,10 @@ public class ItemManipulator extends CustomItem {
 
     public Vec3d getPlayerMainPos() {
         return playerMainPos;
+    }
+
+    public void setPlayerMainPos(Vec3d playerMainPos) {
+        this.playerMainPos = playerMainPos;
     }
 
     public void clearBlock() {
