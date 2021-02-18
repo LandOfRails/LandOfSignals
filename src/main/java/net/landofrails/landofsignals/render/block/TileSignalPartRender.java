@@ -21,7 +21,7 @@ public class TileSignalPartRender {
 
     }
 
-    private static Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
 
     public static StandardModel render(TileSignalPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));

@@ -10,7 +10,7 @@ public class LOSContentPack {
     private String author;
     private String packVersion;
 
-    private List<ContentPackEntry> entries = new ArrayList<>();
+    private final List<ContentPackEntry> entries = new ArrayList<>();
 
     public LOSContentPack(String name, String author, String packVersion) {
         this.name = name;

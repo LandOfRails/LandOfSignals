@@ -33,9 +33,9 @@ public class GuiManipualtor implements IScreen {
     private String textYBefore;
     private String textZBefore;
 
-    private Vec3d offset;
+    private final Vec3d offset;
     private int rotation;
-    private Vec3i blockPos;
+    private final Vec3i blockPos;
 
     private final Predicate<String> doubleFilter = inputString -> {
         if (inputString == null || inputString.length() == 0) {

@@ -19,7 +19,7 @@ public class TileSignalSO12Render {
 
     }
 
-    private static final List<String> groupNames = Arrays.asList(new String[]{"SO12_SO01"});
+    private static final List<String> groupNames = Arrays.asList("SO12_SO01");
     private static OBJRender renderer;
     private static OBJModel model;
 

@@ -16,7 +16,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("block")
-    private String blockName;
+    private final String blockName;
     @TagField("texturePath")
     private String texturePath = null;
 
@@ -48,7 +48,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         this.UUID = nbt.getUUID("UUID");
         if (block.getStates().size() > 1)
             Static.changingSignalPartList.put(this.UUID, this.pos);
-        System.out.println("LOAD nbt.getInteger(\"blockRotation\") = " + nbt.getInteger("blockRotation"));
     }
 
     @Override

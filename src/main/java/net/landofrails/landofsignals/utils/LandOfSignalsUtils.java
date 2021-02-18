@@ -15,10 +15,7 @@ public class LandOfSignalsUtils {
         if (LandOfSignalsUtils.isStandingInBlock(player.getBlockPosition().subtract(target)))
             return false;
 
-        if (world.isAir(target) || world.isReplaceable(target)) {
-            return true;
-        }
-        return false;
+        return world.isAir(target) || world.isReplaceable(target);
     }
 
     private static boolean isStandingInBlock(Vec3i vec3i) {

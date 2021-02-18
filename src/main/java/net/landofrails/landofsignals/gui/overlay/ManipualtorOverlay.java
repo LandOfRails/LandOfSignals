@@ -9,14 +9,15 @@ import cam72cam.mod.math.Vec3d;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.gui.GuiText;
+import net.landofrails.landofsignals.items.ItemManipulator;
 import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
 public class ManipualtorOverlay {
 
-    private int screenWidth;
-    private int screenHeight;
+    private final int screenWidth;
+    private final int screenHeight;
 
     public ManipualtorOverlay() {
         screenWidth = GUIHelpers.getScreenWidth();
@@ -27,16 +28,16 @@ public class ManipualtorOverlay {
 
     public void draw() {
         ItemStack item = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
-        if (!item.is(LOSItems.ITEM_MANIPULATOR) || !LOSItems.ITEM_MANIPULATOR.editIngame) return;
+        if (!item.is(LOSItems.ITEM_MANIPULATOR) || !ItemManipulator.editIngame) return;
         BlockEntity block = LOSItems.ITEM_MANIPULATOR.getBlock();
         if (block != null && block instanceof IManipulate) {
             Player player = MinecraftClient.getPlayer();
             if (player.isCrouching()) {
                 LOSGuis.MANIPULATOR.open(player, block.getPos());
-                LOSItems.ITEM_MANIPULATOR.editIngame = false;
+                ItemManipulator.editIngame = false;
                 return;
             }
-            if (!LOSItems.ITEM_MANIPULATOR.editHeight) {
+            if (!ItemManipulator.editHeight) {
                 Vec3d fastMovement = player.getMovementInput();
                 Vec3d movement = new Vec3d(Static.round(fastMovement.x / 10, 3), 0, Static.round(fastMovement.z / 10, 3));
                 handlePacket(block, player, movement);

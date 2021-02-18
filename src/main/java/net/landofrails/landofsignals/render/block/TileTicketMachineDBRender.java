@@ -21,7 +21,7 @@ public class TileTicketMachineDBRender {
 
     private static OBJRender renderer;
     private static OBJModel model;
-    private static final List<String> groupNames = Arrays.asList(new String[]{"Polygon-Objekt"});
+    private static final List<String> groupNames = Arrays.asList("Polygon-Objekt");
 
     @SuppressWarnings("java:S1611")
     public static StandardModel render(TileTicketMachineDB ts) {
