@@ -9,7 +9,6 @@ import cam72cam.mod.math.Vec3i;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.items.ItemManipulator;
 import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
-import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -145,8 +144,8 @@ public class GuiManipualtor implements IScreen {
     public void onClose() {
         send();
         //Server
-        ManipulatorToServerPacket serverPacket = new ManipulatorToServerPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
-        serverPacket.sendToServer();
+//        ManipulatorToServerPacket serverPacket = new ManipulatorToServerPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
+//        serverPacket.sendToServer();
     }
 
     @Override

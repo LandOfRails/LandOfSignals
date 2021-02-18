@@ -20,7 +20,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("texturePath")
     private String texturePath = null;
 
-
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
@@ -49,8 +48,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         this.UUID = nbt.getUUID("UUID");
         if (block.getStates().size() > 1)
             Static.changingSignalPartList.put(this.UUID, this.pos);
+        System.out.println("LOAD nbt.getInteger(\"blockRotation\") = " + nbt.getInteger("blockRotation"));
     }
-    
 
     @Override
     public ItemStack onPick() {
@@ -90,6 +89,11 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @Override
     public void setOffset(Vec3d vec) {
         offset = vec;
+        try {
+            save(new TagCompound().setVec3d("offset", vec));
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -100,6 +104,11 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @Override
     public void setRotation(int rotation) {
         this.blockRotate = rotation;
+        try {
+            save(new TagCompound().setInteger("blockRotation", rotation));
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
