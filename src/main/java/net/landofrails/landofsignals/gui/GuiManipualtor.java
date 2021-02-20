@@ -12,8 +12,6 @@ import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class GuiManipualtor implements IScreen {
@@ -37,7 +35,7 @@ public class GuiManipualtor implements IScreen {
 
     private final Vec3d offset;
     private int rotation;
-    private final List<Vec3i> blockPos;
+    private final Vec3i blockPos;
 
     private final Predicate<String> doubleFilter = inputString -> {
         if (inputString == null || inputString.length() == 0) {
@@ -52,25 +50,10 @@ public class GuiManipualtor implements IScreen {
     };
 
     public GuiManipualtor(BlockEntity be) {
-        blockPos = new ArrayList<>();
-        blockPos.add(be.getPos());
-
-        //UP
-        int i = 0;
-        while (be.getWorld().getBlockEntity(be.getPos().up(i), BlockEntity.class) instanceof IManipulate) {
-            blockPos.add(be.getPos().up(i));
-            i++;
-        }
-        //DOWN
-        int j = 0;
-        while (be.getWorld().getBlockEntity(be.getPos().down(j), BlockEntity.class) instanceof IManipulate) {
-            blockPos.add(be.getPos().down(j));
-            j++;
-        }
-
         IManipulate manipulate = (IManipulate) be;
         offset = manipulate.getOffset();
         rotation = manipulate.getRotation();
+        blockPos = be.getPos();
     }
 
     @Override
@@ -193,7 +176,7 @@ public class GuiManipualtor implements IScreen {
 
     private void send() {
         //Client
-        ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, (Vec3i) blockPos);
+        ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
         clientPacket.sendToAll();
     }
 

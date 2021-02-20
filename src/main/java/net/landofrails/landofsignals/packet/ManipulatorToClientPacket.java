@@ -8,8 +8,7 @@ import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.utils.IManipulate;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 
 public class ManipulatorToClientPacket extends Packet {
 
@@ -20,7 +19,7 @@ public class ManipulatorToClientPacket extends Packet {
     @TagField("player")
     private Player player;
     @TagField("blockPos")
-    private List<Vec3i> blockPos;
+    private Vec3i blockPos;
     @TagField("gui")
     private boolean gui;
     @TagField("rotation")
@@ -30,7 +29,7 @@ public class ManipulatorToClientPacket extends Packet {
 
     }
 
-    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, List<Vec3i> blockPos) {
+    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, Vec3i blockPos) {
         this.mainPos = mainPos;
         this.movement = movement;
         this.player = player;
@@ -40,16 +39,31 @@ public class ManipulatorToClientPacket extends Packet {
 
     public ManipulatorToClientPacket(Vec3d offset, int rotation, Vec3i blockPos) {
         this.movement = offset;
-        this.blockPos = Collections.singletonList(blockPos);
+        this.blockPos = blockPos;
         this.rotation = rotation;
         gui = true;
     }
 
     @Override
     protected void handle() {
+
+        ArrayList<Vec3i> blockPosList = new ArrayList<>();
+        //UP
+        int i = 0;
+        while (getWorld().getBlockEntity(blockPos.up(i), BlockEntity.class) instanceof IManipulate) {
+            blockPosList.add(blockPos.up(i));
+            i++;
+        }
+        //DOWN
+        int j = 0;
+        while (getWorld().getBlockEntity(blockPos.down(j), BlockEntity.class) instanceof IManipulate) {
+            blockPosList.add(blockPos.down(j));
+            j++;
+        }
+
         if (!gui) {
             player.setPosition(mainPos);
-            for (Vec3i bp : blockPos) {
+            for (Vec3i bp : blockPosList) {
                 BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {
                     IManipulate manipulate = (IManipulate) block;
@@ -57,7 +71,7 @@ public class ManipulatorToClientPacket extends Packet {
                 }
             }
         } else {
-            for (Vec3i bp : blockPos) {
+            for (Vec3i bp : blockPosList) {
                 BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {
                     IManipulate manipulate = (IManipulate) block;

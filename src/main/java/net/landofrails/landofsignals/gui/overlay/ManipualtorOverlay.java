@@ -14,8 +14,6 @@ import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.Collections;
-
 public class ManipualtorOverlay {
 
     private final int screenWidth;
@@ -55,7 +53,7 @@ public class ManipualtorOverlay {
     }
 
     private void handlePacket(BlockEntity block, Player player, Vec3d movement) {
-        ManipulatorToClientPacket packet = new ManipulatorToClientPacket(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos(), movement, player, Collections.singletonList(block.getPos()));
+        ManipulatorToClientPacket packet = new ManipulatorToClientPacket(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos(), movement, player, block.getPos());
         packet.sendToAll();
         player.setPosition(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos());
         IManipulate manipulate = (IManipulate) block;
