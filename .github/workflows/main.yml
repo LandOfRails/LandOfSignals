@@ -33,8 +33,6 @@ jobs:
       run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
     - name: Gradle build
       run: ./gradlew build
-    - name: Gradle uploadArchives
-      run: ./gradlew uploadArchives
     - name: cleanup
       run: rm publish_key
     - uses: actions/upload-artifact@v2
