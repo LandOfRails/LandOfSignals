@@ -23,14 +23,20 @@ public class CustomItems {
 	public static final ItemConnector ITEMCONNECTOR1 = new ItemConnector(1);
 	public static final ItemConnector ITEMCONNECTOR2 = new ItemConnector(2);
 	public static final ItemConnector ITEMCONNECTOR3 = new ItemConnector(3);
+
+	// Blocks
+	public static final ItemBlockFiller ITEMBLOCKFILLER = new ItemBlockFiller();
 	public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
+	public static final ItemBlockSender ITEMBLOCKSENDER = new ItemBlockSender();
 
 	public static void register() {
 		itemList.add(ITEMCONNECTOR1);
 		itemList.add(ITEMCONNECTOR2);
 		itemList.add(ITEMCONNECTOR3);
 
+		ItemRender.register(ITEMBLOCKFILLER, ItemBlockFiller.getModelFor());
 		ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
+		ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
 
 	}
 

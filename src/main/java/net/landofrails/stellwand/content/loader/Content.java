@@ -7,6 +7,7 @@ import java.util.Map;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.content.items.ItemBlockSignal;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Content {
@@ -33,7 +34,8 @@ public class Content {
 
 		// @formatter:off
 		if (!LandOfSignals.VERSION.equalsIgnoreCase(pack.getModversion()))
-			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + LandOfSignals.VERSION + ", but found:" + pack.getModversion());
+			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + LandOfSignals.VERSION
+					+ ", but found:" + pack.getModversion());
 		// @formatter:on
 
 		contentPacks.add(pack);
@@ -42,16 +44,39 @@ public class Content {
 
 	}
 
-	public static Map<ContentPackEntry, String> getEntries() {
+	public static Map<ContentPackEntry, String> getBlockSignals() {
 		Map<ContentPackEntry, String> entries = new HashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
-				entries.put(entry, pack.getId());
+				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSIGNAL.name()))
+					entries.put(entry, pack.getId());
+		}
+		return entries;
+	}
+
+	public static Map<ContentPackEntry, String> getBlockSenders() {
+		Map<ContentPackEntry, String> entries = new HashMap<>();
+		for (ContentPack pack : contentPacks) {
+			for (ContentPackEntry entry : pack.getEntries())
+				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSENDER.name()))
+					entries.put(entry, pack.getId());
+		}
+		return entries;
+	}
+
+	public static Map<ContentPackEntry, String> getBlockFillers() {
+		Map<ContentPackEntry, String> entries = new HashMap<>();
+		for (ContentPack pack : contentPacks) {
+			for (ContentPackEntry entry : pack.getEntries())
+				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKFILLER.name()))
+					entries.put(entry, pack.getId());
 		}
 		return entries;
 	}
 
 	public static String getNameForId(String itemId) {
+		if (itemId == null || !itemId.contains(":"))
+			return ItemBlockSignal.MISSING;
 		return itemId.split(":")[1];
 	}
 
