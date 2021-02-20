@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
@@ -60,6 +61,16 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         super.onBreak();
         if (block.getStates().size() > 1)
             Static.changingSignalPartList.remove(UUID);
+    }
+
+    @Override
+    public IBoundingBox getBoundingBox() {
+        return IBoundingBox.BLOCK.offset(offset);
+    }
+
+    @Override
+    public IBoundingBox getRenderBoundingBox() {
+        return IBoundingBox.BLOCK.offset(offset);
     }
 
     public int getBlockRotate() {
