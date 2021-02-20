@@ -36,11 +36,11 @@ item.landofsignals:item_signal_part_skymanluna_hauptsignal_base.name=Main signal
 item.landofsignals:item_signal_part_skymanluna_hauptsignal_schild.name=Main signal (Sign)
 item.landofsignals:item_signal_part_skymanluna_hauptsignal_kopf.name=Main signal (Signal)
 
-## Stellwand
+# -- Stellwand --
 
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler
 item.landofsignals:stellwand.itemblocksender.name=Block Sender
+item.landofsignals:stellwand.itemblocksignal.name=Block Signal
 item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
-item.landofsignals:stellwand.itemblocksignal.name=Block Signal

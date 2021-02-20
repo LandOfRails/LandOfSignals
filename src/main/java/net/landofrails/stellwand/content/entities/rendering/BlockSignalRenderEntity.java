@@ -1,4 +1,4 @@
-package net.landofrails.stellwand.content.entities;
+package net.landofrails.stellwand.content.entities.rendering;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,20 +12,27 @@ import org.lwjgl.opengl.GL11;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
+import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import cam72cam.mod.text.PlayerMessage;
+import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
-public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEntity {
+public class BlockSignalRenderEntity extends BlockEntity implements IRotatableBlockEntity {
 
 	// Static values
 	public static final String MISSING = "missing";
@@ -47,10 +54,6 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 	private float[] translation;
 	@Nullable
 	private String mode;
-
-	public BlockSignalEntity() {
-
-	}
 
 	public OBJModel getModel() {
 
@@ -101,17 +104,27 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 	 * @return
 	 */
 	public String getMode() {
+
+		if (mode == null) {
+			Map<String, String> m = modes.get(contentPackBlockId);
+			if (m != null && !m.isEmpty()) {
+				mode = m.values().iterator().next();
+			}
+		}
 		return mode;
 	}
 
 	@Override
 	public ItemStack onPick() {
-
-		return null;
+		ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
+		TagCompound tag = is.getTagCompound();
+		tag.setString("itemId", contentPackBlockId);
+		is.setTagCompound(tag);
+		return is;
 	}
 
 	// Rendering
-	public static StandardModel render(BlockSignalEntity entity) {
+	public static StandardModel render(BlockSignalRenderEntity entity) {
 		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
 	}
 
@@ -128,7 +141,7 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 				ModCore.Mod.error(e.getMessage());
 			}
 			// Add contentpack stuff
-			for (Entry<ContentPackEntry, String> entry : Content.getEntries().entrySet()) {
+			for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
 				try {
 					ContentPackEntry cpe = entry.getKey();
 					String packId = entry.getValue();
@@ -150,7 +163,7 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 	}
 
 	@SuppressWarnings("java:S1172")
-	private static void renderStuff(BlockSignalEntity entity, float partialTicks) {
+	private static void renderStuff(BlockSignalRenderEntity entity, float partialTicks) {
 
 		check();
 
@@ -158,7 +171,7 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 		OBJRender renderer = entity.getRenderer();
 		float[] translation = entity.getTranslation();
 		float[] rotation = entity.getRotation();
-		String mode = entity.mode;
+		String mode = entity.getMode();
 
 		try {
 			if (renderer == null || model == null) {
@@ -167,7 +180,10 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 			}
 			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
 				GL11.glTranslated(translation[0], translation[1], translation[2]);
-				GL11.glRotated(1, rotation[0], rotation[1] + entity.getRot(), rotation[2]);
+
+				GL11.glRotated(rotation[0], 1, 0, 0);
+				GL11.glRotated(entity.getRot() + rotation[1], 0, 1, 0);
+				GL11.glRotated(rotation[2], 0, 0, 1);
 
 				if (mode == null) {
 					renderer.draw();
@@ -198,11 +214,24 @@ public class BlockSignalEntity extends BlockEntity implements IRotatableBlockEnt
 
 	@Override
 	public void setRotation(float rotationYawHead) {
-		rot = -(Math.round(rotationYawHead / 10) * 10) + 180;
+		rot = -Math.round(rotationYawHead / 90) * 90f;
 	}
 
 	public void setContentBlockId(String id) {
 		this.contentPackBlockId = id;
+	}
+
+	@Override
+	public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
+
+		player.sendMessage(PlayerMessage.direct("Rotation: " + rot));
+		float[] r = getRotation();
+		player.sendMessage(PlayerMessage.direct("Rotations: " + r[0] + ", " + r[1] + ", " + r[2]));
+		r = rotations.get(contentPackBlockId);
+		if (r != null)
+			player.sendMessage(PlayerMessage.direct("Rotations2: " + r[0] + ", " + r[1] + ", " + r[2]));
+
+		return true;
 	}
 
 }
