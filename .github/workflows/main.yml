@@ -3,11 +3,7 @@
 
 name: LandOfSignals Build Pipeline
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
   build:
