@@ -6,7 +6,7 @@ name: LandOfSignals Build Pipeline
 on:
   push:
     paths:
-      - 'scr/**'
+      - scr/**
 
 jobs:
   build:
