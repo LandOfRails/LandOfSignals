@@ -22,8 +22,7 @@ public class TileSignalLeverRender {
 
     private static OBJRender renderer;
     private static OBJModel model;
-    private static final List<String> groupNames = Arrays
-            .asList("Base01_B01", "Hebelwerk01_H01", "Hebelwerk02_H02");
+    private static final List<String> groupNames = Arrays.asList("Base01_B01", "Hebelwerk01_H01", "Hebelwerk02_H02");
 
     public static StandardModel render(TileSignalLever ts) {
         return new StandardModel().addCustom(partialTicks -> renderStuff(ts, partialTicks));
