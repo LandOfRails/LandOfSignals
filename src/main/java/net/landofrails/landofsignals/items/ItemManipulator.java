@@ -23,6 +23,7 @@ public class ItemManipulator extends CustomItem {
     private Vec3d playerMainPos;
     public static boolean editIngame = false;
     public static boolean editHeight = false;
+    public static boolean sneak = false;
 
     public ItemManipulator(String modID, String name) {
         super(modID, name);
@@ -35,6 +36,7 @@ public class ItemManipulator extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        sneak = player.isCrouching();
         BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
         if (block instanceof IManipulate) {
             this.block = block;

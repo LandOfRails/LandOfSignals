@@ -24,42 +24,48 @@ public class ManipulatorToClientPacket extends Packet {
     private boolean gui;
     @TagField("rotation")
     private int rotation;
+    @TagField("sneak")
+    private boolean sneak;
 
     public ManipulatorToClientPacket() {
 
     }
 
-    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, Vec3i blockPos) {
+    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, Vec3i blockPos, boolean sneak) {
         this.mainPos = mainPos;
         this.movement = movement;
         this.player = player;
         this.blockPos = blockPos;
         gui = false;
+        this.sneak = sneak;
     }
 
-    public ManipulatorToClientPacket(Vec3d offset, int rotation, Vec3i blockPos) {
+    public ManipulatorToClientPacket(Vec3d offset, int rotation, Vec3i blockPos, boolean sneak) {
         this.movement = offset;
         this.blockPos = blockPos;
         this.rotation = rotation;
         gui = true;
+        this.sneak = sneak;
     }
 
     @Override
     protected void handle() {
 
         ArrayList<Vec3i> blockPosList = new ArrayList<>();
-        //UP
-        int i = 0;
-        while (getWorld().getBlockEntity(blockPos.up(i), BlockEntity.class) instanceof IManipulate) {
-            blockPosList.add(blockPos.up(i));
-            i++;
-        }
-        //DOWN
-        int j = 0;
-        while (getWorld().getBlockEntity(blockPos.down(j), BlockEntity.class) instanceof IManipulate) {
-            blockPosList.add(blockPos.down(j));
-            j++;
-        }
+        if (!sneak) {
+            //UP
+            int i = 0;
+            while (getWorld().getBlockEntity(blockPos.up(i), BlockEntity.class) instanceof IManipulate) {
+                blockPosList.add(blockPos.up(i));
+                i++;
+            }
+            //DOWN
+            int j = 0;
+            while (getWorld().getBlockEntity(blockPos.down(j), BlockEntity.class) instanceof IManipulate) {
+                blockPosList.add(blockPos.down(j));
+                j++;
+            }
+        } else blockPosList.add(blockPos);
 
         if (!gui) {
             player.setPosition(mainPos);

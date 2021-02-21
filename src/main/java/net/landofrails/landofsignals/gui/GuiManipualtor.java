@@ -176,7 +176,7 @@ public class GuiManipualtor implements IScreen {
 
     private void send() {
         //Client
-        ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
+        ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos, ItemManipulator.sneak);
         clientPacket.sendToAll();
     }
 
