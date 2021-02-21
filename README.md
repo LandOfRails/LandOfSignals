@@ -42,6 +42,20 @@ Adds many different signals in different designs, so far without a consistent re
 ## Usage
 
 **TBA**
+
+## Development
+
+**IntelliJ**
+1. Get the project from GitHub
+2. ``gradle umc -D umc.loader=1.12.2-forge``
+3. Load gradle changes
+
+You are ready to go ^^
+
+**Eclipse**
+The same I think? I don't know I don't know anything about Eclipse at all
+
+
 <br>
 <br>
 <br>
