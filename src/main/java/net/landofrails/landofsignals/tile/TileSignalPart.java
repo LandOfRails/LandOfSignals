@@ -47,8 +47,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         super.load(nbt);
         this.block = Static.blockSignalPartList.get(blockName);
         this.UUID = nbt.getUUID("UUID");
-        if (block.getStates().size() > 1)
-            Static.changingSignalPartList.put(this.UUID, this.pos);
+        if (block.getStates().size() > 1) Static.changingSignalPartList.put(this.UUID, this.pos);
     }
 
     @Override
@@ -59,8 +58,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @Override
     public void onBreak() {
         super.onBreak();
-        if (block.getStates().size() > 1)
-            Static.changingSignalPartList.remove(UUID);
+        if (block.getStates().size() > 1) Static.changingSignalPartList.remove(UUID);
     }
 
     @Override
