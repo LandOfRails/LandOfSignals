@@ -54,7 +54,7 @@ You are ready to go ^^
 
 **Eclipse**
 
-The same I think? I don't know I don't know anything about Eclipse at all
+The same I think? I don't know anything about Eclipse at all
 
 
 <br>
