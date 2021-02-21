@@ -3,7 +3,10 @@
 
 name: LandOfSignals Build Pipeline
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'scr/**'
 
 jobs:
   build:
