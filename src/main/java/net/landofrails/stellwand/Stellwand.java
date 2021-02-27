@@ -25,6 +25,7 @@ public class Stellwand {
 		CustomBlocks.registerBlocks();
 
 		Packet.register(ChangeHandHeldItem::new, PacketDirection.ClientToServer);
+
 	}
 
 	public static void clientEvent() {

@@ -1,10 +1,16 @@
 package net.landofrails.stellwand.content.network;
 
+import java.util.Arrays;
+import java.util.List;
+
+import cam72cam.mod.ModCore;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
+import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
+import net.landofrails.stellwand.content.items.CustomItems;
 
 public class ChangeHandHeldItem extends Packet {
 
@@ -15,8 +21,11 @@ public class ChangeHandHeldItem extends Packet {
 	@TagField("hand")
 	private Hand hand;
 
-	public ChangeHandHeldItem() {
+	private List<CustomItem> validItems;
 
+	public ChangeHandHeldItem() {
+		validItems = Arrays.asList(CustomItems.ITEMBLOCKFILLER, CustomItems.ITEMBLOCKSENDER,
+				CustomItems.ITEMBLOCKSIGNAL);
 	}
 
 	public ChangeHandHeldItem(Player player, ItemStack itemStack, Hand hand) {
@@ -27,7 +36,23 @@ public class ChangeHandHeldItem extends Packet {
 
 	@Override
 	protected void handle() {
-		player.setHeldItem(hand, itemStack);
+		if (isFromStellwand(itemStack))
+			player.setHeldItem(hand, itemStack);
+		else {
+			ModCore.warn("Invalid Item in ChangeHandHeldItem Event:");
+			ModCore.warn("ItemStack: " + itemStack.getDisplayName() + " NBT: " + itemStack.getTagCompound().toString());
+			ModCore.warn("Player: " + player.internal.getDisplayName().getUnformattedText());
+		}
+
+	}
+
+	private boolean isFromStellwand(ItemStack itemStack) {
+
+		for (CustomItem item : validItems) {
+			if (itemStack.is(item))
+				return true;
+		}
+		return false;
 	}
 
 }

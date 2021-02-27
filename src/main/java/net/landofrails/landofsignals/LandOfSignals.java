@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals;
 
+import java.util.Map;
+
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
@@ -16,12 +18,22 @@ import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
+import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
+import net.landofrails.landofsignals.render.block.TileSignalPartRender;
+import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
+import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
+import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.*;
+import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.tile.TileSignalLever;
+import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalSO12;
+import net.landofrails.landofsignals.tile.TileTicketMachineDB;
+import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
+import net.landofrails.landofsignals.utils.ContentPackHandler;
 import net.landofrails.landofsignals.utils.Static;
-
-import java.util.Map;
+import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
@@ -41,9 +53,9 @@ public class LandOfSignals extends ModCore.Mod {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
 
             // Stellwand
-//            Stellwand.commonEvent();
+            Stellwand.commonEvent();
 
-//            ContentPackHandler.init();
+            ContentPackHandler.init();
 
             LOSBlocks.register();
             LOSItems.register();
@@ -63,7 +75,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ModCore.Mod.info("Starting client construct...");
 
                 // Stellwand
-//                Stellwand.clientEvent();
+                Stellwand.clientEvent();
 
                 // Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);

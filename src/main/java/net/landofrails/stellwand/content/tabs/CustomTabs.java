@@ -13,10 +13,13 @@ public class CustomTabs {
 
 	@SuppressWarnings("java:S3008")
 	public static CreativeTab STELLWAND_TAB;
+	@SuppressWarnings("java:S3008")
+	public static CreativeTab HIDDEN_TAB;
 
 	public static void register() {
 		STELLWAND_TAB = new CreativeTab(LandOfSignals.MODID + ".stellwand",
 				() -> new ItemStack(CustomItems.ITEMCONNECTOR1, 1));
+		HIDDEN_TAB = new CreativeTab(null);
 	}
 
 }

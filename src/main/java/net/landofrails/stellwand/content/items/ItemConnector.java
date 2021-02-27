@@ -28,7 +28,9 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
 	@Override
 	public List<CreativeTab> getCreativeTabs() {
-		return Arrays.asList(CustomTabs.STELLWAND_TAB);
+
+		CreativeTab tab = variation == 1 ? CustomTabs.STELLWAND_TAB : CustomTabs.HIDDEN_TAB;
+		return Arrays.asList(tab);
 	}
 
 	@Override
