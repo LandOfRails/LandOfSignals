@@ -41,7 +41,7 @@ public class ChangeHandHeldItem extends Packet {
 		else {
 			ModCore.warn("Invalid Item in ChangeHandHeldItem Event:");
 			ModCore.warn("ItemStack: " + itemStack.getDisplayName() + " NBT: " + itemStack.getTagCompound().toString());
-			ModCore.warn("Player: " + player.internal.getDisplayName().getUnformattedText());
+			ModCore.warn("Player's UUID: " + player.getUUID());
 		}
 
 	}
