@@ -1,4 +1,4 @@
-# LandOfSignals (MC Forge 1.7.10, 1.10.2 - 1.16.4)
+# LandOfSignals (MC Forge 1.7.10, 1.10.2 - 1.16.5)
 
 [
 ![Curseforge Downloads](http://cf.way2muchnoise.eu/full_434307_downloads.svg)
