@@ -39,17 +39,3 @@ task deployJar(type: Jar)
 configurations {
     deployerJars
 }
-
-dependencies {
-    deployerJars "org.apache.maven.wagon:wagon-ssh:2.9"
-}
-
-uploadArchives {
-    tasks.uploadArchives.dependsOn build
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        repository(url: "scp://teamopenindustry.cc/var/www/html/maven/") {
-            authentication(userName: "mavenci", privateKey: "publish_key")
-        }
-    }
-}
