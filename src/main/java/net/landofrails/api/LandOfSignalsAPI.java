@@ -17,6 +17,14 @@ public class LandOfSignalsAPI {
 
 	static class LandOfSignals {
 
+		/**
+		 * 
+		 * Returns true if block at given position is of type
+		 * 
+		 * @param mcWorld
+		 * @param pos
+		 * @return
+		 */
 		public boolean isSignalblock(net.minecraft.world.World mcWorld,
 				Vector3d pos) {
 

@@ -162,6 +162,7 @@ public class ItemBlockFiller extends CustomItem {
 			BlockTypeEntity block = CustomBlocks.BLOCKFILLER;
 
 			world.setBlock(target, block);
+			// TODO: Muss ggf. angepasst werden zu Storage
 			BlockFillerRenderEntity blockEntity = world.getBlockEntity(target, BlockFillerRenderEntity.class);
 			// Set ContentPackBlockId
 			ItemStack item = player.getHeldItem(hand);

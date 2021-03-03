@@ -31,7 +31,7 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
@@ -207,16 +207,21 @@ public class ItemBlockSignal extends CustomItem {
 			BlockTypeEntity block = CustomBlocks.BLOCKSIGNAL;
 
 			world.setBlock(target, block);
-			BlockSignalRenderEntity blockEntity = world.getBlockEntity(target, BlockSignalRenderEntity.class);
+			BlockSignalStorageEntity blockEntity = world.getBlockEntity(target,
+					BlockSignalStorageEntity.class);
 			// Set ContentPackBlockId
 			ItemStack item = player.getHeldItem(hand);
 			TagCompound tag = item.getTagCompound();
 			if (blockEntity != null) {
 				if (tag != null && !tag.isEmpty())
-					blockEntity.setContentBlockId(tag.hasKey("itemId") ? tag.getString("itemId") : MISSING);
+					blockEntity.renderEntity
+							.setContentBlockId(tag.hasKey("itemId")
+									? tag.getString("itemId")
+									: MISSING);
 				else
-					blockEntity.setContentBlockId(MISSING);
-				blockEntity.setRotation(player.getRotationYawHead());
+					blockEntity.renderEntity.setContentBlockId(MISSING);
+				blockEntity.renderEntity
+						.setRotation(player.getRotationYawHead());
 			}
 			//
 

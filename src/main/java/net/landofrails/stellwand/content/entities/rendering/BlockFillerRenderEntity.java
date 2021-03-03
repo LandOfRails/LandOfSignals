@@ -30,18 +30,31 @@ import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
 public class BlockFillerRenderEntity extends BlockEntity implements IRotatableBlockEntity {
 
-	// Static values
+	// Global static variables
 	public static final String MISSING = "missing";
+
+	// Global TagFields
+	@TagField
+	private String contentPackBlockId = MISSING;
+
+	@TagField
+	private float rot = 0;
+
 	private static Map<String, OBJModel> models = new HashMap<>();
 	private static Map<String, OBJRender> renderers = new HashMap<>();
 	private static Map<String, float[]> rotations = new HashMap<>();
 	private static Map<String, float[]> translations = new HashMap<>();
 
+	/*
+	 * #########################################################################
+	 * ########################## REWORK REWORK REWORK REWORK REWORK REWORK
+	 * REWORK REWORK REWORK REWORK REWORK REWORK REWORK REWORK
+	 * #########################################################################
+	 * ##########################
+	 */
+
+
 	// Storing data
-	@TagField
-	private String contentPackBlockId = MISSING;
-	@TagField
-	private float rot = 0;
 	// Rendering
 	private OBJModel model;
 	private OBJRender renderer;

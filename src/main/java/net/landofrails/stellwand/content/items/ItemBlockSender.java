@@ -162,6 +162,7 @@ public class ItemBlockSender extends CustomItem {
 			BlockTypeEntity block = CustomBlocks.BLOCKSENDER;
 
 			world.setBlock(target, block);
+			// TODO: Muss ggf. angepasst werden zu Storage
 			BlockSenderRenderEntity blockEntity = world.getBlockEntity(target, BlockSenderRenderEntity.class);
 			// Set ContentPackBlockId
 			ItemStack item = player.getHeldItem(hand);
