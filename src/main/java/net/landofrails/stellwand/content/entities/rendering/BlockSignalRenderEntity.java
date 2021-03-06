@@ -111,7 +111,13 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		return mode;
 	}
 
-	protected void setMode(String mode) {
+	public Map<String, String> getModes() {
+
+		return modes.get(entity.contentPackBlockId);
+
+	}
+
+	public void setMode(String mode) {
 		this.mode = mode;
 	}
 
@@ -209,10 +215,6 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 	@Override
 	public void setRotation(float rotationYawHead) {
 		entity.rot = -Math.round(rotationYawHead / 90) * 90f;
-	}
-
-	public void setContentBlockId(String id) {
-		entity.contentPackBlockId = id;
 	}
 
 }

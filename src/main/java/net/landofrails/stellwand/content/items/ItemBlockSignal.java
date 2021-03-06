@@ -50,7 +50,6 @@ public class ItemBlockSignal extends CustomItem {
 	private static Map<String, Float> scales = new HashMap<>();
 	private static Map<String, String> modes = new HashMap<>();
 
-	//
 
 	public ItemBlockSignal() {
 		super(LandOfSignals.MODID, "stellwand.itemblocksignal");
@@ -158,11 +157,15 @@ public class ItemBlockSignal extends CustomItem {
 				renderers.put(itemId, new OBJRender(model));
 			}
 
+			// TODO: Get CustomItem
+
 			OBJRender renderer = renderers.get(itemId);
 
 			float[] translate = translations.get(itemId);
 			float[] rotation = rotations.get(itemId);
-			String mode = modes.get(itemId);
+			// Enables the gui to display different modes
+			String customMode = stack.getTagCompound().getString("customMode");
+			String mode = customMode != null ? customMode : modes.get(itemId);
 			float scale = scales.get(itemId);
 			OBJModel model = models.get(itemId);
 			try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
@@ -214,12 +217,12 @@ public class ItemBlockSignal extends CustomItem {
 			TagCompound tag = item.getTagCompound();
 			if (blockEntity != null) {
 				if (tag != null && !tag.isEmpty())
-					blockEntity.renderEntity
+					blockEntity
 							.setContentBlockId(tag.hasKey("itemId")
 									? tag.getString("itemId")
 									: MISSING);
 				else
-					blockEntity.renderEntity.setContentBlockId(MISSING);
+					blockEntity.setContentBlockId(MISSING);
 				blockEntity.renderEntity
 						.setRotation(player.getRotationYawHead());
 			}
