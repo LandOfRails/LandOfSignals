@@ -8,6 +8,7 @@ import net.landofrails.landofsignals.items.ItemSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,26 +23,26 @@ public class BlockSignalPart extends BlockTypeEntity {
     private final List<String> states;
     private final ItemSignalPart item;
 
-    public BlockSignalPart(String name, String path, Vec3d translation, Vec3d scaling) {
-        this(name, path, translation, translation, scaling, new ArrayList<String>() {{
+    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d scaling) {
+        this(name, customName, path, translation, translation, scaling, new ArrayList<String>() {{
             add(null);
         }});
     }
 
-    public BlockSignalPart(String name, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling) {
-        this(name, path, translation, itemTranslaton, scaling, new ArrayList<String>() {{
+    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling) {
+        this(name, customName, path, translation, itemTranslaton, scaling, new ArrayList<String>() {{
             add(null);
         }});
     }
 
-    public BlockSignalPart(String name, String path, Vec3d translation, Vec3d scaling, List<String> states) {
-        this(name, path, translation, translation, scaling, states);
+    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d scaling, List<String> states) {
+        this(name, customName, path, translation, translation, scaling, states);
     }
 
-    public BlockSignalPart(String name, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling, List<String> states) {
+    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling, List<String> states) {
         super(LandOfSignals.MODID, name);
         Static.blockSignalPartList.put(name, this);
-        item = new ItemSignalPart(name.replace("block", "item"), this);
+        item = new ItemSignalPart(name.replace("block", "item"), customName, this);
         this.name = name;
         this.path = path;
         this.translation = translation;

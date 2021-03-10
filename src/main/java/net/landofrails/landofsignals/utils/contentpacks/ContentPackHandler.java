@@ -1,4 +1,4 @@
-package net.landofrails.landofsignals.utils;
+package net.landofrails.landofsignals.utils.contentpacks;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.stellwand.utils.StellwandUtils;
