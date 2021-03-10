@@ -4,7 +4,6 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
@@ -24,15 +23,11 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    @TagField("pos")
-    private final Vec3i pos;
-
     private BlockSignalPart block;
 
-    public TileSignalPart(int rotation, String blockName, Vec3i pos) {
+    public TileSignalPart(int rotation, String blockName) {
         this.blockRotate = rotation;
         this.blockName = blockName;
-        this.pos = pos;
         block = Static.blockSignalPartList.get(blockName);
     }
 

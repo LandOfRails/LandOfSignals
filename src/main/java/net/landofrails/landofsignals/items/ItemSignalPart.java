@@ -41,7 +41,6 @@ public class ItemSignalPart extends CustomItem {
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
         block.setRot(rot);
-        block.setPos(pos.offset(facing));
         world.setBlock(pos.offset(facing), block);
         return ClickResult.ACCEPTED;
     }
