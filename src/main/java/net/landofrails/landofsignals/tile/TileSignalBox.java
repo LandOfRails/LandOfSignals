@@ -10,16 +10,14 @@ import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.landofsignals.utils.Static;
 
 import java.util.List;
-import java.util.UUID;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
-    private UUID UUIDTileSignalPart;
+    private Vec3i TileSignalPartPos;
 
     @TagField("redstone")
     private int redstone = 0;
@@ -38,7 +36,7 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (!player.isCrouching() && player.getWorld().isClient && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
+        if (!player.isCrouching() && player.getWorld().isClient && TileSignalPartPos != null && player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class) != null) {
             LOSGuis.SIGNAL_BOX.open(player, getPos());
             return true;
         } else return false;
@@ -46,8 +44,8 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
-        if (getWorld().isServer && UUIDTileSignalPart != null && Static.changingSignalPartList.containsKey(UUIDTileSignalPart)) {
-            TileSignalPart entity = getWorld().getBlockEntity(Static.changingSignalPartList.get(UUIDTileSignalPart), TileSignalPart.class);
+        if (getWorld().isServer && TileSignalPartPos != null) {
+            TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (entity != null) {
                 List<String> states = entity.getBlock().getStates();
                 if (redstone >= states.size() || noRedstone >= states.size()) {
@@ -57,6 +55,8 @@ public class TileSignalBox extends BlockEntity {
                 if (getWorld().getRedstone(neighbor) > 0)
                     //Redstone
                     entity.setTexturePath(states.get(redstone));
+                else if (getWorld().getRedstone(entity.getPos()) > 0)
+                    entity.setTexturePath(states.get(redstone));
                 else
                     //No redstone
                     entity.setTexturePath(states.get(noRedstone));
@@ -64,13 +64,13 @@ public class TileSignalBox extends BlockEntity {
         }
     }
 
-    public void setUUID(UUID uuid) {
-        this.UUIDTileSignalPart = uuid;
+    public void setTileSignalPartPos(Vec3i pos) {
+        this.TileSignalPartPos = pos;
         markDirty();
     }
 
-    public UUID getUUIDTileSignalPart() {
-        return UUIDTileSignalPart;
+    public Vec3i getTileSignalPartPos() {
+        return TileSignalPartPos;
     }
 
     public int getRedstone() {

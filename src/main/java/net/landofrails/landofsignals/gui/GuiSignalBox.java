@@ -11,7 +11,6 @@ import cam72cam.mod.render.OpenGL;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 public class GuiSignalBox implements IScreen {
@@ -30,7 +29,7 @@ public class GuiSignalBox implements IScreen {
     @SuppressWarnings("java:S3010")
     public GuiSignalBox(TileSignalBox ts) {
         this.ts = ts;
-        TileSignalPart tsp = MinecraftClient.getPlayer().getWorld().getBlockEntity(Static.changingSignalPartList.get(ts.getUUIDTileSignalPart()), TileSignalPart.class);
+        TileSignalPart tsp = MinecraftClient.getPlayer().getWorld().getBlockEntity(ts.getTileSignalPartPos(), TileSignalPart.class);
         itemStackLeft = new ItemStack(tsp.getBlock().getItem(), 1);
         itemStackRight = new ItemStack(tsp.getBlock().getItem(), 1);
         listTexureNames = tsp.getBlock().getStates().toArray(new String[0]);

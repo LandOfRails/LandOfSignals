@@ -23,7 +23,6 @@ public class BlockSignalPart extends BlockTypeEntity {
     private final Vec3d scaling;
     private final List<String> states;
     private final ItemSignalPart item;
-    private TileSignalPart tile;
 
     public BlockSignalPart(String name, String path, Vec3d translation, Vec3d scaling) {
         this(name, path, translation, translation, scaling, new ArrayList<String>() {{
@@ -51,12 +50,11 @@ public class BlockSignalPart extends BlockTypeEntity {
         this.scaling = scaling;
         this.states = states;
         this.itemTranslation = itemTranslaton;
-        if (states.size() > 1) tile.setChanging();
     }
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return tile = new TileSignalPart(rot, name, pos);
+        return new TileSignalPart(rot, name, pos);
     }
 
     public void setRot(int rot) {

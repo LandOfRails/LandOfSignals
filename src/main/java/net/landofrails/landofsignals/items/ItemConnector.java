@@ -40,7 +40,7 @@ public class ItemConnector extends CustomItem {
                     blockEntitySignalPart = null;
                     return ClickResult.REJECTED;
                 }
-                blockEntityBox.setUUID(blockEntitySignalPart.getUUID());
+                blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
                 blockEntitySignalPart = null;
                 blockEntityBox = null;
                 player.sendMessage(PlayerMessage.direct("Signal paired."));
@@ -50,7 +50,7 @@ public class ItemConnector extends CustomItem {
                     blockEntitySignalPart = null;
                     return ClickResult.REJECTED;
                 }
-                player.sendMessage(PlayerMessage.direct("Pairing started with " + blockEntitySignalPart.getBlock()));
+                player.sendMessage(PlayerMessage.direct("Pairing started with " + blockEntitySignalPart.getBlock().getName()));
                 return ClickResult.ACCEPTED;
             } else if (blockEntityBox != null) {
                 player.sendMessage(PlayerMessage.direct("Pairing started with SignalBox"));
