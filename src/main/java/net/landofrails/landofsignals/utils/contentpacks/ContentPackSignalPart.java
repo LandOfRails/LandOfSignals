@@ -1,5 +1,11 @@
 package net.landofrails.landofsignals.utils.contentpacks;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.landofrails.stellwand.utils.exceptions.ContentPackException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class ContentPackSignalPart {
@@ -78,5 +84,24 @@ public class ContentPackSignalPart {
 
     public void setStates(List<String> states) {
         this.states = states;
+    }
+
+    public static ContentPackSignalPart fromJson(InputStream inputStream) {
+        StringBuilder s = new StringBuilder();
+        byte[] buffer = new byte[1024];
+        int read = 0;
+
+        try {
+            while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
+                s.append(new String(buffer, 0, read));
+            }
+        } catch (IOException e) {
+            throw new ContentPackException("Cant read ContentPackSignalPart: " + e.getMessage());
+        }
+
+        String json = s.toString();
+        Gson gson = new GsonBuilder().create();
+
+        return gson.fromJson(json, ContentPackSignalPart.class);
     }
 }

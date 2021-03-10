@@ -1,14 +1,14 @@
 package net.landofrails.landofsignals.utils.contentpacks;
 
 import cam72cam.mod.ModCore;
+import net.landofrails.stellwand.content.loader.Content;
+import net.landofrails.stellwand.content.loader.ContentPackEntry;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -87,12 +87,31 @@ public class ContentPackHandler {
 
     private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
 
-        for (Enumeration e = zip.entries(); e.hasMoreElements(); ) {
-            ZipEntry entry = (ZipEntry) e.nextElement();
-            if (!entry.isDirectory() && FilenameUtils.getExtension(entry.getName()).equals("obj")) {
-                modelPath.add(entry.getName());
-                System.out.println(entry.getName());
+        try {
+            ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+            // @formatter:off
+            List<ZipEntry> files = zip.stream().
+                    filter(not(ZipEntry::isDirectory)).
+                    filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
+            // @formatter:on
+
+            List<ContentPackEntry> contentPackEntries = new ArrayList<>();
+
+            ModCore.info("Content for " + contentPack.getId() + ": ");
+            for (String contentName : contentPack.getContent()) {
+                for (ZipEntry entry : files) {
+                    if (entry.getName().equalsIgnoreCase(contentName)) {
+                        ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry));
+                        ModCore.info("Block: " + contentPackEntry.getName());
+                        contentPackEntries.add(contentPackEntry);
+                    }
+                }
             }
+            contentPack.setEntries(contentPackEntries);
+
+            Content.addContentPack(contentPack);
+        } catch (IOException e) {
+            ModCore.Mod.error(e.getMessage());
         }
     }
 
