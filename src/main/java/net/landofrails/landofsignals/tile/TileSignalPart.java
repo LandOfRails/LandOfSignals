@@ -26,8 +26,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @TagField("pos")
     private final Vec3i pos;
-    @TagField("UUID")
-    private java.util.UUID UUID = java.util.UUID.randomUUID();
 
     private BlockSignalPart block;
 
@@ -38,27 +36,15 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         block = Static.blockSignalPartList.get(blockName);
     }
 
-    public void setChanging() {
-        Static.changingSignalPartList.put(this.UUID, this.pos);
-    }
-
     @Override
     public void load(TagCompound nbt) throws SerializationException {
         super.load(nbt);
         this.block = Static.blockSignalPartList.get(blockName);
-        this.UUID = nbt.getUUID("UUID");
-        if (block.getStates().size() > 1) Static.changingSignalPartList.put(this.UUID, this.pos);
     }
 
     @Override
     public ItemStack onPick() {
         return new ItemStack(block.getItem(), 1);
-    }
-
-    @Override
-    public void onBreak() {
-        super.onBreak();
-        if (block.getStates().size() > 1) Static.changingSignalPartList.remove(UUID);
     }
 
     @Override
@@ -88,10 +74,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         if (texturePath == null) this.texturePath = "null";
         else this.texturePath = texturePath;
         markDirty();
-    }
-
-    public java.util.UUID getUUID() {
-        return UUID;
     }
 
     @Override

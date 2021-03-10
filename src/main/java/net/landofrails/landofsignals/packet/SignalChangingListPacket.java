@@ -3,7 +3,6 @@ package net.landofrails.landofsignals.packet;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
-import net.landofrails.landofsignals.utils.Static;
 
 import java.util.UUID;
 
@@ -27,7 +26,5 @@ public class SignalChangingListPacket extends Packet {
 
     @Override
     protected void handle() {
-        if (remove) Static.changingSignalPartList.remove(uuid, pos);
-        else Static.changingSignalPartList.put(uuid, pos);
     }
 }

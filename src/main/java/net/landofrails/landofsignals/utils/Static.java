@@ -1,12 +1,14 @@
 package net.landofrails.landofsignals.utils;
 
-import cam72cam.mod.math.Vec3i;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.items.ItemSignalPart;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Static {
 
@@ -24,6 +26,6 @@ public class Static {
 
     public static Map<String, BlockSignalPart> blockSignalPartList = new HashMap<>();
     public static List<ItemSignalPart> itemSignalPartList = new ArrayList<>();
-    public static Map<UUID, Vec3i> changingSignalPartList = new HashMap<>();
+//    public static Map<UUID, Vec3i> changingSignalPartList = new HashMap<>();
 
 }
