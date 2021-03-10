@@ -7,6 +7,7 @@ import net.landofrails.stellwand.content.blocks.others.BlockSignal;
 import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 
 public class CustomBlocks {
@@ -34,7 +35,8 @@ public class CustomBlocks {
 		BlockRender.register(BLOCKSIGNAL, BlockSignalRenderEntity::render,
 				BlockSignalStorageEntity.class);
 		// TODO: Muss eventuell zu Storage umgeändert werden!
-		BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render, BlockSenderRenderEntity.class);
+		BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render,
+				BlockSenderStorageEntity.class);
 
 	}
 
