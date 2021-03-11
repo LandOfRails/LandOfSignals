@@ -2,6 +2,7 @@ package net.landofrails.stellwand.content.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -68,9 +69,9 @@ public class ContentPackEntry {
 		private float[] rotation;
 		private float[] translation;
 
-		private Map<String, String> modes;
+		private LinkedHashMap<String, String> modes;
 
-		public ContentPackEntryBlock(float[] rotation, float[] translation, Map<String, String> modes) {
+		public ContentPackEntryBlock(float[] rotation, float[] translation, LinkedHashMap<String, String> modes) {
 			super();
 			this.rotation = rotation;
 			this.translation = translation;

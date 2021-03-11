@@ -2,8 +2,10 @@ package net.landofrails.stellwand.content.entities.storage;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
+import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.content.entities.function.BlockSignalFunctionEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
@@ -19,18 +21,21 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	public String contentPackBlockId = MISSING;
 	@TagField
 	public float rot = 0;
-	@TagField
-	public UUID signalId = UUID.randomUUID();
 
 	// Modes
-	public Map<UUID, String> modes = new HashMap<>();
+	public Map<Vec3i, String> modes = new HashMap<>();
 	
 	// Subclasses
 	public BlockSignalRenderEntity renderEntity;
 
 	public BlockSignalStorageEntity() {
 		renderEntity = new BlockSignalRenderEntity(this);
-		RunTimeStorage.register(signalId, this);
+	}
+
+	@Override
+	public void load(TagCompound nbt) throws SerializationException {
+		super.load(nbt);
+		RunTimeStorage.register(getPos(), this);
 	}
 
 	public void setContentBlockId(String id) {

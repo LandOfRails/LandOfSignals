@@ -4,6 +4,7 @@ import static net.landofrails.stellwand.content.entities.storage.BlockSignalStor
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -193,9 +194,11 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 							.collect(Collectors.toCollection(ArrayList::new));
 
 					if (!modes.isEmpty()) {
-						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
+						ArrayList<String> generals = model.groups().stream()
+								.filter(s -> s.startsWith("general"))
 								.collect(Collectors.toCollection(ArrayList::new));
 						modes.addAll(generals);
+
 						renderer.drawGroups(modes);
 					} else {
 						renderer.drawGroups(model.groups());
@@ -215,6 +218,19 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 	@Override
 	public void setRotation(float rotationYawHead) {
 		entity.rot = -Math.round(rotationYawHead / 90) * 90f;
+	}
+
+	public String nextMode() {
+		List<String> modeList = new ArrayList<>();
+		modeList.addAll(getModes().values());
+		boolean next = false;
+		for (String m : modeList) {
+			if (m.equals(getMode()))
+				next = true;
+			else if (next)
+				return m;
+		}
+		return modeList.get(0);
 	}
 
 }

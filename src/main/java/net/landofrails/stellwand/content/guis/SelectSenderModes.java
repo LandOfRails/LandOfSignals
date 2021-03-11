@@ -3,7 +3,6 @@ package net.landofrails.stellwand.content.guis;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
@@ -36,11 +35,11 @@ public class SelectSenderModes implements IScreen {
 	@SuppressWarnings("java:S1192")
 	public SelectSenderModes(BlockSenderStorageEntity entity) {
 		if (!entity.signals.isEmpty()) {
-			UUID signalId = entity.signals.get(0);
+			Vec3i signalId = entity.signals.get(0);
 			List<BlockSignalStorageEntity> list = entity.getWorld()
 					.getBlockEntities(BlockSignalStorageEntity.class);
 			Optional<BlockSignalStorageEntity> optional = list.stream()
-					.filter(s -> s.signalId.equals(signalId)).findFirst();
+					.filter(s -> s.getPos().equals(signalId)).findFirst();
 			if (optional.isPresent()) {
 				BlockSignalStorageEntity signalEntity = optional.get();
 				modes = signalEntity.renderEntity.getModes();

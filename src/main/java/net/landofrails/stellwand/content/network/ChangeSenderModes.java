@@ -34,7 +34,6 @@ public class ChangeSenderModes extends Packet {
 		sender.modePowerOff = modePowerOff;
 		sender.modePowerOn = modePowerOn;
 		sender.markDirty();
-		// TODO: Refresh?
 	}
 
 }

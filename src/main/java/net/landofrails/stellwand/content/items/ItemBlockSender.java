@@ -162,7 +162,6 @@ public class ItemBlockSender extends CustomItem {
 			BlockTypeEntity block = CustomBlocks.BLOCKSENDER;
 
 			world.setBlock(target, block);
-			// TODO: Muss ggf. angepasst werden zu Storage
 			BlockSenderStorageEntity blockEntity = world.getBlockEntity(target,
 					BlockSenderStorageEntity.class);
 			// Set ContentPackBlockId

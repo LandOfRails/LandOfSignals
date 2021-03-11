@@ -24,8 +24,16 @@ public class ChangeHandHeldItem extends Packet {
 	private List<CustomItem> validItems;
 
 	public ChangeHandHeldItem() {
-		validItems = Arrays.asList(CustomItems.ITEMBLOCKFILLER, CustomItems.ITEMBLOCKSENDER,
-				CustomItems.ITEMBLOCKSIGNAL);
+		// @formatter:off
+		validItems = Arrays.asList(
+				CustomItems.ITEMBLOCKFILLER,
+				CustomItems.ITEMBLOCKSENDER,
+				CustomItems.ITEMBLOCKSIGNAL,
+				CustomItems.ITEMCONNECTOR1,
+				CustomItems.ITEMCONNECTOR2,
+				CustomItems.ITEMCONNECTOR3
+		);
+		// @formatter:on
 	}
 
 	public ChangeHandHeldItem(Player player, ItemStack itemStack, Hand hand) {

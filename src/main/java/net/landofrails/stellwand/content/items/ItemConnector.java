@@ -2,7 +2,6 @@ package net.landofrails.stellwand.content.items;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -18,11 +17,17 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
+import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
 public class ItemConnector extends CustomItem implements ICustomTexturePath {
+
+	// Constants
+	private static final String senderKey = "senderPos";
+	private static final String signalKey = "signalPos";
+	//
 
 	private int variation = -1;
 
@@ -62,133 +67,99 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 		TagCompound nbt = itemStack.getTagCompound();
 		LoSPlayer p = new LoSPlayer(player);
 
+		BlockSignalStorageEntity signalEntity = getSignal(world, pos);
+		BlockSenderStorageEntity senderEntity = getSender(world, pos);
+
 		if (itemStack.is(CustomItems.ITEMCONNECTOR1)) {
-			// Item type: 1 - Blank
-
-			if (world.hasBlockEntity(pos, BlockSenderStorageEntity.class)) {
-				BlockSenderStorageEntity entity = world.getBlockEntity(pos,
-						BlockSenderStorageEntity.class);
-
-				if (player.isCrouching()) {
-					// Removing all signals from sender
-					entity.signals.clear();
-					p.direct("All connections removed. ({0}, {1}, {2})", pos.x,
-							pos.y, pos.z);
-				} else {
-					// Change to Item type 2, set senderId
-					ItemStack newItem = new ItemStack(
-							CustomItems.ITEMCONNECTOR2, 1);
-					newItem.getTagCompound().setUUID("senderId",
-							entity.senderId);
-					player.setHeldItem(hand, newItem);
-
-					p.direct("Sender selected ({0}, {1}, {2})", pos.x, pos.y,
-							pos.z);
-					p.direct("Next: Click the signals you want to connect.");
-				}
-
+			if (signalEntity != null) {
+				selectSignal(p, hand, pos);
 				return ClickResult.ACCEPTED;
-			} else if (world.hasBlockEntity(pos,
-					BlockSignalStorageEntity.class)) {
-				BlockSignalStorageEntity entity = world.getBlockEntity(pos,
-						BlockSignalStorageEntity.class);
-
-				if (player.isCrouching()) {
-					// Remove all senders from signal
-					List<BlockSenderStorageEntity> list = world
-							.getBlockEntities(BlockSenderStorageEntity.class);
-
-					list.stream()
-							.filter(s -> s.signals.contains(entity.signalId))
-							.forEach(s -> s.signals.remove(entity.signalId));
-
-					p.direct("All connections removed. ({0}, {1}, {2})", pos.x,
-							pos.y, pos.z);
-
-				} else {
-					// Change to Item type 3, set signalId
-					ItemStack newItem = new ItemStack(
-							CustomItems.ITEMCONNECTOR3, 1);
-					newItem.getTagCompound().setUUID("signalId",
-							entity.signalId);
-					player.setHeldItem(hand, newItem);
-
-					p.direct("Sender selected ({0}, {1}, {2})", pos.x, pos.y,
-							pos.z);
-					p.direct("Next: Click the senders you want to connect.");
-				}
-
+			} else if (senderEntity != null) {
+				selectSender(p, hand, pos);
 				return ClickResult.ACCEPTED;
 			}
-
 		} else if (itemStack.is(CustomItems.ITEMCONNECTOR2)) {
-			// Sender
-
-			if (world.hasBlockEntity(pos, BlockSenderStorageEntity.class)) {
-				// set senderId
-				BlockSenderStorageEntity entity = world.getBlockEntity(pos,
-						BlockSenderStorageEntity.class);
-
-				nbt.setUUID("senderId", entity.senderId);
-
-				p.direct("Sender selected ({0}, {1}, {2})", pos.x, pos.y,
-						pos.z);
-				p.direct("Next: Click the senders you want to connect.");
-
+			if (signalEntity != null) {
+				Vec3i senderPos = nbt.getVec3i(senderKey);
+				boolean d = player.isCrouching();
+				BlockSenderStorageEntity sender = getSender(world, senderPos);
+				if (sender.isCompatible(signalEntity)) {
+					connect(world, senderPos, signalEntity.getPos(), d);
+					if (p.getWorld().isServer)
+						p.direct(d ? "Signal disconnected!" : "Signal connected!");
+				} else {
+					p.direct("Signal is not compatable with sender!");
+					p.direct("You only can connect the same type of signal with a sender!");
+				}
 				return ClickResult.ACCEPTED;
-			} else if (world.hasBlockEntity(pos,
-					BlockSignalStorageEntity.class)) {
-				// connect signal to sender
-				BlockSignalStorageEntity entity = world.getBlockEntity(pos,
-						BlockSignalStorageEntity.class);
-
-				List<BlockSenderStorageEntity> list = world
-						.getBlockEntities(BlockSenderStorageEntity.class);
-				UUID senderId = nbt.getUUID("senderId");
-				// @formatter:off
-				list.stream()
-						.filter(sender -> sender.senderId.equals(senderId))
-						.forEach(s -> s.signals.add(entity.signalId));
-				// @formatter:on
-
-				p.direct("Signal connected to sender.");
+			} else if (senderEntity != null) {
+				selectSender(p, hand, pos);
 				return ClickResult.ACCEPTED;
 			}
-
 		} else if (itemStack.is(CustomItems.ITEMCONNECTOR3)) {
-			// Signal
-
-			if (world.hasBlockEntity(pos, BlockSenderStorageEntity.class)) {
-				// connect sender to signal
-				BlockSenderStorageEntity entity = world.getBlockEntity(pos,
-						BlockSenderStorageEntity.class);
-
-				UUID signalId = nbt.getUUID("signalId");
-				entity.signals.add(signalId);
-
-				p.direct("Sender connected to signal.");
-
+			if(signalEntity != null) {
+				selectSignal(p, hand, pos);
 				return ClickResult.ACCEPTED;
-			} else if (world.hasBlockEntity(pos,
-					BlockSignalStorageEntity.class)) {
-				// connect signal to sender
-				BlockSignalStorageEntity entity = world.getBlockEntity(pos,
-						BlockSignalStorageEntity.class);
-
-				nbt.setUUID("signalId", entity.signalId);
-
-				p.direct("Signal selected ({0}, {1}, {2})", pos.x, pos.y,
-						pos.z);
-				p.direct("Next: Click the signals you want to connect.");
+			}else if(senderEntity != null) {
+				Vec3i signalPos = nbt.getVec3i(signalKey);
+				boolean d = player.isCrouching();
+				if (senderEntity.isCompatible(getSignal(world, signalPos))) {
+					connect(world, senderEntity.getPos(), signalPos, d);
+					if (p.getWorld().isServer)
+						p.direct(d ? "Sender disconnected!" : "Signal connected!");
+				} else {
+					p.direct("Signal is not compatable with sender!");
+					p.direct("You only can connect the same type of signal with a sender!");
+				}
 
 				return ClickResult.ACCEPTED;
 			}
-
 		}
 
-		
-
 		return ClickResult.PASS;
+	}
+
+	// Helper
+
+	public BlockSignalStorageEntity getSignal(World world, Vec3i pos) {
+		return world.getBlockEntity(pos, BlockSignalStorageEntity.class);
+	}
+
+	public BlockSenderStorageEntity getSender(World world, Vec3i pos) {
+		return world.getBlockEntity(pos, BlockSenderStorageEntity.class);
+	}
+
+	public void selectSignal(LoSPlayer player, Hand hand, Vec3i pos) {
+
+		if (player.getWorld().isServer) {
+			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR3, 1);
+			stack.getTagCompound().setVec3i(signalKey, pos);
+			player.setHeldItem(hand, stack);
+			player.direct("New signal selected! ({0}, {1}, {2})", pos.x, pos.y, pos.z);
+		}
+	}
+
+	public void selectSender(LoSPlayer player, Hand hand, Vec3i pos) {
+		if (player.getWorld().isServer) {
+			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR2, 1);
+			stack.getTagCompound().setVec3i(senderKey, pos);
+			player.setHeldItem(hand, stack);
+			player.direct("New sender selected! ({0}, {1}, {2})", pos.x, pos.y, pos.z);
+			ChangeHandHeldItem packet = new ChangeHandHeldItem(player, stack, hand);
+			packet.sendToObserving(player);
+		}
+	}
+
+	public void connect(World world, Vec3i senderPos, Vec3i signalPos, boolean disconnect) {
+		if (world.isServer) {
+			BlockSenderStorageEntity sender = getSender(world, senderPos);
+			if (!disconnect) {
+				sender.signals.add(signalPos);
+			} else {
+				sender.signals.remove(signalPos);
+			}
+			sender.markDirty();
+		}
 	}
 
 }

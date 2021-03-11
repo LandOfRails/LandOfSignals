@@ -1,17 +1,18 @@
 package net.landofrails.stellwand.content.entities.function;
 
 import java.util.Map;
-import java.util.UUID;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.network.ChangeSignalMode;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
@@ -40,9 +41,16 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 	@Override
 	public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
 		ItemStack item = player.getHeldItem(hand);
-		if (getWorld().isServer && item.is(ItemStack.EMPTY)) {
-			LoSPlayer p = new LoSPlayer(player);
-			p.direct("UUID of Signal: " + entity.signalId.toString());
+		if (isAir(item)) {
+			if (player.getWorld().isServer) {
+				LoSPlayer p = new LoSPlayer(player);
+				p.direct("Signal: " + entity.getPos().toString());
+				String nextMode = entity.renderEntity.nextMode();
+				entity.renderEntity.setMode(nextMode);
+				ChangeSignalMode packet = new ChangeSignalMode(getPos(), nextMode);
+				packet.sendToAll();
+				p.direct("New mode: " + nextMode);
+			}
 			return true;
 		}
 		return false;
@@ -50,12 +58,12 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 
 	@Override
 	public void onBreak() {
-		RunTimeStorage.removeSignal(entity.signalId);
+		RunTimeStorage.removeSignal(entity.getPos());
 	}
 
 	public void update() {
 		Map<String, String> blockModes = entity.renderEntity.getModes();
-		Map<UUID, String> senderModes = entity.modes;
+		Map<Vec3i, String> senderModes = entity.modes;
 
 		String actualMode = entity.renderEntity.getMode();
 		for (String mode : blockModes.values()) {
@@ -64,6 +72,10 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 		}
 
 		entity.renderEntity.setMode(actualMode);
+	}
+
+	private boolean isAir(ItemStack item) {
+		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
 	}
 
 }

@@ -1,7 +1,5 @@
 package net.landofrails.stellwand.content.network;
 
-import java.util.UUID;
-
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
@@ -12,7 +10,7 @@ public class ConnectionSenderSignal extends Packet {
 	@TagField
 	private Vec3i senderPos;
 	@TagField
-	private UUID signalId;
+	private Vec3i signalId;
 	@TagField
 	private boolean disconnect = false;
 
@@ -20,7 +18,7 @@ public class ConnectionSenderSignal extends Packet {
 		
 	}
 
-	public ConnectionSenderSignal(Vec3i senderPos, UUID signalId,
+	public ConnectionSenderSignal(Vec3i senderPos, Vec3i signalId,
 			boolean... disconnect) {
 		this.senderPos = senderPos;
 		this.signalId = signalId;

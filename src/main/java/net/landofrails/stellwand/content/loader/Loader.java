@@ -21,6 +21,8 @@ public class Loader {
 
 		Optional<File> opt = StellwandUtils.getModFolder();
 
+		StaticLoader.init();
+
 		if (opt.isPresent()) {
 			File file = opt.get();
 			String path = file.getPath();

@@ -50,7 +50,6 @@ public class ItemBlockSignal extends CustomItem {
 	private static Map<String, Float> scales = new HashMap<>();
 	private static Map<String, String> modes = new HashMap<>();
 
-
 	public ItemBlockSignal() {
 		super(LandOfSignals.MODID, "stellwand.itemblocksignal");
 	}
@@ -156,8 +155,6 @@ public class ItemBlockSignal extends CustomItem {
 
 				renderers.put(itemId, new OBJRender(model));
 			}
-
-			// TODO: Get CustomItem
 
 			OBJRender renderer = renderers.get(itemId);
 

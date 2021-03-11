@@ -1,7 +1,6 @@
 package net.landofrails.stellwand.content.entities.function;
 
 import java.util.Iterator;
-import java.util.UUID;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
@@ -15,7 +14,6 @@ import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEnti
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
@@ -46,16 +44,22 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		ItemStack item = player.getHeldItem(hand);
 		LoSPlayer p = new LoSPlayer(player);
 
-		if (getWorld().isServer)
-			return true;
+		if (isAir(item)) {
 
-		if (item.isEmpty()) {
+			if (player.getWorld().isServer) {
+				p.direct("Powered: " + entity.hasPower);
+				p.direct("Signals ({0}):", entity.signals.size());
+				for (Vec3i signal : entity.signals)
+					p.direct("Signal: {0}, {1}, {2}", signal.x, signal.y, signal.z);
+				return true;
+			}
 
 			if (!entity.signals.isEmpty()) {
 				p.direct("Select modes");
 				CustomGuis.selectSenderModes.open(player, entity.getPos());
 			} else {
 				p.direct("Sender must have atleast 1 signal connected");
+
 			}
 
 			return true;
@@ -65,56 +69,50 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	@Override
 	public void onNeighborChange(Vec3i neighbor) {
-		if (!getWorld().isServer)
-			return;
-
 		boolean power = getWorld().getRedstone(getPos()) > 0;
 		if (entity.hasPower != power) {
 			entity.hasPower = power;
 			update();
 		}
-
 	}
 
 	@Override
 	public void onBreak() {
-		if (!getWorld().isServer)
-			return;
-
-		for (UUID signal : entity.signals) {
+		for (Vec3i signal : entity.signals) {
 			BlockSignalStorageEntity signalEntity = RunTimeStorage
 					.getSignal(signal);
 			if (signalEntity != null) {
-				signalEntity.modes.remove(entity.senderId);
+				signalEntity.modes.remove(entity.getPos());
 				update();
 			}
 		}
-		RunTimeStorage.removeSender(entity.senderId);
+		RunTimeStorage.removeSender(entity.getPos());
 	}
 
 	public void update() {
-		if (!getWorld().isServer)
-			return;
 
-		Iterator<UUID> iterator = entity.signals.iterator();
+		Iterator<Vec3i> iterator = entity.signals.iterator();
 		while (iterator.hasNext()) {
-			UUID signal = iterator.next();
+			Vec3i signal = iterator.next();
 			BlockSignalStorageEntity signalEntity = RunTimeStorage
 					.getSignal(signal);
 			if (signalEntity == null) {
 				iterator.remove();
 			} else {
 				if (entity.hasPower) {
-					signalEntity.modes.put(entity.senderId, entity.modePowerOn);
+					signalEntity.modes.put(entity.getPos(), entity.modePowerOn);
 				} else {
-					signalEntity.modes.put(entity.senderId,
+					signalEntity.modes.put(entity.getPos(),
 							entity.modePowerOff);
 				}
-				new ChangeSignalModes(signalEntity.getPos(), signalEntity.modes)
-						.sendToAll();
+				signalEntity.update();
 			}
 		}
 
+	}
+
+	private boolean isAir(ItemStack item) {
+		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
 	}
 
 }

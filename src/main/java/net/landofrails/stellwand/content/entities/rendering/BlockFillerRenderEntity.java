@@ -45,15 +45,6 @@ public class BlockFillerRenderEntity extends BlockEntity implements IRotatableBl
 	private static Map<String, float[]> rotations = new HashMap<>();
 	private static Map<String, float[]> translations = new HashMap<>();
 
-	/*
-	 * #########################################################################
-	 * ########################## REWORK REWORK REWORK REWORK REWORK REWORK
-	 * REWORK REWORK REWORK REWORK REWORK REWORK REWORK REWORK
-	 * #########################################################################
-	 * ##########################
-	 */
-
-
 	// Storing data
 	// Rendering
 	private OBJModel model;
