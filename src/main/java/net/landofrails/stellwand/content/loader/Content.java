@@ -1,7 +1,7 @@
 package net.landofrails.stellwand.content.loader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class Content {
 
 	}
 
-	private static List<ContentPack> contentPacks = new ArrayList<>();
+	private static List<ContentPack> contentPacks = new LinkedList<>();
 
 	// model = new OBJModel(new Identifier(LandOfSignals.MODID,
 	// this.getPath(BlockItemType.BLOCK)), 0);
@@ -45,7 +45,7 @@ public class Content {
 	}
 
 	public static Map<ContentPackEntry, String> getBlockSignals() {
-		Map<ContentPackEntry, String> entries = new HashMap<>();
+		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
 				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSIGNAL.name()))
@@ -55,7 +55,7 @@ public class Content {
 	}
 
 	public static Map<ContentPackEntry, String> getBlockSenders() {
-		Map<ContentPackEntry, String> entries = new HashMap<>();
+		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
 				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSENDER.name()))
@@ -65,7 +65,7 @@ public class Content {
 	}
 
 	public static Map<ContentPackEntry, String> getBlockFillers() {
-		Map<ContentPackEntry, String> entries = new HashMap<>();
+		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
 				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKFILLER.name()))
