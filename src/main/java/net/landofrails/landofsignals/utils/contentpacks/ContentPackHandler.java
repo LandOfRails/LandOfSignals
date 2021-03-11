@@ -8,7 +8,6 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -83,8 +82,6 @@ public class ContentPackHandler {
         }
     }
 
-    public static List<String> modelPath = new ArrayList<>();
-
     private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
 
         try {
@@ -100,7 +97,7 @@ public class ContentPackHandler {
                 for (ZipEntry zipEntry : files) {
                     if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
                         ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
-                        ModCore.info("Signalset: " + contentPackSignalSet.getName());
+                        ModCore.info("SignalSet: " + contentPackSignalSet.getName());
                         for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
                             for (ZipEntry zipEntry1 : files) {
                                 if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
@@ -119,6 +116,7 @@ public class ContentPackHandler {
                                 }
                             }
                         }
+                        break;
                     }
                 }
             }

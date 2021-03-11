@@ -16,11 +16,6 @@ public class ContentPackHead {
 
     private List<String> signals;
 
-//    private Map<String, List<String>> content;
-
-    // Manually filled by ContentPackHandler.
-//    private List<ContentPackSignalSet> signals = new ArrayList<>();
-
     public ContentPackHead(String name, String packversion, String author, List<String> signals) {
         this.name = name;
         this.packversion = packversion;
@@ -59,13 +54,6 @@ public class ContentPackHead {
     public void setSignals(List<String> signals) {
         this.signals = signals;
     }
-//    public List<ContentPackSignalSet> getSignals() {
-//        return signals;
-//    }
-
-//    public void setSignals(List<ContentPackSignalSet> signals) {
-//        this.signals = signals;
-//    }
 
     public String getId() {
         return name + "@" + author;
