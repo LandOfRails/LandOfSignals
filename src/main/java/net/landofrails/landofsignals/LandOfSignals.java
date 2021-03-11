@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals;
 
+import java.util.Map;
+
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
@@ -9,20 +11,30 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
-import cam72cam.mod.text.Command;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
-import net.landofrails.landofsignals.commands.DebugCommand;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.items.ItemSignalPart;
-import net.landofrails.landofsignals.packet.*;
-import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
+import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
+import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
+import net.landofrails.landofsignals.packet.SignalChangingListPacket;
+import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
+import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
+import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
+import net.landofrails.landofsignals.render.block.TileSignalPartRender;
+import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
+import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
+import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.*;
+import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.tile.TileSignalLever;
+import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalSO12;
+import net.landofrails.landofsignals.tile.TileTicketMachineDB;
+import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
 import net.landofrails.landofsignals.utils.ContentPackHandler;
 import net.landofrails.landofsignals.utils.Static;
 import net.landofrails.stellwand.Stellwand;
-
-import java.util.Map;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
@@ -55,7 +67,6 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
 
-            Command.register(new DebugCommand());
         }
 
     }
