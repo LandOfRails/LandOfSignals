@@ -6,9 +6,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ContentPackHead {
 
@@ -16,16 +14,18 @@ public class ContentPackHead {
     private String packversion;
     private String author;
 
-    private Map<String, List<String>> content;
+    private List<String> signals;
+
+//    private Map<String, List<String>> content;
 
     // Manually filled by ContentPackHandler.
-    private List<ContentPackSignalSet> signals = new ArrayList<>();
+//    private List<ContentPackSignalSet> signals = new ArrayList<>();
 
-    public ContentPackHead(String name, String packversion, String author, Map<String, List<String>> content) {
+    public ContentPackHead(String name, String packversion, String author, List<String> signals) {
         this.name = name;
         this.packversion = packversion;
         this.author = author;
-        this.content = content;
+        this.signals = signals;
     }
 
     public String getName() {
@@ -52,21 +52,20 @@ public class ContentPackHead {
         this.author = author;
     }
 
-    public Map<String, List<String>> getContent() {
-        return content;
-    }
-
-    public void setContent(Map<String, List<String>> content) {
-        this.content = content;
-    }
-
-    public List<ContentPackSignalSet> getSignals() {
+    public List<String> getSignals() {
         return signals;
     }
 
-    public void setSignals(List<ContentPackSignalSet> signals) {
+    public void setSignals(List<String> signals) {
         this.signals = signals;
     }
+//    public List<ContentPackSignalSet> getSignals() {
+//        return signals;
+//    }
+
+//    public void setSignals(List<ContentPackSignalSet> signals) {
+//        this.signals = signals;
+//    }
 
     public String getId() {
         return name + "@" + author;

@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -97,38 +96,30 @@ public class ContentPackHandler {
             // @formatter:on
 
             ModCore.info("Content for " + contentPack.getId() + ": ");
-            for (Map.Entry<String, List<String>> entry : contentPack.getContent().entrySet()) {
-                switch (entry.getKey()) {
-                    case "signals":
-                        for (String pathToContentPackSignalSet : entry.getValue()) {
-                            for (ZipEntry zipEntry : files) {
-                                if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
-                                    ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
-                                    ModCore.info("Signalset: " + contentPackSignalSet.getName());
-                                    for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
-                                        for (ZipEntry zipEntry1 : files) {
-                                            if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
-                                                ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
-                                                ModCore.info("SignalPart: " + contentPackSignalPart.getName());
-                                                List<String> states = contentPackSignalPart.getStates();
-                                                states.add(0, null);
-                                                new BlockSignalPart(contentPackSignalPart.getId(),
-                                                        contentPackSignalPart.getName(),
-                                                        contentPackSignalPart.getModel(),
-                                                        new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
-                                                        new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
-                                                        new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
-                                                        states);
-                                                break;
-                                            }
-                                        }
-                                    }
+            for (String pathToContentPackSignalSet : contentPack.getSignals()) {
+                for (ZipEntry zipEntry : files) {
+                    if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
+                        ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
+                        ModCore.info("Signalset: " + contentPackSignalSet.getName());
+                        for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
+                            for (ZipEntry zipEntry1 : files) {
+                                if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
+                                    ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
+                                    ModCore.info("SignalPart: " + contentPackSignalPart.getName());
+                                    List<String> states = contentPackSignalPart.getStates();
+                                    states.add(0, null);
+                                    new BlockSignalPart(contentPackSignalPart.getId(),
+                                            contentPackSignalPart.getName(),
+                                            contentPackSignalPart.getModel(),
+                                            new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
+                                            new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
+                                            new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
+                                            states);
+                                    break;
                                 }
                             }
                         }
-                        break;
-                    default:
-                        ModCore.error("Unknown content type in landofsignals.json", entry.getKey());
+                    }
                 }
             }
         } catch (IOException e) {
