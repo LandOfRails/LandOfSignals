@@ -22,7 +22,7 @@ import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler; 
 import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
