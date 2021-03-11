@@ -1,14 +1,14 @@
-package net.landofrails.landofsignals.utils;
+package net.landofrails.landofsignals.utils.contentpacks;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.math.Vec3d;
+import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -87,12 +87,43 @@ public class ContentPackHandler {
 
     private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
 
-        for (Enumeration e = zip.entries(); e.hasMoreElements(); ) {
-            ZipEntry entry = (ZipEntry) e.nextElement();
-            if (!entry.isDirectory() && FilenameUtils.getExtension(entry.getName()).equals("obj")) {
-                modelPath.add(entry.getName());
-                System.out.println(entry.getName());
+        try {
+            ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+            // @formatter:off
+            List<ZipEntry> files = zip.stream().
+                    filter(not(ZipEntry::isDirectory)).
+                    filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
+            // @formatter:on
+
+            ModCore.info("Content for " + contentPack.getId() + ": ");
+            for (String pathToContentPackSignalSet : contentPack.getSignals()) {
+                for (ZipEntry zipEntry : files) {
+                    if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
+                        ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
+                        ModCore.info("Signalset: " + contentPackSignalSet.getName());
+                        for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
+                            for (ZipEntry zipEntry1 : files) {
+                                if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
+                                    ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
+                                    ModCore.info("SignalPart: " + contentPackSignalPart.getName());
+                                    List<String> states = contentPackSignalPart.getStates();
+                                    states.add(0, null);
+                                    new BlockSignalPart(contentPackSignalPart.getId(),
+                                            contentPackSignalPart.getName(),
+                                            contentPackSignalPart.getModel(),
+                                            new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
+                                            new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
+                                            new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
+                                            states);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        } catch (IOException e) {
+            ModCore.Mod.error(e.getMessage());
         }
     }
 

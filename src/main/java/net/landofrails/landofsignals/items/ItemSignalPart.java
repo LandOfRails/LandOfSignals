@@ -4,6 +4,7 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.item.ClickResult;
 import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.CustomItem;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.util.Facing;
@@ -15,17 +16,20 @@ import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 public class ItemSignalPart extends CustomItem {
 
     private final BlockSignalPart block;
+    private final String customName;
 
-    public ItemSignalPart(String name, BlockSignalPart block) {
+    public ItemSignalPart(String name, @Nullable String customName, BlockSignalPart block) {
         super(LandOfSignals.MODID, name);
         Static.itemSignalPartList.add(this);
         this.block = block;
+        this.customName = customName;
     }
 
     @Override
@@ -41,9 +45,14 @@ public class ItemSignalPart extends CustomItem {
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
         block.setRot(rot);
-        block.setPos(pos.offset(facing));
         world.setBlock(pos.offset(facing), block);
         return ClickResult.ACCEPTED;
+    }
+
+    @Override
+    public String getCustomName(ItemStack stack) {
+        if (customName != null) return customName;
+        else return super.getCustomName(stack);
     }
 
     public BlockSignalPart getBlock() {

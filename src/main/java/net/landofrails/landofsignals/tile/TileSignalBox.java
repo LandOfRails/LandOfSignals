@@ -52,10 +52,8 @@ public class TileSignalBox extends BlockEntity {
                     redstone = 0;
                     noRedstone = 0;
                 }
-                if (getWorld().getRedstone(neighbor) > 0)
+                if (getWorld().getRedstone(getPos()) > 0)
                     //Redstone
-                    entity.setTexturePath(states.get(redstone));
-                else if (getWorld().getRedstone(entity.getPos()) > 0)
                     entity.setTexturePath(states.get(redstone));
                 else
                     //No redstone

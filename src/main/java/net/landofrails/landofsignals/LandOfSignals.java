@@ -17,23 +17,12 @@ import net.landofrails.landofsignals.items.ItemSignalPart;
 import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
-import net.landofrails.landofsignals.packet.SignalChangingListPacket;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
-import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
-import net.landofrails.landofsignals.render.block.TileSignalPartRender;
-import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
-import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
-import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
+import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalLever;
-import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalSO12;
-import net.landofrails.landofsignals.tile.TileTicketMachineDB;
-import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
-import net.landofrails.landofsignals.utils.ContentPackHandler;
+import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
@@ -63,7 +52,6 @@ public class LandOfSignals extends ModCore.Mod {
             LOSGuis.register();
             Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
-            Packet.register(SignalChangingListPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
 
