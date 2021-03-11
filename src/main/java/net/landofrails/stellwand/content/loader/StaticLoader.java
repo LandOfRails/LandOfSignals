@@ -38,7 +38,15 @@ public class StaticLoader {
 		prop.setItemMode("white");
 		contentPackEntries.add(prop.toEntry());
 		
+		//// Fillers
 		
+		// Block Filler
+		prop = new Properties().setName("Block Filler");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/blockfiller/blockfiller.obj");
+		prop.setBlockTranslation(0.5f, 0f, 0.5f);
+		prop.setItemTranslation(0.5f, 0.1625f, 0.5f);
+		contentPackEntries.add(prop.toEntry());
 
 		return contentPackEntries;
 	}
@@ -136,7 +144,9 @@ public class StaticLoader {
 			ContentPackEntryBlock block = new ContentPackEntryBlock(blockRotation, blockTranslation, modes);
 			ContentPackEntryItem item = new ContentPackEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
 
-			return new ContentPackEntry(type.name(), name, fromDir.name(), toDir.name(), model, block, item);
+			String from = fromDir != null ? fromDir.name() : null;
+			String to = toDir != null ? toDir.name() : null;
+			return new ContentPackEntry(type.name(), name, from, to, model, block, item);
 		}
 
 	}

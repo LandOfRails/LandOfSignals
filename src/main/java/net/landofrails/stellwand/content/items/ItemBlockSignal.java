@@ -30,6 +30,7 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
@@ -58,7 +59,7 @@ public class ItemBlockSignal extends CustomItem {
 	public static void init() {
 		if (renderers.isEmpty()) {
 			try {
-				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
+				Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 				OBJModel model = new OBJModel(id, 0);
 				models.put(MISSING, model);
 				// Renderers in render function

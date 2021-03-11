@@ -21,7 +21,7 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
-import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
@@ -131,7 +131,7 @@ public class BlockFillerRenderEntity extends BlockEntity implements IRotatableBl
 	public static void check() {
 		if (models.isEmpty() && renderers.isEmpty()) {
 			try {
-				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
+				Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 				OBJModel m = new OBJModel(id, 0);
 				models.put(MISSING, m);
 				renderers.put(MISSING, new OBJRender(m));

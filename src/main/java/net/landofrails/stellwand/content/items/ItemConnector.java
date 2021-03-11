@@ -49,7 +49,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
 	@Override
 	public String getTexturePath() {
-		return "items/stellwand/connector/itemconnector" + variation;
+		return "items/itemconnector" + variation;
 	}
 
 	@Override

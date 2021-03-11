@@ -9,6 +9,8 @@ import net.landofrails.stellwand.content.tabs.CustomTabs;
 
 public class Stellwand {
 
+	public static final String DOMAIN = "stellwand";
+
 	private Stellwand() {
 
 	}
