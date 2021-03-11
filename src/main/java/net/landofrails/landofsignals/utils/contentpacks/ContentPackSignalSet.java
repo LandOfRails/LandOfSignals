@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentPackSignal {
+public class ContentPackSignalSet {
 
     private String name;
     private List<String> signalparts;
@@ -17,7 +17,7 @@ public class ContentPackSignal {
     // Manually filled by ContentPackHandler.
     private List<ContentPackSignalPart> signalParts = new ArrayList<>();
 
-    public ContentPackSignal(String name, List<String> signalparts) {
+    public ContentPackSignalSet(String name, List<String> signalparts) {
         this.name = name;
         this.signalparts = signalparts;
     }
@@ -46,7 +46,7 @@ public class ContentPackSignal {
         this.signalParts = signalParts;
     }
 
-    public static ContentPackSignal fromJson(InputStream inputStream) {
+    public static ContentPackSignalSet fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
         int read = 0;
@@ -56,12 +56,12 @@ public class ContentPackSignal {
                 s.append(new String(buffer, 0, read));
             }
         } catch (IOException e) {
-            throw new ContentPackException("Cant read ContentPackSignal: " + e.getMessage());
+            throw new ContentPackException("Cant read ContentPackSignalSet: " + e.getMessage());
         }
 
         String json = s.toString();
         Gson gson = new GsonBuilder().create();
 
-        return gson.fromJson(json, ContentPackSignal.class);
+        return gson.fromJson(json, ContentPackSignalSet.class);
     }
 }

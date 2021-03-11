@@ -19,7 +19,7 @@ public class ContentPackHead {
     private Map<String, List<String>> content;
 
     // Manually filled by ContentPackHandler.
-    private List<ContentPackSignal> signals = new ArrayList<>();
+    private List<ContentPackSignalSet> signals = new ArrayList<>();
 
     public ContentPackHead(String name, String packversion, String author, Map<String, List<String>> content) {
         this.name = name;
@@ -60,11 +60,11 @@ public class ContentPackHead {
         this.content = content;
     }
 
-    public List<ContentPackSignal> getSignals() {
+    public List<ContentPackSignalSet> getSignals() {
         return signals;
     }
 
-    public void setSignals(List<ContentPackSignal> signals) {
+    public void setSignals(List<ContentPackSignalSet> signals) {
         this.signals = signals;
     }
 
