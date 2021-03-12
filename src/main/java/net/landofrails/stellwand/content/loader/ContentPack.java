@@ -2,7 +2,7 @@ package net.landofrails.stellwand.content.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -17,10 +17,10 @@ public class ContentPack {
 	private String packversion = "";
 	private String author = "";
 
-	private List<String> content = new ArrayList<>();
+	private List<String> content = new LinkedList<>();
 
 	// Manually filled by Loader.
-	private List<ContentPackEntry> entries = new ArrayList<>();
+	private List<ContentPackEntry> entries = new LinkedList<>();
 
 	public ContentPack(String modversion, String name, String packversion, String author, List<String> content) {
 		this.modversion = modversion;

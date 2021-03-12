@@ -7,8 +7,8 @@ import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.utils.BlockItemType;
 import net.landofrails.stellwand.utils.ICustomRenderer;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
@@ -45,7 +45,7 @@ public class CustomItems {
 		for (CustomItem item : itemList) {
 			if (item instanceof ICustomTexturePath) {
 				ICustomTexturePath path = (ICustomTexturePath) item;
-				ItemRender.register(item, new Identifier(LandOfSignals.MODID, path.getTexturePath()));
+				ItemRender.register(item, new Identifier(Stellwand.DOMAIN, path.getTexturePath()));
 			} else if (item instanceof ICustomRenderer) {
 				ICustomRenderer renderer = (ICustomRenderer) item;
 
@@ -54,10 +54,10 @@ public class CustomItems {
 				Vec3d rotation = renderer.getRotation(BlockItemType.ITEM);
 				float scale = renderer.getScale(BlockItemType.ITEM);
 
-				ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, path),
+				ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(Stellwand.DOMAIN, path),
 						translate, rotation, null, scale));
 			} else {
-				ItemRender.register(item, new Identifier(LandOfSignals.MODID, "items/" + item.getRegistryName()));
+				ItemRender.register(item, new Identifier(Stellwand.DOMAIN, "items/" + item.getRegistryName()));
 			}
 		}
 	}

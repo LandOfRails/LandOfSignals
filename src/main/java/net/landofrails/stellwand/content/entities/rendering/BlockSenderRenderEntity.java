@@ -14,7 +14,7 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
@@ -111,7 +111,7 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 	public static void check() {
 		if (models.isEmpty() && renderers.isEmpty()) {
 			try {
-				Identifier id = new Identifier(LandOfSignals.MODID, "models/block/stellwand/blocknotfound.obj");
+				Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 				OBJModel m = new OBJModel(id, 0);
 				models.put(MISSING, m);
 				renderers.put(MISSING, new OBJRender(m));

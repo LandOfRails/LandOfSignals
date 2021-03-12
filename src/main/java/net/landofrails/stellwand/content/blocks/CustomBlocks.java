@@ -30,11 +30,9 @@ public class CustomBlocks {
 
 	public static void registerBlockRenderers() {
 
-		// TODO: Muss eventuell zu Storage umgeändert werden!
 		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerRenderEntity.class);
 		BlockRender.register(BLOCKSIGNAL, BlockSignalRenderEntity::render,
 				BlockSignalStorageEntity.class);
-		// TODO: Muss eventuell zu Storage umgeändert werden!
 		BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render,
 				BlockSenderStorageEntity.class);
 
