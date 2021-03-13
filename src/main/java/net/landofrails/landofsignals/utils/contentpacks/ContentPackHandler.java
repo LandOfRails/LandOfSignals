@@ -1,14 +1,12 @@
 package net.landofrails.landofsignals.utils.contentpacks;
 
 import cam72cam.mod.ModCore;
-import cam72cam.mod.math.Vec3d;
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -83,8 +81,6 @@ public class ContentPackHandler {
         }
     }
 
-    public static List<String> modelPath = new ArrayList<>();
-
     private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
 
         try {
@@ -100,7 +96,7 @@ public class ContentPackHandler {
                 for (ZipEntry zipEntry : files) {
                     if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
                         ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
-                        ModCore.info("Signalset: " + contentPackSignalSet.getName());
+                        ModCore.info("SignalSet: " + contentPackSignalSet.getName());
                         for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
                             for (ZipEntry zipEntry1 : files) {
                                 if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
@@ -108,17 +104,20 @@ public class ContentPackHandler {
                                     ModCore.info("SignalPart: " + contentPackSignalPart.getName());
                                     List<String> states = contentPackSignalPart.getStates();
                                     states.add(0, null);
-                                    new BlockSignalPart(contentPackSignalPart.getId(),
-                                            contentPackSignalPart.getName(),
-                                            contentPackSignalPart.getModel(),
-                                            new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
-                                            new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
-                                            new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
-                                            states);
+//                                    new BlockSignalPart(contentPackSignalPart.getId(),
+//                                            contentPackSignalPart.getName(),
+//                                            contentPackSignalPart.getModel(),
+//                                            new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
+//                                            new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
+//                                            new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
+//                                            states);
+                                    contentPackSignalPart.setStates(states);
+                                    LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
                                     break;
                                 }
                             }
                         }
+                        break;
                     }
                 }
             }

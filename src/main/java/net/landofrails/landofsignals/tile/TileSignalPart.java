@@ -4,42 +4,35 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.utils.IManipulate;
-import net.landofrails.landofsignals.utils.Static;
 
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @TagField("blockRotation")
     private int blockRotate;
-    @TagField("block")
-    private final String blockName;
+    @TagField("id")
+    private final String id;
     @TagField("texturePath")
     private String texturePath = null;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    private BlockSignalPart block;
-
-    public TileSignalPart(int rotation, String blockName) {
-        this.blockRotate = rotation;
-        this.blockName = blockName;
-        block = Static.blockSignalPartList.get(blockName);
-    }
-
-    @Override
-    public void load(TagCompound nbt) throws SerializationException {
-        super.load(nbt);
-        this.block = Static.blockSignalPartList.get(blockName);
+    public TileSignalPart(String id, int rot) {
+        this.blockRotate = rot;
+        this.id = id;
     }
 
     @Override
     public ItemStack onPick() {
-        return new ItemStack(block.getItem(), 1);
+        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        TagCompound tag = is.getTagCompound();
+        tag.setString("itemId", id);
+        is.setTagCompound(tag);
+        return is;
     }
 
     @Override
@@ -56,13 +49,13 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
-    public BlockSignalPart getBlock() {
-        return block;
-    }
-
     public String getTexturePath() {
         if (texturePath != null && texturePath.equals("null")) return null;
         else return texturePath;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setTexturePath(String texturePath) {

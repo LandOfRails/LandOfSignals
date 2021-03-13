@@ -6,16 +6,12 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContentPackSignalSet {
 
     private String name;
     private List<String> signalparts;
-
-    // Manually filled by ContentPackHandler.
-    private List<ContentPackSignalPart> signalParts = new ArrayList<>();
 
     public ContentPackSignalSet(String name, List<String> signalparts) {
         this.name = name;
@@ -36,14 +32,6 @@ public class ContentPackSignalSet {
 
     public void setSignalparts(List<String> signalparts) {
         this.signalparts = signalparts;
-    }
-
-    public List<ContentPackSignalPart> getSignalParts() {
-        return signalParts;
-    }
-
-    public void setSignalParts(List<ContentPackSignalPart> signalParts) {
-        this.signalParts = signalParts;
     }
 
     public static ContentPackSignalSet fromJson(InputStream inputStream) {

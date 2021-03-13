@@ -8,6 +8,9 @@ import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
+import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
@@ -30,9 +33,18 @@ public class GuiSignalBox implements IScreen {
     public GuiSignalBox(TileSignalBox ts) {
         this.ts = ts;
         TileSignalPart tsp = MinecraftClient.getPlayer().getWorld().getBlockEntity(ts.getTileSignalPartPos(), TileSignalPart.class);
-        itemStackLeft = new ItemStack(tsp.getBlock().getItem(), 1);
-        itemStackRight = new ItemStack(tsp.getBlock().getItem(), 1);
-        listTexureNames = tsp.getBlock().getStates().toArray(new String[0]);
+
+        itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        TagCompound tag = itemStackLeft.getTagCompound();
+        tag.setString("itemId", tsp.getId());
+        itemStackLeft.setTagCompound(tag);
+
+        itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        TagCompound tag2 = itemStackRight.getTagCompound();
+        tag.setString("itemId", tsp.getId());
+        itemStackRight.setTagCompound(tag2);
+
+        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
         stateRight = ts.getRedstone();
         stateLeft = ts.getNoRedstone();
         if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {

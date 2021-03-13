@@ -6,8 +6,8 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
@@ -28,6 +28,7 @@ public class TileSignalPartRender {
     }
 
     private static void renderStuff(TileSignalPart tsp) {
+        String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
                 OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
@@ -37,22 +38,20 @@ public class TileSignalPartRender {
                 e.printStackTrace();
             }
         }
-        BlockSignalPart block = tsp.getBlock();
-        if (!cache.containsKey(block.getName())) {
+        if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, block.getPath()), 0);
-                OBJRender renderer = new OBJRender(model, block.getStates());
-                cache.put(block.getName(), Pair.of(model, renderer));
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0);
+                OBJRender renderer = new OBJRender(model, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
+                cache.put(id, Pair.of(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        OBJRender renderer = cache.get(block.getName()).getRight();
+        OBJRender renderer = cache.get(id).getRight();
         try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
-            Vec3d scale = block.getScaling();
+            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
             GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = block.getTranslation().add(tsp.getOffset());
-            Vec3d offset = tsp.getOffset();
+            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.draw();

@@ -8,6 +8,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 
@@ -47,7 +48,7 @@ public class TileSignalBox extends BlockEntity {
         if (getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (entity != null) {
-                List<String> states = entity.getBlock().getStates();
+                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId());
                 if (redstone >= states.size() || noRedstone >= states.size()) {
                     redstone = 0;
                     noRedstone = 0;
