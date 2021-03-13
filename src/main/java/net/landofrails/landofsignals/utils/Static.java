@@ -1,14 +1,7 @@
 package net.landofrails.landofsignals.utils;
 
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
-import net.landofrails.landofsignals.items.ItemSignalPart;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Static {
 
@@ -24,8 +17,8 @@ public class Static {
         return bd.doubleValue();
     }
 
-    public static Map<String, BlockSignalPart> blockSignalPartList = new HashMap<>();
-    public static List<ItemSignalPart> itemSignalPartList = new ArrayList<>();
-//    public static Map<UUID, Vec3i> changingSignalPartList = new HashMap<>();
+    //    public static Map<String, BlockSignalPart> blockSignalPartList = new HashMap<>();
+//    public static List<ItemSignalPart> itemSignalPartList = new ArrayList<>();
+    public static final String MISSING = "missing";
 
 }

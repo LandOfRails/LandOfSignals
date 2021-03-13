@@ -6,9 +6,10 @@ import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.IInventory;
 import cam72cam.mod.item.ItemStack;
-import net.landofrails.landofsignals.items.ItemSignalPart;
+import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.utils.Static;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,13 @@ public class GuiSelectSignal implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
         List<ItemStack> itemStackList = new ArrayList<>();
-        for (ItemSignalPart i : Static.itemSignalPartList) itemStackList.add(new ItemStack(i, 1));
+        for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet()) {
+            ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+            TagCompound tag = is.getTagCompound();
+            tag.setString("itemId", id);
+            is.setTagCompound(tag);
+            itemStackList.add(is);
+        }
         ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
             if (itemStack != null) {
                 boolean intoInv = false;

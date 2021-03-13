@@ -9,6 +9,7 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
@@ -36,7 +37,7 @@ public class ItemConnector extends CustomItem {
             if (blockEntitySignalPart == null) blockEntitySignalPart = world.getBlockEntity(pos, TileSignalPart.class);
             if (blockEntityBox == null) blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
             if (blockEntityBox != null && blockEntitySignalPart != null) {
-                if (blockEntitySignalPart.getBlock().getStates().size() <= 1) {
+                if (LOSBlocks.BLOCK_SIGNAL_PART.getStates(blockEntitySignalPart.getId()).size() <= 1) {
                     blockEntitySignalPart = null;
                     return ClickResult.REJECTED;
                 }
@@ -46,11 +47,11 @@ public class ItemConnector extends CustomItem {
                 player.sendMessage(PlayerMessage.direct("Signal paired."));
                 return ClickResult.ACCEPTED;
             } else if (blockEntitySignalPart != null) {
-                if (blockEntitySignalPart.getBlock().getStates().size() <= 1) {
+                if (LOSBlocks.BLOCK_SIGNAL_PART.getStates(blockEntitySignalPart.getId()).size() <= 1) {
                     blockEntitySignalPart = null;
                     return ClickResult.REJECTED;
                 }
-                player.sendMessage(PlayerMessage.direct("Pairing started with " + blockEntitySignalPart.getBlock().getName()));
+                player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
                 return ClickResult.ACCEPTED;
             } else if (blockEntityBox != null) {
                 player.sendMessage(PlayerMessage.direct("Pairing started with SignalBox"));

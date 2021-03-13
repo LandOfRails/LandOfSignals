@@ -1,7 +1,5 @@
 package net.landofrails.landofsignals;
 
-import java.util.Map;
-
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
@@ -11,18 +9,16 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
-import net.landofrails.landofsignals.items.ItemSignalPart;
 import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
 import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
 import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
-import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler; 
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
@@ -87,15 +83,17 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/katanagear"));
 
                 //SignalPart : Block
-                for (Map.Entry<String, BlockSignalPart> entry : Static.blockSignalPartList.entrySet()) {
-                    BlockRender.register(entry.getValue(), TileSignalPartRender::render, TileSignalPart.class);
-                }
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
+//                for (Map.Entry<String, BlockSignalPart> entry : Static.blockSignalPartList.entrySet()) {
+//                    BlockRender.register(entry.getValue(), TileSignalPartRender::render, TileSignalPart.class);
+//                }
 
                 //SignalPart : Item
-                for (ItemSignalPart item : Static.itemSignalPartList) {
-                    BlockSignalPart block = item.getBlock();
-                    ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(MODID, block.getPath()), block.getItemTranslation(), Vec3d.ZERO, block.getStates(), (float) block.getScaling().x));
-                }
+                ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
+//                for (ItemSignalPart item : Static.itemSignalPartList) {
+//                    BlockSignalPart block = item.getBlock();
+//                    ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(MODID, block.getPath()), block.getItemTranslation(), Vec3d.ZERO, block.getStates(), (float) block.getScaling().x));
+//                }
                 break;
             case INITIALIZE:
             case SETUP:

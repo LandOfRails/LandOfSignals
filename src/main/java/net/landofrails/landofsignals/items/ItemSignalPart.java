@@ -7,29 +7,21 @@ import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.blocks.BlockSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
-import net.landofrails.landofsignals.utils.Static;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 public class ItemSignalPart extends CustomItem {
 
-    private final BlockSignalPart block;
-    private final String customName;
-
-    public ItemSignalPart(String name, @Nullable String customName, BlockSignalPart block) {
-        super(LandOfSignals.MODID, name);
-        Static.itemSignalPartList.add(this);
-        this.block = block;
-        this.customName = customName;
+    public ItemSignalPart(String modID, String name) {
+        super(modID, name);
     }
 
     @Override
@@ -44,18 +36,16 @@ public class ItemSignalPart extends CustomItem {
         int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
-        block.setRot(rot);
-        world.setBlock(pos.offset(facing), block);
+        LOSBlocks.BLOCK_SIGNAL_PART.setRot(rot);
+        LOSBlocks.BLOCK_SIGNAL_PART.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
+        world.setBlock(pos.offset(facing), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
     }
 
     @Override
     public String getCustomName(ItemStack stack) {
-        if (customName != null) return customName;
-        else return super.getCustomName(stack);
-    }
-
-    public BlockSignalPart getBlock() {
-        return block;
+        TagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey("itemId")) return LOSBlocks.BLOCK_SIGNAL_PART.getName(tag.getString("itemId"));
+        else return "Error missing tag \"itemId\" for ItemSignalPart";
     }
 }
