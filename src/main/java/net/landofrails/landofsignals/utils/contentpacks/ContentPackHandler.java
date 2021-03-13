@@ -104,13 +104,6 @@ public class ContentPackHandler {
                                     ModCore.info("SignalPart: " + contentPackSignalPart.getName());
                                     List<String> states = contentPackSignalPart.getStates();
                                     states.add(0, null);
-//                                    new BlockSignalPart(contentPackSignalPart.getId(),
-//                                            contentPackSignalPart.getName(),
-//                                            contentPackSignalPart.getModel(),
-//                                            new Vec3d(contentPackSignalPart.getTranslation()[0], contentPackSignalPart.getTranslation()[1], contentPackSignalPart.getTranslation()[2]),
-//                                            new Vec3d(contentPackSignalPart.getItemTranslation()[0], contentPackSignalPart.getItemTranslation()[1], contentPackSignalPart.getItemTranslation()[2]),
-//                                            new Vec3d(contentPackSignalPart.getScaling()[0], contentPackSignalPart.getScaling()[1], contentPackSignalPart.getScaling()[2]),
-//                                            states);
                                     contentPackSignalPart.setStates(states);
                                     LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
                                     break;

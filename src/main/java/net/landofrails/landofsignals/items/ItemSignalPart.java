@@ -17,6 +17,7 @@ import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemSignalPart extends CustomItem {
 
@@ -31,14 +32,15 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        if (!LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player)) return ClickResult.REJECTED;
+        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
+        if (!target.isPresent()) return ClickResult.REJECTED;
 
         int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(rot);
         LOSBlocks.BLOCK_SIGNAL_PART.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
-        world.setBlock(pos.offset(facing), LOSBlocks.BLOCK_SIGNAL_PART);
+        world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
     }
 

@@ -14,45 +14,9 @@ import java.util.Map;
 
 public class BlockSignalPart extends BlockTypeEntity {
 
-//    private final String name;
-//    private final String path;
-//    private final Vec3d translation;
-//    private final Vec3d itemTranslation;
-//    private final Vec3d scaling;
-//    private final List<String> states;
-//    private final ItemSignalPart item;
-
     private Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
     private String id;
     private int rot;
-
-//    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d scaling) {
-//        this(name, customName, path, translation, translation, scaling, new ArrayList<String>() {{
-//            add(null);
-//        }});
-//    }
-//
-//    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling) {
-//        this(name, customName, path, translation, itemTranslaton, scaling, new ArrayList<String>() {{
-//            add(null);
-//        }});
-//    }
-//
-//    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d scaling, List<String> states) {
-//        this(name, customName, path, translation, translation, scaling, states);
-//    }
-//
-//    public BlockSignalPart(String name, @Nullable String customName, String path, Vec3d translation, Vec3d itemTranslaton, Vec3d scaling, List<String> states) {
-//        super(LandOfSignals.MODID, name);
-//        Static.blockSignalPartList.put(name, this);
-//        item = new ItemSignalPart(name.replace("block", "item"), customName, this);
-//        this.name = name;
-//        this.path = path;
-//        this.translation = translation;
-//        this.scaling = scaling;
-//        this.states = states;
-//        this.itemTranslation = itemTranslaton;
-//    }
 
     public BlockSignalPart(String modID, String name) {
         super(modID, name);

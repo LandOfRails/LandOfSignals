@@ -14,6 +14,7 @@ import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemSignalBox extends CustomItem {
     public ItemSignalBox(String modID, String name) {
@@ -27,8 +28,9 @@ public class ItemSignalBox extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        if (!LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player)) return ClickResult.REJECTED;
-        world.setBlock(pos.offset(facing), LOSBlocks.BLOCK_SIGNAL_BOX);
+        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
+        if (!target.isPresent()) return ClickResult.REJECTED;
+        world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_BOX);
         return ClickResult.ACCEPTED;
     }
 }
