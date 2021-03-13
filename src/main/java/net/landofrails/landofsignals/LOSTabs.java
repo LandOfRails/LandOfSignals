@@ -14,13 +14,9 @@ public class LOSTabs {
     public static final CreativeTab HIDDEN_TAB;
 
     static {
+        SIGNALS_TAB = new CreativeTab(LandOfSignals.MODID + ".signals", () -> new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1));
         ASSETS_TAB = new CreativeTab(LandOfSignals.MODID + ".assets", () -> new ItemStack(LOSItems.ITEM_TICKET_MACHINE_DB, 1));
         HIDDEN_TAB = new CreativeTab(null);
-//        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-//        TagCompound tag = is.getTagCompound();
-//        tag.setString("itemId", LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet().iterator().next());
-//        is.setTagCompound(tag);
-        SIGNALS_TAB = new CreativeTab(LandOfSignals.MODID + ".signals", () -> new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1));
     }
 
 }

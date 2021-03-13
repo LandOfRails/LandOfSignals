@@ -10,6 +10,7 @@ import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
+import net.landofrails.landofsignals.utils.Static;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,13 @@ public class GuiSelectSignal implements IScreen {
     public void init(IScreenBuilder screen) {
         List<ItemStack> itemStackList = new ArrayList<>();
         for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet()) {
-            ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-            TagCompound tag = is.getTagCompound();
-            tag.setString("itemId", id);
-            is.setTagCompound(tag);
-            itemStackList.add(is);
+            if (!id.equals(Static.MISSING)) {
+                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+                TagCompound tag = is.getTagCompound();
+                tag.setString("itemId", id);
+                is.setTagCompound(tag);
+                itemStackList.add(is);
+            }
         }
         ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
             if (itemStack != null) {
