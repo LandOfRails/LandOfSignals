@@ -84,18 +84,12 @@ public class LandOfSignals extends ModCore.Mod {
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
-//                for (Map.Entry<String, BlockSignalPart> entry : Static.blockSignalPartList.entrySet()) {
-//                    BlockRender.register(entry.getValue(), TileSignalPartRender::render, TileSignalPart.class);
-//                }
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
-//                for (ItemSignalPart item : Static.itemSignalPartList) {
-//                    BlockSignalPart block = item.getBlock();
-//                    ItemRender.register(item, ObjItemRender.getModelFor(new Identifier(MODID, block.getPath()), block.getItemTranslation(), Vec3d.ZERO, block.getStates(), (float) block.getScaling().x));
-//                }
                 break;
             case INITIALIZE:
+                break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> {
                     new ManipualtorOverlay().draw();
