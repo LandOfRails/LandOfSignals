@@ -20,22 +20,6 @@ item.landofsignals:item_connector.name=Verbindungstool
 item.landofsignals:item_manipulator.name=Manipulierungstool
 item.landofsignals:item_signal_selector.name=Signal-Auswahl-Tool
 
-#gamerTV
-item.landofsignals:item_signal_part_gamertv_hvhp.name=Hauptsignal (Signal)
-item.landofsignals:item_signal_part_gamertv_vorsignal.name=Vorsignal (Signal)
-item.landofsignals:item_signal_part_gamertv_hversatz.name=Ersatzsignal (Signal)
-item.landofsignals:item_signal_part_gamertv_base.name=Signal (Stütze)
-item.landofsignals:item_signal_part_gamertv_mast.name=Signal (Mast)
-
-#Skyman_Luna
-item.landofsignals:item_signal_part_skymanluna_sperrsignal_sh0.name=Sperrsignal
-item.landofsignals:item_signal_part_skymanluna_vorsignal_base.name=Vorsignalsignal (Stütze)
-item.landofsignals:item_signal_part_skymanluna_mast.name=Vorsignalsignal (Mast)
-item.landofsignals:item_signal_part_skymanluna_vorsignal_kopf.name=Vorsignalsignal (Signal)
-item.landofsignals:item_signal_part_skymanluna_hauptsignal_base.name=Hauptsignal (Stütze)
-item.landofsignals:item_signal_part_skymanluna_hauptsignal_schild.name=Hauptsignal (Schild)
-item.landofsignals:item_signal_part_skymanluna_hauptsignal_kopf.name=Hauptsignal (Signal)
-
 # -- Stellwand --
 
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler
