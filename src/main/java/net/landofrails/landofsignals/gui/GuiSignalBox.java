@@ -41,7 +41,7 @@ public class GuiSignalBox implements IScreen {
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag2 = itemStackRight.getTagCompound();
-        tag.setString("itemId", tsp.getId());
+        tag2.setString("itemId", tsp.getId());
         itemStackRight.setTagCompound(tag2);
 
         listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
