@@ -30,6 +30,7 @@ public class ItemSignalBox extends CustomItem {
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
+
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_BOX);
         return ClickResult.ACCEPTED;
     }
