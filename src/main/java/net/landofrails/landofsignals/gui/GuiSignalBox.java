@@ -1,6 +1,5 @@
 package net.landofrails.landofsignals.gui;
 
-import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
@@ -32,7 +31,7 @@ public class GuiSignalBox implements IScreen {
     @SuppressWarnings("java:S3010")
     public GuiSignalBox(TileSignalBox ts) {
         this.ts = ts;
-        TileSignalPart tsp = MinecraftClient.getPlayer().getWorld().getBlockEntity(ts.getTileSignalPartPos(), TileSignalPart.class);
+        TileSignalPart tsp = ts.getTileSignalPart();
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag = itemStackLeft.getTagCompound();
