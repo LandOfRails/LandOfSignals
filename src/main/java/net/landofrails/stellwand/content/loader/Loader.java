@@ -17,6 +17,10 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Loader {
 
+	private Loader() {
+
+	}
+
 	public static void init() {
 
 		Optional<File> opt = StellwandUtils.getModFolder();
