@@ -31,7 +31,7 @@ public class ItemManipulator extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override
