@@ -10,7 +10,7 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.landofsignals.packet.SignalBoxGuiPacket;
+import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
@@ -19,7 +19,7 @@ public class GuiSignalBox implements IScreen {
 
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
-    private final TileSignalBox ts;
+    private final TileSignalBox tsb;
     private static String textureName = null;
     private static String textureNameRight = null;
     private static String textureNameLeft = null;
@@ -29,9 +29,9 @@ public class GuiSignalBox implements IScreen {
     private final String[] listTexureNames;
 
     @SuppressWarnings("java:S3010")
-    public GuiSignalBox(TileSignalBox ts) {
-        this.ts = ts;
-        TileSignalPart tsp = ts.getTileSignalPart();
+    public GuiSignalBox(TileSignalBox tsb) {
+        this.tsb = tsb;
+        TileSignalPart tsp = tsb.getTileSignalPart();
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag = itemStackLeft.getTagCompound();
@@ -44,8 +44,8 @@ public class GuiSignalBox implements IScreen {
         itemStackRight.setTagCompound(tag2);
 
         listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
-        stateRight = ts.getRedstone();
-        stateLeft = ts.getNoRedstone();
+        stateRight = tsb.getRedstone();
+        stateLeft = tsb.getNoRedstone();
         if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {
             stateRight = 0;
             stateLeft = 0;
@@ -88,9 +88,9 @@ public class GuiSignalBox implements IScreen {
     @Override
     public void onClose() {
         textureName = null;
-        ts.setNoRedstone(stateLeft);
-        ts.setRedstone(stateRight);
-        SignalBoxGuiPacket packet = new SignalBoxGuiPacket(stateRight, stateLeft, ts.getPos());
+        tsb.setNoRedstone(stateLeft);
+        tsb.setRedstone(stateRight);
+        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
         packet.sendToServer();
     }
 

@@ -43,7 +43,8 @@ public class LandOfSignals extends ModCore.Mod {
             LOSBlocks.register();
             LOSItems.register();
             LOSGuis.register();
-            Packet.register(SignalBoxGuiPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignalBoxGuiToServerPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignalBoxGuiToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalBoxTileSignalPartPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
