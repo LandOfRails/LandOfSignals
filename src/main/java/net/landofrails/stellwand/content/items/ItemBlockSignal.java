@@ -108,8 +108,6 @@ public class ItemBlockSignal extends CustomItem {
 
 		List<ItemStack> itemStackList = new ArrayList<>();
 
-		itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
-
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
 
 			ContentPackEntry cpe = entry.getKey();
@@ -120,6 +118,9 @@ public class ItemBlockSignal extends CustomItem {
 			itemStackList.add(is);
 
 		}
+
+		if (itemStackList.isEmpty())
+			itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
 
 		SelectItem si = new SelectItem();
 		si.open(player, itemStackList, item -> {

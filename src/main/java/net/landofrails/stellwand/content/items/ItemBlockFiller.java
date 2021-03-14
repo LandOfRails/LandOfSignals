@@ -107,7 +107,6 @@ public class ItemBlockFiller extends CustomItem {
 					e.printStackTrace();
 				}
 			}
-
 		}
 	}
 
@@ -127,8 +126,6 @@ public class ItemBlockFiller extends CustomItem {
 
 		List<ItemStack> itemStackList = new ArrayList<>();
 
-		itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKFILLER, 1));
-
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockFillers().entrySet()) {
 
 			ContentPackEntry cpe = entry.getKey();
@@ -139,6 +136,9 @@ public class ItemBlockFiller extends CustomItem {
 			itemStackList.add(is);
 
 		}
+
+		if (itemStackList.isEmpty())
+			itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
 
 		SelectItem si = new SelectItem();
 		si.open(player, itemStackList, item -> {

@@ -3,6 +3,7 @@ package net.landofrails.stellwand.content.loader;
 import static net.landofrails.stellwand.content.loader.ContentPackEntryDirectionType.BOTTOM;
 import static net.landofrails.stellwand.content.loader.ContentPackEntryDirectionType.LEFT;
 import static net.landofrails.stellwand.content.loader.ContentPackEntryDirectionType.RIGHT;
+import static net.landofrails.stellwand.content.loader.ContentPackEntryDirectionType.TOP;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -57,7 +58,7 @@ public class StaticLoader {
 		// Signal Diagonal Track
 		prop = new Properties().setName("Signal Diagonal Track DL");
 		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
-		prop.setModel("models/block/blocksignal/trackdiag/trackdiagdownleft.obj");
+		prop.setModel("models/block/blocksignal/trackdiag/downleft/trackdiagdownleft.obj");
 		prop.setModes(modes("Off", "off", "White", "white", "Red", "red"));
 		prop.setFromDir(LEFT).setToDir(BOTTOM);
 		prop.setItemMode("white");
@@ -71,11 +72,52 @@ public class StaticLoader {
 		prop.setItemMode("white");
 		contentPackEntries.add(prop.toEntry());
 
+		prop = new Properties().setName("Signal Diagonal Track UL");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackdiag/upleft/trackdiagupleft.obj");
+		prop.setModes(modes("Off", "off", "White", "white", "Red", "red"));
+		prop.setFromDir(LEFT).setToDir(TOP);
+		prop.setItemMode("white");
+		contentPackEntries.add(prop.toEntry());
+
+		prop = new Properties().setName("Signal Diagonal Track UR");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackdiag/upright/trackdiagupright.obj");
+		prop.setModes(modes("Off", "off", "White", "white", "Red", "red"));
+		prop.setFromDir(RIGHT).setToDir(TOP);
+		prop.setItemMode("white");
+		contentPackEntries.add(prop.toEntry());
+
 		// Signal HSig
 		prop = new Properties().setName("Signal HSig Left");
 		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
 		prop.setModel("models/block/blocksignal/trackmainsignal/left/hsigleft.obj");
 		prop.setModes(modes("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"));
+		prop.setFromDir(LEFT).setToDir(RIGHT);
+		prop.setItemMode("green");
+		contentPackEntries.add(prop.toEntry());
+
+		prop = new Properties().setName("Signal HSig Right");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackmainsignal/right/hsigright.obj");
+		prop.setModes(modes("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"));
+		prop.setFromDir(LEFT).setToDir(RIGHT);
+		prop.setItemMode("green");
+		contentPackEntries.add(prop.toEntry());
+
+		// Signal dwarfsignal
+		prop = new Properties().setName("Dwarfsignal bottom");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/blockdwarfsignal/blockdwarfsignalbottom.obj");
+		prop.setModes(modes("Off", "off", "Green", "green"));
+		prop.setFromDir(LEFT).setToDir(RIGHT);
+		prop.setItemMode("green");
+		contentPackEntries.add(prop.toEntry());
+
+		prop = new Properties().setName("Dwarfsignal top");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/blockdwarfsignal/blockdwarfsignaltop.obj");
+		prop.setModes(modes("Off", "off", "Green", "green"));
 		prop.setFromDir(LEFT).setToDir(RIGHT);
 		prop.setItemMode("green");
 		contentPackEntries.add(prop.toEntry());

@@ -42,9 +42,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
 	@Override
 	public List<CreativeTab> getCreativeTabs() {
-
-		CreativeTab tab = variation == 1 ? CustomTabs.STELLWAND_TAB : CustomTabs.HIDDEN_TAB;
-		return Arrays.asList(tab);
+		return Arrays.asList(CustomTabs.STELLWAND_TAB);
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 				return ClickResult.ACCEPTED;
 			}
 		} else if (itemStack.is(CustomItems.ITEMCONNECTOR2)) {
-			if (signalEntity != null) {
+			if (signalEntity != null && nbt.hasKey(senderKey)) {
 				Vec3i senderPos = nbt.getVec3i(senderKey);
 				boolean d = player.isCrouching();
 				BlockSenderStorageEntity sender = getSender(world, senderPos);
@@ -100,7 +98,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			if(signalEntity != null) {
 				selectSignal(p, hand, pos);
 				return ClickResult.ACCEPTED;
-			}else if(senderEntity != null) {
+			} else if (senderEntity != null && nbt.hasKey(signalKey)) {
 				Vec3i signalPos = nbt.getVec3i(signalKey);
 				boolean d = player.isCrouching();
 				if (senderEntity.isCompatible(getSignal(world, signalPos))) {

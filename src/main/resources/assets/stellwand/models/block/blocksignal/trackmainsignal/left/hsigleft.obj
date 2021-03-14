@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib Signal_Block.mtl
+mtllib hsigleft.mtl
 o orange
 v 0.500000 0.500000 -0.437500
 v 0.500000 -0.500000 -0.437500
