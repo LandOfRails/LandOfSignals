@@ -16,6 +16,7 @@ import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
+import net.landofrails.stellwand.Stellwand;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
