@@ -2,6 +2,7 @@ package net.landofrails.stellwand.content.entities.function;
 
 import java.util.Iterator;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -69,10 +70,18 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	@Override
 	public void onNeighborChange(Vec3i neighbor) {
+
+		// Info: Only called on server-side
+
 		boolean power = getWorld().getRedstone(getPos()) > 0;
 		if (entity.hasPower != power) {
 			entity.hasPower = power;
 			update();
+
+			String side = getWorld().isServer ? "Server" : "Client";
+			ModCore.info("Side: " + side);
+			ModCore.info("NeighborChange: " + getPos().toString());
+
 		}
 	}
 
@@ -94,6 +103,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		Iterator<Vec3i> iterator = entity.signals.iterator();
 		while (iterator.hasNext()) {
 			Vec3i signal = iterator.next();
+
 			BlockSignalStorageEntity signalEntity = RunTimeStorage
 					.getSignal(signal);
 			if (signalEntity == null) {

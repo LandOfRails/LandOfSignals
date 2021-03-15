@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import org.lwjgl.opengl.GL11;
 
 import cam72cam.mod.ModCore;
@@ -39,15 +37,13 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 	private static Map<String, OBJRender> renderers = new HashMap<>();
 	private static Map<String, float[]> rotations = new HashMap<>();
 	private static Map<String, float[]> translations = new HashMap<>();
-	protected static Map<String, Map<String, String>> modes = new HashMap<>();
+	public static Map<String, Map<String, String>> modes = new HashMap<>();
 
 	// Rendering
 	private OBJModel model;
 	private OBJRender renderer;
 	private float[] rotation;
 	private float[] translation;
-	@Nullable
-	private String mode;
 
 	public OBJModel getModel() {
 
@@ -95,31 +91,10 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		return rotation;
 	}
 
-	/**
-	 * 
-	 * Return the group to render. If everything should be rendered its null.
-	 * 
-	 * @return
-	 */
-	public String getMode() {
-
-		if (mode == null) {
-			Map<String, String> m = modes.get(entity.contentPackBlockId);
-			if (m != null && !m.isEmpty()) {
-				mode = m.values().iterator().next();
-			}
-		}
-		return mode;
-	}
-
 	public Map<String, String> getModes() {
 
 		return modes.get(entity.contentPackBlockId);
 
-	}
-
-	public void setMode(String mode) {
-		this.mode = mode;
 	}
 
 	// Rendering
@@ -171,7 +146,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		OBJRender renderer = entity.renderEntity.getRenderer();
 		float[] translation = entity.renderEntity.getTranslation();
 		float[] rotation = entity.renderEntity.getRotation();
-		String mode = entity.renderEntity.getMode();
+		String mode = entity.getMode();
 
 		try {
 			if (renderer == null || model == null) {
@@ -225,7 +200,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		modeList.addAll(getModes().values());
 		boolean next = false;
 		for (String m : modeList) {
-			if (m.equals(getMode()))
+			if (m.equals(entity.getMode()))
 				next = true;
 			else if (next)
 				return m;

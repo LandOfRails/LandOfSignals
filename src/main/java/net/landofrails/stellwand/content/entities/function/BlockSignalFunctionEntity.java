@@ -42,15 +42,11 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 	public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
 		ItemStack item = player.getHeldItem(hand);
 		if (isAir(item)) {
-			if (player.getWorld().isServer) {
-				LoSPlayer p = new LoSPlayer(player);
-				p.direct("Signal: " + entity.getPos().toString());
-				String nextMode = entity.renderEntity.nextMode();
-				entity.renderEntity.setMode(nextMode);
-				ChangeSignalMode packet = new ChangeSignalMode(getPos(), nextMode);
-				packet.sendToAll();
-				p.direct("New mode: " + nextMode);
-			}
+			LoSPlayer p = new LoSPlayer(player);
+			String side = player.getWorld().isServer ? "Server" : "Client";
+			p.direct("Side: " + side);
+			p.direct("Signal: " + entity.getPos().toString());
+			p.direct("Mode: " + entity.getMode());
 			return true;
 		}
 		return false;
@@ -65,13 +61,17 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 		Map<String, String> blockModes = entity.renderEntity.getModes();
 		Map<Vec3i, String> senderModes = entity.modes;
 
-		String actualMode = entity.renderEntity.getMode();
+		String actualMode = entity.getMode();
 		for (String mode : blockModes.values()) {
 			if (senderModes.containsValue(mode))
 				actualMode = mode;
 		}
 
-		entity.renderEntity.setMode(actualMode);
+		entity.setMode(actualMode);
+
+		ChangeSignalMode packet = new ChangeSignalMode(entity.getPos(), actualMode);
+		packet.sendToAll();
+
 	}
 
 	private boolean isAir(ItemStack item) {

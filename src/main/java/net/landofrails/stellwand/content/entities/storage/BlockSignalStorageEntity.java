@@ -3,6 +3,7 @@ package net.landofrails.stellwand.content.entities.storage;
 import java.util.HashMap;
 import java.util.Map;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
@@ -21,6 +22,8 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	public String contentPackBlockId = MISSING;
 	@TagField
 	public float rot = 0;
+	@TagField
+	private String mode;
 
 	// Modes
 	public Map<Vec3i, String> modes = new HashMap<>();
@@ -44,6 +47,28 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 
 	public String getContentBlockId() {
 		return contentPackBlockId;
+	}
+	
+	public String getMode() {
+
+		if (this.mode == null) {
+			Map<String, String> m = BlockSignalRenderEntity.modes.get(this.contentPackBlockId);
+			if (m != null && !m.isEmpty()) {
+				this.mode = m.values().iterator().next();
+			}
+		}
+		return this.mode;
+
+	}
+
+	public void setMode(String mode) {
+
+		String side = getWorld().isServer ? "Server" : "Client";
+		ModCore.info("Side: " + side);
+		ModCore.info("Changed mode: " + getPos().toString());
+		ModCore.info("Mode: " + mode);
+
+		this.mode = mode;
 	}
 
 }

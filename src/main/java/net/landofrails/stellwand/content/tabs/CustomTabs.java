@@ -1,9 +1,15 @@
 package net.landofrails.stellwand.content.tabs;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.loader.Content;
+import net.landofrails.stellwand.content.loader.ContentPackEntry;
 
 public class CustomTabs {
 
@@ -17,9 +23,20 @@ public class CustomTabs {
 	public static CreativeTab HIDDEN_TAB;
 
 	public static void register() {
-		STELLWAND_TAB = new CreativeTab(LandOfSignals.MODID + ".stellwand",
-				() -> new ItemStack(CustomItems.ITEMCONNECTOR1, 1));
-		HIDDEN_TAB = new CreativeTab(null);
+		STELLWAND_TAB = new CreativeTab(LandOfSignals.MODID + ".stellwand", () -> {
+
+			Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSignals().entrySet().iterator();
+			Entry<ContentPackEntry, String> entry = it.next();
+
+			ContentPackEntry cpe = entry.getKey();
+			ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
+			TagCompound tag = is.getTagCompound();
+			tag.setString("itemId", cpe.getBlockId(entry.getValue()));
+			is.setTagCompound(tag);
+
+			return is;
+
+		});
 	}
 
 }

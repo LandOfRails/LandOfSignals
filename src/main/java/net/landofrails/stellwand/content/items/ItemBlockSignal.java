@@ -3,6 +3,7 @@ package net.landofrails.stellwand.content.items;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -98,6 +99,30 @@ public class ItemBlockSignal extends CustomItem {
 	@Override
 	public List<CreativeTab> getCreativeTabs() {
 		return Arrays.asList(CustomTabs.STELLWAND_TAB);
+	}
+
+	@Override
+	public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+		List<ItemStack> items = new ArrayList<>();
+
+		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSignals().entrySet().iterator();
+
+		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+			return items;
+
+		if (it.hasNext()) {
+			Entry<ContentPackEntry, String> entry = it.next();
+
+			ContentPackEntry cpe = entry.getKey();
+			ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
+			TagCompound tag = is.getTagCompound();
+			tag.setString("itemId", cpe.getBlockId(entry.getValue()));
+			is.setTagCompound(tag);
+			items.add(is);
+
+		}
+
+		return items;
 	}
 
 	@Override
