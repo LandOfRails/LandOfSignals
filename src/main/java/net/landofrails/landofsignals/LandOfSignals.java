@@ -35,7 +35,7 @@ public class LandOfSignals extends ModCore.Mod {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
 
             // Stellwand
-//            Stellwand.commonEvent();
+            Stellwand.commonEvent();
 
             ContentPackHandler.init();
 
@@ -60,7 +60,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ModCore.Mod.info("Starting client construct...");
 
                 // Stellwand
-//                Stellwand.clientEvent();
+                Stellwand.clientEvent();
 
                 // Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
