@@ -12,17 +12,17 @@ jobs:
           - branch: 1.7.10-forge
             version: 1.7.10
           - branch: 1.10.2-forge
-              version: 1.10.2
+            version: 1.10.2
           - branch: 1.11.2-forge
-              version: 1.11.2
+            version: 1.11.2
           - branch: 1.12.2-forge
-              version: 1.12.2
+            version: 1.12.2
           - branch: 1.14.4-forge
-              version: 1.14.4
+            version: 1.14.4
           - branch: 1.15.2-forge
-              version: 1.15.2
+            version: 1.15.2
           - branch: 1.16.4-forge
-              version: 1.16.5
+            version: 1.16.5
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
