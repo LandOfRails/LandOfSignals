@@ -1,5 +1,6 @@
 package net.landofrails.stellwand.content.items;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +44,18 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 	@Override
 	public List<CreativeTab> getCreativeTabs() {
 		return Arrays.asList(CustomTabs.STELLWAND_TAB);
+	}
+
+	@Override
+	public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+		List<ItemStack> items = new ArrayList<>();
+
+		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+			return items;
+
+		if (variation == 1)
+			items.add(new ItemStack(CustomItems.ITEMCONNECTOR1, 1));
+		return items;
 	}
 
 	@Override
