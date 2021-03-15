@@ -5,7 +5,7 @@ import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 
-public class SignalBoxGuiPacket extends Packet {
+public class SignalBoxGuiToClientPacket extends Packet {
 
     @TagField("textureNameRedstone")
     private int textureNameRedstone;
@@ -14,10 +14,10 @@ public class SignalBoxGuiPacket extends Packet {
     @TagField("pos")
     private Vec3i pos;
 
-    public SignalBoxGuiPacket() {
+    public SignalBoxGuiToClientPacket() {
     }
 
-    public SignalBoxGuiPacket(int textureNameRedstone, int textureNameNoRedstone, Vec3i pos) {
+    public SignalBoxGuiToClientPacket(int textureNameRedstone, int textureNameNoRedstone, Vec3i pos) {
         this.textureNameRedstone = textureNameRedstone;
         this.textureNameNoRedstone = textureNameNoRedstone;
         this.pos = pos;

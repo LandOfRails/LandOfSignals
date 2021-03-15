@@ -6,8 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
         branch: [ 1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.4-forge ]
+        include:
+          - branch: 1.7.10-forge
+            version: 1.7.10
+          - branch: 1.10.2-forge
+            version: 1.10.2
+          - branch: 1.11.2-forge
+            version: 1.11.2
+          - branch: 1.12.2-forge
+            version: 1.12.2
+          - branch: 1.14.4-forge
+            version: 1.14.4
+          - branch: 1.15.2-forge
+            version: 1.15.2
+          - branch: 1.16.4-forge
+            version: 1.16.5
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -32,3 +48,32 @@ jobs:
         with:
           name: LandOfSignals ${{matrix.branch}}
           path: build/libs/LandOfSignals-${{matrix.branch}}-*
+      - name: Read CHANGELOG file
+        id: getchangelog
+        run: echo "::set-output name=changelog::$(cat CHANGELOG)"
+      - name: Read VERSION file
+        id: getversion
+        run: echo "::set-output name=version::$(cat VERSION)"
+      - name: Upload to CurseForge ${{matrix.branch}}
+        # You may pin to the exact commit or the version.
+        # uses: itsmeow/curseforge-upload@3c78af1b2e009b4bc866bfc53c130cc5830222b7
+        uses: itsmeow/curseforge-upload@v3
+        env:
+          VERSION: ${{ matrix.version }}
+        with:
+          # Token used to authenticate with CurseForge API. Definitely use a secret for this.
+          token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
+          # Project id (numerical) to upload file to. You can ge the numerical ID from the sidebar on a project page.
+          project_id: 434307
+          # The subdomain of curseforge.com where the upload request will be made. (minecraft, kerbal, etc.)
+          game_endpoint: minecraft
+          # The path to the file you want to upload
+          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar
+          # The changelog text to put on the file. Can be HTML or markdown if changelog_type is set.
+          changelog: ${{ steps.getchangelog.outputs.changelog }}
+          # The game version IDs to select on this file. Seperate IDs with "," (no quotes). You can specify numerical or slug/name IDs and they will be converted to numerical IDs. For slugs/names with duplicates, you can specify a type by prefixing the name/slug with "(type):" (no quotes). See README for more info.
+          game_versions: ${VERSION}
+          # The type of this release. Allowed values: alpha, beta, release
+          release_type: beta
+          # List of projects this file is related to and their relation type. Seperate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
+          relations: universal-mod-core:requiredDependency

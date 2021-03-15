@@ -9,8 +9,8 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
-import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 
 import java.util.List;
 
@@ -25,6 +25,8 @@ public class TileSignalBox extends BlockEntity {
     @TagField("noRedstone")
     private int noRedstone = 0;
 
+    private TileSignalPart tileSignalPart;
+
     @Override
     public ItemStack onPick() {
         return new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1);
@@ -37,8 +39,8 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (!player.isCrouching() && player.getWorld().isClient && TileSignalPartPos != null && player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class) != null) {
-            LOSGuis.SIGNAL_BOX.open(player, getPos());
+        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
+            new SignalBoxTileSignalPartPacket(player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class), getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
             return true;
         } else return false;
     }
@@ -68,8 +70,12 @@ public class TileSignalBox extends BlockEntity {
         markDirty();
     }
 
-    public Vec3i getTileSignalPartPos() {
-        return TileSignalPartPos;
+    public void setTileSignalPart(TileSignalPart tileSignalPart) {
+        this.tileSignalPart = tileSignalPart;
+    }
+
+    public TileSignalPart getTileSignalPart() {
+        return tileSignalPart;
     }
 
     public int getRedstone() {
