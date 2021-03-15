@@ -57,7 +57,7 @@ jobs:
       - name: Upload to CurseForge ${{matrix.branch}}
         # You may pin to the exact commit or the version.
         # uses: itsmeow/curseforge-upload@3c78af1b2e009b4bc866bfc53c130cc5830222b7
-        uses: itsmeow/curseforge-upload@v3
+        uses: MarkenJaden/curseforge-upload@master
         env:
           VERSION: ${{ matrix.version }}
         with:
