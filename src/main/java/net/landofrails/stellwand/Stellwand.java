@@ -1,6 +1,10 @@
 package net.landofrails.stellwand;
 
+import cam72cam.mod.ModEvent;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
+import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
+import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.loader.Loader;
@@ -15,22 +19,72 @@ public class Stellwand {
 
 	}
 
-	public static void commonEvent() {
+	// Gets called before clientEvent and serverEvent
+	public static void commonEvent(ModEvent event) {
 
-		Loader.init();
+		switch (event) {
+			case CONSTRUCT :
 
-		CustomGuis.register();
-		CustomTabs.register();
-		CustomItems.register();
+				Loader.init();
 
-		CustomPackets.register();
+				CustomGuis.register();
+				CustomTabs.register();
+				CustomItems.register();
+
+				CustomPackets.register();
+
+				break;
+			case INITIALIZE :
+			case SETUP :
+				// Register overlays
+			case RELOAD :
+			case START :
+			case FINALIZE :
+				break;
+		}
 
 	}
 
-	public static void clientEvent() {
 
-		CustomItems.registerRenderers();
-		CustomBlocks.registerBlockRenderers();
+	public static void clientEvent(ModEvent event) {
+
+		switch (event) {
+			case CONSTRUCT :
+
+				CustomItems.registerRenderers();
+				CustomBlocks.registerBlockRenderers();
+
+				break;
+			case INITIALIZE :
+				break;
+			case SETUP :
+				// Register overlay
+			case RELOAD :
+			case START :
+			case FINALIZE :
+				break;
+		}
+
+	}
+
+	public static void serverEvent(ModEvent event) {
+
+		switch (event) {
+			case CONSTRUCT :
+
+				BlockSenderRenderEntity.check(false);
+				BlockSignalRenderEntity.check(false);
+				BlockFillerRenderEntity.check(false);
+
+				break;
+			case INITIALIZE :
+			case SETUP :
+				// Register overlay
+			case RELOAD :
+			case START :
+			case FINALIZE :
+				break;
+		}
 
 	}
 

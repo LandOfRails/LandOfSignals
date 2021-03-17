@@ -47,11 +47,12 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
+		// Stellwand
+
+		Stellwand.commonEvent(event);
+
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-
-            // Stellwand
-            Stellwand.commonEvent();
 
             ContentPackHandler.init();
 
@@ -71,12 +72,13 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void clientEvent(ModEvent event) {
+
+		// Stellwand
+		Stellwand.clientEvent(event);
+
         switch (event) {
             case CONSTRUCT:
                 ModCore.Mod.info("Starting client construct...");
-
-                // Stellwand
-                Stellwand.clientEvent();
 
                 // Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
@@ -118,5 +120,6 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void serverEvent(ModEvent event) {
         // Do nothing for now
+		Stellwand.serverEvent(event);
     }
 }
