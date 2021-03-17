@@ -11,7 +11,6 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
-import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.storage.RunTimeStorage;
@@ -44,7 +43,7 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 		ItemStack item = player.getHeldItem(hand);
 		if (isAir(item)) {
 			LoSPlayer p = new LoSPlayer(player);
-			String side = Stellwand.isServer ? "Server" : "Client";
+			String side = player.getWorld().isServer ? "Server" : "Client";
 			p.direct("Side: " + side);
 			p.direct("Signal: " + entity.getPos().toString());
 			p.direct("Mode: " + entity.getMode());
