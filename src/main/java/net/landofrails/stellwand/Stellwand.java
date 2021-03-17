@@ -2,9 +2,6 @@ package net.landofrails.stellwand;
 
 import cam72cam.mod.ModEvent;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.loader.Loader;
@@ -72,9 +69,9 @@ public class Stellwand {
 		switch (event) {
 			case CONSTRUCT :
 
-				BlockSenderRenderEntity.check(false);
-				BlockSignalRenderEntity.check(false);
-				BlockFillerRenderEntity.check(false);
+				// BlockSenderRenderEntity.check(false);
+				// BlockSignalRenderEntity.check(false);
+				// BlockFillerRenderEntity.check(false);
 
 				break;
 			case INITIALIZE :
