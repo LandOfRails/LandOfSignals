@@ -7,6 +7,7 @@ import net.landofrails.stellwand.content.blocks.others.BlockSignal;
 import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 
@@ -22,7 +23,7 @@ public class CustomBlocks {
 
 	public static void registerBlockRenderers() {
 
-		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerRenderEntity.class);
+		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerStorageEntity.class);
 		BlockRender.register(BLOCKSIGNAL, BlockSignalRenderEntity::render,
 				BlockSignalStorageEntity.class);
 		BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render,

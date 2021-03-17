@@ -42,7 +42,7 @@ public class SelectSenderModes implements IScreen {
 					.filter(s -> s.getPos().equals(signalId)).findFirst();
 			if (optional.isPresent()) {
 				BlockSignalStorageEntity signalEntity = optional.get();
-				modes = signalEntity.renderEntity.getModes();
+				modes = signalEntity.getPossibleModes();
 
 				// @formatter:off
 				// Item Power off

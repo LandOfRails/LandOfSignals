@@ -2,6 +2,9 @@ package net.landofrails.stellwand;
 
 import cam72cam.mod.ModEvent;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.loader.Loader;
@@ -32,8 +35,15 @@ public class Stellwand {
 
 				break;
 			case INITIALIZE :
+				break;
 			case SETUP :
-				// Register overlays
+
+				// Loading here, Files not available at CONSTRUCT
+				BlockFillerStorageEntity.prepare(true);
+				BlockSignalStorageEntity.prepare(true);
+				BlockSenderStorageEntity.prepare(true);
+
+				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :
@@ -68,12 +78,6 @@ public class Stellwand {
 
 		switch (event) {
 			case CONSTRUCT :
-
-				// BlockSenderRenderEntity.check(false);
-				// BlockSignalRenderEntity.check(false);
-				// BlockFillerRenderEntity.check(false);
-
-				break;
 			case INITIALIZE :
 			case SETUP :
 				// Register overlay
