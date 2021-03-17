@@ -3,7 +3,7 @@ package net.landofrails.stellwand.content.entities.function;
 import java.util.Iterator;
 
 import cam72cam.mod.ModCore;
-import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.block.BlockEntityTickable;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
@@ -15,10 +15,14 @@ import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEnti
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
-public abstract class BlockSenderFunctionEntity extends BlockEntity {
+public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
+
+	private int currentTick = 0;
+	private final int targetTick = 10;
 
 	private BlockSenderStorageEntity entity;
 
@@ -76,12 +80,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		boolean power = getWorld().getRedstone(getPos()) > 0;
 		if (entity.hasPower != power) {
 			entity.hasPower = power;
-			update();
-
-			String side = getWorld().isServer ? "Server" : "Client";
-			ModCore.info("Side: " + side);
-			ModCore.info("NeighborChange: " + getPos().toString());
-
+			updateSignalModes();
 		}
 	}
 
@@ -92,17 +91,21 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 					.getSignal(signal);
 			if (signalEntity != null) {
 				signalEntity.modes.remove(entity.getPos());
-				update();
+				updateSignalModes();
 			}
 		}
 		RunTimeStorage.removeSender(entity.getPos());
 	}
 
-	public void update() {
+	public void updateSignalModes() {
 
 		Iterator<Vec3i> iterator = entity.signals.iterator();
 		while (iterator.hasNext()) {
 			Vec3i signal = iterator.next();
+
+			String side = getWorld().isServer ? "Server" : "Client";
+			ModCore.info("Side: " + side);
+			ModCore.info("Update: " + getPos().toString());
 
 			BlockSignalStorageEntity signalEntity = RunTimeStorage
 					.getSignal(signal);
@@ -115,7 +118,11 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 					signalEntity.modes.put(entity.getPos(),
 							entity.modePowerOff);
 				}
-				signalEntity.update();
+				// Server -> Client
+				ChangeSignalModes packet = new ChangeSignalModes(signal, signalEntity.modes);
+				packet.sendToAll();
+
+				signalEntity.updateSignalMode();
 			}
 		}
 
@@ -123,6 +130,37 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	private boolean isAir(ItemStack item) {
 		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
+	}
+
+	@Override
+	public void update() {
+		if (getWorld().isClient)
+			return;
+
+		if(currentTick + 1 == targetTick) {
+			
+			Iterator<Vec3i> iterator = entity.signals.iterator();
+			while(iterator.hasNext()) {
+				
+				Vec3i signal = iterator.next();
+				BlockSignalStorageEntity signalEntity = RunTimeStorage
+						.getSignal(signal);
+				
+				if(signalEntity == null) {
+					iterator.remove();
+				} else {
+					if(!signalEntity.modes.containsKey(getPos())) {
+						entity.hasPower = getWorld().getRedstone(getPos()) > 0;
+						updateSignalModes();
+					}
+				}
+				
+			}
+			
+			currentTick = 0;
+		} else {
+			currentTick++;
+		}
 	}
 
 }

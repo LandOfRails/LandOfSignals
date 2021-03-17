@@ -32,7 +32,7 @@ public class ChangeSignalModes extends Packet {
 		BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(pos,
 				BlockSignalStorageEntity.class);
 		signalEntity.modes = modes;
-		signalEntity.update();
+		signalEntity.updateSignalMode();
 	}
 
 	// @formatter:off

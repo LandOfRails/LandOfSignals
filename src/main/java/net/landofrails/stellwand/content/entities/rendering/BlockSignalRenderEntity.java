@@ -102,15 +102,16 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
 	}
 
-	public static void check() {
+	public static void check(boolean isClient) {
 		if (models.isEmpty() && renderers.isEmpty()) {
 			try {
 				Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 				OBJModel m = new OBJModel(id, 0);
 				models.put(MISSING, m);
-				renderers.put(MISSING, new OBJRender(m));
 				rotations.put(MISSING, new float[] { 0, 0, 0 });
 				translations.put(MISSING, new float[] { 0.5f, 0.5f, 0.5f });
+				if (isClient)
+					renderers.put(MISSING, new OBJRender(m));
 			} catch (Exception e) {
 				ModCore.Mod.error(e.getMessage());
 			}
@@ -125,10 +126,11 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 					Identifier id = new Identifier("stellwand", objPath);
 					OBJModel m = new OBJModel(id, 0);
 					models.put(blockId, m);
-					renderers.put(blockId, new OBJRender(m));
 					rotations.put(blockId, block.getRotation());
 					translations.put(blockId, block.getTranslation());
 					modes.put(blockId, block.getModes());
+					if (isClient)
+						renderers.put(blockId, new OBJRender(m));
 				} catch (Exception e) {
 					ModCore.Mod.error(e.getMessage());
 				}
@@ -140,7 +142,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 	private static void renderStuff(BlockSignalStorageEntity entity,
 			float partialTicks) {
 
-		check();
+		check(entity.getWorld().isClient);
 
 		OBJModel model = entity.renderEntity.getModel();
 		OBJRender renderer = entity.renderEntity.getRenderer();

@@ -1,6 +1,7 @@
 package net.landofrails.stellwand.content.entities.function;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
@@ -12,7 +13,6 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.network.ChangeSignalMode;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
@@ -47,6 +47,8 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 			p.direct("Side: " + side);
 			p.direct("Signal: " + entity.getPos().toString());
 			p.direct("Mode: " + entity.getMode());
+			for (Entry<Vec3i, String> entry : entity.modes.entrySet())
+				p.direct("Modes: {0}, {1}", entry.getKey().toString(), entry.getValue());
 			return true;
 		}
 		return false;
@@ -57,21 +59,19 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 		RunTimeStorage.removeSignal(entity.getPos());
 	}
 
-	public void update() {
+	public void updateSignalMode() {
 		Map<String, String> blockModes = entity.renderEntity.getModes();
 		Map<Vec3i, String> senderModes = entity.modes;
 
 		String actualMode = entity.getMode();
-		for (String mode : blockModes.values()) {
-			if (senderModes.containsValue(mode))
-				actualMode = mode;
+		if (blockModes != null) {
+			for (String mode : blockModes.values()) {
+				if (senderModes.containsValue(mode))
+					actualMode = mode;
+			}
 		}
 
 		entity.setMode(actualMode);
-
-		ChangeSignalMode packet = new ChangeSignalMode(entity.getPos(), actualMode);
-		packet.sendToAll();
-
 	}
 
 	private boolean isAir(ItemStack item) {

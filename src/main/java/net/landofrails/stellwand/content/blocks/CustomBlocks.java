@@ -20,14 +20,6 @@ public class CustomBlocks {
 	public static final BlockSender BLOCKSENDER = new BlockSender();
 	public static final BlockSignal BLOCKSIGNAL = new BlockSignal();
 
-	public static void registerBlocks() {
-		// Currently no normal blocks available
-	}
-
-	public static void registerItemRenderers() {
-		// Currently no normal blocks available
-	}
-
 	public static void registerBlockRenderers() {
 
 		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerRenderEntity.class);

@@ -22,7 +22,6 @@ public class Stellwand {
 		CustomGuis.register();
 		CustomTabs.register();
 		CustomItems.register();
-		CustomBlocks.registerBlocks();
 
 		CustomPackets.register();
 
@@ -31,7 +30,6 @@ public class Stellwand {
 	public static void clientEvent() {
 
 		CustomItems.registerRenderers();
-		CustomBlocks.registerItemRenderers();
 		CustomBlocks.registerBlockRenderers();
 
 	}

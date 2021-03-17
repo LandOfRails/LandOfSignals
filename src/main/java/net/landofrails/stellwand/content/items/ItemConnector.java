@@ -18,7 +18,6 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
-import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
@@ -156,8 +155,6 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			stack.getTagCompound().setVec3i(senderKey, pos);
 			player.setHeldItem(hand, stack);
 			player.direct("New sender selected! ({0}, {1}, {2})", pos.x, pos.y, pos.z);
-			ChangeHandHeldItem packet = new ChangeHandHeldItem(player, stack, hand);
-			packet.sendToObserving(player);
 		}
 	}
 
