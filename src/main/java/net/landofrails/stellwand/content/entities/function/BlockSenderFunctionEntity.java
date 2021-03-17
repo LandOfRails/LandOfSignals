@@ -1,20 +1,28 @@
 package net.landofrails.stellwand.content.entities.function;
 
-import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.block.BlockEntityTickable;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
+import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.messages.Message;
+import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
-public abstract class BlockSenderFunctionEntity extends BlockEntity {
+public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 
+	private boolean firstTick = true;
+	private int currentTick = 0;
+	private static final int triggerTick = 20 * 5;
 
 	private BlockSenderStorageEntity entity;
 
@@ -25,6 +33,12 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		else
 			throw new RuntimeException(
 					"This should be a subclass of BlockSenderStorageEntity!");
+	}
+
+	@Override
+	public void load(TagCompound nbt) throws SerializationException {
+		super.load(nbt);
+		RunTimeStorage.register(getPos(), entity);
 	}
 
 	@Override
@@ -41,7 +55,13 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		ItemStack item = player.getHeldItem(hand);
 		LoSPlayer p = new LoSPlayer(player);
 
-		// TODO: CustomGuis.selectSenderModes.open(player, entity.getPos());
+		if (isAir(item) && p.getWorld().isClient) {
+			if (!entity.signals.isEmpty()) {
+				CustomGuis.selectSenderModes.open(player, entity.getPos());
+			} else {
+				p.direct(Message.MESSAGE_NO_SIGNALS_CONNECTED.toString());
+			}
+		}
 
 		return false;
 	}
@@ -50,6 +70,21 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 	public void onNeighborChange(Vec3i neighbor) {
 		// Info: Only called on server-side
 
+		boolean power = getWorld().getRedstone(getPos()) > 0;
+		if (entity.hasPower != power) {
+			entity.hasPower = power;
+
+			for (Vec3i signal : entity.signals) {
+				BlockSignalStorageEntity s = RunTimeStorage.getSignal(signal);
+				if (s != null) {
+					s.senderModes.put(getPos(), power ? entity.modePowerOn : entity.modePowerOff);
+					s.updateSignalMode();
+					ChangeSignalModes packet = new ChangeSignalModes(getPos(), s.senderModes);
+					packet.sendToAll();
+				}
+			}
+
+		}
 
 	}
 
@@ -58,10 +93,21 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		RunTimeStorage.removeSender(entity.getPos());
 	}
 
-
-
 	private boolean isAir(ItemStack item) {
 		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
+	}
+
+	@Override
+	public void update() {
+		if (firstTick) {
+			this.onNeighborChange(getPos());
+			firstTick = false;
+		} else if (currentTick >= triggerTick) {
+			this.onNeighborChange(getPos());
+			currentTick = 0;
+		} else {
+			currentTick++;
+		}
 	}
 
 }

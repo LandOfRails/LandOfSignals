@@ -58,7 +58,8 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 			models.put(MISSING, m);
 			rotations.put(MISSING, new float[]{0, 0, 0});
 			translations.put(MISSING, new float[]{0.5f, 0.5f, 0.5f});
-			renderers.put(MISSING, new OBJRender(m));
+			if (isClient)
+				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
 			ModCore.Mod.error(e.getMessage());
 		}
@@ -75,7 +76,8 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 				models.put(blockId, m);
 				rotations.put(blockId, block.getRotation());
 				translations.put(blockId, block.getTranslation());
-				renderers.put(blockId, new OBJRender(m));
+				if (isClient)
+					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
 				ModCore.Mod.error(e.getMessage());
 			}
