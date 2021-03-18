@@ -1,6 +1,6 @@
 package net.landofrails.stellwand.content.entities.function;
 
-import cam72cam.mod.block.BlockEntityTickable;
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
@@ -18,11 +18,7 @@ import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
-public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
-
-	private boolean firstTick = true;
-	private int currentTick = 0;
-	private static final int triggerTick = 20 * 5;
+public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	private BlockSenderStorageEntity entity;
 
@@ -81,8 +77,10 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 				if (s != null) {
 					s.senderModes.put(getPos(), power ? entity.modePowerOn : entity.modePowerOff);
 					s.updateSignalMode();
-					ChangeSignalModes packet = new ChangeSignalModes(getPos(), s.senderModes);
-					packet.sendToAll();
+					if (getWorld().isServer) {
+						ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+						packet.sendToAll();
+					}
 				}
 			}
 
@@ -97,21 +95,6 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 
 	private boolean isAir(ItemStack item) {
 		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
-	}
-
-	@Override
-	public void update() {
-		return;
-
-		// if (firstTick) {
-		// this.onNeighborChange(getPos());
-		// firstTick = false;
-		// } else if (currentTick >= triggerTick) {
-		// this.onNeighborChange(getPos());
-		// currentTick = 0;
-		// } else {
-		// currentTick++;
-		// }
 	}
 
 }
