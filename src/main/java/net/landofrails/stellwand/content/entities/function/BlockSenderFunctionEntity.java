@@ -61,6 +61,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 			} else {
 				p.direct(Message.MESSAGE_NO_SIGNALS_CONNECTED.toString());
 			}
+			return true;
 		}
 
 		return false;
@@ -75,7 +76,8 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 			entity.hasPower = power;
 
 			for (Vec3i signal : entity.signals) {
-				BlockSignalStorageEntity s = RunTimeStorage.getSignal(signal);
+				BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+
 				if (s != null) {
 					s.senderModes.put(getPos(), power ? entity.modePowerOn : entity.modePowerOff);
 					s.updateSignalMode();
@@ -99,15 +101,17 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 
 	@Override
 	public void update() {
-		if (firstTick) {
-			this.onNeighborChange(getPos());
-			firstTick = false;
-		} else if (currentTick >= triggerTick) {
-			this.onNeighborChange(getPos());
-			currentTick = 0;
-		} else {
-			currentTick++;
-		}
+		return;
+
+		// if (firstTick) {
+		// this.onNeighborChange(getPos());
+		// firstTick = false;
+		// } else if (currentTick >= triggerTick) {
+		// this.onNeighborChange(getPos());
+		// currentTick = 0;
+		// } else {
+		// currentTick++;
+		// }
 	}
 
 }
