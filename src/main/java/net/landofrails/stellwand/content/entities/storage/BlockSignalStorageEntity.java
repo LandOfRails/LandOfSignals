@@ -29,13 +29,13 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	public static Map<String, Map<String, String>> possibleModes = new HashMap<>();
 
 	// TagFields
-	@TagField
+	@TagField("contentPackBlockId")
 	public String contentPackBlockId = MISSING;
 
-	@TagField
+	@TagField("blockRotation")
 	public float blockRotation = 0;
 
-	@TagField
+	@TagField("displayMode")
 	public String displayMode;
 
 	// Variables

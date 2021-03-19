@@ -9,7 +9,15 @@ public enum Message {
 	
 	// Sender
 	MESSAGE_NO_SIGNALS_CONNECTED("sender.nosignalsconnected"),
-	MESSAGE_MODES_SET("sender.modesset");
+	MESSAGE_MODES_SET("sender.modesset"), 
+	
+	// Connector
+	MESSAGE_SIGNAL_DISCONNECTED("connector.signaldisconnected"),
+	MESSAGE_SIGNAL_CONNECTED("connector.signalconnected"), 
+	MESSAGE_SIGNALS_MUST_BE_EQUAL("connector.sendersignalsmustbeequal"),
+	MESSAGE_NEW_SIGNAL_SELECTED("connector.newsignalselected"),
+	MESSAGE_NEW_SENDER_SELECTED("connector.newsenderselected");
+	
 
 	// @formatter:on
 

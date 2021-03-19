@@ -1,7 +1,9 @@
 package net.landofrails.stellwand.content.entities.function;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
@@ -15,9 +17,10 @@ public class BlockFillerFunctionEntity extends BlockEntity {
 		if (this instanceof BlockFillerStorageEntity)
 			entity = (BlockFillerStorageEntity) this;
 		else
-			throw new RuntimeException(
-					"This should be a subclass of BlockFillerStorageEntity!");
+			throw new RuntimeException("This should be a subclass of BlockFillerStorageEntity!");
 	}
+
+	// WHY DONT YOU RUN
 
 	@Override
 	public ItemStack onPick() {
@@ -26,6 +29,14 @@ public class BlockFillerFunctionEntity extends BlockEntity {
 		tag.setString("itemId", entity.getContentPackBlockId());
 		is.setTagCompound(tag);
 		return is;
+	}
+
+	@Override
+	public void readUpdate(TagCompound nbt) throws SerializationException {
+
+		ModCore.info("READ: " + nbt.toString());
+
+		super.readUpdate(nbt);
 	}
 
 }

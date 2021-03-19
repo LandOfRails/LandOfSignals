@@ -27,11 +27,11 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 	public static Map<String, float[]> translations = new HashMap<>();
 
 	// TagFields
-	@TagField
+	@TagField("contentPackBlockId")
 	public String contentPackBlockId = MISSING;
 
-	@TagField
-	public float blockRotation = 0;
+	@TagField("blockRotation")
+	public float blockRotation = 0f;
 
 	// Subclasses
 	public BlockFillerRenderEntity renderEntity;
@@ -84,5 +84,7 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 		}
 
 	}
+	
+
 
 }

@@ -30,6 +30,7 @@ public class Stellwand {
 				CustomGuis.register();
 				CustomTabs.register();
 				CustomItems.register();
+				CustomBlocks.init();
 
 				CustomPackets.register();
 

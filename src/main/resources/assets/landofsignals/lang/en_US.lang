@@ -30,5 +30,11 @@ item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
 
-message.stellwand:sender.nosignalsconnected=Can't select modes without any signal connected!
+message.stellwand:sender.nosignalsconnected=Can't select modes without any signals connected!
 message.stellwand:sender.modesset=Modes set!
+
+message.stellwand:connector.signaldisconnected=Signal disconnected!
+message.stellwand:connector.signalconnected=Signal connected!
+message.stellwand:connector.sendersignalsmustbeequal=You only can connect the same type of signal with a sender!
+message.stellwand:connector.newsignalselected=New signal selected! ({0}, {1}, {2})
+message.stellwand:connector.newsenderselected=New sender selected! ({0}, {1}, {2})

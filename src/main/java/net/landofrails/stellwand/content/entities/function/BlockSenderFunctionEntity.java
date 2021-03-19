@@ -15,7 +15,6 @@ import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.messages.Message;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
-import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
@@ -34,7 +33,6 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 	@Override
 	public void load(TagCompound nbt) throws SerializationException {
 		super.load(nbt);
-		RunTimeStorage.register(getPos(), entity);
 	}
 
 	@Override
@@ -86,11 +84,6 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 		}
 
-	}
-
-	@Override
-	public void onBreak() {
-		RunTimeStorage.removeSender(entity.getPos());
 	}
 
 	private boolean isAir(ItemStack item) {

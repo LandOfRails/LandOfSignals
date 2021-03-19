@@ -19,7 +19,6 @@ import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEnt
 import net.landofrails.stellwand.content.loader.Content;
 import net.landofrails.stellwand.content.loader.ContentPackEntry;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
-import net.landofrails.stellwand.storage.RunTimeStorage;
 import net.landofrails.stellwand.utils.mapper.Vec3iListMapper;
 
 public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
@@ -33,19 +32,19 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 	public static Map<String, float[]> translations = new HashMap<>();
 
 	// TagFields
-	@TagField
+	@TagField("contentPackBlockId")
 	public String contentPackBlockId = MISSING;
 
-	@TagField
+	@TagField("blockRotation")
 	public float blockRotation = 0;
 
 	@TagField(value = "signals", typeHint = Vec3i.class, mapper = Vec3iListMapper.class)
 	public List<Vec3i> signals = new ArrayList<>();
 
-	@TagField
+	@TagField("modePowerOff")
 	public String modePowerOff;
 
-	@TagField
+	@TagField("modePowerOn")
 	public String modePowerOn;
 
 	// Variables
@@ -107,7 +106,7 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 			return true;
 
 		Iterator<Vec3i> signal = signals.iterator();
-		BlockSignalStorageEntity signalEntity = RunTimeStorage.getSignal(signal.next());
+		BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signal.next(), BlockSignalStorageEntity.class);
 		return signalEntity.getContentPackBlockId().equals(otherSignal.getContentPackBlockId());
 	}
 

@@ -21,6 +21,10 @@ public class CustomBlocks {
 	public static final BlockSender BLOCKSENDER = new BlockSender();
 	public static final BlockSignal BLOCKSIGNAL = new BlockSignal();
 
+	public static void init() {
+		// WICHTIG: Triggert das Laden der Blöcke.
+	}
+
 	public static void registerBlockRenderers() {
 
 		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerStorageEntity.class);
