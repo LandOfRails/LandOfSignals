@@ -7,6 +7,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -103,6 +104,9 @@ public class ContentPackHandler {
                                     ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
                                     ModCore.info("SignalPart: " + contentPackSignalPart.getName());
                                     List<String> states = contentPackSignalPart.getStates();
+                                    if (states == null) {
+                                        states = new ArrayList<>();
+                                    }
                                     states.add(0, null);
                                     contentPackSignalPart.setStates(states);
                                     LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);

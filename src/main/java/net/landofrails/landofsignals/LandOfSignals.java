@@ -10,26 +10,11 @@ import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
-import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
-import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
-import net.landofrails.landofsignals.packet.SignalBoxGuiToClientPacket;
-import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
-import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
-import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
-import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
-import net.landofrails.landofsignals.render.block.TileSignalPartRender;
-import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
-import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
-import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
+import net.landofrails.landofsignals.packet.*;
+import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalLever;
-import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalSO12;
-import net.landofrails.landofsignals.tile.TileTicketMachineDB;
-import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
+import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
@@ -47,9 +32,9 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
-		// Stellwand
+        // Stellwand
 
-		Stellwand.commonEvent(event);
+        Stellwand.commonEvent(event);
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
@@ -73,8 +58,8 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void clientEvent(ModEvent event) {
 
-		// Stellwand
-		Stellwand.clientEvent(event);
+        // Stellwand
+        Stellwand.clientEvent(event);
 
         switch (event) {
             case CONSTRUCT:
@@ -100,6 +85,7 @@ public class LandOfSignals extends ModCore.Mod {
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartAnimatedRender::render, TileSignalAnimatedPart.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
@@ -120,6 +106,6 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void serverEvent(ModEvent event) {
         // Do nothing for now
-		Stellwand.serverEvent(event);
+        Stellwand.serverEvent(event);
     }
 }
