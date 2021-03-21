@@ -12,7 +12,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class ContentPack {
 
-	private String modversion = "";
+	private String addonVersion = "";
 	private String name = "";
 	private String packversion = "";
 	private String author = "";
@@ -22,8 +22,8 @@ public class ContentPack {
 	// Manually filled by Loader.
 	private List<ContentPackEntry> entries = new LinkedList<>();
 
-	public ContentPack(String modversion, String name, String packversion, String author, List<String> content) {
-		this.modversion = modversion;
+	public ContentPack(String addonVersion, String name, String packversion, String author, List<String> content) {
+		this.addonVersion = addonVersion;
 		this.name = name;
 		this.packversion = packversion;
 		this.author = author;
@@ -37,8 +37,8 @@ public class ContentPack {
 		return entries;
 	}
 
-	public String getModversion() {
-		return modversion;
+	public String getAddonVersion() {
+		return addonVersion;
 	}
 
 	public String getName() {

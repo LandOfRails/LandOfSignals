@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryItem;
 
@@ -20,7 +20,7 @@ public class StaticLoader {
 	}
 
 	public static void init() {
-		ContentPack contentPack = new ContentPack(LandOfSignals.VERSION, "LandOfSignals", "1.0.0", "SeltixSub", new ArrayList<>());
+		ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.0", "SeltixSub", new ArrayList<>());
 		contentPack.setEntries(getEntries());
 		Content.addContentPack(contentPack);
 	}
@@ -55,6 +55,15 @@ public class StaticLoader {
 		prop.setItemMode("white");
 		contentPackEntries.add(prop.toEntry());
 		
+		// Signal Straight Unisolated
+		prop = new Properties().setName("Signal Straight Unisolated");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/blocktrackunisolated/unisolated.obj");
+		prop.setModes(modes("Off", "off", "White", "white"));
+		prop.setFromDir(LEFT).setToDir(RIGHT);
+		prop.setItemMode("white");
+		contentPackEntries.add(prop.toEntry());
+
 		// Signal Diagonal Track
 		prop = new Properties().setName("Signal Diagonal Track DL");
 		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
@@ -122,6 +131,48 @@ public class StaticLoader {
 		prop.setItemMode("green");
 		contentPackEntries.add(prop.toEntry());
 
+		// Track Switches
+		// Left -> Right, Down (LRD)
+		prop = new Properties().setName("Track switch (Left -> Right, Down)");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackswitch/lrd/trackswitch.obj");
+		prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite",
+				"Branch white", "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+		prop.setFromDir(LEFT).setToDir(RIGHT, BOTTOM);
+		prop.setItemMode("branch_white");
+		contentPackEntries.add(prop.toEntry());
+
+		// Left -> Right, Up (LRU)
+		prop = new Properties().setName("Track switch (Left -> Right, Up)");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackswitch/lru/trackswitch.obj");
+		prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+				"branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+		prop.setFromDir(LEFT).setToDir(RIGHT, TOP);
+		prop.setItemMode("branch_white");
+		contentPackEntries.add(prop.toEntry());
+
+		// Right -> Left, Down (RLD)
+		prop = new Properties().setName("Track switch (Right -> Left, Down)");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackswitch/rld/trackswitch.obj");
+		prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+				"branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+		prop.setFromDir(RIGHT).setToDir(LEFT, BOTTOM);
+		prop.setItemMode("branch_white");
+		contentPackEntries.add(prop.toEntry());
+
+		// Right -> Left, Up (RLU)
+		prop = new Properties().setName("Track switch (Right -> Left, Up)");
+		prop.setType(ContentPackEntryType.BLOCKSIGNAL);
+		prop.setModel("models/block/blocksignal/trackswitch/rlu/trackswitch.obj");
+		prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+				"branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+		prop.setFromDir(RIGHT).setToDir(LEFT, TOP);
+		prop.setItemMode("branch_white");
+		contentPackEntries.add(prop.toEntry());
+
+
 		//// Fillers
 		
 		// Block Filler
@@ -130,6 +181,36 @@ public class StaticLoader {
 		prop.setModel("models/block/blockfiller/blockfiller/blockfiller.obj");
 		prop.setBlockTranslation(0.5f, 0f, 0.5f);
 		prop.setItemTranslation(0.5f, 0.1625f, 0.5f);
+		contentPackEntries.add(prop.toEntry());
+
+		// Straight Track
+		prop = new Properties().setName("Straight track");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/trackstraight/trackstraight.obj");
+		contentPackEntries.add(prop.toEntry());
+
+		// TrackDiag (down left)
+		prop = new Properties().setName("Diagonal track (down - left)");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/trackdiag/dl/trackdiag.obj");
+		contentPackEntries.add(prop.toEntry());
+
+		// TrackDiag (down right)
+		prop = new Properties().setName("Diagonal track (down - right)");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/trackdiag/dr/trackdiag.obj");
+		contentPackEntries.add(prop.toEntry());
+
+		// TrackDiag (up left)
+		prop = new Properties().setName("Diagonal track (up - left)");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/trackdiag/ul/trackdiag.obj");
+		contentPackEntries.add(prop.toEntry());
+
+		// TrackDiag (up right)
+		prop = new Properties().setName("Diagonal track (up - right)");
+		prop.setType(ContentPackEntryType.BLOCKFILLER);
+		prop.setModel("models/block/blockfiller/trackdiag/ur/trackdiag.obj");
 		contentPackEntries.add(prop.toEntry());
 
 		return contentPackEntries;
@@ -152,8 +233,8 @@ public class StaticLoader {
 
 		private ContentPackEntryType type;
 		private String name;
-		private ContentPackEntryDirectionType fromDir;
-		private ContentPackEntryDirectionType toDir;
+		private ContentPackEntryDirectionType[] fromDir;
+		private ContentPackEntryDirectionType[] toDir;
 		private String model;
 		private LinkedHashMap<String, String> modes = new LinkedHashMap<>();
 		private String itemMode;
@@ -173,12 +254,12 @@ public class StaticLoader {
 			return this;
 		}
 
-		public Properties setFromDir(ContentPackEntryDirectionType fromDir) {
+		public Properties setFromDir(ContentPackEntryDirectionType... fromDir) {
 			this.fromDir = fromDir;
 			return this;
 		}
 
-		public Properties setToDir(ContentPackEntryDirectionType toDir) {
+		public Properties setToDir(ContentPackEntryDirectionType... toDir) {
 			this.toDir = toDir;
 			return this;
 		}
@@ -227,10 +308,7 @@ public class StaticLoader {
 		public ContentPackEntry toEntry() {
 			ContentPackEntryBlock block = new ContentPackEntryBlock(blockRotation, blockTranslation, modes);
 			ContentPackEntryItem item = new ContentPackEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
-
-			String from = fromDir != null ? fromDir.name() : null;
-			String to = toDir != null ? toDir.name() : null;
-			return new ContentPackEntry(type.name(), name, from, to, model, block, item);
+			return new ContentPackEntry(type.name(), name, fromDir, toDir, model, block, item);
 		}
 
 	}

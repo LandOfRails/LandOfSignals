@@ -26,7 +26,7 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	public static Map<String, OBJRender> renderers = new HashMap<>();
 	public static Map<String, float[]> rotations = new HashMap<>();
 	public static Map<String, float[]> translations = new HashMap<>();
-	public static Map<String, Map<String, String>> possibleModes = new HashMap<>();
+	protected static Map<String, Map<String, String>> possibleModes = new HashMap<>();
 
 	// TagFields
 	@TagField("contentPackBlockId")
@@ -113,10 +113,16 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 		return displayMode;
 	}
 
+	@SuppressWarnings("java:S1751")
 	public void updateSignalMode() {
 
-		String actualMode = getDisplayMode();
+		String actualMode = "";
 		
+		for (Entry<String, String> entry : getPossibleModes().entrySet()) {
+			actualMode = entry.getValue();
+			break;
+		}
+
 		for (String possibleMode : getPossibleModes().values())
 			if (senderModes.containsValue(possibleMode))
 				actualMode = possibleMode;

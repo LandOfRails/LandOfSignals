@@ -26,8 +26,8 @@ import net.landofrails.stellwand.utils.compact.LoSPlayer;
 public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
 	// Constants
-	private static final String senderKey = "senderPos";
-	private static final String signalKey = "signalPos";
+	private static final String SENDERKEY = "senderPos";
+	private static final String SIGNALKEY = "signalPos";
 	//
 
 	private int variation = -1;
@@ -70,6 +70,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 		}
 	}
 
+	@SuppressWarnings("java:S3776")
 	@Override
 	public ClickResult onClickBlock(Player player, World world, Vec3i pos,
 			Hand hand, Facing facing, Vec3d inBlockPos) {
@@ -90,8 +91,8 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 				return ClickResult.ACCEPTED;
 			}
 		} else if (itemStack.is(CustomItems.ITEMCONNECTOR2)) {
-			if (signalEntity != null && nbt.hasKey(senderKey)) {
-				Vec3i senderPos = nbt.getVec3i(senderKey);
+			if (signalEntity != null && nbt.hasKey(SENDERKEY)) {
+				Vec3i senderPos = nbt.getVec3i(SENDERKEY);
 				boolean d = player.isCrouching();
 				BlockSenderStorageEntity sender = getSender(world, senderPos);
 				if (sender.isCompatible(signalEntity)) {
@@ -99,7 +100,8 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 					if (p.getWorld().isServer)
 						p.direct(d ? Message.MESSAGE_SIGNAL_DISCONNECTED.toString() : Message.MESSAGE_SIGNAL_CONNECTED.toString());
 				} else {
-					p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
+					if (p.getWorld().isServer)
+						p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
 				}
 				return ClickResult.ACCEPTED;
 			} else if (senderEntity != null) {
@@ -110,15 +112,16 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			if(signalEntity != null) {
 				selectSignal(p, hand, pos);
 				return ClickResult.ACCEPTED;
-			} else if (senderEntity != null && nbt.hasKey(signalKey)) {
-				Vec3i signalPos = nbt.getVec3i(signalKey);
+			} else if (senderEntity != null && nbt.hasKey(SIGNALKEY)) {
+				Vec3i signalPos = nbt.getVec3i(SIGNALKEY);
 				boolean d = player.isCrouching();
 				if (senderEntity.isCompatible(getSignal(world, signalPos))) {
 					connect(world, senderEntity.getPos(), signalPos, d);
 					if (p.getWorld().isServer)
 						p.direct(d ? Message.MESSAGE_SIGNAL_DISCONNECTED.toString() : Message.MESSAGE_SIGNAL_CONNECTED.toString());
 				} else {
-					p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
+					if (p.getWorld().isServer)
+						p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
 				}
 
 				return ClickResult.ACCEPTED;
@@ -131,10 +134,12 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 	// Helper
 
 	public BlockSignalStorageEntity getSignal(World world, Vec3i pos) {
+		world.keepLoaded(pos);
 		return world.getBlockEntity(pos, BlockSignalStorageEntity.class);
 	}
 
 	public BlockSenderStorageEntity getSender(World world, Vec3i pos) {
+		world.keepLoaded(pos);
 		return world.getBlockEntity(pos, BlockSenderStorageEntity.class);
 	}
 
@@ -142,7 +147,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
 		if (player.getWorld().isServer) {
 			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR3, 1);
-			stack.getTagCompound().setVec3i(signalKey, pos);
+			stack.getTagCompound().setVec3i(SIGNALKEY, pos);
 			player.setHeldItem(hand, stack);
 			player.direct(Message.MESSAGE_NEW_SIGNAL_SELECTED.toString(), pos.x, pos.y, pos.z);
 		}
@@ -151,7 +156,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 	public void selectSender(LoSPlayer player, Hand hand, Vec3i pos) {
 		if (player.getWorld().isServer) {
 			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR2, 1);
-			stack.getTagCompound().setVec3i(senderKey, pos);
+			stack.getTagCompound().setVec3i(SENDERKEY, pos);
 			player.setHeldItem(hand, stack);
 			player.direct(Message.MESSAGE_NEW_SENDER_SELECTED.toString(), pos.x, pos.y, pos.z);
 		}
@@ -165,6 +170,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			} else {
 				sender.signals.remove(signalPos);
 			}
+			sender.updateSignals();
 			sender.markDirty();
 		}
 	}

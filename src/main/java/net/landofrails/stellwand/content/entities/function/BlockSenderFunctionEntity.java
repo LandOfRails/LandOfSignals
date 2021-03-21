@@ -6,15 +6,14 @@ import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
-import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
-import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.messages.Message;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
+import net.landofrails.stellwand.content.network.OpenSenderGui;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
@@ -31,11 +30,6 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 	}
 
 	@Override
-	public void load(TagCompound nbt) throws SerializationException {
-		super.load(nbt);
-	}
-
-	@Override
 	public ItemStack onPick() {
 		ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSENDER, 1);
 		TagCompound tag = is.getTagCompound();
@@ -49,12 +43,23 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		ItemStack item = player.getHeldItem(hand);
 		LoSPlayer p = new LoSPlayer(player);
 
-		if (isAir(item) && p.getWorld().isClient) {
+		if (isAir(item) && p.getWorld().isServer) {
 			if (!entity.signals.isEmpty()) {
-				CustomGuis.selectSenderModes.open(player, entity.getPos());
+
+				Vec3i signalid = entity.signals.get(0);
+				getWorld().keepLoaded(signalid);
+				if (getWorld().hasBlockEntity(signalid, BlockSignalStorageEntity.class)) {
+					BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalid, BlockSignalStorageEntity.class);
+					OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
+					packet.sendToAllAround(player.getWorld(), player.getPosition(), 1);
+				} else {
+					p.direct("Shit shawty, signal found!");
+				}
+
 			} else {
 				p.direct(Message.MESSAGE_NO_SIGNALS_CONNECTED.toString());
 			}
+
 			return true;
 		}
 
@@ -69,21 +74,51 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		if (entity.hasPower != power) {
 			entity.hasPower = power;
 
-			for (Vec3i signal : entity.signals) {
-				BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+			updateSignals();
 
-				if (s != null) {
-					s.senderModes.put(getPos(), power ? entity.modePowerOn : entity.modePowerOff);
+		}
+
+	}
+
+	public void updateSignals() {
+		for (Vec3i signal : entity.signals) {
+			getWorld().keepLoaded(signal);
+			BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+
+			if (s != null) {
+				if (entity.modePowerOn != null && entity.modePowerOff != null) {
+					s.senderModes.put(getPos(), entity.hasPower ? entity.modePowerOn : entity.modePowerOff);
 					s.updateSignalMode();
 					if (getWorld().isServer) {
 						ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
 						packet.sendToAll();
 					}
 				}
+			} else if (getWorld().isBlockLoaded(signal)) {
+				entity.signals.remove(signal);
 			}
+		}
+	}
 
+	@Override
+	public void onBreak() {
+
+		for (Vec3i signal : entity.signals) {
+			getWorld().keepLoaded(signal);
+			BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+
+			if (s != null && s.senderModes.containsKey(getPos())) {
+				s.senderModes.remove(getPos());
+
+				s.updateSignalMode();
+				if (getWorld().isServer) {
+					ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+					packet.sendToAll();
+				}
+			}
 		}
 
+		super.onBreak();
 	}
 
 	private boolean isAir(ItemStack item) {

@@ -47,8 +47,11 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 	@TagField("modePowerOn")
 	public String modePowerOn;
 
-	// Variables
+	@TagField("hasPower")
 	public boolean hasPower = false;
+
+	// Variables
+	private BlockSignalStorageEntity signalEntity;
 
 	// Subclasses
 	public BlockSenderRenderEntity renderEntity;
@@ -108,6 +111,14 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 		Iterator<Vec3i> signal = signals.iterator();
 		BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signal.next(), BlockSignalStorageEntity.class);
 		return signalEntity.getContentPackBlockId().equals(otherSignal.getContentPackBlockId());
+	}
+
+	public void setSignal(BlockSignalStorageEntity signalEntity) {
+		this.signalEntity = signalEntity;
+	}
+
+	public BlockSignalStorageEntity getSignal() {
+		return this.signalEntity;
 	}
 
 }

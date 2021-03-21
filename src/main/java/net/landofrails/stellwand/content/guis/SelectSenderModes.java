@@ -1,11 +1,10 @@
 package net.landofrails.stellwand.content.guis;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.lwjgl.opengl.GL11;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
@@ -34,14 +33,10 @@ public class SelectSenderModes implements IScreen {
 
 	@SuppressWarnings("java:S1192")
 	public SelectSenderModes(BlockSenderStorageEntity entity) {
-		if (!entity.signals.isEmpty()) {
-			Vec3i signalId = entity.signals.get(0);
-			List<BlockSignalStorageEntity> list = entity.getWorld()
-					.getBlockEntities(BlockSignalStorageEntity.class);
-			Optional<BlockSignalStorageEntity> optional = list.stream()
-					.filter(s -> s.getPos().equals(signalId)).findFirst();
-			if (optional.isPresent()) {
-				BlockSignalStorageEntity signalEntity = optional.get();
+		if (entity.getSignal() != null) {
+
+			BlockSignalStorageEntity signalEntity = entity.getSignal();
+			if (signalEntity != null) {
 				modes = signalEntity.getPossibleModes();
 
 				// @formatter:off
@@ -59,12 +54,12 @@ public class SelectSenderModes implements IScreen {
 				// Position
 				pos = entity.getPos();
 
-				// Everything is okay, return.
 				return;
+			} else {
+				ModCore.error("Couldnt get signal");
 			}
-
-
-
+		} else {
+			ModCore.error("Sender has no signals!");
 		}
 		throw new RuntimeException("Entity does not contain signals.");
 

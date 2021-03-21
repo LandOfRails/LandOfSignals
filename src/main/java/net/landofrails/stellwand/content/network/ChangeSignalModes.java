@@ -29,10 +29,13 @@ public class ChangeSignalModes extends Packet {
 
 	@Override
 	protected void handle() {
+		getWorld().keepLoaded(pos);
 		BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(pos,
 				BlockSignalStorageEntity.class);
-		signalEntity.senderModes.putAll(modes);
-		signalEntity.updateSignalMode();
+		if (getWorld().hasBlockEntity(pos, BlockSignalStorageEntity.class)) {
+			signalEntity.senderModes = modes;
+			signalEntity.updateSignalMode();
+		}
 	}
 
 	// @formatter:off

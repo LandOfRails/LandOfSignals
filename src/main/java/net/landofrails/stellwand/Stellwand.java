@@ -14,6 +14,7 @@ import net.landofrails.stellwand.content.tabs.CustomTabs;
 public class Stellwand {
 
 	public static final String DOMAIN = "stellwand";
+	public static final String ADDON_VERSION = "1";
 
 	private Stellwand() {
 
