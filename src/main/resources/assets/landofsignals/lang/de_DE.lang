@@ -28,3 +28,12 @@ item.landofsignals:stellwand.itemblocksignal.name=Block Signal
 item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
+
+message.stellwand:sender.nosignalsconnected=Modes können ohne verbundenes Signal gesetzt werden!
+message.stellwand:sender.modesset=Modes gesetzt!
+
+message.stellwand:connector.signaldisconnected=Signal verbunden!
+message.stellwand:connector.signalconnected=Signal entfernt!
+message.stellwand:connector.sendersignalsmustbeequal=Du kannst nur Signale des gleichen Types an einen Sender verbinden!
+message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! ({0}, {1}, {2})
+message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt!! ({0}, {1}, {2})

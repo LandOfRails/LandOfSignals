@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -27,7 +26,6 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
-import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -142,14 +140,6 @@ public class ItemBlockSender extends CustomItem {
 		if (world.isServer)
 			return;
 
-		player.sendMessage(PlayerMessage.direct("Entries: " + Content.getBlockSenders().size()));
-		String id = "error";
-		ItemStack i = player.getHeldItem(hand);
-		TagCompound t = i.getTagCompound();
-		if (t != null && t.hasKey("itemId"))
-			id = t.getString("itemId");
-		player.sendMessage(PlayerMessage.direct("Id: " + id));
-
 		List<ItemStack> itemStackList = new ArrayList<>();
 
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockSenders().entrySet()) {
@@ -210,7 +200,7 @@ public class ItemBlockSender extends CustomItem {
 			return ClickResult.ACCEPTED;
 		}
 
-		return ClickResult.REJECTED;
+		return ClickResult.PASS;
 	}
 
 	private boolean isStandingInBlock(Vec3i vec3i) {
@@ -233,13 +223,6 @@ public class ItemBlockSender extends CustomItem {
 
 			if (renderers.get(itemId) == null) {
 				OBJModel model = models.get(itemId);
-
-				ModCore.Mod.info("Groups for " + itemId + ":");
-				for (String g : model.groups()) {
-
-					ModCore.Mod.info("Group found: " + g);
-				}
-
 				renderers.put(itemId, new OBJRender(model));
 			}
 

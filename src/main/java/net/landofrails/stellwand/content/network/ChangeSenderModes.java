@@ -33,6 +33,7 @@ public class ChangeSenderModes extends Packet {
 				BlockSenderStorageEntity.class);
 		sender.modePowerOff = modePowerOff;
 		sender.modePowerOn = modePowerOn;
+		sender.updateSignals();
 		sender.markDirty();
 	}
 

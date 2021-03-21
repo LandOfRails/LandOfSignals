@@ -14,15 +14,23 @@ public class ContentPackEntry {
 
 	private String type;
 	private String name;
-	private String directionFrom;
-	private String directionTo;
+	private ContentPackEntryDirectionType[] directionFrom;
+	private ContentPackEntryDirectionType[] directionTo;
 	private String model;
 
 	private ContentPackEntryBlock block;
 	private ContentPackEntryItem item;
 
-	public ContentPackEntry(String type, String name, String directionFrom, String directionTo, String model,
-			ContentPackEntryBlock block, ContentPackEntryItem item) {
+	// @formatter:off
+	public ContentPackEntry(
+			String type,
+			String name,
+			ContentPackEntryDirectionType[] directionFrom,
+			ContentPackEntryDirectionType[] directionTo,
+			String model,
+			ContentPackEntryBlock block,
+			ContentPackEntryItem item
+	) {
 		this.type = type;
 		this.name = name;
 		this.directionFrom = directionFrom;
@@ -31,6 +39,7 @@ public class ContentPackEntry {
 		this.block = block;
 		this.item = item;
 	}
+	// @formatter:on
 
 	public String getType() {
 		return type;
@@ -40,11 +49,11 @@ public class ContentPackEntry {
 		return name;
 	}
 
-	public String getDirectionFrom() {
+	public ContentPackEntryDirectionType[] getDirectionFrom() {
 		return directionFrom;
 	}
 
-	public String getDirectionTo() {
+	public ContentPackEntryDirectionType[] getDirectionTo() {
 		return directionTo;
 	}
 

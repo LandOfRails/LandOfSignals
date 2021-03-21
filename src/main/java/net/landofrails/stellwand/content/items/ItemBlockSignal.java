@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -173,13 +172,6 @@ public class ItemBlockSignal extends CustomItem {
 
 			if (renderers.get(itemId) == null) {
 				OBJModel model = models.get(itemId);
-
-				ModCore.Mod.info("Groups for " + itemId + ":");
-				for (String g : model.groups()) {
-
-					ModCore.Mod.info("Group found: " + g);
-				}
-
 				renderers.put(itemId, new OBJRender(model));
 			}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cam72cam.mod.ModCore;
-import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.items.ItemBlockSignal;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
@@ -33,9 +33,9 @@ public class Content {
 		}
 
 		// @formatter:off
-		if (!LandOfSignals.VERSION.equalsIgnoreCase(pack.getModversion()))
-			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + LandOfSignals.VERSION
-					+ ", but found:" + pack.getModversion());
+		if (!Stellwand.ADDON_VERSION.equalsIgnoreCase(pack.getAddonVersion()))
+			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + Stellwand.ADDON_VERSION
+					+ ", but found:" + pack.getAddonVersion());
 		// @formatter:on
 
 		contentPacks.add(pack);
