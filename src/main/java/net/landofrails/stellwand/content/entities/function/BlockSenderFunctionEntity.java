@@ -53,7 +53,8 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 					OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
 					packet.sendToAllAround(player.getWorld(), player.getPosition(), 1);
 				} else {
-					p.direct("Shit shawty, signal found!");
+					p.direct(Message.MESSAGE_NO_SIGNAL_FOUND.toString(),
+							Message.MESSAGE_ERROR1.toString());
 				}
 
 			} else {

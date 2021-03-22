@@ -10,6 +10,8 @@ public enum Message {
 	// Sender
 	MESSAGE_NO_SIGNALS_CONNECTED("sender.nosignalsconnected"),
 	MESSAGE_MODES_SET("sender.modesset"), 
+	MESSAGE_NO_SIGNAL_FOUND("sender.signalnotfound"),
+	MESSAGE_ERROR1("sender.error1"),
 	
 	// Connector
 	MESSAGE_SIGNAL_DISCONNECTED("connector.signaldisconnected"),

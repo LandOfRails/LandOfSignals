@@ -18,8 +18,6 @@ public class BlockFillerFunctionEntity extends BlockEntity {
 			throw new RuntimeException("This should be a subclass of BlockFillerStorageEntity!");
 	}
 
-	// WHY DONT YOU RUN
-
 	@Override
 	public ItemStack onPick() {
 		ItemStack is = new ItemStack(CustomItems.ITEMBLOCKFILLER, 1);

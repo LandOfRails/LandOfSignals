@@ -31,6 +31,8 @@ item.landofsignals:stellwand.itemconnector3.name=Connector
 
 message.stellwand:sender.nosignalsconnected=Modes können ohne verbundenes Signal gesetzt werden!
 message.stellwand:sender.modesset=Modes gesetzt!
+message.stellwand:sender.signalnotfound=Signal konnte nicht gefunden werden: {0}
+message.stellwand:sender.error1:Ich weiß nicht wie, aber es ist weg.. [Surprised Pikachu hier einfügen]
 
 message.stellwand:connector.signaldisconnected=Signal verbunden!
 message.stellwand:connector.signalconnected=Signal entfernt!
