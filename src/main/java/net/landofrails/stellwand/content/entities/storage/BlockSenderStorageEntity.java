@@ -16,9 +16,9 @@ import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.function.BlockSenderFunctionEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
-import net.landofrails.stellwand.content.loader.Content;
-import net.landofrails.stellwand.content.loader.ContentPackEntry;
-import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.utils.mapper.Vec3iListMapper;
 
 public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {

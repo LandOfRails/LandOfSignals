@@ -1,9 +1,10 @@
-package net.landofrails.stellwand.content.loader;
+package net.landofrails.stellwand.contentpacks.loader;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,6 +13,10 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import cam72cam.mod.ModCore;
+import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.ContentPack;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.types.EntryType;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
@@ -107,12 +112,19 @@ public class Loader {
 			List<ContentPackEntry> contentPackEntries = new ArrayList<>();
 
 			ModCore.info("Content for %s: ", contentPack.getId());
-			for (String contentName : contentPack.getContent()) {
+			for (Entry<String, EntryType> content : contentPack.getContent().entrySet()) {
+
+				String contentName = content.getKey();
+				EntryType type = content.getValue();
+
 				for (ZipEntry entry : files) {
 					if (entry.getName().equalsIgnoreCase(contentName)) {
-						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry));
+
+						// New: type
+						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry), type);
 						ModCore.info("Block: %s", contentPackEntry.getName());
 						contentPackEntries.add(contentPackEntry);
+
 					}
 				}
 			}

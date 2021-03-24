@@ -9,14 +9,14 @@ import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEnti
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.loader.Loader;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.contentpacks.loader.Loader;
 
 public class Stellwand {
 
 	public static final String DOMAIN = "stellwand";
-	public static final String ADDON_VERSION = "1";
+	public static final String ADDON_VERSION = "2";
 
 	private Stellwand() {
 

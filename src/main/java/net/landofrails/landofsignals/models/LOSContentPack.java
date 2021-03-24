@@ -1,6 +1,5 @@
 package net.landofrails.landofsignals.models;
 
-import net.landofrails.stellwand.content.loader.ContentPackEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,8 @@ public class LOSContentPack {
     private String author;
     private String packVersion;
 
-    private final List<ContentPackEntry> entries = new ArrayList<>();
+	// TODO: Überprüfen Jaden!
+	private final List<LOSContentPackEntry> entries = new ArrayList<>();
 
     public LOSContentPack(String name, String author, String packVersion) {
         this.name = name;

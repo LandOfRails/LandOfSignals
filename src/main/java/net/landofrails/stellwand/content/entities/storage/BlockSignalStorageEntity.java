@@ -14,9 +14,9 @@ import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.function.BlockSignalFunctionEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
-import net.landofrails.stellwand.content.loader.Content;
-import net.landofrails.stellwand.content.loader.ContentPackEntry;
-import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntryBlock;
 
 public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	
@@ -66,7 +66,7 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 				ContentPackEntry cpe = entry.getKey();
 				String packId = entry.getValue();
 				String blockId = cpe.getBlockId(packId);
-				ContentPackEntryBlock block = cpe.getBlock();
+				BlockSignalEntryBlock block = cpe.getBlock(BlockSignalEntryBlock.class);
 				String objPath = cpe.getModel();
 				Identifier id = new Identifier("stellwand", objPath);
 				OBJModel m = new OBJModel(id, 0);

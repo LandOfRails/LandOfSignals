@@ -34,11 +34,11 @@ import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
-import net.landofrails.stellwand.content.loader.Content;
-import net.landofrails.stellwand.content.loader.ContentPackEntry;
-import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryItem;
 import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
 
 public class ItemBlockSignal extends CustomItem {
 

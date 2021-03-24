@@ -1,4 +1,4 @@
-package net.landofrails.stellwand.content.loader;
+package net.landofrails.stellwand.contentpacks;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -8,6 +8,9 @@ import java.util.Map;
 import cam72cam.mod.ModCore;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.items.ItemBlockSignal;
+import net.landofrails.stellwand.contentpacks.entries.ContentPack;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.types.EntryType;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Content {
@@ -44,7 +47,7 @@ public class Content {
 		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
-				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSIGNAL.name()))
+				if (entry.isType(EntryType.BLOCKSIGNAL))
 					entries.put(entry, pack.getId());
 		}
 		return entries;
@@ -54,7 +57,7 @@ public class Content {
 		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
-				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKSENDER.name()))
+				if (entry.isType(EntryType.BLOCKSENDER))
 					entries.put(entry, pack.getId());
 		}
 		return entries;
@@ -64,7 +67,7 @@ public class Content {
 		Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
 		for (ContentPack pack : contentPacks) {
 			for (ContentPackEntry entry : pack.getEntries())
-				if (entry.getType().equalsIgnoreCase(ContentPackEntryType.BLOCKFILLER.name()))
+				if (entry.isType(EntryType.BLOCKFILLER))
 					entries.put(entry, pack.getId());
 		}
 		return entries;
