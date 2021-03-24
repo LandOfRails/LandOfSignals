@@ -108,8 +108,9 @@ public class TileSignalAnimatedPart extends BlockEntityTickable implements IMani
         return blockRotate;
     }
 
-    public void switchActive() {
-        active = !active;
+    public void setActive(boolean active) {
+        this.active = active;
+        markDirty();
     }
 
     public float getPartRotate() {

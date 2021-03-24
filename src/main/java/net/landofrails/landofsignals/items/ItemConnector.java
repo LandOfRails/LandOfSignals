@@ -37,6 +37,32 @@ public class ItemConnector extends CustomItem {
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         if (world.isServer) {
 
+            TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
+            TileSignalAnimatedPart tempAnimatedPart = world.getBlockEntity(pos, TileSignalAnimatedPart.class);
+            TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
+
+            if (tempPart == null && tempAnimatedPart == null && tempSignalBox == null) {
+                return ClickResult.REJECTED;
+            }
+
+            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates(tempPart.getId()).size() > 1) {
+                blockEntityAnimatedPart = null;
+                blockEntitySignalPart = tempPart;
+                if (blockEntityBox == null)
+                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
+            }
+            if (tempAnimatedPart != null) {
+                blockEntitySignalPart = null;
+                blockEntityAnimatedPart = tempAnimatedPart;
+                if (blockEntityBox == null)
+                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntityAnimatedPart.getId())));
+            }
+            if (tempSignalBox != null) {
+                blockEntityBox = tempSignalBox;
+                if (blockEntitySignalPart == null && blockEntityAnimatedPart == null)
+                    player.sendMessage(PlayerMessage.direct("Pairing started with signal box."));
+            }
+
             if ((blockEntitySignalPart != null || blockEntityAnimatedPart != null) && blockEntityBox != null) {
                 if (blockEntitySignalPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
@@ -52,57 +78,8 @@ public class ItemConnector extends CustomItem {
                 blockEntityBox = null;
                 return ClickResult.ACCEPTED;
             }
-
-            TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
-            TileSignalAnimatedPart tempAnimatedPart = world.getBlockEntity(pos, TileSignalAnimatedPart.class);
-            TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
-
-            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates(blockEntitySignalPart.getId()).size() > 1) {
-                blockEntityAnimatedPart = null;
-                blockEntitySignalPart = tempPart;
-                player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
-                return ClickResult.ACCEPTED;
-            }
-            if (tempAnimatedPart != null) {
-                blockEntitySignalPart = null;
-                blockEntityAnimatedPart = tempAnimatedPart;
-                player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntityAnimatedPart.getId())));
-                return ClickResult.ACCEPTED;
-            }
-            if (tempSignalBox != null) {
-                blockEntityBox = tempSignalBox;
-                player.sendMessage(PlayerMessage.direct("Pairing started with signal box."));
-                return ClickResult.ACCEPTED;
-            }
         }
-        return ClickResult.REJECTED;
-
-//        if (world.isServer) {
-//            if (blockEntitySignalPart == null) blockEntitySignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-//            if (blockEntityBox == null) blockEntityBox = world.getBlockEntity(pos, TileSignalBox.class);
-//            if (blockEntityBox != null && blockEntitySignalPart != null) {
-//                if (LOSBlocks.BLOCK_SIGNAL_PART.getStates(blockEntitySignalPart.getId()).size() <= 1) {
-//                    blockEntitySignalPart = null;
-//                    return ClickResult.REJECTED;
-//                }
-//                blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-//                blockEntitySignalPart = null;
-//                blockEntityBox = null;
-//                player.sendMessage(PlayerMessage.direct("Signal paired."));
-//                return ClickResult.ACCEPTED;
-//            } else if (blockEntitySignalPart != null) {
-//                if (LOSBlocks.BLOCK_SIGNAL_PART.getStates(blockEntitySignalPart.getId()).size() <= 1) {
-//                    blockEntitySignalPart = null;
-//                    return ClickResult.REJECTED;
-//                }
-//                player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
-//                return ClickResult.ACCEPTED;
-//            } else if (blockEntityBox != null) {
-//                player.sendMessage(PlayerMessage.direct("Pairing started with SignalBox"));
-//                return ClickResult.ACCEPTED;
-//            }
-//        }
-//        return ClickResult.REJECTED;
+        return ClickResult.ACCEPTED;
     }
 
     @Override

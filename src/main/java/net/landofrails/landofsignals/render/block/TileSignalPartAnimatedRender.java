@@ -48,17 +48,21 @@ public class TileSignalPartAnimatedRender {
             }
         }
         OBJRender renderer = cache.get(id).getRight();
-        Set<String> groupsWithoutWing = renderer.model.groups();
-        groupsWithoutWing.remove(groupNames);
+        List<String> groupsWithoutWing = new ArrayList<>();
+        for (String s : renderer.model.groups()) groupsWithoutWing.add(s);
+        groupsWithoutWing.removeAll(groupNames);
         try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
             Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
             GL11.glScaled(scale.x, scale.y, scale.z);
             Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
-
-            GL11.glRotatef(tsp.getPartRotate() * 2, 1, 0, 0);
+            renderer.drawGroups(groupsWithoutWing);
+            
+            GL11.glTranslated(0, 0, 0);
+            GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
+            GL11.glTranslated(0, -5.4, 0);
+//            GL11.glTranslated(0, 0, 0);
             renderer.drawGroups(groupNames);
         }
 

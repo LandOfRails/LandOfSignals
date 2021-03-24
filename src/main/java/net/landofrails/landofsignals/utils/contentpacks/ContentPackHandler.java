@@ -25,10 +25,10 @@ public class ContentPackHandler {
         if (opt.isPresent()) {
             File file = opt.get();
             String path = file.getPath();
-            ModCore.Mod.info("Mod Folder: " + path, path);
+            ModCore.Mod.info("Mod Folder: %s", path);
             loadAssets(file);
         } else {
-            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.", "warning1");
+            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
         }
 
     }
@@ -36,49 +36,53 @@ public class ContentPackHandler {
     public static void loadAssets(File modFolder) {
 
         if (modFolder == null) {
-            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.", "warning2");
+            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
             return;
         }
+
         File assetFolder = new File("./config/landofsignals");
         if (assetFolder.exists()) {
-            ModCore.Mod.info("Searching for assets..", "information1");
+            ModCore.Mod.info("Searching for assets..");
 
             File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
 
-            if (assets == null || assets.length == 0)
-                ModCore.Mod.info("No assets found.", "information2");
-            else
+            if (assets == null || assets.length == 0) {
+                ModCore.Mod.info("No assets found.");
+            } else {
                 for (File asset : assets)
                     loadAsset(asset);
+            }
 
         } else {
             boolean result = assetFolder.mkdirs();
             if (result)
-                ModCore.Mod.info("Asset folder created.", "information3");
+                ModCore.Mod.info("Asset folder created.");
             else
-                ModCore.Mod.warn("Couldn't create asset folder: " + assetFolder.getPath(), "warning3");
+                ModCore.Mod.warn("Couldn't create asset folder: %s", assetFolder.getPath());
 
         }
     }
 
     private static void loadAsset(File asset) {
-        ModCore.Mod.info("Loading Asset: " + asset.getAbsolutePath(), "information4");
+        ModCore.Mod.info("Loading Asset: %s", asset.getAbsolutePath());
 
         try (ZipFile zip = new ZipFile(asset)) {
 
             List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
-            Optional<ZipEntry> landofsignalsJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json")).findFirst();
-            if (landofsignalsJson.isPresent())
-                load(zip, landofsignalsJson.get());
-            else
+            Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
+                    .findFirst();
+            if (stellwandJson.isPresent()) {
+                load(zip, stellwandJson.get());
+            } else {
                 throw new ContentPackException("[" + asset.getName() + "] Missing landofsignals.json");
+            }
 
         } catch (ZipException zipException) {
-            ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error2");
-            ModCore.Mod.error("Error: " + zipException.getMessage(), "error2");
+            ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
+            ModCore.Mod.error("Error: %s", zipException.getMessage());
         } catch (IOException e) {
-            ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error3");
-            ModCore.Mod.error("Error: " + e.getMessage(), "error3");
+            ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
+            ModCore.Mod.error("Error: %s", e.getMessage());
         }
     }
 
@@ -92,17 +96,17 @@ public class ContentPackHandler {
                     filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
             // @formatter:on
 
-            ModCore.info("Content for " + contentPack.getId() + ": ");
+            ModCore.info("Content for %s:", contentPack.getId());
             for (String pathToContentPackSignalSet : contentPack.getSignals()) {
                 for (ZipEntry zipEntry : files) {
                     if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
                         ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
-                        ModCore.info("SignalSet: " + contentPackSignalSet.getName());
+                        ModCore.info("SignalSet: %s", contentPackSignalSet.getName());
                         for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
                             for (ZipEntry zipEntry1 : files) {
                                 if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
                                     ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
-                                    ModCore.info("SignalPart: " + contentPackSignalPart.getName());
+                                    ModCore.info("SignalPart: %s", contentPackSignalPart.getName());
                                     List<String> states = contentPackSignalPart.getStates();
                                     if (states == null) {
                                         states = new ArrayList<>();
@@ -119,7 +123,7 @@ public class ContentPackHandler {
                 }
             }
         } catch (IOException e) {
-            ModCore.Mod.error(e.getMessage());
+            ModCore.Mod.error("Error while loading Contentpack: %s", e.getMessage());
         }
     }
 

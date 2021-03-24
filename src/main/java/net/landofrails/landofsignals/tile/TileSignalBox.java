@@ -44,14 +44,9 @@ public class TileSignalBox extends BlockEntity {
             if (tempSignalPart != null) {
                 new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
                 return true;
-            } else {
-                TileSignalAnimatedPart tempAnimatedPart = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalAnimatedPart.class);
-                if (tempAnimatedPart != null) {
-                    tempAnimatedPart.switchActive();
-                }
-                return true;
             }
         } else return false;
+        return false;
     }
 
     @Override
@@ -70,8 +65,25 @@ public class TileSignalBox extends BlockEntity {
                 else
                     //No redstone
                     entity.setTexturePath(states.get(noRedstone));
+            } else if (TileSignalPartPos != null) {
+                TileSignalAnimatedPart tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalAnimatedPart.class);
+                if (tempAnimatedPart != null) {
+                    if (getWorld().getRedstone(getPos()) > 0)
+                        //Redstone
+                        tempAnimatedPart.setActive(true);
+                    else
+                        //No redstone
+                        tempAnimatedPart.setActive(false);
+                }
             }
         }
+    }
+
+    @Override
+    public void onBreak() {
+        super.onBreak();
+        TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
+        entity.setTexturePath(LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId()).get(0));
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
