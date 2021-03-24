@@ -66,7 +66,7 @@ public class ItemBlockFiller extends CustomItem {
 
 		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockFillers().entrySet().iterator();
 
-		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
 			return items;
 
 		if (it.hasNext()) {

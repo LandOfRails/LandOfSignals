@@ -80,6 +80,7 @@ public class ContentPackEntry {
 
 		private LinkedHashMap<String, String> modes;
 
+		@SuppressWarnings("java:S1319")
 		public ContentPackEntryBlock(float[] rotation, float[] translation, LinkedHashMap<String, String> modes) {
 			super();
 			this.rotation = rotation;

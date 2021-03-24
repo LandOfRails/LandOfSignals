@@ -21,10 +21,10 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 	// Statics
 	public static final String MISSING = "missing";
 
-	public static Map<String, OBJModel> models = new HashMap<>();
-	public static Map<String, OBJRender> renderers = new HashMap<>();
-	public static Map<String, float[]> rotations = new HashMap<>();
-	public static Map<String, float[]> translations = new HashMap<>();
+	protected static Map<String, OBJModel> models = new HashMap<>();
+	protected static Map<String, OBJRender> renderers = new HashMap<>();
+	protected static Map<String, float[]> rotations = new HashMap<>();
+	protected static Map<String, float[]> translations = new HashMap<>();
 
 	// TagFields
 	@TagField("contentPackBlockId")
@@ -61,7 +61,7 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 			if (isClient)
 				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
-			ModCore.Mod.error(e.getMessage());
+			ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
 		}
 		// Add contentpack stuff
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockFillers().entrySet()) {
@@ -79,12 +79,27 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 				if (isClient)
 					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
-				ModCore.Mod.error(e.getMessage());
+				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
 			}
 		}
 
 	}
-	
 
+	// Getters
+	public static Map<String, OBJModel> getModels() {
+		return models;
+	}
+
+	public static Map<String, OBJRender> getRenderers() {
+		return renderers;
+	}
+
+	public static Map<String, float[]> getRotations() {
+		return rotations;
+	}
+
+	public static Map<String, float[]> getTranslations() {
+		return translations;
+	}
 
 }

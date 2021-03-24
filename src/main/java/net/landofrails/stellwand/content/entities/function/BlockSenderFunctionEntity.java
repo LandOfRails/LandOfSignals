@@ -1,5 +1,7 @@
 package net.landofrails.stellwand.content.entities.function;
 
+import java.text.MessageFormat;
+
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -20,6 +22,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	private BlockSenderStorageEntity entity;
 
+	// Ein Kommentar damit der Client startet lol
 	@SuppressWarnings("java:S112")
 	public BlockSenderFunctionEntity() {
 		if (this instanceof BlockSenderStorageEntity)
@@ -53,8 +56,10 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 					OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
 					packet.sendToAllAround(player.getWorld(), player.getPosition(), 1);
 				} else {
-					p.direct(Message.MESSAGE_NO_SIGNAL_FOUND.toString(),
-							Message.MESSAGE_ERROR1.toString());
+					entity.signals.remove(signalid);
+					String msg = Message.MESSAGE_NO_SIGNAL_FOUND.toString();
+					msg = MessageFormat.format(msg, "Doesnt exist anymore, removing it..");
+					p.direct(msg);
 				}
 
 			} else {
@@ -78,9 +83,9 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 			updateSignals();
 
 		}
-
 	}
 
+	@SuppressWarnings("java:S3776")
 	public void updateSignals() {
 		for (Vec3i signal : entity.signals) {
 			getWorld().keepLoaded(signal);

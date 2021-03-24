@@ -31,7 +31,7 @@ public class SelectSenderModes implements IScreen {
 	private final ItemStack itemPowerOff;
 	private final ItemStack itemPowerOn;
 
-	@SuppressWarnings("java:S1192")
+	@SuppressWarnings({"java:S112", "java:S1192"})
 	public SelectSenderModes(BlockSenderStorageEntity entity) {
 		if (entity.getSignal() != null) {
 
@@ -56,7 +56,7 @@ public class SelectSenderModes implements IScreen {
 
 				return;
 			} else {
-				ModCore.error("Couldnt get signal");
+				ModCore.error("Couldnt get signal: %s", "Signal doesn't exist (anymore)");
 			}
 		} else {
 			ModCore.error("Sender has no signals!");

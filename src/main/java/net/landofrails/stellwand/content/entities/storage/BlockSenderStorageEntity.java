@@ -26,10 +26,10 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 	// Statics
 	public static final String MISSING = "missing";
 
-	public static Map<String, OBJModel> models = new HashMap<>();
-	public static Map<String, OBJRender> renderers = new HashMap<>();
-	public static Map<String, float[]> rotations = new HashMap<>();
-	public static Map<String, float[]> translations = new HashMap<>();
+	protected static Map<String, OBJModel> models = new HashMap<>();
+	protected static Map<String, OBJRender> renderers = new HashMap<>();
+	protected static Map<String, float[]> rotations = new HashMap<>();
+	protected static Map<String, float[]> translations = new HashMap<>();
 
 	// TagFields
 	@TagField("contentPackBlockId")
@@ -71,7 +71,7 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 			if (isClient)
 				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
-			ModCore.Mod.error(e.getMessage());
+			ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
 		}
 		// Add contentpack stuff
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockSenders().entrySet()) {
@@ -89,7 +89,7 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 				if (isClient)
 					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
-				ModCore.Mod.error(e.getMessage());
+				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
 			}
 		}
 
@@ -109,8 +109,8 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 			return true;
 
 		Iterator<Vec3i> signal = signals.iterator();
-		BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signal.next(), BlockSignalStorageEntity.class);
-		return signalEntity.getContentPackBlockId().equals(otherSignal.getContentPackBlockId());
+		BlockSignalStorageEntity signalTile = getWorld().getBlockEntity(signal.next(), BlockSignalStorageEntity.class);
+		return signalTile.getContentPackBlockId().equals(otherSignal.getContentPackBlockId());
 	}
 
 	public void setSignal(BlockSignalStorageEntity signalEntity) {
@@ -119,6 +119,23 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 
 	public BlockSignalStorageEntity getSignal() {
 		return this.signalEntity;
+	}
+
+	// Getters
+	public static Map<String, OBJModel> getModels() {
+		return models;
+	}
+
+	public static Map<String, OBJRender> getRenderers() {
+		return renderers;
+	}
+
+	public static Map<String, float[]> getRotations() {
+		return rotations;
+	}
+
+	public static Map<String, float[]> getTranslations() {
+		return translations;
 	}
 
 }

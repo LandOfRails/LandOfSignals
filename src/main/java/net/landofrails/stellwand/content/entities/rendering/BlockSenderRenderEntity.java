@@ -35,10 +35,10 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 	public OBJModel getModel() {
 
 		if (model == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.models.containsKey(entity.contentPackBlockId))
-				model = BlockSenderStorageEntity.models.get(entity.contentPackBlockId);
+			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getModels().containsKey(entity.contentPackBlockId))
+				model = BlockSenderStorageEntity.getModels().get(entity.contentPackBlockId);
 			else
-				model = BlockSenderStorageEntity.models.get(BlockSenderStorageEntity.MISSING);
+				model = BlockSenderStorageEntity.getModels().get(BlockSenderStorageEntity.MISSING);
 		}
 
 		return model;
@@ -46,18 +46,18 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 
 	public OBJRender getRenderer() {
 		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.renderers.containsKey(entity.contentPackBlockId))
-				renderer = BlockSenderStorageEntity.renderers.get(entity.contentPackBlockId);
+			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getRenderers().containsKey(entity.contentPackBlockId))
+				renderer = BlockSenderStorageEntity.getRenderers().get(entity.contentPackBlockId);
 			else
-				renderer = BlockSenderStorageEntity.renderers.get(BlockSenderStorageEntity.MISSING);
+				renderer = BlockSenderStorageEntity.getRenderers().get(BlockSenderStorageEntity.MISSING);
 		}
 		return renderer;
 	}
 
 	public float[] getTranslation() {
 		if (defaultTranslation == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.translations.containsKey(entity.contentPackBlockId))
-				defaultTranslation = BlockSenderStorageEntity.translations.get(entity.contentPackBlockId);
+			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
+				defaultTranslation = BlockSenderStorageEntity.getTranslations().get(entity.contentPackBlockId);
 			else
 				defaultTranslation = new float[]{0.5f, 0, 0.5f};
 		}
@@ -66,8 +66,8 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 
 	public float[] getRotation() {
 		if (defaultRotation == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.rotations.containsKey(entity.contentPackBlockId))
-				defaultRotation = BlockSenderStorageEntity.rotations.get(entity.contentPackBlockId);
+			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getRotations().containsKey(entity.contentPackBlockId))
+				defaultRotation = BlockSenderStorageEntity.getRotations().get(entity.contentPackBlockId);
 			else
 				defaultRotation = new float[]{0, 0, 0};
 		}
@@ -87,7 +87,7 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 
 		try {
 			if (renderer == null || model == null) {
-				ModCore.warn("Block has no renderer!!");
+				ModCore.warn("Block has no renderer: %s!", entity.getPos().toString());
 				return;
 			}
 			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {

@@ -30,10 +30,10 @@ public class Loader {
 		if (opt.isPresent()) {
 			File file = opt.get();
 			String path = file.getPath();
-			ModCore.Mod.info("Mod Folder: " + path, path);
+			ModCore.Mod.info("Mod Folder: %s", path);
 			loadAssets(file);
 		} else {
-			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.", "warning1");
+			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
 		}
 
 	}
@@ -41,18 +41,18 @@ public class Loader {
 	private static void loadAssets(File modFolder) {
 
 		if (modFolder == null) {
-			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.", "warning2");
+			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
 			return;
 		}
 
 		File assetFolder = new File("./config/stellwand");
 		if (assetFolder.exists()) {
-			ModCore.Mod.info("Searching for assets..", "information1");
+			ModCore.Mod.info("Searching for assets..");
 
 			File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
 
 			if (assets == null || assets.length == 0) {
-				ModCore.Mod.info("No assets found.", "information2");
+				ModCore.Mod.info("No assets found.");
 			} else {
 				for (File asset : assets)
 					loadAsset(asset);
@@ -61,9 +61,9 @@ public class Loader {
 		} else {
 			boolean result = assetFolder.mkdirs();
 			if (result)
-				ModCore.Mod.info("Asset folder created.", "information3");
+				ModCore.Mod.info("Asset folder created.");
 			else
-				ModCore.Mod.warn("Couldn't create asset folder: " + assetFolder.getPath(), "warning3");
+				ModCore.Mod.warn("Couldn't create asset folder: %s", assetFolder.getPath());
 
 		}
 
@@ -71,7 +71,7 @@ public class Loader {
 
 	// Run: 4
 	private static void loadAsset(File asset) {
-		ModCore.Mod.info("Loading Asset: " + asset.getAbsolutePath(), "information4");
+		ModCore.Mod.info("Loading Asset: %s", asset.getAbsolutePath());
 
 		try (ZipFile zip = new ZipFile(asset)) {
 
@@ -85,11 +85,11 @@ public class Loader {
 			}
 
 		} catch (ZipException zipException) {
-			ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error2");
-			ModCore.Mod.error("Error: " + zipException.getMessage(), "error2");
+			ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
+			ModCore.Mod.error("Error: %s", zipException.getMessage());
 		} catch (IOException e) {
-			ModCore.Mod.error("Couldn't load asset: " + asset.getName(), "error3");
-			ModCore.Mod.error("Error: " + e.getMessage(), "error3");
+			ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
+			ModCore.Mod.error("Error: %s", e.getMessage());
 		}
 
 	}
@@ -106,12 +106,12 @@ public class Loader {
 
 			List<ContentPackEntry> contentPackEntries = new ArrayList<>();
 
-			ModCore.info("Content for " + contentPack.getId() + ": ");
+			ModCore.info("Content for %s: ", contentPack.getId());
 			for (String contentName : contentPack.getContent()) {
 				for (ZipEntry entry : files) {
 					if (entry.getName().equalsIgnoreCase(contentName)) {
 						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry));
-						ModCore.info("Block: " + contentPackEntry.getName());
+						ModCore.info("Block: %s", contentPackEntry.getName());
 						contentPackEntries.add(contentPackEntry);
 					}
 				}
@@ -120,7 +120,7 @@ public class Loader {
 
 			Content.addContentPack(contentPack);
 		} catch (IOException e) {
-			ModCore.Mod.error(e.getMessage());
+			ModCore.Mod.error("Error while loading Contentpack: %s", e.getMessage());
 		}
 	}
 

@@ -66,7 +66,7 @@ public class ItemBlockSender extends CustomItem {
 
 		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSenders().entrySet().iterator();
 
-		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
 			return items;
 
 		if (it.hasNext()) {

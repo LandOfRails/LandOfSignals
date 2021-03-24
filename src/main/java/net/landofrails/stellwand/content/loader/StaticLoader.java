@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import cam72cam.mod.ModCore;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryBlock;
 import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryItem;
@@ -21,6 +22,7 @@ public class StaticLoader {
 
 	public static void init() {
 		ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.0", "SeltixSub", new ArrayList<>());
+		ModCore.info("Loading ContentPack: %s v%s", contentPack.getName(), contentPack.getPackversion());
 		contentPack.setEntries(getEntries());
 		Content.addContentPack(contentPack);
 	}

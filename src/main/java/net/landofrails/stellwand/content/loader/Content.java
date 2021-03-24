@@ -18,10 +18,6 @@ public class Content {
 
 	private static List<ContentPack> contentPacks = new LinkedList<>();
 
-	// model = new OBJModel(new Identifier(LandOfSignals.MODID,
-	// this.getPath(BlockItemType.BLOCK)), 0);
-	// renderer = new OBJRender(model);
-
 	public static void addContentPack(ContentPack pack) {
 
 		if (contentPacks.contains(pack))
@@ -40,7 +36,7 @@ public class Content {
 
 		contentPacks.add(pack);
 
-		ModCore.Mod.info("Content Pack loaded: " + pack.getName() + " v" + pack.getPackversion());
+		ModCore.Mod.info("Content Pack loaded: %s v%s", pack.getName(), pack.getPackversion());
 
 	}
 

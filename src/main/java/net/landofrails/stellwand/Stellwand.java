@@ -1,6 +1,8 @@
 package net.landofrails.stellwand;
 
 import cam72cam.mod.ModEvent;
+import cam72cam.mod.config.ConfigFile;
+import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
@@ -25,6 +27,10 @@ public class Stellwand {
 
 		switch (event) {
 			case CONSTRUCT :
+
+				// Config
+				StellwandConfig.init();
+				ConfigFile.sync(StellwandConfig.class);
 
 				Loader.init();
 

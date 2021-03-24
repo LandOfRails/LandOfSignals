@@ -50,7 +50,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 	public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
 		List<ItemStack> items = new ArrayList<>();
 
-		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
 			return items;
 
 		if (variation == 1)
