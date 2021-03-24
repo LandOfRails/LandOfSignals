@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -35,11 +34,11 @@ import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
-import net.landofrails.stellwand.content.loader.Content;
-import net.landofrails.stellwand.content.loader.ContentPackEntry;
-import net.landofrails.stellwand.content.loader.ContentPackEntry.ContentPackEntryItem;
 import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
 
 public class ItemBlockSignal extends CustomItem {
 
@@ -107,7 +106,7 @@ public class ItemBlockSignal extends CustomItem {
 
 		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSignals().entrySet().iterator();
 
-		if (creativeTab == null || !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
 			return items;
 
 		if (it.hasNext()) {
@@ -173,13 +172,6 @@ public class ItemBlockSignal extends CustomItem {
 
 			if (renderers.get(itemId) == null) {
 				OBJModel model = models.get(itemId);
-
-				ModCore.Mod.info("Groups for " + itemId + ":");
-				for (String g : model.groups()) {
-
-					ModCore.Mod.info("Group found: " + g);
-				}
-
 				renderers.put(itemId, new OBJRender(model));
 			}
 

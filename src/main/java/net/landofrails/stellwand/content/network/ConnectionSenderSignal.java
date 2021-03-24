@@ -28,12 +28,17 @@ public class ConnectionSenderSignal extends Packet {
 
 	@Override
 	protected void handle() {
+
+		getWorld().keepLoaded(senderPos);
 		BlockSenderStorageEntity storageEntity = getWorld()
 				.getBlockEntity(senderPos, BlockSenderStorageEntity.class);
-		if (!disconnect) {
-			storageEntity.signals.add(signalId);
-		} else {
-			storageEntity.signals.remove(signalId);
+
+		if (getWorld().hasBlockEntity(senderPos, BlockSenderStorageEntity.class)) {
+			if (!disconnect) {
+				storageEntity.signals.add(signalId);
+			} else {
+				storageEntity.signals.remove(signalId);
+			}
 		}
 	}
  

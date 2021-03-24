@@ -48,8 +48,8 @@ public class ChangeHandHeldItem extends Packet {
 			player.setHeldItem(hand, itemStack);
 		else {
 			ModCore.warn("Invalid Item in ChangeHandHeldItem Event:");
-			ModCore.warn("ItemStack: " + itemStack.getDisplayName() + " NBT: " + itemStack.getTagCompound().toString());
-			ModCore.warn("Player's UUID: " + player.getUUID());
+			ModCore.warn("ItemStack: %s NBT: %s", itemStack.getDisplayName(), itemStack.getTagCompound().toString());
+			ModCore.warn("Player's UUID: %s", player.getUUID().toString());
 		}
 
 	}

@@ -11,7 +11,6 @@ public class BlockSender extends BlockTypeEntity {
 		super(LandOfSignals.MODID, "stellwand.blocksender");
 	}
 
-	// TODO: Change to storage in the near future
 	@Override
 	protected BlockEntity constructBlockEntity() {
 		return new BlockSenderStorageEntity();

@@ -1,9 +1,8 @@
 package net.landofrails.stellwand.content.entities.function;
 
-import java.util.Iterator;
+import java.text.MessageFormat;
 
-import cam72cam.mod.ModCore;
-import cam72cam.mod.block.BlockEntityTickable;
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ItemStack;
@@ -13,19 +12,17 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
-import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.messages.Message;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
-import net.landofrails.stellwand.storage.RunTimeStorage;
+import net.landofrails.stellwand.content.network.OpenSenderGui;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
-public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
-
-	private int currentTick = 0;
-	private final int targetTick = 10;
+public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
 	private BlockSenderStorageEntity entity;
 
+	// Ein Kommentar damit der Client startet lol
 	@SuppressWarnings("java:S112")
 	public BlockSenderFunctionEntity() {
 		if (this instanceof BlockSenderStorageEntity)
@@ -39,7 +36,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 	public ItemStack onPick() {
 		ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSENDER, 1);
 		TagCompound tag = is.getTagCompound();
-		tag.setString("itemId", entity.getContentBlockId());
+		tag.setString("itemId", entity.getContentPackBlockId());
 		is.setTagCompound(tag);
 		return is;
 	}
@@ -49,118 +46,89 @@ public abstract class BlockSenderFunctionEntity extends BlockEntityTickable {
 		ItemStack item = player.getHeldItem(hand);
 		LoSPlayer p = new LoSPlayer(player);
 
-		if (isAir(item)) {
-
-			if (player.getWorld().isServer) {
-				p.direct("Powered: " + entity.hasPower);
-				p.direct("Signals ({0}):", entity.signals.size());
-				for (Vec3i signal : entity.signals)
-					p.direct("Signal: {0}, {1}, {2}", signal.x, signal.y, signal.z);
-				return true;
-			}
-
+		if (isAir(item) && p.getWorld().isServer) {
 			if (!entity.signals.isEmpty()) {
-				p.direct("Select modes");
-				CustomGuis.selectSenderModes.open(player, entity.getPos());
-			} else {
-				p.direct("Sender must have atleast 1 signal connected");
 
+				Vec3i signalid = entity.signals.get(0);
+				getWorld().keepLoaded(signalid);
+				if (getWorld().hasBlockEntity(signalid, BlockSignalStorageEntity.class)) {
+					BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalid, BlockSignalStorageEntity.class);
+					OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
+					packet.sendToAllAround(player.getWorld(), player.getPosition(), 1);
+				} else {
+					entity.signals.remove(signalid);
+					String msg = Message.MESSAGE_NO_SIGNAL_FOUND.toString();
+					msg = MessageFormat.format(msg, "Doesnt exist anymore, removing it..");
+					p.direct(msg);
+				}
+
+			} else {
+				p.direct(Message.MESSAGE_NO_SIGNALS_CONNECTED.toString());
 			}
 
 			return true;
 		}
+
 		return false;
 	}
 
 	@Override
 	public void onNeighborChange(Vec3i neighbor) {
-
 		// Info: Only called on server-side
 
 		boolean power = getWorld().getRedstone(getPos()) > 0;
 		if (entity.hasPower != power) {
 			entity.hasPower = power;
-			updateSignalModes();
+
+			updateSignals();
+
+		}
+	}
+
+	@SuppressWarnings("java:S3776")
+	public void updateSignals() {
+		for (Vec3i signal : entity.signals) {
+			getWorld().keepLoaded(signal);
+			BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+
+			if (s != null) {
+				if (entity.modePowerOn != null && entity.modePowerOff != null) {
+					s.senderModes.put(getPos(), entity.hasPower ? entity.modePowerOn : entity.modePowerOff);
+					s.updateSignalMode();
+					if (getWorld().isServer) {
+						ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+						packet.sendToAll();
+					}
+				}
+			} else if (getWorld().isBlockLoaded(signal)) {
+				entity.signals.remove(signal);
+			}
 		}
 	}
 
 	@Override
 	public void onBreak() {
+
 		for (Vec3i signal : entity.signals) {
-			BlockSignalStorageEntity signalEntity = RunTimeStorage
-					.getSignal(signal);
-			if (signalEntity != null) {
-				signalEntity.modes.remove(entity.getPos());
-				updateSignalModes();
-			}
-		}
-		RunTimeStorage.removeSender(entity.getPos());
-	}
+			getWorld().keepLoaded(signal);
+			BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
 
-	public void updateSignalModes() {
+			if (s != null && s.senderModes.containsKey(getPos())) {
+				s.senderModes.remove(getPos());
 
-		Iterator<Vec3i> iterator = entity.signals.iterator();
-		while (iterator.hasNext()) {
-			Vec3i signal = iterator.next();
-
-			String side = getWorld().isServer ? "Server" : "Client";
-			ModCore.info("Side: " + side);
-			ModCore.info("Update: " + getPos().toString());
-
-			BlockSignalStorageEntity signalEntity = RunTimeStorage
-					.getSignal(signal);
-			if (signalEntity == null) {
-				iterator.remove();
-			} else {
-				if (entity.hasPower) {
-					signalEntity.modes.put(entity.getPos(), entity.modePowerOn);
-				} else {
-					signalEntity.modes.put(entity.getPos(),
-							entity.modePowerOff);
+				s.updateSignalMode();
+				if (getWorld().isServer) {
+					ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+					packet.sendToAll();
 				}
-				// Server -> Client
-				ChangeSignalModes packet = new ChangeSignalModes(signal, signalEntity.modes);
-				packet.sendToAll();
-
-				signalEntity.updateSignalMode();
 			}
 		}
 
+		super.onBreak();
 	}
 
 	private boolean isAir(ItemStack item) {
 		return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
-	}
-
-	@Override
-	public void update() {
-		if (getWorld().isClient)
-			return;
-
-		if(currentTick + 1 == targetTick) {
-			
-			Iterator<Vec3i> iterator = entity.signals.iterator();
-			while(iterator.hasNext()) {
-				
-				Vec3i signal = iterator.next();
-				BlockSignalStorageEntity signalEntity = RunTimeStorage
-						.getSignal(signal);
-				
-				if(signalEntity == null) {
-					iterator.remove();
-				} else {
-					if(!signalEntity.modes.containsKey(getPos())) {
-						entity.hasPower = getWorld().getRedstone(getPos()) > 0;
-						updateSignalModes();
-					}
-				}
-				
-			}
-			
-			currentTick = 0;
-		} else {
-			currentTick++;
-		}
 	}
 
 }

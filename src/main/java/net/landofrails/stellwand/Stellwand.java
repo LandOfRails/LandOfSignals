@@ -1,19 +1,22 @@
 package net.landofrails.stellwand;
 
 import cam72cam.mod.ModEvent;
+import cam72cam.mod.config.ConfigFile;
+import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.loader.Loader;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
+import net.landofrails.stellwand.contentpacks.loader.Loader;
 
 public class Stellwand {
 
 	public static final String DOMAIN = "stellwand";
+	public static final String ADDON_VERSION = "2";
 
 	private Stellwand() {
 
@@ -25,18 +28,22 @@ public class Stellwand {
 		switch (event) {
 			case CONSTRUCT :
 
+				// Config
+				StellwandConfig.init();
+				ConfigFile.sync(StellwandConfig.class);
+
 				Loader.init();
 
 				CustomGuis.register();
 				CustomTabs.register();
 				CustomItems.register();
+				CustomBlocks.init();
 
 				CustomPackets.register();
 
 				break;
 			case INITIALIZE :
 			case SETUP :
-				// Register overlays
 			case RELOAD :
 			case START :
 			case FINALIZE :
@@ -58,7 +65,11 @@ public class Stellwand {
 			case INITIALIZE :
 				break;
 			case SETUP :
-				// Register overlay
+				// Loading here, Files not available at CONSTRUCT
+				BlockFillerStorageEntity.prepare(true);
+				BlockSignalStorageEntity.prepare(true);
+				BlockSenderStorageEntity.prepare(true);
+				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :
@@ -71,15 +82,14 @@ public class Stellwand {
 
 		switch (event) {
 			case CONSTRUCT :
-
-				BlockSenderRenderEntity.check(false);
-				BlockSignalRenderEntity.check(false);
-				BlockFillerRenderEntity.check(false);
-
-				break;
 			case INITIALIZE :
+				break;
 			case SETUP :
-				// Register overlay
+				// Loading here, Files not available at CONSTRUCT
+				BlockFillerStorageEntity.prepare(false);
+				BlockSignalStorageEntity.prepare(false);
+				BlockSenderStorageEntity.prepare(false);
+				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :
