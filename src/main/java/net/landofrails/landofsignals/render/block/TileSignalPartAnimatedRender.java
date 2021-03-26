@@ -58,11 +58,15 @@ public class TileSignalPartAnimatedRender {
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.drawGroups(groupsWithoutWing);
-            
-            GL11.glTranslated(0, 0, 0);
+
+            Vec3d center = renderer.model.centerOfGroups(groupNames);
+            center = new Vec3d(-center.x, -center.y, -center.z);
+            Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
+
+            GL11.glTranslated(0, -center.y, 0);
             GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
-            GL11.glTranslated(0, -5.4, 0);
-//            GL11.glTranslated(0, 0, 0);
+            GL11.glTranslated(0, rotateYaw.y, 0);
+
             renderer.drawGroups(groupNames);
         }
 
@@ -99,4 +103,18 @@ public class TileSignalPartAnimatedRender {
 //        }
 //        GL11.glPopMatrix();
     }
+
+//    private Vec3d angleToDirection(Vec3d angle) {
+//// Convert angle to radians
+//        angle.x = angle.x * 3.14159265 / 180;
+//        angle.y = angle.y * 3.14159265 / 180;
+//
+//        double sinYaw = Math.sin(angle.y);
+//        double cosYaw = Math.cos(angle.y);
+//
+//        double sinPitch = Math.sin(angle.x);
+//        double cosPitch = Math.cos(angle.x);
+//
+//        return new Vec3d(cosPitch * cosYaw, cosPitch * sinYaw, -sinPitch);
+//    }
 }
