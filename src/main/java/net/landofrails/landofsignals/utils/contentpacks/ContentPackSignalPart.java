@@ -18,6 +18,8 @@ public class ContentPackSignalPart {
     private float[] itemTranslation;
     private float[] scaling;
 
+    private float rotation_degree;
+
     private List<String> states;
 
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
@@ -27,6 +29,18 @@ public class ContentPackSignalPart {
         this.translation = translation;
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
+        this.states = states;
+        this.rotation_degree = 0;
+    }
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float rotation_degree, List<String> states) {
+        this.id = id;
+        this.name = name;
+        this.model = model;
+        this.translation = translation;
+        this.itemTranslation = itemTranslation;
+        this.scaling = scaling;
+        this.rotation_degree = rotation_degree;
         this.states = states;
     }
 
@@ -84,6 +98,14 @@ public class ContentPackSignalPart {
 
     public void setStates(List<String> states) {
         this.states = states;
+    }
+
+    public float getRotation_degree() {
+        return rotation_degree;
+    }
+
+    public void setRotation_degree(float rotation_degree) {
+        this.rotation_degree = rotation_degree;
     }
 
     public static ContentPackSignalPart fromJson(InputStream inputStream) {

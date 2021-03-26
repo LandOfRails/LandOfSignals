@@ -29,7 +29,7 @@ public class LOSBlocks {
 	@SuppressWarnings("serial")
 	public static void register() {
         // loads static classes and ctrs
-        BLOCK_SIGNAL_PART.add(new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{
+        BLOCK_SIGNAL_PART.add(new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, 0, new ArrayList<String>() {{
             add(null);
         }}));
 
