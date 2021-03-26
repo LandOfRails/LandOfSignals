@@ -111,7 +111,6 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
 								.collect(Collectors.toCollection(ArrayList::new));
 						modes.addAll(generals);
-
 						renderer.drawGroups(modes);
 					} else {
 						renderer.drawGroups(model.groups());

@@ -1,10 +1,15 @@
 package net.landofrails.landofsignals;
 
-import net.landofrails.landofsignals.blocks.*;
+import java.util.ArrayList;
+
+import net.landofrails.landofsignals.blocks.BlockSignalBox;
+import net.landofrails.landofsignals.blocks.BlockSignalLever;
+import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.blocks.BlockSignalSO12;
+import net.landofrails.landofsignals.blocks.BlockTicketMachineDB;
+import net.landofrails.landofsignals.blocks.BlockTicketMachineSBB;
 import net.landofrails.landofsignals.utils.Static;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
-
-import java.util.ArrayList;
 
 public class LOSBlocks {
 
@@ -21,7 +26,8 @@ public class LOSBlocks {
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
 
-    public static void register() {
+	@SuppressWarnings("serial")
+	public static void register() {
         // loads static classes and ctrs
         BLOCK_SIGNAL_PART.add(new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{
             add(null);

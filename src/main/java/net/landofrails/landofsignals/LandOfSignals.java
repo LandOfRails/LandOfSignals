@@ -47,8 +47,7 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
-		// Stellwand
-
+		// Stellwand commonEvent
 		Stellwand.commonEvent(event);
 
         if (event == ModEvent.CONSTRUCT) {
