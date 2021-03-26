@@ -25,7 +25,7 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        if (signalParts != null && signalParts.get(id).getRotation_degree() > 0)
+        if (signalParts != null && id != null && signalParts.get(id).getRotation_degree() > 0)
             return new TileSignalAnimatedPart(id, rot);
         else return new TileSignalPart(id, rot);
     }
