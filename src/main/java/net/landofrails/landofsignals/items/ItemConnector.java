@@ -11,9 +11,9 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.tile.TileSignalAnimatedPart;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemConnector extends CustomItem {
 
     TileSignalPart blockEntitySignalPart;
-    TileSignalAnimatedPart blockEntityAnimatedPart;
+    TileSignalPartAnimated blockEntityAnimatedPart;
     TileSignalBox blockEntityBox;
 
     public ItemConnector(String modID, String name) {
@@ -38,7 +38,7 @@ public class ItemConnector extends CustomItem {
         if (world.isServer) {
 
             TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
-            TileSignalAnimatedPart tempAnimatedPart = world.getBlockEntity(pos, TileSignalAnimatedPart.class);
+            TileSignalPartAnimated tempAnimatedPart = world.getBlockEntity(pos, TileSignalPartAnimated.class);
             TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
 
             if (tempPart == null && tempAnimatedPart == null && tempSignalBox == null) {

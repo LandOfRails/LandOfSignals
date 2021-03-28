@@ -4,7 +4,7 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
-import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import net.landofrails.landofsignals.utils.Static;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
@@ -12,19 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlockSignalPart extends BlockTypeEntity {
+public class BlockSignalPartAnimated extends BlockTypeEntity {
 
     private Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
     private String id;
     private int rot;
 
-    public BlockSignalPart(String modID, String name) {
+    public BlockSignalPartAnimated(String modID, String name) {
         super(modID, name);
     }
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return new TileSignalPart(id, rot);
+        return new TileSignalPartAnimated(id, rot);
     }
 
     public void setRot(int rot) {
@@ -67,6 +67,10 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     public String getName(String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getName();
+    }
+
+    public float getRotationDegree(String uncheckedId) {
+        return signalParts.get(checkIfMissing(uncheckedId)).getRotation_degree();
     }
 
     public void add(ContentPackSignalPart contentPackSignalPart) {

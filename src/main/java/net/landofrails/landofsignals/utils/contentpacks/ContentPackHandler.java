@@ -113,7 +113,10 @@ public class ContentPackHandler {
                                     }
                                     states.add(0, null);
                                     contentPackSignalPart.setStates(states);
-                                    LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
+                                    if (contentPackSignalPart.getRotation_degree() > 0)
+                                        LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(contentPackSignalPart);
+                                    else
+                                        LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
                                     break;
                                 }
                             }

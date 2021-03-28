@@ -66,7 +66,7 @@ public class TileSignalBox extends BlockEntity {
                     //No redstone
                     entity.setTexturePath(states.get(noRedstone));
             } else if (TileSignalPartPos != null) {
-                TileSignalAnimatedPart tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalAnimatedPart.class);
+                TileSignalPartAnimated tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
                 if (tempAnimatedPart != null) {
                     if (getWorld().getRedstone(getPos()) > 0)
                         //Redstone
