@@ -36,16 +36,23 @@ Adds many different signals in different designs, so far without a consistent re
 * Huge thanks to [cam72cam](https://github.com/cam72cam) for
   creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
   possible here
-  
+
 </details>
 
-## Usage
+**Usage**
+------------------
 
-**TBA**
+1. Select a signal with the "Signal selector" by right-clicking in the air. It will be placed in your inventory
+2. Place the signal at the desired position
+3. Place the "Signal box" in any location
+4. Take the "Connector tool" and connect with a right click the box with the place signal
+5. Open the GUI with a right click on the box and select the desired signal image
+6. Control the signal with a redstone signal to the signal box
 
 ## Development
 
 **IntelliJ**
+
 1. Get the project from GitHub
 2. ``gradle umc -D umc.loader=1.12.2-forge``
 3. Load gradle changes
