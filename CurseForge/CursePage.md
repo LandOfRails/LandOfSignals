@@ -61,4 +61,4 @@ you feel like creating your own pack!
 
 **Client & Server:** After the first start the folder "landofsignals" is created in the "config" folder (``
 MINECRAFT_FOLDER/config/landofsignals``). Put your signalpack in there and start the game. The pack will be loaded
-automatically. Please note that both server and client must have the pack.- 1. 
+automatically. Please note that both server and client must have the pack. 
