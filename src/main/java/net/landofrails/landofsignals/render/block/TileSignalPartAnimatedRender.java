@@ -8,7 +8,7 @@ import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.tile.TileSignalAnimatedPart;
+import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -23,11 +23,11 @@ public class TileSignalPartAnimatedRender {
     private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
     private static final List<String> groupNames = Arrays.asList("wing");
 
-    public static StandardModel render(TileSignalAnimatedPart tsp) {
+    public static StandardModel render(TileSignalPartAnimated tsp) {
         return new StandardModel().addCustom(partialTicks -> renderStuff(tsp, partialTicks));
     }
 
-    private static void renderStuff(TileSignalAnimatedPart tsp, float partialTicks) {
+    private static void renderStuff(TileSignalPartAnimated tsp, float partialTicks) {
         String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
@@ -40,8 +40,8 @@ public class TileSignalPartAnimatedRender {
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0);
-                OBJRender renderer = new OBJRender(model, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0);
+                OBJRender renderer = new OBJRender(model, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
                 cache.put(id, Pair.of(model, renderer));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -50,6 +50,7 @@ public class TileSignalPartAnimatedRender {
         OBJRender renderer = cache.get(id).getRight();
         List<String> groupsWithoutWing = new ArrayList<>();
         for (String s : renderer.model.groups()) groupsWithoutWing.add(s);
+        boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
         try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
             Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
@@ -59,15 +60,17 @@ public class TileSignalPartAnimatedRender {
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.drawGroups(groupsWithoutWing);
 
-            Vec3d center = renderer.model.centerOfGroups(groupNames);
-            center = new Vec3d(-center.x, -center.y, -center.z);
-            Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
+            if (wingsExist) {
+                Vec3d center = renderer.model.centerOfGroups(groupNames);
+                center = new Vec3d(-center.x, -center.y, -center.z);
+                Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
 
-            GL11.glTranslated(0, -center.y, 0);
-            GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
-            GL11.glTranslated(0, rotateYaw.y, 0);
+                GL11.glTranslated(0, -center.y, 0);
+                GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
+                GL11.glTranslated(0, rotateYaw.y, 0);
 
-            renderer.drawGroups(groupNames);
+                renderer.drawGroups(groupNames);
+            }
         }
 
 //        OBJRender flareRenderer = cache.get("flare").getRight();

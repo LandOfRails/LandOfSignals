@@ -12,6 +12,7 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
@@ -84,10 +85,11 @@ public class LandOfSignals extends ModCore.Mod {
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
-                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartAnimatedRender::render, TileSignalAnimatedPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 break;
             case INITIALIZE:
                 break;

@@ -11,9 +11,9 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.tile.TileSignalAnimatedPart;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemConnector extends CustomItem {
 
     TileSignalPart blockEntitySignalPart;
-    TileSignalAnimatedPart blockEntityAnimatedPart;
+    TileSignalPartAnimated blockEntityAnimatedPart;
     TileSignalBox blockEntityBox;
 
     public ItemConnector(String modID, String name) {
@@ -38,7 +38,7 @@ public class ItemConnector extends CustomItem {
         if (world.isServer) {
 
             TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
-            TileSignalAnimatedPart tempAnimatedPart = world.getBlockEntity(pos, TileSignalAnimatedPart.class);
+            TileSignalPartAnimated tempAnimatedPart = world.getBlockEntity(pos, TileSignalPartAnimated.class);
             TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
 
             if (tempPart == null && tempAnimatedPart == null && tempSignalBox == null) {
@@ -55,7 +55,7 @@ public class ItemConnector extends CustomItem {
                 blockEntitySignalPart = null;
                 blockEntityAnimatedPart = tempAnimatedPart;
                 if (blockEntityBox == null)
-                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntityAnimatedPart.getId())));
+                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));
             }
             if (tempSignalBox != null) {
                 blockEntityBox = tempSignalBox;
@@ -69,7 +69,7 @@ public class ItemConnector extends CustomItem {
                     player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
                 } else if (blockEntityAnimatedPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntityAnimatedPart.getPos());
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntityAnimatedPart.getId())));
+                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));
                 }
 
 

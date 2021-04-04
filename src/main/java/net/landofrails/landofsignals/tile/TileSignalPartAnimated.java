@@ -10,7 +10,7 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.utils.IManipulate;
 
-public class TileSignalAnimatedPart extends BlockEntityTickable implements IManipulate {
+public class TileSignalPartAnimated extends BlockEntityTickable implements IManipulate {
 
     @TagField("blockRotation")
     private int blockRotate;
@@ -26,14 +26,14 @@ public class TileSignalAnimatedPart extends BlockEntityTickable implements IMani
     private boolean active;
     private float partRotate = 0;
 
-    public TileSignalAnimatedPart(String id, int rot) {
+    public TileSignalPartAnimated(String id, int rot) {
         this.blockRotate = rot;
         this.id = id;
     }
 
     @Override
     public void update() {
-        if (active && partRotate <= LOSBlocks.BLOCK_SIGNAL_PART.getRotationDegree(id)) {
+        if (active && partRotate <= LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getRotationDegree(id)) {
             partRotate++;
         } else if (!active && partRotate >= 0) {
             partRotate--;

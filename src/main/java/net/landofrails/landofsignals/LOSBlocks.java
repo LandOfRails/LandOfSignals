@@ -25,13 +25,16 @@ public class LOSBlocks {
 
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
+    public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
 
 	@SuppressWarnings("serial")
 	public static void register() {
         // loads static classes and ctrs
-        BLOCK_SIGNAL_PART.add(new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, 0, new ArrayList<String>() {{
+        ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, 0, new ArrayList<String>() {{
             add(null);
-        }}));
+        }});
+        BLOCK_SIGNAL_PART.add(MISSING);
+        BLOCK_SIGNAL_PART_ANIMATED.add(MISSING);
 
         BLOCK_SIGNAL_PART.add(new ContentPackSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "Sperrsignal Sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {{
             add(null);

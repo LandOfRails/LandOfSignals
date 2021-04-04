@@ -28,6 +28,15 @@ public class GuiSelectSignal implements IScreen {
                 itemStackList.add(is);
             }
         }
+        for (String id : LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().keySet()) {
+            if (!id.equals(Static.MISSING)) {
+                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
+                TagCompound tag = is.getTagCompound();
+                tag.setString("itemId", id);
+                is.setTagCompound(tag);
+                itemStackList.add(is);
+            }
+        }
         ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
             if (itemStack != null) {
                 boolean intoInv = false;
