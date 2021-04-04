@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.landofrails.landofsignals.blocks.BlockSignalBox;
 import net.landofrails.landofsignals.blocks.BlockSignalLever;
 import net.landofrails.landofsignals.blocks.BlockSignalPart;
+import net.landofrails.landofsignals.blocks.BlockSignalPartAnimated;
 import net.landofrails.landofsignals.blocks.BlockSignalSO12;
 import net.landofrails.landofsignals.blocks.BlockTicketMachineDB;
 import net.landofrails.landofsignals.blocks.BlockTicketMachineSBB;
