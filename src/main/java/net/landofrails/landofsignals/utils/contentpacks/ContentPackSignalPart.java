@@ -7,6 +7,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class ContentPackSignalPart {
 
@@ -18,9 +19,9 @@ public class ContentPackSignalPart {
     private float[] itemTranslation;
     private float[] scaling;
 
-    private float rotation_degree;
-
     private List<String> states;
+
+    private Map<String, List<ContentPackAnimation>> animations;
 
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
         this.id = id;
@@ -30,18 +31,17 @@ public class ContentPackSignalPart {
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
         this.states = states;
-        this.rotation_degree = 0;
     }
 
-    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float rotation_degree, List<String> states) {
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
         this.id = id;
         this.name = name;
         this.model = model;
         this.translation = translation;
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
-        this.rotation_degree = rotation_degree;
         this.states = states;
+        this.animations = animations;
     }
 
     public String getId() {
@@ -100,12 +100,12 @@ public class ContentPackSignalPart {
         this.states = states;
     }
 
-    public float getRotation_degree() {
-        return rotation_degree;
+    public Map<String, List<ContentPackAnimation>> getAnimations() {
+        return animations;
     }
 
-    public void setRotation_degree(float rotation_degree) {
-        this.rotation_degree = rotation_degree;
+    public void setAnimations(Map<String, List<ContentPackAnimation>> animations) {
+        this.animations = animations;
     }
 
     public static ContentPackSignalPart fromJson(InputStream inputStream) {

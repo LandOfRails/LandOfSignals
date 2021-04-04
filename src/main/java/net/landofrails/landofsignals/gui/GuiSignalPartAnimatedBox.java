@@ -15,7 +15,7 @@ import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
-public class GuiSignalBox implements IScreen {
+public class GuiSignalPartAnimatedBox implements IScreen {
 
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
@@ -29,21 +29,21 @@ public class GuiSignalBox implements IScreen {
     private final String[] listTexureNames;
 
     @SuppressWarnings("java:S3010")
-    public GuiSignalBox(TileSignalBox tsb) {
+    public GuiSignalPartAnimatedBox(TileSignalBox tsb) {
         this.tsb = tsb;
         TileSignalPart tsp = tsb.getTileSignalPart();
 
-        itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
         TagCompound tag = itemStackLeft.getTagCompound();
         tag.setString("itemId", tsp.getId());
         itemStackLeft.setTagCompound(tag);
 
-        itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
         TagCompound tag2 = itemStackRight.getTagCompound();
         tag2.setString("itemId", tsp.getId());
         itemStackRight.setTagCompound(tag2);
 
-        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
+        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tsp.getId()).toArray(new String[0]);
         stateRight = tsb.getRedstone();
         stateLeft = tsb.getNoRedstone();
         if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {

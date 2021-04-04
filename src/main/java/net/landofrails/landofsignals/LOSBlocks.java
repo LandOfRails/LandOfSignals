@@ -2,6 +2,7 @@ package net.landofrails.landofsignals;
 
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.ArrayList;
@@ -24,8 +25,14 @@ public class LOSBlocks {
 
     public static void register() {
         // loads static classes and ctrs
-        ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, 0, new ArrayList<String>() {{
+        ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{
             add(null);
+        }}, new HashMap<String, List<ContentPackAnimation>>() {{
+            put(Static.MISSING, new ArrayList<ContentPackAnimation>() {{
+                add(new ContentPackAnimation(new ArrayList<String>() {{
+                    add(Static.MISSING);
+                }}, new float[]{0f, 0f, 0f}, 0f, Static.MISSING, 0f, 0f)
+            }})
         }});
         BLOCK_SIGNAL_PART.add(MISSING);
         BLOCK_SIGNAL_PART_ANIMATED.add(MISSING);

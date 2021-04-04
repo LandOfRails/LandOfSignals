@@ -8,7 +8,7 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.gui.GuiSignalBox;
+import net.landofrails.landofsignals.gui.GuiSignalPartBox;
 import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;
@@ -56,7 +56,7 @@ public class ObjItemRender {
             OBJRender renderer = cache.get(id);
             String textureName;
             if (collection != null)
-                textureName = GuiSignalBox.getTexureName();
+                textureName = GuiSignalPartBox.getTexureName();
             else
                 textureName = null;
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
