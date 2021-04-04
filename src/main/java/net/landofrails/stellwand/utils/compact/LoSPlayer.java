@@ -1,11 +1,12 @@
 package net.landofrails.stellwand.utils.compact;
 
+import java.util.Arrays;
+
 import javax.annotation.Nullable;
 
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.content.messages.EMessage;
-import scala.actors.threadpool.Arrays;
 
 public class LoSPlayer extends Player {
 
