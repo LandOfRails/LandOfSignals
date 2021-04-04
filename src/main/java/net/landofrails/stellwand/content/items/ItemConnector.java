@@ -18,7 +18,8 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
-import net.landofrails.stellwand.content.messages.Message;
+import net.landofrails.stellwand.content.messages.EMessage;
+import net.landofrails.stellwand.content.network.ServerMessage;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
@@ -98,10 +99,10 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 				if (sender.isCompatible(signalEntity)) {
 					connect(world, senderPos, signalEntity.getPos(), d);
 					if (p.getWorld().isServer)
-						p.direct(d ? Message.MESSAGE_SIGNAL_DISCONNECTED.toString() : Message.MESSAGE_SIGNAL_CONNECTED.toString());
+						ServerMessage.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
 				} else {
 					if (p.getWorld().isServer)
-						p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
+						ServerMessage.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
 				}
 				return ClickResult.ACCEPTED;
 			} else if (senderEntity != null) {
@@ -118,10 +119,10 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 				if (senderEntity.isCompatible(getSignal(world, signalPos))) {
 					connect(world, senderEntity.getPos(), signalPos, d);
 					if (p.getWorld().isServer)
-						p.direct(d ? Message.MESSAGE_SIGNAL_DISCONNECTED.toString() : Message.MESSAGE_SIGNAL_CONNECTED.toString());
+						ServerMessage.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
 				} else {
 					if (p.getWorld().isServer)
-						p.direct(Message.MESSAGE_SIGNALS_MUST_BE_EQUAL.toString());
+						ServerMessage.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
 				}
 
 				return ClickResult.ACCEPTED;
@@ -149,7 +150,8 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR3, 1);
 			stack.getTagCompound().setVec3i(SIGNALKEY, pos);
 			player.setHeldItem(hand, stack);
-			player.direct(Message.MESSAGE_NEW_SIGNAL_SELECTED.toString(), pos.x, pos.y, pos.z);
+			ServerMessage.send(player, EMessage.MESSAGE_NEW_SIGNAL_SELECTED, "" + pos.x, "" + pos.y, "" + pos.z);
+
 		}
 	}
 
@@ -158,7 +160,7 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
 			ItemStack stack = new ItemStack(CustomItems.ITEMCONNECTOR2, 1);
 			stack.getTagCompound().setVec3i(SENDERKEY, pos);
 			player.setHeldItem(hand, stack);
-			player.direct(Message.MESSAGE_NEW_SENDER_SELECTED.toString(), pos.x, pos.y, pos.z);
+			ServerMessage.send(player, EMessage.MESSAGE_NEW_SENDER_SELECTED, "" + pos.x, "" + pos.y, "" + pos.z);
 		}
 	}
 

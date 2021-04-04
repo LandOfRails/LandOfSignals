@@ -18,6 +18,7 @@ public class CustomPackets {
 		Packet.register(ChangeSignalModes::new, PacketDirection.ServerToClient);
 		Packet.register(ConnectionSenderSignal::new, PacketDirection.ServerToClient);
 		Packet.register(OpenSenderGui::new, PacketDirection.ServerToClient);
+		Packet.register(ServerMessage::new, PacketDirection.ServerToClient);
 
 		// Both directions
 		Packet.register(ChangeHandHeldItem::new, PacketDirection.ClientToServer);
