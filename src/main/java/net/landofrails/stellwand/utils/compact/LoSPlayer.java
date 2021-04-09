@@ -10,8 +10,15 @@ import net.landofrails.stellwand.content.messages.EMessage;
 
 public class LoSPlayer extends Player {
 
+	private Player player;
+
 	public LoSPlayer(Player player) {
 		super(player.internal);
+		this.player = player;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	public void direct(String message) {

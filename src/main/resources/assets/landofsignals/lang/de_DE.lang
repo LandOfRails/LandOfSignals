@@ -38,4 +38,4 @@ message.stellwand:connector.signaldisconnected=Signal entfernt!
 message.stellwand:connector.signalconnected=Signal verbunden!
 message.stellwand:connector.sendersignalsmustbeequal=Du kannst nur Signale des gleichen Types an einen Sender verbinden!
 message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! (%s, %s, %s)
-message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt!! (%s, %s, %s)
+message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s, %s)

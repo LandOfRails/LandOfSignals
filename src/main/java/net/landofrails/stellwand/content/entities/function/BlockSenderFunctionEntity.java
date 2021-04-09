@@ -3,6 +3,7 @@ package net.landofrails.stellwand.content.entities.function;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
@@ -14,7 +15,7 @@ import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.content.network.OpenSenderGui;
-import net.landofrails.stellwand.content.network.ServerMessage;
+import net.landofrails.stellwand.content.network.ServerMessagePacket;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
@@ -29,6 +30,12 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		else
 			throw new RuntimeException(
 					"This should be a subclass of BlockSenderStorageEntity!");
+
+	}
+
+	@Override
+	public IBoundingBox getBoundingBox() {
+		return IBoundingBox.BLOCK;
 	}
 
 	@Override
@@ -57,11 +64,11 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 				} else {
 					entity.signals.remove(signalid);
 
-					ServerMessage.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
+					ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
 				}
 
 			} else {
-				ServerMessage.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
+				ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
 			}
 
 			return true;
