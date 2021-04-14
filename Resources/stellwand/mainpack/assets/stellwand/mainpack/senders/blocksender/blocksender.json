@@ -1,0 +1,31 @@
+{
+    "type": "blockSender",
+    "name": "Block Sender",
+    "model": "mainpack/senders/blocksender/blocksender.obj",
+    "block": {
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "translation": [
+            0.5,
+            0.5,
+            0.5
+        ]
+    },
+    "item": {
+        "rotation": [
+            15,
+            195,
+            0
+        ],
+        "translation": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "scale": 0.7,
+        "model": "mainpack/senders/blocksender/blocksender.obj"
+    }
+}

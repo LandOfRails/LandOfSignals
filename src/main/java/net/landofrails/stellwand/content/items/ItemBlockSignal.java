@@ -127,8 +127,9 @@ public class ItemBlockSignal extends CustomItem {
 	@Override
 	public void onClickAir(Player player, World world, Hand hand) {
 
-		if (world.isServer)
+		if (world.isServer) {
 			return;
+		}
 
 		List<ItemStack> itemStackList = new ArrayList<>();
 

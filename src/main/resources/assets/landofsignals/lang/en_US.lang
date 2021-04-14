@@ -32,11 +32,11 @@ item.landofsignals:stellwand.itemconnector3.name=Connector
 
 message.stellwand:sender.nosignalsconnected=Can't select modes without any signals connected!
 message.stellwand:sender.modesset=Modes set!
-message.stellwand:sender.signalnotfound=Signal couldn't be found: {0}
+message.stellwand:sender.signalnotfound=Signal couldn't be found: %s
 message.stellwand:sender.error1:I dont know how, but its missing.. [Insert surprised Pikachu here]
 
 message.stellwand:connector.signaldisconnected=Signal disconnected!
 message.stellwand:connector.signalconnected=Signal connected!
 message.stellwand:connector.sendersignalsmustbeequal=You only can connect the same type of signal with a sender!
-message.stellwand:connector.newsignalselected=New signal selected! ({0}, {1}, {2})
-message.stellwand:connector.newsenderselected=New sender selected! ({0}, {1}, {2})
+message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
+message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)

@@ -1,10 +1,9 @@
 package net.landofrails.stellwand.content.entities.function;
 
-import java.text.MessageFormat;
-
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
@@ -13,9 +12,10 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
-import net.landofrails.stellwand.content.messages.Message;
+import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.content.network.OpenSenderGui;
+import net.landofrails.stellwand.content.network.ServerMessagePacket;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
@@ -30,6 +30,12 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		else
 			throw new RuntimeException(
 					"This should be a subclass of BlockSenderStorageEntity!");
+
+	}
+
+	@Override
+	public IBoundingBox getBoundingBox() {
+		return IBoundingBox.BLOCK;
 	}
 
 	@Override
@@ -54,16 +60,15 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 				if (getWorld().hasBlockEntity(signalid, BlockSignalStorageEntity.class)) {
 					BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalid, BlockSignalStorageEntity.class);
 					OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
-					packet.sendToAllAround(player.getWorld(), player.getPosition(), 1);
+					packet.sendToObserving(player);
 				} else {
 					entity.signals.remove(signalid);
-					String msg = Message.MESSAGE_NO_SIGNAL_FOUND.toString();
-					msg = MessageFormat.format(msg, "Doesnt exist anymore, removing it..");
-					p.direct(msg);
+
+					ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
 				}
 
 			} else {
-				p.direct(Message.MESSAGE_NO_SIGNALS_CONNECTED.toString());
+				ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
 			}
 
 			return true;
