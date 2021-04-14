@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals.utils.contentpacks;
 
+import cam72cam.mod.render.obj.OBJRender;
+
 import java.util.List;
 
 public class ContentPackAnimation {
@@ -66,5 +68,9 @@ public class ContentPackAnimation {
 
     public void setStartAfter(float startAfter) {
         this.startAfter = startAfter;
+    }
+
+    public void drawAnimation(OBJRender renderer) {
+        
     }
 }

@@ -33,7 +33,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
 
     @Override
     public void update() {
-        if (active && partRotate <= LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getRotationDegree(id)) {
+        if (active && partRotate <= LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAnimation(id, "wing1").get(0).getRotate()) {
             partRotate++;
         } else if (!active && partRotate >= 0) {
             partRotate--;

@@ -6,6 +6,8 @@ import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class LOSBlocks {
 
@@ -31,8 +33,8 @@ public class LOSBlocks {
             put(Static.MISSING, new ArrayList<ContentPackAnimation>() {{
                 add(new ContentPackAnimation(new ArrayList<String>() {{
                     add(Static.MISSING);
-                }}, new float[]{0f, 0f, 0f}, 0f, Static.MISSING, 0f, 0f)
-            }})
+                }}, new float[]{0f, 0f, 0f}, 0f, Static.MISSING, 0f, 0f));
+            }});
         }});
         BLOCK_SIGNAL_PART.add(MISSING);
         BLOCK_SIGNAL_PART_ANIMATED.add(MISSING);

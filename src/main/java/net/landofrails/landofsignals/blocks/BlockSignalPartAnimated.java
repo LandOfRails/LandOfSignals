@@ -6,6 +6,7 @@ import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.HashMap;
@@ -69,8 +70,8 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
         return signalParts.get(checkIfMissing(uncheckedId)).getName();
     }
 
-    public float getRotationDegree(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getRotation_degree();
+    public List<ContentPackAnimation> getAnimation(String uncheckedId, String animation) {
+        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations().get(animation);
     }
 
     public void add(ContentPackSignalPart contentPackSignalPart) {

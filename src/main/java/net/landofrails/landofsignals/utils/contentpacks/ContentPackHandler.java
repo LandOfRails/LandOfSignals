@@ -113,7 +113,7 @@ public class ContentPackHandler {
                                     }
                                     states.add(0, null);
                                     contentPackSignalPart.setStates(states);
-                                    if (contentPackSignalPart.getRotation_degree() > 0)
+                                    if (contentPackSignalPart.getAnimations() != null)
                                         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(contentPackSignalPart);
                                     else
                                         LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
