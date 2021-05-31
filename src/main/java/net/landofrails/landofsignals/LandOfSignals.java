@@ -10,12 +10,30 @@ import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
-import net.landofrails.landofsignals.packet.*;
-import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
+import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
+import net.landofrails.landofsignals.packet.SignalBoxGuiToClientPacket;
+import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
+import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
+import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
+import net.landofrails.landofsignals.packet.TileSignalBoxToClient;
+import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
+import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
+import net.landofrails.landofsignals.render.block.TileSignalPartAnimatedRender;
+import net.landofrails.landofsignals.render.block.TileSignalPartRender;
+import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
+import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
+import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.*;
+import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.tile.TileSignalLever;
+import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
+import net.landofrails.landofsignals.tile.TileSignalSO12;
+import net.landofrails.landofsignals.tile.TileTicketMachineDB;
+import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
@@ -50,6 +68,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
+			Packet.register(TileSignalBoxToClient::new, PacketDirection.ClientToServer);
 
         }
 

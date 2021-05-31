@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals.tile;
 
+import java.util.List;
+
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
@@ -11,8 +13,6 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
-
-import java.util.List;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
@@ -42,7 +42,8 @@ public class TileSignalBox extends BlockEntity {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (tempSignalPart != null) {
-                new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
+				new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(),
+						1);
                 return true;
             }
         } else return false;

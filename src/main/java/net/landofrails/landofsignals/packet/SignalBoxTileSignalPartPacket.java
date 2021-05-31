@@ -17,7 +17,7 @@ public class SignalBoxTileSignalPartPacket extends Packet {
     public SignalBoxTileSignalPartPacket() {
     }
 
-    public SignalBoxTileSignalPartPacket(TileSignalPart tileSignalPart, Vec3i posSignalBox) {
+	public SignalBoxTileSignalPartPacket(TileSignalPart tileSignalPart, Vec3i posSignalBox) {
         this.tileSignalPart = tileSignalPart;
         this.posSignalBox = posSignalBox;
     }
@@ -25,6 +25,6 @@ public class SignalBoxTileSignalPartPacket extends Packet {
     @Override
     protected void handle() {
         getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
-        LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
+		LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
     }
 }
