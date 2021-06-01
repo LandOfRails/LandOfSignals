@@ -17,7 +17,6 @@ import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
-import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class Loader {
@@ -28,27 +27,15 @@ public class Loader {
 
 	public static void init() {
 
-		Optional<File> opt = StellwandUtils.getModFolder();
-
 		StaticLoader.init();
 
-		if (opt.isPresent()) {
-			File file = opt.get();
-			String path = file.getPath();
-			ModCore.Mod.info("Mod Folder: %s", path);
-			loadAssets(file);
-		} else {
-			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
-		}
+		loadAssets();
+
+		Content.testOutput();
 
 	}
 
-	private static void loadAssets(File modFolder) {
-
-		if (modFolder == null) {
-			ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
-			return;
-		}
+	private static void loadAssets() {
 
 		File assetFolder = new File("./config/stellwand");
 		if (assetFolder.exists()) {
@@ -122,7 +109,7 @@ public class Loader {
 
 						// New: type
 						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry), type);
-						ModCore.info("Block: %s", contentPackEntry.getName());
+						ModCore.info("Block: %s, Type: %s", contentPackEntry.getName(), type.name());
 						contentPackEntries.add(contentPackEntry);
 
 					}
