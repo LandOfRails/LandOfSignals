@@ -14,6 +14,7 @@ public class StellwandUtils {
 
 	}
 
+	@Deprecated
 	public static Optional<File> getModFolder() {
 		try {
 			URL url = BlockSignal.class.getProtectionDomain().getCodeSource().getLocation();
@@ -22,6 +23,7 @@ public class StellwandUtils {
 			file = file.getParentFile();
 			return Optional.ofNullable(file);
 		} catch (NullPointerException | URISyntaxException e) {
+			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
