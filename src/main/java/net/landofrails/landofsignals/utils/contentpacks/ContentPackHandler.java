@@ -2,7 +2,6 @@ package net.landofrails.landofsignals.utils.contentpacks;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.landofsignals.LOSBlocks;
-import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.File;
@@ -19,26 +18,10 @@ import java.util.zip.ZipFile;
 public class ContentPackHandler {
 
     public static void init() {
-
-        Optional<File> opt = StellwandUtils.getModFolder();
-
-        if (opt.isPresent()) {
-            File file = opt.get();
-            String path = file.getPath();
-            ModCore.Mod.info("Mod Folder: %s", path);
-            loadAssets(file);
-        } else {
-            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
-        }
-
+        loadAssets();
     }
 
-    public static void loadAssets(File modFolder) {
-
-        if (modFolder == null) {
-            ModCore.Mod.warn("Couldn't get Mod folder. Can't load assets.");
-            return;
-        }
+    public static void loadAssets() {
 
         File assetFolder = new File("./config/landofsignals");
         if (assetFolder.exists()) {
