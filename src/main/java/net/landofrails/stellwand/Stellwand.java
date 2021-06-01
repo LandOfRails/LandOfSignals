@@ -16,6 +16,8 @@ import net.landofrails.stellwand.contentpacks.loader.Loader;
 public class Stellwand {
 
 	public static final String DOMAIN = "stellwand";
+
+	// Version 2 statt 0.0.2
 	public static final String ADDON_VERSION = "2";
 
 	private Stellwand() {

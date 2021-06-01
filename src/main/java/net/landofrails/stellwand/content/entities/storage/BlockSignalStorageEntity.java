@@ -41,6 +41,8 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	// Variables
 	public Map<Vec3i, String> senderModes = new HashMap<>();
 
+	private boolean marked = false;
+
 	// Subclasses
 	public BlockSignalRenderEntity renderEntity;
 
@@ -77,7 +79,8 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 				if (isClient)
 					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
-				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
+				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.toString());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -146,6 +149,14 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 
 	public static Map<String, float[]> getTranslations() {
 		return translations;
+	}
+
+	public boolean isMarked() {
+		return marked;
+	}
+
+	public void setMarked(boolean marked) {
+		this.marked = marked;
 	}
 
 }

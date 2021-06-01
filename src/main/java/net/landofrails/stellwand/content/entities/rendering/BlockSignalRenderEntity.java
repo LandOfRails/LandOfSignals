@@ -94,6 +94,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 				return;
 			}
 			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+
 				GL11.glTranslated(translation[0], translation[1], translation[2]);
 
 				GL11.glRotated(rotation[0], 1, 0, 0);
@@ -117,10 +118,54 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 					}
 
 				}
+
+				// Muss erst translated werden.
+				if (entity.isMarked())
+					renderMarking();
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void renderMarking() {
+
+		// 0.5 ist Blockkante
+		final float margin = 0.51f;
+
+		int[][] points = new int[][]{{+1, +1, +1}, {-1, -1, 1}, {-1, +1, -1}, {+1, -1, -1}};
+
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+		for (int i = 0; i < points.length; i++) {
+			for (int o = 0; o < 3; o++) {
+
+				GL11.glColor3f(1.0f, 1.0f, 0.2f);
+				GL11.glLineWidth(10f);
+
+				GL11.glBegin(GL11.GL_LINE_STRIP);
+
+				GL11.glVertex3f(points[i][0] * margin, points[i][1] * margin, points[i][2] * margin);
+				int x = points[i][0] * (o == 0 ? -1 : 1);
+				int y = points[i][1] * (o == 1 ? -1 : 1);
+				int z = points[i][2] * (o == 2 ? -1 : 1);
+				GL11.glVertex3f(x * margin, y * margin, z * margin);
+
+				GL11.glEnd();
+
+			}
+		}
+
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+
 	}
 
 }

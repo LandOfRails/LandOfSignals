@@ -27,6 +27,7 @@ public class LoSPlayer extends Player {
 
 	public void direct(String message, String... args) {
 
+		if (args != null)
 		for (int index = 0; index < args.length; index++) {
 			EMessage eMessage = getEMsg(args[index]);
 			if (eMessage != null) {

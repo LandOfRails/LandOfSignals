@@ -27,6 +27,7 @@ public class ServerMessagePacket extends Packet {
 	public ServerMessagePacket(Player player, EMessage message) {
 		this.player = player;
 		this.message = message;
+		this.arguments = new String[0];
 	}
 
 	public ServerMessagePacket(Player player, EMessage message, String[] arguments) {
