@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals;
 
+import java.util.Optional;
+
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
@@ -16,7 +18,6 @@ import net.landofrails.landofsignals.packet.SignalBoxGuiToClientPacket;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.packet.TileSignalBoxToClient;
 import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
 import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
 import net.landofrails.landofsignals.render.block.TileSignalPartAnimatedRender;
@@ -36,6 +37,7 @@ import net.landofrails.landofsignals.tile.TileTicketMachineDB;
 import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
+import net.minecraftforge.fml.common.Mod;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
@@ -68,7 +70,6 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
-			Packet.register(TileSignalBoxToClient::new, PacketDirection.ServerToClient);
 
         }
 
@@ -122,6 +123,15 @@ public class LandOfSignals extends ModCore.Mod {
                 break;
         }
     }
+
+	public Optional<String> getMCVersion() {
+
+		Mod annotation = ModCore.class.getAnnotation(net.minecraftforge.fml.common.Mod.class);
+		if (annotation != null) {
+			return Optional.of(annotation.acceptedMinecraftVersions());
+		}
+		return Optional.empty();
+	}
 
     @Override
     public void serverEvent(ModEvent event) {
