@@ -32,9 +32,9 @@ public class Content {
 		}
 
 		// @formatter:off
-		if (!Stellwand.ADDON_VERSION.equalsIgnoreCase(pack.getAddonVersion()))
+		if (!Stellwand.ADDON_VERSION.equalsIgnoreCase(pack.getAddonversion()))
 			throw new ContentPackException("[" + pack.getName() + "] Excepted ModVersion: " + Stellwand.ADDON_VERSION
-					+ ", but found:" + pack.getAddonVersion());
+					+ ", but found:" + pack.getAddonversion());
 		// @formatter:on
 
 		contentPacks.add(pack);
@@ -77,6 +77,15 @@ public class Content {
 		if (itemId == null || !itemId.contains(":"))
 			return ItemBlockSignal.MISSING;
 		return itemId.split(":")[1];
+	}
+
+	public static void testOutput() {
+
+		contentPacks.forEach(cp -> {
+			ModCore.info("Pack: " + cp.getName());
+			cp.getEntries().forEach(e -> ModCore.info("Block: %s, Type: %s", e.getName(), e.getType().name()));
+		});
+
 	}
 
 }
