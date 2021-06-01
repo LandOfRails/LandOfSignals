@@ -6,6 +6,7 @@ import java.io.InputStream;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import cam72cam.mod.ModCore;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntry;
@@ -46,9 +47,26 @@ public abstract class ContentPackEntry {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends ContentPackEntryBlock> T getBlock(Class<T> cls){
-		if (cls.isInstance(block))
-			return (T) block;
-		return null;
+
+
+
+		try {
+			if (cls.isInstance(block) || cls.isAssignableFrom(block.getClass()))
+				return (T) block;
+		} catch (Exception e) {
+			// If it fails: try next
+
+		}
+
+		try {
+			return cls.cast(block);
+		} catch (Exception e2) {
+			ModCore.error("Tried to cast blockclass: %s", block != null && block.getClass() != null ? block.getClass().getName() : "null");
+			ModCore.error("Tried to cast to: %s", cls.getName());
+			return null;
+		}
+
+
 	}
 
 	public ContentPackEntryItem getItem() {
@@ -85,10 +103,15 @@ public abstract class ContentPackEntry {
 		String json = s.toString();
 		Gson gson = new GsonBuilder().create();
 
+
 		return gson.fromJson(json, getTypeClass(type));
 	}
 
+	// NullPointerException falls type null ist
 	private static Class<? extends ContentPackEntry> getTypeClass(EntryType type) {
+
+		if (type == null)
+			throw new ContentPackException("Type was null, was it written in UPPERCASE?");
 
 		switch (type) {
 			case BLOCKFILLER :

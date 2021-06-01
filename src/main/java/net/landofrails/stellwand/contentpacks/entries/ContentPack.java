@@ -16,18 +16,19 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 public class ContentPack {
 
-	private String addonVersion = "";
+	private String addonversion = "";
 	private String name = "";
 	private String packversion = "";
 	private String author = "";
 
+	// Map = "content": {"path": "type", "path": "type"}
 	private Map<String, EntryType> content = new LinkedHashMap<>();
 
 	// Manually filled by Loader.
 	private List<ContentPackEntry> entries = new LinkedList<>();
 
-	public ContentPack(String addonVersion, String name, String packversion, String author, List<String> content) {
-		this.addonVersion = addonVersion;
+	public ContentPack(String addonversion, String name, String packversion, String author, List<String> content) {
+		this.addonversion = addonversion;
 		this.name = name;
 		this.packversion = packversion;
 		this.author = author;
@@ -41,8 +42,8 @@ public class ContentPack {
 		return entries;
 	}
 
-	public String getAddonVersion() {
-		return addonVersion;
+	public String getAddonversion() {
+		return addonversion;
 	}
 
 	public String getName() {
