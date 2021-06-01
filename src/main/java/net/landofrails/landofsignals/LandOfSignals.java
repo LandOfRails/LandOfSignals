@@ -40,7 +40,6 @@ import net.landofrails.landofsignals.tile.TileTicketMachineDB;
 import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
-import net.minecraftforge.fml.common.Mod;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
