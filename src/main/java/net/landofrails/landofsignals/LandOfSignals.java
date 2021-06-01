@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import cam72cam.mod.ModCore;
@@ -58,6 +59,8 @@ public class LandOfSignals extends ModCore.Mod {
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
+			Optional<String> mcVersion = getMCVersion();
+			ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed"));
 
             ContentPackHandler.init();
 
@@ -128,9 +131,20 @@ public class LandOfSignals extends ModCore.Mod {
 
 		Mod annotation = ModCore.class.getAnnotation(net.minecraftforge.fml.common.Mod.class);
 		if (annotation != null) {
+
+			for (Field field : Mod.class.getDeclaredFields()) {
+				if (field.getName().contains("minecraft")) {
+					try {
+						return Optional.of((String) field.get(annotation));
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						Optional.empty();
+					}
+				}
+			}
 			return Optional.of(annotation.acceptedMinecraftVersions());
 		}
 		return Optional.empty();
+
 	}
 
     @Override
