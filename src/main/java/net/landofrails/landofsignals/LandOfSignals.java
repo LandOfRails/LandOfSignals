@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -130,20 +131,21 @@ public class LandOfSignals extends ModCore.Mod {
 
 	public Optional<String> getMCVersion() {
 
-		Mod annotation = ModCore.class.getAnnotation(net.minecraftforge.fml.common.Mod.class);
-		if (annotation != null) {
-
-			for (Method method : Mod.class.getDeclaredMethods()) {
-				if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
-					try {
-						return Optional.of((String) method.invoke(annotation));
-					} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-						e.printStackTrace();
-						return Optional.empty();
+		for (Annotation annotation : ModCore.class.getAnnotations()) {
+			if (annotation.annotationType().getName().endsWith("Mod")) {
+				for (Method method : Mod.class.getDeclaredMethods()) {
+					if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
+						try {
+							return Optional.of((String) method.invoke(annotation));
+						} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+							e.printStackTrace();
+							return Optional.empty();
+						}
 					}
 				}
 			}
 		}
+
 		return Optional.empty();
 
 	}
