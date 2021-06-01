@@ -45,7 +45,13 @@ public class Stellwand {
 
 				break;
 			case INITIALIZE :
+				break;
 			case SETUP :
+				// Loading here, Files not available at CONSTRUCT
+				BlockFillerStorageEntity.prepare();
+				BlockSignalStorageEntity.prepare();
+				BlockSenderStorageEntity.prepare();
+				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :
@@ -65,13 +71,7 @@ public class Stellwand {
 
 				break;
 			case INITIALIZE :
-				break;
 			case SETUP :
-				// Loading here, Files not available at CONSTRUCT
-				BlockFillerStorageEntity.prepare(true);
-				BlockSignalStorageEntity.prepare(true);
-				BlockSenderStorageEntity.prepare(true);
-				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :
@@ -85,13 +85,7 @@ public class Stellwand {
 		switch (event) {
 			case CONSTRUCT :
 			case INITIALIZE :
-				break;
 			case SETUP :
-				// Loading here, Files not available at CONSTRUCT
-				BlockFillerStorageEntity.prepare(false);
-				BlockSignalStorageEntity.prepare(false);
-				BlockSenderStorageEntity.prepare(false);
-				break;
 			case RELOAD :
 			case START :
 			case FINALIZE :

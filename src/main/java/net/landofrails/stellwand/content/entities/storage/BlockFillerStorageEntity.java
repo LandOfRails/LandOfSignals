@@ -48,7 +48,7 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 		this.contentPackBlockId = contentPackBlockId;
 	}
 
-	public static void prepare(boolean isClient) {
+	public static void prepare() {
 
 		ModCore.Mod.info("Preparing Filler..");
 
@@ -58,8 +58,6 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 			models.put(MISSING, m);
 			rotations.put(MISSING, new float[]{0, 0, 0});
 			translations.put(MISSING, new float[]{0.5f, 0.5f, 0.5f});
-			if (isClient)
-				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
 			ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
 		}
@@ -76,8 +74,6 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 				models.put(blockId, m);
 				rotations.put(blockId, block.getRotation());
 				translations.put(blockId, block.getTranslation());
-				if (isClient)
-					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
 				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
 			}

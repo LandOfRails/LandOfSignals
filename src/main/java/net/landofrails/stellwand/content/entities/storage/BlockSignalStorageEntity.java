@@ -50,15 +50,13 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 		renderEntity = new BlockSignalRenderEntity(this);
 	}
 
-	public static void prepare(boolean isClient) {
+	public static void prepare() {
 		try {
 			Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 			OBJModel m = new OBJModel(id, 0);
 			models.put(MISSING, m);
 			rotations.put(MISSING, new float[]{0, 0, 0});
 			translations.put(MISSING, new float[]{0.5f, 0.5f, 0.5f});
-			if (isClient)
-				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
 			ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
 		}
@@ -76,8 +74,6 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 				rotations.put(blockId, block.getRotation());
 				translations.put(blockId, block.getTranslation());
 				possibleModes.put(blockId, block.getModes());
-				if (isClient)
-					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
 				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.toString());
 				e.printStackTrace();

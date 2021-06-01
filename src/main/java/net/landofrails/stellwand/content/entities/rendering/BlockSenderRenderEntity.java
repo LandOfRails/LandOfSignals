@@ -46,10 +46,19 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 
 	public OBJRender getRenderer() {
 		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getRenderers().containsKey(entity.contentPackBlockId))
+			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
+				if (!BlockSenderStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
+					OBJModel m = BlockSenderStorageEntity.getModels().get(entity.contentPackBlockId);
+					BlockSenderStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
+				}
 				renderer = BlockSenderStorageEntity.getRenderers().get(entity.contentPackBlockId);
-			else
+			} else {
+				if (BlockSenderStorageEntity.getRenderers().containsKey(BlockSenderStorageEntity.MISSING)) {
+					OBJModel m = BlockSenderStorageEntity.getModels().get(BlockSenderStorageEntity.MISSING);
+					BlockSenderStorageEntity.getRenderers().put(BlockSenderStorageEntity.MISSING, new OBJRender(m));
+				}
 				renderer = BlockSenderStorageEntity.getRenderers().get(BlockSenderStorageEntity.MISSING);
+			}
 		}
 		return renderer;
 	}

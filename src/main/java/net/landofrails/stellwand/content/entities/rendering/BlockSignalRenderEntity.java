@@ -47,10 +47,19 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 
 	public OBJRender getRenderer() {
 		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockSignalStorageEntity.getRenderers().containsKey(entity.contentPackBlockId))
+			if (entity.contentPackBlockId != null && BlockSignalStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
+				if (!BlockSignalStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
+					OBJModel m = BlockSignalStorageEntity.getModels().get(entity.contentPackBlockId);
+					BlockSignalStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
+				}
 				renderer = BlockSignalStorageEntity.getRenderers().get(entity.contentPackBlockId);
-			else
+			} else {
+				if (BlockSignalStorageEntity.getRenderers().containsKey(BlockSignalStorageEntity.MISSING)) {
+					OBJModel m = BlockSignalStorageEntity.getModels().get(BlockSignalStorageEntity.MISSING);
+					BlockSignalStorageEntity.getRenderers().put(BlockSignalStorageEntity.MISSING, new OBJRender(m));
+				}
 				renderer = BlockSignalStorageEntity.getRenderers().get(BlockSignalStorageEntity.MISSING);
+			}
 		}
 		return renderer;
 	}

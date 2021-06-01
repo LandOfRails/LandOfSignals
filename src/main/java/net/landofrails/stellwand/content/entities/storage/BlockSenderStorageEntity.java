@@ -60,7 +60,7 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 		renderEntity = new BlockSenderRenderEntity(this);
 	}
 
-	public static void prepare(boolean isClient) {
+	public static void prepare() {
 
 		try {
 			Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
@@ -68,8 +68,6 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 			models.put(MISSING, m);
 			rotations.put(MISSING, new float[]{0, 0, 0});
 			translations.put(MISSING, new float[]{0.5f, 0.5f, 0.5f});
-			if (isClient)
-				renderers.put(MISSING, new OBJRender(m));
 		} catch (Exception e) {
 			ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
 		}
@@ -86,8 +84,6 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 				models.put(blockId, m);
 				rotations.put(blockId, block.getRotation());
 				translations.put(blockId, block.getTranslation());
-				if (isClient)
-					renderers.put(blockId, new OBJRender(m));
 			} catch (Exception e) {
 				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
 			}
