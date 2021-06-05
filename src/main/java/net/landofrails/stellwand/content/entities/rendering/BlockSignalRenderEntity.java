@@ -125,7 +125,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 
 				// Muss erst translated werden.
 				if (entity.isMarked())
-					renderMarking();
+					renderMarking(entity.getMarkedColor());
 
 			}
 		} catch (Exception e) {
@@ -133,22 +133,20 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 		}
 	}
 
-	private static void renderMarking() {
+	private static void renderMarking(float[] color) {
 
-		// 0.5 ist Blockkante
+		// 0.5 is edge of block
 		final float margin = 0.51f;
 
 		int[][] points = new int[][]{{+1, +1, +1}, {-1, -1, 1}, {-1, +1, -1}, {+1, -1, -1}};
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		for (int i = 0; i < points.length; i++) {
-			for (int o = 0; o < 3; o++) {
+		for (short i = 0; i < points.length; i++) {
+			for (short o = 0; o < 3; o++) {
 
-				GL11.glColor3f(1.0f, 1.0f, 0.2f);
+				GL11.glColor3f(1, 1, 1);
+				GL11.glColor3f(color[0], color[1], color[2]);
 				GL11.glLineWidth(10f);
 
 				GL11.glBegin(GL11.GL_LINE_STRIP);
@@ -164,11 +162,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
 			}
 		}
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-
 
 	}
 

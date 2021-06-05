@@ -16,6 +16,7 @@ import net.landofrails.stellwand.content.entities.function.BlockSignalFunctionEn
 import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntryBlock;
 import net.landofrails.stellwand.utils.StellwandUtils;
 
@@ -43,6 +44,7 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	public Map<Vec3i, String> senderModes = new HashMap<>();
 
 	private boolean marked = false;
+	private float[] markedColor = new float[]{0, 0, 0};
 
 	// Subclasses
 	public BlockSignalRenderEntity renderEntity;
@@ -164,8 +166,13 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 		return marked;
 	}
 
-	public void setMarked(boolean marked) {
+	public void setMarked(boolean marked, float[] color) {
 		this.marked = marked;
+		this.markedColor = color;
+	}
+
+	public float[] getMarkedColor() {
+		return markedColor;
 	}
 
 }
