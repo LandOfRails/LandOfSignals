@@ -1,13 +1,17 @@
 package net.landofrails.stellwand.contentpacks.entries.signal;
 
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
 public class BlockSignalEntry extends ContentPackEntry {
 
-	@Override
-	public EntryType getType() {
-		return EntryType.BLOCKSIGNAL;
+	private BlockSignalEntryBlock block;
+	private BlockSignalEntryItem item;
+
+	public BlockSignalEntry() {
+
 	}
 
 	// @formatter:off
@@ -17,9 +21,25 @@ public class BlockSignalEntry extends ContentPackEntry {
 			BlockSignalEntryBlock block, 
 			BlockSignalEntryItem item
 	) {
-		super(name, model, block, item);
+		super(name, model);
+		this.block = block;
+		this.item = item;
 	}
 	// @formatter:on
 
+	@Override
+	public ContentPackEntryBlock getBlock() {
+		return block;
+	}
+
+	@Override
+	public ContentPackEntryItem getItem() {
+		return item;
+	}
+
+	@Override
+	public EntryType getType() {
+		return EntryType.BLOCKSIGNAL;
+	}
 
 }

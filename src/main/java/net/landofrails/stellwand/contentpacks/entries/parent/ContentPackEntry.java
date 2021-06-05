@@ -18,14 +18,14 @@ public abstract class ContentPackEntry {
 	protected String name;
 	protected String model;
 
-	protected ContentPackEntryBlock block;
-	protected ContentPackEntryItem item;
 
-	public ContentPackEntry(String name, String model, ContentPackEntryBlock block, ContentPackEntryItem item) {
+	public ContentPackEntry() {
+
+	}
+
+	public ContentPackEntry(String name, String model) {
 		this.name = name;
 		this.model = model;
-		this.block = block;
-		this.item = item;
 	}
 
 	public String getBlockId(String packId) {
@@ -40,43 +40,37 @@ public abstract class ContentPackEntry {
 		return model;
 	}
 
-	public ContentPackEntryBlock getBlock() {
-		return block;
-	}
+	public abstract ContentPackEntryBlock getBlock();
 
 	
 	@SuppressWarnings("unchecked")
-	public <T extends ContentPackEntryBlock> T getBlock(Class<T> cls){
-
-
+	public <T extends ContentPackEntryBlock> T getBlock(Class<T> cls) {
 
 		try {
-			if (cls.isInstance(block) || cls.isAssignableFrom(block.getClass()))
-				return (T) block;
-		} catch (Exception e) {
+			return (T) getBlock();
+		} catch (ClassCastException e) {
 			// If it fails: try next
 
 		}
 
 		try {
-			return cls.cast(block);
-		} catch (Exception e2) {
-			ModCore.error("Tried to cast blockclass: %s", block != null && block.getClass() != null ? block.getClass().getName() : "null");
+			return cls.cast(getBlock());
+		} catch (ClassCastException e2) {
+			ModCore.error("Tried to cast blockclass: %s",
+					getBlock() != null && getBlock().getClass() != null ? getBlock().getClass().getName() : "null");
 			ModCore.error("Tried to cast to: %s", cls.getName());
-			return null;
+
+			throw new ContentPackException("Weird cast exception above.");
 		}
 
-
 	}
 
-	public ContentPackEntryItem getItem() {
-		return item;
-	}
+	public abstract ContentPackEntryItem getItem();
 
 	@SuppressWarnings("unchecked")
 	public <T extends ContentPackEntryItem> T getItem(Class<T> cls) {
-		if (cls.isInstance(item))
-			return (T) item;
+		if (cls.isInstance(getItem()))
+			return (T) getItem();
 		return null;
 	}
 
@@ -103,26 +97,17 @@ public abstract class ContentPackEntry {
 		String json = s.toString();
 		Gson gson = new GsonBuilder().create();
 
-
-		return gson.fromJson(json, getTypeClass(type));
-	}
-
-	// NullPointerException falls type null ist
-	private static Class<? extends ContentPackEntry> getTypeClass(EntryType type) {
-
-		if (type == null)
-			throw new ContentPackException("Type was null, was it written in UPPERCASE?");
-
 		switch (type) {
 			case BLOCKFILLER :
-				return BlockFillerEntry.class;
+				return gson.fromJson(json, BlockFillerEntry.class);
 			case BLOCKSENDER :
-				return BlockSenderEntry.class;
+				return gson.fromJson(json, BlockSenderEntry.class);
 			case BLOCKSIGNAL :
-				return BlockSignalEntry.class;
+				return gson.fromJson(json, BlockSignalEntry.class);
 			default :
-				return ContentPackEntry.class;
+				throw new ContentPackException("Type-switch failed unnormaly");
 		}
+
 	}
 
 }

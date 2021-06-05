@@ -4,6 +4,10 @@ import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlo
 
 public class BlockFillerEntryBlock extends ContentPackEntryBlock {
 
+	public BlockFillerEntryBlock() {
+
+	}
+
 	public BlockFillerEntryBlock(float[] rotation, float[] translation) {
 		super(rotation, translation);
 	}
