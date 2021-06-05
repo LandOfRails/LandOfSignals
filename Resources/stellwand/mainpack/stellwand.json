@@ -1,11 +1,11 @@
 {
-  "addonversion": "0.0.2",
+  "addonversion": "2",
   "name": "MainPack",
   "packversion": "0.3",
   "author": "SeltixSub",
-  "content": [
-    "blockSignal", "assets/stellwand/mainpack/signals/blockstraightunisolated/blockstraightunisolated.json",
-    "blockSender", "assets/stellwand/mainpack/senders/blocksender2/blocksender2.json",
-    "blockFiller", "assets/stellwand/mainpack/fillers/blockfiller/filler.json"
-  ]
+  "content": {
+    "assets/stellwand/mainpack/signals/blockstraightunisolated/blockstraightunisolated.json": "BLOCKSIGNAL",
+    "assets/stellwand/mainpack/senders/blocksender2/blocksender2.json": "BLOCKSENDER",
+    "assets/stellwand/mainpack/fillers/blockfiller/filler.json": "BLOCKFILLER"
+  }
 }
