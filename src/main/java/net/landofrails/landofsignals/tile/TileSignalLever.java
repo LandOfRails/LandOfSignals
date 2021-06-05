@@ -65,15 +65,19 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
         this.activated = activated;
     }
 
+	/**
+	 * <pre>
+	 * Gibt den anliegenden Blöcken ein Redstonesignal.
+	 * <b>HINWEIS:</b> Löst leider kein onNeighborChange aus!
+	 * </pre>
+	 */
     @Override
-    public int getStrongPower(Facing from) {
-        return 0;
-    }
+	public int getStrongPower(Facing from) {
+		return activated ? 15 : 0;
+	}
 
-    @Override
+	@Override
     public int getWeakPower(Facing from) {
-        if (activated) {
-            return 15;
-        } else return 0;
+		return activated ? 15 : 0;
     }
 }
