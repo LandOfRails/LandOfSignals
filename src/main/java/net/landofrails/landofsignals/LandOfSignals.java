@@ -61,7 +61,7 @@ public class LandOfSignals extends ModCore.Mod {
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
 			Optional<String> mcVersion = getMCVersion();
-			ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed"));
+			ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed to receive"));
 
             ContentPackHandler.init();
 
@@ -131,7 +131,8 @@ public class LandOfSignals extends ModCore.Mod {
 	public Optional<String> getMCVersion() {
 
 		for (Annotation annotation : ModCore.class.getAnnotations()) {
-			if (annotation.annotationType().getName().endsWith("Mod")) {
+			System.out.println("Annotation: " + annotation.annotationType().getName());
+			if (annotation.annotationType().getName().contains("Mod")) {
 				for (Method method : Mod.class.getDeclaredMethods()) {
 					if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
 						try {
