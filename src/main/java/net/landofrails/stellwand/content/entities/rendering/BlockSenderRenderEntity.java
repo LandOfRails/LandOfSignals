@@ -2,7 +2,6 @@ package net.landofrails.stellwand.content.entities.rendering;
 
 import org.lwjgl.opengl.GL11;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
@@ -89,16 +88,11 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 
 	private static void renderStuff(BlockSenderStorageEntity entity, float partialTicks) {
 
-		OBJModel model = entity.renderEntity.getModel();
 		OBJRender renderer = entity.renderEntity.getRenderer();
 		float[] translation = entity.renderEntity.getTranslation();
 		float[] rotation = entity.renderEntity.getRotation();
 
 		try {
-			if (renderer == null || model == null) {
-				ModCore.warn("Block has no renderer: %s!", entity.getPos().toString());
-				return;
-			}
 			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
 				GL11.glTranslated(translation[0], translation[1], translation[2]);
 
