@@ -42,4 +42,9 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 		return super.onClick(player, hand, facing, hit);
 	}
 
+	@Override
+	public void onBreak() {
+		getWorld().dropItem(onPick(), getPos());
+	}
+
 }

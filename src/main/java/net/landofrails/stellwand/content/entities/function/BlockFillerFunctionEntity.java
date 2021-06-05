@@ -26,4 +26,10 @@ public class BlockFillerFunctionEntity extends BlockEntity {
 		is.setTagCompound(tag);
 		return is;
 	}
+
+	@Override
+	public void onBreak() {
+		getWorld().dropItem(onPick(), getPos());
+	}
+
 }

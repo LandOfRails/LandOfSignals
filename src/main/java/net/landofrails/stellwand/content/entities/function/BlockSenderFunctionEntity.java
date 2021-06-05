@@ -129,7 +129,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 			}
 		}
 
-		super.onBreak();
+		getWorld().dropItem(onPick(), getPos());
 	}
 
 	private boolean isAir(ItemStack item) {
