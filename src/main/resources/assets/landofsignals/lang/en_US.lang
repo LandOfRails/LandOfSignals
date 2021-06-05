@@ -29,6 +29,7 @@ item.landofsignals:stellwand.itemblocksignal.name=Block Signal
 item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
+item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass
 
 message.stellwand:sender.nosignalsconnected=Can't select modes without any signals connected!
 message.stellwand:sender.modesset=Modes set!
