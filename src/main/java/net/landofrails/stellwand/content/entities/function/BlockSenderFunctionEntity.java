@@ -52,6 +52,10 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 		ItemStack item = player.getHeldItem(hand);
 		LoSPlayer p = new LoSPlayer(player);
 
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != null && heldItem.is(CustomItems.ITEMMAGNIFYINGGLASS))
+			return false;
+
 		if (isAir(item) && p.getWorld().isServer) {
 			if (!entity.signals.isEmpty()) {
 
