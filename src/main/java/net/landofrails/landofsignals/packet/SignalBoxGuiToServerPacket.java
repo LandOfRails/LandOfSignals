@@ -29,11 +29,7 @@ public class SignalBoxGuiToServerPacket extends Packet {
         box.setRedstone(textureNameRedstone);
         box.setNoRedstone(textureNameNoRedstone);
 
-		// Fix for Issue #4
-		TileSignalBoxToClient packet1 = new TileSignalBoxToClient(box, pos);
-		packet1.sendToAll();
-
-		SignalBoxGuiToClientPacket packet2 = new SignalBoxGuiToClientPacket(textureNameRedstone, textureNameNoRedstone, pos);
-		packet2.sendToAll();
+		SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(textureNameRedstone, textureNameNoRedstone, pos);
+		packet.sendToAll();
     }
 }
