@@ -64,24 +64,29 @@ public class ItemBlockFiller extends CustomItem {
 	public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
 		List<ItemStack> items = new ArrayList<>();
 
-		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockFillers().entrySet().iterator();
-
 		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
 			return items;
 
+		if (getFirstVarient() != null)
+			items.add(getFirstVarient());
+
+		return items;
+	}
+
+	public ItemStack getFirstVarient() {
+		ItemStack is = null;
+		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockFillers().entrySet().iterator();
 		if (it.hasNext()) {
 			Entry<ContentPackEntry, String> entry = it.next();
 
 			ContentPackEntry cpe = entry.getKey();
-			ItemStack is = new ItemStack(CustomItems.ITEMBLOCKFILLER, 1);
+			is = new ItemStack(CustomItems.ITEMBLOCKFILLER, 1);
 			TagCompound tag = is.getTagCompound();
 			tag.setString("itemId", cpe.getBlockId(entry.getValue()));
 			is.setTagCompound(tag);
-			items.add(is);
 
 		}
-
-		return items;
+		return is;
 	}
 
 	@Override
@@ -153,12 +158,14 @@ public class ItemBlockFiller extends CustomItem {
 		}
 
 		if (itemStackList.isEmpty())
-			itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
+			itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKFILLER, 1));
 
+		int sizeInHand = player.getHeldItem(hand).getCount();
 		SelectItem si = new SelectItem();
 		si.open(player, itemStackList, item -> {
 			if (item != null) {
 				player.setHeldItem(hand, item);
+				item.setCount(sizeInHand);
 				ChangeHandHeldItem packet = new ChangeHandHeldItem(player, item, hand);
 				packet.sendToServer();
 			}
@@ -178,6 +185,11 @@ public class ItemBlockFiller extends CustomItem {
 			BlockTypeEntity block = CustomBlocks.BLOCKFILLER;
 
 			world.setBlock(target, block);
+			if (!player.isCreative()) {
+				ItemStack is = player.getHeldItem(hand);
+				is.shrink(1);
+				player.setHeldItem(hand, is);
+			}
 			BlockFillerStorageEntity blockEntity = world.getBlockEntity(target, BlockFillerStorageEntity.class);
 			// Set ContentPackBlockId
 			ItemStack item = player.getHeldItem(hand);
