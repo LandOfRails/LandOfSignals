@@ -33,6 +33,7 @@ public class SelectSenderModes implements IScreen {
 
 	@SuppressWarnings({"java:S112", "java:S1192"})
 	public SelectSenderModes(BlockSenderStorageEntity entity) {
+
 		if (entity.getSignal() != null) {
 
 			BlockSignalStorageEntity signalEntity = entity.getSignal();
@@ -67,7 +68,7 @@ public class SelectSenderModes implements IScreen {
 
 	@Override
 	public void init(IScreenBuilder screen) {
-		new Button(screen, -100, 0,
+		new Button(screen, -100, 40,
 				"<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
 			@Override
 			public void onClick(Player.Hand hand) {
@@ -77,7 +78,7 @@ public class SelectSenderModes implements IScreen {
 						nextMode(mode));
 			}
 		};
-		new Button(screen, -100, 50,
+		new Button(screen, -100, 80,
 				GuiText.LABEL_REDSTONE.toString() + " -->") {
 			@Override
 			public void onClick(Player.Hand hand) {
