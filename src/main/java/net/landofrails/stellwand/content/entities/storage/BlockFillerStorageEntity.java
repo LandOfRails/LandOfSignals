@@ -15,6 +15,7 @@ import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEnt
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.utils.StellwandUtils;
 
 public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 
@@ -63,10 +64,16 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 		}
 		// Add contentpack stuff
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockFillers().entrySet()) {
+			String name = null;
+			String type = null;
+			ContentPackEntryBlock cpeb = null;
 			try {
 				ContentPackEntry cpe = entry.getKey();
 				String packId = entry.getValue();
 				String blockId = cpe.getBlockId(packId);
+				cpeb = entry.getKey().getBlock();
+				name = blockId;
+				type = cpe.getType() != null ? cpe.getType().name() : "null";
 				ContentPackEntryBlock block = cpe.getBlock();
 				String objPath = cpe.getModel();
 				Identifier id = new Identifier("stellwand", objPath);
@@ -75,7 +82,11 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 				rotations.put(blockId, block.getRotation());
 				translations.put(blockId, block.getTranslation());
 			} catch (Exception e) {
-				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.getMessage());
+				ModCore.Mod.error("Error while loading contentpack blocks:");
+				ModCore.Mod.error("Block: %s", name);
+				ModCore.Mod.error("Type: %s", type);
+				StellwandUtils.printSuperclasses(cpeb);
+				e.printStackTrace();
 			}
 		}
 

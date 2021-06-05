@@ -17,6 +17,7 @@ import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEnt
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntryBlock;
+import net.landofrails.stellwand.utils.StellwandUtils;
 
 public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	
@@ -65,10 +66,16 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 		}
 		// Add contentpack stuff
 		for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
+			String name = null;
+			String type = null;
+			ContentPackEntryBlock cpeb = null;
 			try {
 				ContentPackEntry cpe = entry.getKey();
 				String packId = entry.getValue();
 				String blockId = cpe.getBlockId(packId);
+				cpeb = entry.getKey().getBlock();
+				name = blockId;
+				type = cpe.getType() != null ? cpe.getType().name() : "null";
 				BlockSignalEntryBlock block = cpe.getBlock(BlockSignalEntryBlock.class);
 				String objPath = cpe.getModel();
 				Identifier id = new Identifier("stellwand", objPath);
@@ -78,7 +85,10 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 				translations.put(blockId, block.getTranslation());
 				possibleModes.put(blockId, block.getModes());
 			} catch (Exception e) {
-				ModCore.Mod.error("Error while loading contentpack blocks: %s", e.toString());
+				ModCore.Mod.error("Error while loading contentpack blocks:");
+				ModCore.Mod.error("Block: %s", name);
+				ModCore.Mod.error("Type: %s", type);
+				StellwandUtils.printSuperclasses(cpeb);
 				e.printStackTrace();
 			}
 		}
