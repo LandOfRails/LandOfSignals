@@ -1,5 +1,6 @@
 package net.landofrails.stellwand;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.config.ConfigFile;
 import net.landofrails.stellwand.config.StellwandConfig;
@@ -10,6 +11,7 @@ import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEnti
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.network.CustomPackets;
+import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.contentpacks.loader.Loader;
 
@@ -34,19 +36,26 @@ public class Stellwand {
 				StellwandConfig.init();
 				ConfigFile.sync(StellwandConfig.class);
 
-				Loader.init();
+				if (!StellwandConfig.disableStellwand) {
+					Loader.init();
 
-				CustomGuis.register();
-				CustomTabs.register();
-				CustomItems.register();
-				CustomBlocks.init();
+					CustomGuis.register();
+					CustomTabs.register();
+					CustomItems.register();
+					CustomRecipes.register();
+					CustomBlocks.init();
 
-				CustomPackets.register();
+					CustomPackets.register();
+				}
 
 				break;
 			case INITIALIZE :
 				break;
 			case SETUP :
+				if (StellwandConfig.disableStellwand) {
+					return;
+				}
+
 				// Loading here, Files not available at CONSTRUCT
 				BlockFillerStorageEntity.prepare();
 				BlockSignalStorageEntity.prepare();
@@ -62,6 +71,10 @@ public class Stellwand {
 
 
 	public static void clientEvent(ModEvent event) {
+
+		if (StellwandConfig.disableStellwand) {
+			return;
+		}
 
 		switch (event) {
 			case CONSTRUCT :
@@ -82,6 +95,10 @@ public class Stellwand {
 
 	public static void serverEvent(ModEvent event) {
 
+		if (StellwandConfig.disableStellwand) {
+			return;
+		}
+
 		switch (event) {
 			case CONSTRUCT :
 			case INITIALIZE :
@@ -92,6 +109,23 @@ public class Stellwand {
 				break;
 		}
 
+	}
+
+	public static void info(String msg, Object... params) {
+		ModCore.info(msg, params);
+	}
+	
+	public static void warn(String msg, Object... params) {
+		ModCore.warn(msg, params);
+	}
+
+	public static void error(String msg, Object... params) {
+		ModCore.error(msg, params);
+	}
+
+	public static void debug(String msg, Object... params) {
+		if (StellwandConfig.Debugging.debugOutput)
+			ModCore.debug(msg, params);
 	}
 
 }

@@ -9,22 +9,21 @@ import cam72cam.mod.config.ConfigFile.Name;
 @File("stellwand.cfg")
 public class StellwandConfig {
 
-	private StellwandConfig() {
-
-	}
-
 	public static void init() {
 		// Derzeit nichts zum initialisieren.
 	}
 
+	@Comment("Disables the stellwand part | Default: false")
+	public static boolean disableStellwand = false;
+
+	@Comment("Disables all stellwand recipes | Default: false")
+	public static boolean disableRecipes = false;
+
 	@Name("debugging")
+	@Comment("Debugging options")
 	public static class Debugging {
 
-		private Debugging() {
-
-		}
-
-		@Comment("Enables debug outputs, just for testing")
+		@Comment("Enables debug outputs | Default: false")
 		public static boolean debugOutput = false;
 
 	}
