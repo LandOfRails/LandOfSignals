@@ -51,6 +51,9 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
 	}
 
 	public static void prepare() {
+
+		Stellwand.debug("Preparing Signals..");
+
 		try {
 			Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 			OBJModel m = new OBJModel(id, 0);

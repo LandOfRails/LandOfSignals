@@ -50,8 +50,8 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
 
 	public static void prepare() {
 
-		ModCore.Mod.info("Preparing Filler..");
-
+		Stellwand.debug("Preparing Filler..");
+		
 		try {
 			Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 			OBJModel m = new OBJModel(id, 0);

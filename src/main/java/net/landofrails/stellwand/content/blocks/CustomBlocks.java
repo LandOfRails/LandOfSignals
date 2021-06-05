@@ -1,6 +1,7 @@
 package net.landofrails.stellwand.content.blocks;
 
 import cam72cam.mod.render.BlockRender;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.blocks.others.BlockFiller;
 import net.landofrails.stellwand.content.blocks.others.BlockSender;
 import net.landofrails.stellwand.content.blocks.others.BlockSignal;
@@ -26,7 +27,7 @@ public class CustomBlocks {
 	}
 
 	public static void registerBlockRenderers() {
-
+		Stellwand.debug("Registering blocks");
 		BlockRender.register(BLOCKFILLER, BlockFillerRenderEntity::render, BlockFillerStorageEntity.class);
 		BlockRender.register(BLOCKSIGNAL, BlockSignalRenderEntity::render,
 				BlockSignalStorageEntity.class);

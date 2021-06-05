@@ -62,6 +62,8 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
 
 	public static void prepare() {
 
+		Stellwand.debug("Preparing Sender..");
+
 		try {
 			Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
 			OBJModel m = new OBJModel(id, 0);

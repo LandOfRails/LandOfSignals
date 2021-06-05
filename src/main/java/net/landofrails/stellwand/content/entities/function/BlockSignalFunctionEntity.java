@@ -8,6 +8,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
+import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
 public abstract class BlockSignalFunctionEntity extends BlockEntity {
@@ -34,8 +35,10 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
 
 	@Override
 	public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
-		player.sendMessage(PlayerMessage.direct("ContentBlockId: " + entity.contentPackBlockId));
-		player.sendMessage(PlayerMessage.direct("DisplayMode: " + entity.displayMode));
+		if (StellwandConfig.Debugging.debugOutput) {
+			player.sendMessage(PlayerMessage.direct("ContentBlockId: " + entity.contentPackBlockId));
+			player.sendMessage(PlayerMessage.direct("DisplayMode: " + entity.displayMode));
+		}
 		return super.onClick(player, hand, facing, hit);
 	}
 

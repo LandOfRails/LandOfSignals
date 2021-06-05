@@ -13,6 +13,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import cam72cam.mod.ModCore;
+import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
@@ -55,7 +56,7 @@ public class Loader {
 			if (result)
 				ModCore.Mod.info("Asset folder created.");
 			else
-				ModCore.Mod.warn("Couldn't create asset folder: %s", assetFolder.getPath());
+				ModCore.Mod.error("Couldn't create asset folder: %s", assetFolder.getPath());
 
 		}
 
@@ -98,7 +99,7 @@ public class Loader {
 
 			List<ContentPackEntry> contentPackEntries = new ArrayList<>();
 
-			ModCore.info("Content for %s: ", contentPack.getId());
+			Stellwand.debug("Content for %s: ", contentPack.getId());
 			for (Entry<String, EntryType> content : contentPack.getContent().entrySet()) {
 
 				String contentName = content.getKey();
@@ -109,7 +110,8 @@ public class Loader {
 
 						// New: type
 						ContentPackEntry contentPackEntry = ContentPackEntry.fromJson(zip.getInputStream(entry), type);
-						ModCore.info("Block: %s, Type: %s", contentPackEntry.getName(), type.name());
+						Stellwand.debug("Block: %s, Type: %s", contentPackEntry.getName(), type.name());
+
 						contentPackEntries.add(contentPackEntry);
 
 					}

@@ -27,6 +27,8 @@ public class OpenSenderGui extends Packet {
 	@Override
 	protected void handle() {
 
+		Stellwand.info("Opening SelectSenderModesGui");
+
 		BlockSenderStorageEntity sender = getWorld().getBlockEntity(senderPos, BlockSenderStorageEntity.class);
 		sender.setSignal(signalTile);
 		CustomGuis.selectSenderModes.open(getPlayer(), senderPos);
