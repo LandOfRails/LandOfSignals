@@ -74,6 +74,10 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
         return signalParts.get(checkIfMissing(uncheckedId)).getAnimations().get(animation);
     }
 
+    public Map<String, List<ContentPackAnimation>> getAniamtions(String uncheckedId) {
+        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations();
+    }
+
     public void add(ContentPackSignalPart contentPackSignalPart) {
         if (!signalParts.containsKey(contentPackSignalPart.getId())) {
             this.signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);

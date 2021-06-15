@@ -33,7 +33,7 @@ public class LOSBlocks {
             put(Static.MISSING, new ArrayList<ContentPackAnimation>() {{
                 add(new ContentPackAnimation(new ArrayList<String>() {{
                     add(Static.MISSING);
-                }}, new float[]{0f, 0f, 0f}, 0f, Static.MISSING, 0f, 0f));
+                }}, new float[]{0f, 0f, 0f}, new float[]{0f, 0f, 0f}, Static.MISSING, 0f, 0f));
             }});
         }});
         BLOCK_SIGNAL_PART.add(MISSING);

@@ -1,10 +1,5 @@
 package net.landofrails.landofsignals;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.math.Vec3d;
@@ -15,31 +10,19 @@ import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
-import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
-import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
-import net.landofrails.landofsignals.packet.SignalBoxGuiToClientPacket;
-import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
-import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
-import net.landofrails.landofsignals.packet.SignalSelectorGuiPacket;
-import net.landofrails.landofsignals.render.block.TileSignalBoxRender;
-import net.landofrails.landofsignals.render.block.TileSignalLeverRender;
-import net.landofrails.landofsignals.render.block.TileSignalPartAnimatedRender;
-import net.landofrails.landofsignals.render.block.TileSignalPartRender;
-import net.landofrails.landofsignals.render.block.TileSignalSO12Render;
-import net.landofrails.landofsignals.render.block.TileTicketMachineDBRender;
-import net.landofrails.landofsignals.render.block.TileTicketMachineSBBRender;
+import net.landofrails.landofsignals.packet.*;
+import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
-import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalLever;
-import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
-import net.landofrails.landofsignals.tile.TileSignalSO12;
-import net.landofrails.landofsignals.tile.TileTicketMachineDB;
-import net.landofrails.landofsignals.tile.TileTicketMachineSBB;
+import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 @SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
@@ -55,13 +38,13 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
-		// Stellwand commonEvent
-		Stellwand.commonEvent(event);
+        // Stellwand commonEvent
+        Stellwand.commonEvent(event);
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-			Optional<String> mcVersion = getMCVersion();
-			ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed to receive"));
+            Optional<String> mcVersion = getMCVersion();
+            ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed to receive"));
 
             ContentPackHandler.init();
 
@@ -128,27 +111,27 @@ public class LandOfSignals extends ModCore.Mod {
         }
     }
 
-	public Optional<String> getMCVersion() {
+    public Optional<String> getMCVersion() {
 
-		for (Annotation annotation : ModCore.class.getAnnotations()) {
-			System.out.println("Annotation: " + annotation.annotationType().getName());
-			if (annotation.annotationType().getName().contains("Mod")) {
-				for (Method method : Mod.class.getDeclaredMethods()) {
-					if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
-						try {
-							return Optional.of((String) method.invoke(annotation));
-						} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-							e.printStackTrace();
-							return Optional.empty();
-						}
-					}
-				}
-			}
-		}
+        for (Annotation annotation : ModCore.class.getAnnotations()) {
+            System.out.println("Annotation: " + annotation.annotationType().getName());
+            if (annotation.annotationType().getName().contains("Mod")) {
+                for (Method method : Mod.class.getDeclaredMethods()) {
+                    if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
+                        try {
+                            return Optional.of((String) method.invoke(annotation));
+                        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                            return Optional.empty();
+                        }
+                    }
+                }
+            }
+        }
 
-		return Optional.empty();
+        return Optional.empty();
 
-	}
+    }
 
     @Override
     public void serverEvent(ModEvent event) {

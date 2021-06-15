@@ -1,19 +1,17 @@
 package net.landofrails.landofsignals.utils.contentpacks;
 
-import cam72cam.mod.render.obj.OBJRender;
-
 import java.util.List;
 
 public class ContentPackAnimation {
 
     private List<String> groups;
     private float[] move;
-    private float rotate;
+    private float[] rotate;
     private String state;
     private float duration;
     private float startAfter;
 
-    public ContentPackAnimation(List<String> groups, float[] move, float rotate, String state, float duration, float startAfter) {
+    public ContentPackAnimation(List<String> groups, float[] move, float[] rotate, String state, float duration, float startAfter) {
         this.groups = groups;
         this.move = move;
         this.rotate = rotate;
@@ -38,11 +36,11 @@ public class ContentPackAnimation {
         this.move = move;
     }
 
-    public float getRotate() {
+    public float[] getRotate() {
         return rotate;
     }
 
-    public void setRotate(float rotate) {
+    public void setRotate(float[] rotate) {
         this.rotate = rotate;
     }
 
@@ -68,9 +66,5 @@ public class ContentPackAnimation {
 
     public void setStartAfter(float startAfter) {
         this.startAfter = startAfter;
-    }
-
-    public void drawAnimation(OBJRender renderer) {
-        
     }
 }

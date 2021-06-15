@@ -1,7 +1,5 @@
 package net.landofrails.landofsignals.tile;
 
-import java.util.List;
-
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
@@ -13,6 +11,8 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
+
+import java.util.List;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
@@ -26,6 +26,7 @@ public class TileSignalBox extends BlockEntity {
     private int noRedstone = 0;
 
     private TileSignalPart tileSignalPart;
+    private TileSignalPartAnimated tileSignalPartAnimated;
 
     @Override
     public ItemStack onPick() {
@@ -41,9 +42,13 @@ public class TileSignalBox extends BlockEntity {
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
+            TileSignalPartAnimated tempSignalPartAnimated = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
             if (tempSignalPart != null) {
-				new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(),
-						1);
+                new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(),
+                        1);
+                return true;
+            } else if (tempSignalPartAnimated != null) {
+                new SignalBoxTileSignalPartPacket(tempSignalPartAnimated, getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
                 return true;
             }
         } else return false;
@@ -53,28 +58,29 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public void onNeighborChange(Vec3i neighbor) {
         if (getWorld().isServer && TileSignalPartPos != null) {
-            TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
-            if (entity != null) {
-                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId());
+            TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
+            if (tempTileSignalPart != null) {
+                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tempTileSignalPart.getId());
                 if (redstone >= states.size() || noRedstone >= states.size()) {
                     redstone = 0;
                     noRedstone = 0;
                 }
                 if (getWorld().getRedstone(getPos()) > 0)
                     //Redstone
-                    entity.setTexturePath(states.get(redstone));
+                    tempTileSignalPart.setTexturePath(states.get(redstone));
                 else
                     //No redstone
-                    entity.setTexturePath(states.get(noRedstone));
+                    tempTileSignalPart.setTexturePath(states.get(noRedstone));
             } else if (TileSignalPartPos != null) {
                 TileSignalPartAnimated tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
                 if (tempAnimatedPart != null) {
+                    List<String> states = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tempTileSignalPart.getId());
                     if (getWorld().getRedstone(getPos()) > 0)
                         //Redstone
-                        tempAnimatedPart.setActive(true);
+                        tempAnimatedPart.setTexturePath(states.get(redstone));
                     else
                         //No redstone
-                        tempAnimatedPart.setActive(false);
+                        tempAnimatedPart.setTexturePath(states.get(noRedstone));
                 }
             }
         }
@@ -98,6 +104,14 @@ public class TileSignalBox extends BlockEntity {
 
     public TileSignalPart getTileSignalPart() {
         return tileSignalPart;
+    }
+
+    public TileSignalPartAnimated getTileSignalPartAnimated() {
+        return tileSignalPartAnimated;
+    }
+
+    public void setTileSignalPartAnimated(TileSignalPartAnimated tileSignalPartAnimated) {
+        this.tileSignalPartAnimated = tileSignalPartAnimated;
     }
 
     public int getRedstone() {
