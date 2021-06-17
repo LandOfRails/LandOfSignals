@@ -1,19 +1,16 @@
 package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.entity.Player;
-import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
-import org.lwjgl.opengl.GL11;
 
 public class GuiSignalPartAnimatedBox implements IScreen {
 
@@ -26,7 +23,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     private int stateRight;
     private int stateLeft;
 
-    private final String[] listTexureNames;
+    private String[] listTexureNames;
     private final String[] listAnimationNames;
 
     @SuppressWarnings("java:S3010")
@@ -53,10 +50,15 @@ public class GuiSignalPartAnimatedBox implements IScreen {
             stateRight = 0;
             stateLeft = 0;
         }
-        if (stateLeft < listTexureNames.length) nameLeft = listTexureNames[stateLeft];
-        else nameLeft = listAnimationNames[stateLeft];
-        if (stateRight < listTexureNames.length) nameRight = listTexureNames[stateRight];
-        else nameRight = listAnimationNames[stateRight];
+
+        if (listTexureNames[0] == null) listTexureNames = new String[0];
+
+        if (stateLeft < listTexureNames.length)
+            nameLeft = listTexureNames[stateLeft];
+        else nameLeft = listAnimationNames[stateLeft - listTexureNames.length];
+        if (stateRight < listTexureNames.length)
+            nameRight = listTexureNames[stateRight];
+        else nameRight = listAnimationNames[stateRight - listTexureNames.length];
     }
 
     @SuppressWarnings("java:S2696")
@@ -70,7 +72,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
                     stateLeft = 0;
                 }
                 if (stateLeft < listTexureNames.length) nameLeft = listTexureNames[stateLeft];
-                else nameLeft = listAnimationNames[stateLeft];
+                else nameLeft = listAnimationNames[stateLeft - listTexureNames.length];
 
                 this.setText("<-- " + GuiText.LABEL_NOREDSTONE.toString() + " : " + nameLeft);
             }
@@ -83,7 +85,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
                     stateRight = 0;
                 }
                 if (stateRight < listTexureNames.length) nameRight = listTexureNames[stateRight];
-                else nameRight = listAnimationNames[stateRight];
+                else nameRight = listAnimationNames[stateRight - listTexureNames.length];
 
                 this.setText(GuiText.LABEL_REDSTONE.toString() + " : " + nameRight + " -->");
             }
@@ -108,19 +110,19 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     @SuppressWarnings("java:S2696")
     @Override
     public void draw(IScreenBuilder builder) {
-        int scale = 8;
-        name = nameRight;
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackRight, 0, 0);
-        }
-        name = nameLeft;
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackLeft, 0, 0);
-        }
+//        int scale = 8;
+//        name = nameRight;
+//        try (OpenGL.With ignored = OpenGL.matrix()) {
+//            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
+//            GL11.glScaled(scale, scale, 1);
+//            GUIHelpers.drawItem(itemStackRight, 0, 0);
+//        }
+//        name = nameLeft;
+//        try (OpenGL.With ignored = OpenGL.matrix()) {
+//            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
+//            GL11.glScaled(scale, scale, 1);
+//            GUIHelpers.drawItem(itemStackLeft, 0, 0);
+//        }
     }
 
     public static String getTexureName() {

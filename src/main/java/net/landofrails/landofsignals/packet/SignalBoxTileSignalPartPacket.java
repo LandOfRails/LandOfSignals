@@ -36,6 +36,6 @@ public class SignalBoxTileSignalPartPacket extends Packet {
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
         else
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPartAnimated(tileSignalPartAnimated);
-        LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
+        LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
     }
 }

@@ -27,11 +27,13 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     private boolean active;
     private float partRotate = 0;
 
-    AnimationHandler animationHandler = new AnimationHandler();
+    AnimationHandler animationHandler;
 
     public TileSignalPartAnimated(String id, int rot) {
         this.blockRotate = rot;
         this.id = id;
+        if (id != null)
+            this.animationHandler = new AnimationHandler(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(id));
     }
 
     @Override
