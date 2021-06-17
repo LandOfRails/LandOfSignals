@@ -18,7 +18,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     @TagField("id")
     private final String id;
     @TagField("texturePath")
-    private String texturePath = null;
+    private String animationOrTextureName = null;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
@@ -68,18 +68,18 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         return blockRotate;
     }
 
-    public String getTexturePath() {
-        if (texturePath != null && texturePath.equals("null")) return null;
-        else return texturePath;
+    public String getAnimationOrTextureName() {
+        if (animationOrTextureName != null && animationOrTextureName.equals("null")) return null;
+        else return animationOrTextureName;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setTexturePath(String texturePath) {
-        if (texturePath == null) this.texturePath = "null";
-        else this.texturePath = texturePath;
+    public void setAnimationOrStateTexture(String name) {
+        if (name == null) this.animationOrTextureName = "null";
+        else this.animationOrTextureName = name;
         markDirty();
     }
 

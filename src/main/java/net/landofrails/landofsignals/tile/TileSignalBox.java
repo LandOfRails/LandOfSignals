@@ -74,13 +74,22 @@ public class TileSignalBox extends BlockEntity {
             } else if (TileSignalPartPos != null) {
                 TileSignalPartAnimated tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
                 if (tempAnimatedPart != null) {
-                    List<String> states = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tempTileSignalPart.getId());
-                    if (getWorld().getRedstone(getPos()) > 0)
+                    List<String> states = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tempAnimatedPart.getId());
+                    if (getWorld().getRedstone(getPos()) > 0) {
                         //Redstone
-                        tempAnimatedPart.setTexturePath(states.get(redstone));
-                    else
+                        String temp;
+                        if (redstone < states.size()) temp = states.get(redstone);
+                        else
+                            temp = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tempAnimatedPart.getId()).keySet().toArray(new String[0])[redstone - states.size()];
+                        tempAnimatedPart.setAnimationOrStateTexture(temp);
+                    } else {
                         //No redstone
-                        tempAnimatedPart.setTexturePath(states.get(noRedstone));
+                        String temp;
+                        if (noRedstone < states.size()) temp = states.get(noRedstone);
+                        else
+                            temp = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tempAnimatedPart.getId()).keySet().toArray(new String[0])[noRedstone - states.size()];
+                        tempAnimatedPart.setAnimationOrStateTexture(temp);
+                    }
                 }
             }
         }
