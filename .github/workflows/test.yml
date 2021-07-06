@@ -10,6 +10,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Read CHANGELOG.md file
         id: getchangelog
-        run: echo "::set-output name=changelog::$(cat CHANGELOG.md)"
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
       - name: Output getchangelog
-        run: echo ${{ steps.getchangelog.outputs.changelog }}
+        run: echo ${{ steps.getchangelog.outputs.content }}
