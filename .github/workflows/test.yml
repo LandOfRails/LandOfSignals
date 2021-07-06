@@ -11,3 +11,5 @@ jobs:
       - name: Read CHANGELOG.md file
         id: getchangelog
         run: echo "::set-output name=changelog::$(cat CHANGELOG.md)"
+      - name: Output getchangelog
+        run: echo ${{ steps.getchangelog.outputs.changelog }}
