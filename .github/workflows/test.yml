@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Read CHANGELOG.md file
         id: getchangelog
-        uses: andstor/file-reader-action@v1
+        uses: juliangruber/read-file-action@v1
         with:
-          path: "CHANGELOG.md"
+          path: CHANGELOG.md
       - name: Output getchangelog
-        run: echo ${{ steps.getchangelog.outputs.contents }}
+        run: echo "${{ steps.getchangelog.outputs.contents }}"
