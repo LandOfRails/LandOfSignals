@@ -50,18 +50,25 @@ jobs:
           path: build/libs/LandOfSignals-${{matrix.branch}}-*
       - name: Read CHANGELOG.md file
         id: getchangelog
-        run: echo "::set-output name=changelog::$(cat CHANGELOG.md)"
+        uses: juliangruber/read-file-action@v1.1.4
+        with:
+          path: ./CHANGELOG.md
       - name: Read VERSION file
         id: getversion
         run: echo "::set-output name=version::$(cat VERSION)"
+      - name: Read SUFFIX file
+        id: getsuffix
+        run: echo "::set-output name=suffix::$(cat SUFFIX)"
+      - name: Rename with suffix
+        run: mv build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar 
       - name: Upload to CurseForge ${{matrix.branch}}
         uses: MarkenJaden/curseforge-upload@master
         with:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307
           game_endpoint: minecraft
-          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar
-          changelog: ${{ steps.getchangelog.outputs.changelog }}
+          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+          changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
           release_type: beta
