@@ -1,0 +1,13 @@
+name: Test Pipeline
+
+on: [ workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Read CHANGELOG.md file
+        id: getchangelog
+        run: echo "::set-output name=changelog::$(cat CHANGELOG.md)"
