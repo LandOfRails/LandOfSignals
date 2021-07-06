@@ -8,6 +8,7 @@
 ![Discord](https://img.shields.io/discord/797514319410495503?logo=discord)
 ](https://discord.gg/ykAqHKYjVM)
 [![LandOfSignals Build Pipeline](https://github.com/LandOfRails/LandOfSignals/actions/workflows/main.yml/badge.svg)](https://github.com/LandOfRails/LandOfSignals/actions/workflows/main.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/landofrails/landofsignals/badge)](https://www.codefactor.io/repository/github/landofrails/landofsignals)
 [![wakatime](https://wakatime.com/badge/github/LandOfRails/LandOfSignals.svg)](https://wakatime.com/badge/github/LandOfRails/LandOfSignals)
 
 ### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
