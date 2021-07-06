@@ -12,6 +12,6 @@ jobs:
         id: getchangelog
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./CHANGELOG.md
+          path: CHANGELOG.md
       - name: Output getchangelog
         run: echo ${{ steps.getchangelog.outputs.content }}
