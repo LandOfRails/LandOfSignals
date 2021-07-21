@@ -60,10 +60,10 @@ public class ItemSignalPartAnimatedRender {
             } else
                 textureName = null;
             Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getItemTranslation(itemId);
-            float scale = (float) LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getScaling(itemId).x;
+            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getItemScaling(itemId);
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
-                GL11.glScaled(scale, scale, scale);
+                GL11.glScaled(scale.x, scale.y, scale.z);
                 renderer.draw();
             }
         });

@@ -18,10 +18,22 @@ public class ContentPackSignalPart {
     private float[] translation;
     private float[] itemTranslation;
     private float[] scaling;
+    private float[] itemScaling;
 
     private List<String> states;
 
     private Map<String, List<ContentPackAnimation>> animations;
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states) {
+        this.id = id;
+        this.name = name;
+        this.model = model;
+        this.translation = translation;
+        this.itemTranslation = itemTranslation;
+        this.scaling = scaling;
+        this.itemScaling = itemScaling;
+        this.states = states;
+    }
 
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
         this.id = id;
@@ -30,7 +42,20 @@ public class ContentPackSignalPart {
         this.translation = translation;
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
+        this.itemScaling = scaling;
         this.states = states;
+    }
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
+        this.id = id;
+        this.name = name;
+        this.model = model;
+        this.translation = translation;
+        this.itemTranslation = itemTranslation;
+        this.scaling = scaling;
+        this.itemScaling = itemScaling;
+        this.states = states;
+        this.animations = animations;
     }
 
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
@@ -40,6 +65,7 @@ public class ContentPackSignalPart {
         this.translation = translation;
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
+        this.itemScaling = scaling;
         this.states = states;
         this.animations = animations;
     }
@@ -90,6 +116,14 @@ public class ContentPackSignalPart {
 
     public void setScaling(float[] scaling) {
         this.scaling = scaling;
+    }
+
+    public float[] getItemScaling() {
+        return itemScaling;
+    }
+
+    public void setItemScaling(float[] itemScaling) {
+        this.itemScaling = itemScaling;
     }
 
     public List<String> getStates() {
