@@ -46,9 +46,21 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
         return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
+    public Vec3d getItemTranslation(String uncheckedId) {
+        String id = checkIfMissing(uncheckedId);
+        float[] translation = signalParts.get(id).getItemTranslation();
+        return new Vec3d(translation[0], translation[1], translation[2]);
+    }
+
     public Vec3d getScaling(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
         float[] scaling = signalParts.get(id).getScaling();
+        return new Vec3d(scaling[0], scaling[1], scaling[2]);
+    }
+
+    public Vec3d getItemScaling(String uncheckedId) {
+        String id = checkIfMissing(uncheckedId);
+        float[] scaling = signalParts.get(id).getItemScaling();
         return new Vec3d(scaling[0], scaling[1], scaling[2]);
     }
 
@@ -58,12 +70,6 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
 
     public String getId(String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getId();
-    }
-
-    public Vec3d getItemTranslation(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
-        float[] translation = signalParts.get(id).getItemTranslation();
-        return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
     public String getName(String uncheckedId) {
