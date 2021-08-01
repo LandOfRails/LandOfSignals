@@ -18,15 +18,22 @@ public class ContentPackSignalPart {
     private float[] itemTranslation;
     private float[] scaling;
 
+    private float[] itemScaling;
+
     private List<String> states;
 
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
+        this(id, name, model, translation, itemTranslation, scaling, scaling, states);
+    }
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states) {
         this.id = id;
         this.name = name;
         this.model = model;
         this.translation = translation;
         this.itemTranslation = itemTranslation;
         this.scaling = scaling;
+        this.itemScaling = itemScaling;
         this.states = states;
     }
 
@@ -84,6 +91,14 @@ public class ContentPackSignalPart {
 
     public void setStates(List<String> states) {
         this.states = states;
+    }
+
+    public float[] getItemScaling() {
+        return itemScaling;
+    }
+
+    public void setItemScaling(float[] itemScaling) {
+        this.itemScaling = itemScaling;
     }
 
     public static ContentPackSignalPart fromJson(InputStream inputStream) {

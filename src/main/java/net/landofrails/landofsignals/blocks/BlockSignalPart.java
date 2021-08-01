@@ -51,6 +51,12 @@ public class BlockSignalPart extends BlockTypeEntity {
         return new Vec3d(scaling[0], scaling[1], scaling[2]);
     }
 
+    public Vec3d getItemScaling(String uncheckedId) {
+        String id = checkIfMissing(uncheckedId);
+        float[] scaling = signalParts.get(id).getItemScaling();
+        return new Vec3d(scaling[0], scaling[1], scaling[2]);
+    }
+
     public List<String> getStates(String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getStates();
     }
