@@ -37,7 +37,9 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         activated = !activated;
+        // Updates the own coordinate
         getWorld().notifyNeighborsOfStateChange(getPos(), LOSBlocks.BLOCK_SIGNAL_LEVER, true);
+        // Update coordinate below
         getWorld().notifyNeighborsOfStateChange(getPos().offset(Facing.DOWN), LOSBlocks.BLOCK_SIGNAL_LEVER, true);
         markDirty();
         return true;
