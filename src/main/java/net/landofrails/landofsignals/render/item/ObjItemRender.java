@@ -29,18 +29,13 @@ public class ObjItemRender {
         return getModelFor(id, translate, Vec3d.ZERO, null, scale);
     }
 
-    @SuppressWarnings({"java:S3776", "java:S112"})
     public static ItemRender.IItemModel getModelFor(Identifier id, Vec3d translate, Vec3d rotation,
                                                     Collection<String> collection, float scale) {
         return (stack, world) -> new StandardModel().addCustom(() -> {
             if (!cache.containsKey(id)) {
                 try {
                     OBJModel model = new OBJModel(id, 0);
-                    OBJRender renderer;
-                    if (collection != null)
-                        renderer = new OBJRender(model, collection);
-                    else
-                        renderer = new OBJRender(model);
+                    OBJRender renderer = new OBJRender(model);
                     cache.put(id, renderer);
                 } catch (FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {

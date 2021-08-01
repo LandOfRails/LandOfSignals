@@ -19,7 +19,7 @@ universalmodcore {
     modName = 'LandOfSignals'
     modId = 'landofsignals'
     modVersion = version
-    umcVersion = '1.0.1'
+    umcVersion = '1.1.0'
 }
 
 task('umcIntegration') {
@@ -38,4 +38,15 @@ task deployJar(type: Jar)
 
 configurations {
     deployerJars
+}
+
+task('showBuildInfo') {
+    doLast {
+        String minecraftString = version.split('-')[0]
+        String minecraftLoader = version.split('-')[1]
+        String umcVersionString = "${minecraftString}-${minecraftLoader}-${universalmodcore.umcVersion}"
+        System.out.println("Build for MC ${minecraftString} (${minecraftLoader})")
+        System.out.println("https://teamopenindustry.cc/maven/cam72cam/immersiverailroading/ImmersiveRailroading/${version}/ImmersiveRailroading-${version}.jar")
+        System.out.println("https://teamopenindustry.cc/maven/cam72cam/universalmodcore/UniversalModCore/${umcVersionString}/UniversalModCore-${umcVersionString}.jar")
+    }
 }

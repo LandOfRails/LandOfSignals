@@ -1,9 +1,10 @@
 package net.landofrails.landofsignals.commands;
 
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.text.Command;
 import cam72cam.mod.text.PlayerMessage;
-import cam72cam.mod.world.World;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DebugCommand extends Command {
@@ -18,16 +19,16 @@ public class DebugCommand extends Command {
     }
 
     @Override
-    public boolean opRequired() {
-        return true;
-    }
-
-    @Override
-    public boolean execute(World world, Consumer<PlayerMessage> sender, String[] args) {
+    public boolean execute(Consumer<PlayerMessage> sender, Optional<Player> player, String[] args) {
         if (args.length != 1) return false;
-        if (args[0].equals("changing")) {
+        if (args[0].equalsIgnoreCase("changing")) {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public int getRequiredPermissionLevel() {
+        return PermissionLevel.LEVEL4;
     }
 }

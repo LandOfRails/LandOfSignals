@@ -35,11 +35,7 @@ public class ItemSignalPartRender {
             if (!cache.containsKey(itemId)) {
                 try {
                     OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
-                    OBJRender renderer;
-                    if (collection != null)
-                        renderer = new OBJRender(model, collection);
-                    else
-                        renderer = new OBJRender(model);
+                    OBJRender renderer = new OBJRender(model);
                     cache.put(itemId, renderer);
                 } catch (FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {
