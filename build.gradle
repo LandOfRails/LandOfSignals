@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'cam72cam.universalmodcore'
 apply plugin: 'maven'
 
-String version = '0.0.3'
+String version = '0.0.4'
 
 universalmodcore {
     modPackage = 'net.landofrails.landofsignals'
@@ -19,7 +19,7 @@ universalmodcore {
     modName = 'LandOfSignals'
     modId = 'landofsignals'
     modVersion = version
-    umcVersion = '1.1.0'
+    umcVersion = '1.1.1'
 }
 
 task('umcIntegration') {
