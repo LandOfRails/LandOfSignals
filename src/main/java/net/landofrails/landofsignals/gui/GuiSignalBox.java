@@ -20,61 +20,62 @@ public class GuiSignalBox implements IScreen {
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
     private final TileSignalBox tsb;
-    private static String textureName = null;
     private static String textureNameRight = null;
     private static String textureNameLeft = null;
     private int stateRight;
     private int stateLeft;
 
-    private final String[] listTexureNames;
+    private final String[] listTextureNames;
 
-    @SuppressWarnings("java:S3010")
     public GuiSignalBox(TileSignalBox tsb) {
         this.tsb = tsb;
         TileSignalPart tsp = tsb.getTileSignalPart();
 
+        listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
+        stateRight = tsb.getRedstone();
+        stateLeft = tsb.getNoRedstone();
+        if (stateRight >= listTextureNames.length || stateLeft >= listTextureNames.length) {
+            stateRight = 0;
+            stateLeft = 0;
+        }
+        textureNameLeft = listTextureNames[stateLeft];
+        textureNameRight = listTextureNames[stateRight];
+
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag = itemStackLeft.getTagCompound();
         tag.setString("itemId", tsp.getId());
+        tag.setString("textureName", textureNameLeft);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag2 = itemStackRight.getTagCompound();
         tag2.setString("itemId", tsp.getId());
+        tag2.setString("textureName", textureNameRight);
         itemStackRight.setTagCompound(tag2);
 
-        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
-        stateRight = tsb.getRedstone();
-        stateLeft = tsb.getNoRedstone();
-        if (stateRight >= listTexureNames.length || stateLeft >= listTexureNames.length) {
-            stateRight = 0;
-            stateLeft = 0;
-        }
-        textureNameLeft = listTexureNames[stateLeft];
-        textureNameRight = listTexureNames[stateRight];
+
     }
 
-    @SuppressWarnings("java:S2696")
     @Override
     public void init(IScreenBuilder screen) {
         new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 stateLeft++;
-                if (stateLeft == listTexureNames.length) {
+                if (stateLeft == listTextureNames.length) {
                     stateLeft = 0;
                 }
-                textureNameLeft = listTexureNames[stateLeft];
+                textureNameLeft = listTextureNames[stateLeft];
             }
         };
         new Button(screen, -100, 50, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
                 stateRight++;
-                if (stateRight == listTexureNames.length) {
+                if (stateRight == listTextureNames.length) {
                     stateRight = 0;
                 }
-                textureNameRight = listTexureNames[stateRight];
+                textureNameRight = listTextureNames[stateRight];
             }
         };
     }
@@ -84,35 +85,36 @@ public class GuiSignalBox implements IScreen {
         builder.close();
     }
 
-    @SuppressWarnings("java:S2696")
     @Override
     public void onClose() {
-        textureName = null;
         tsb.setNoRedstone(stateLeft);
         tsb.setRedstone(stateRight);
         SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
         packet.sendToServer();
     }
 
-    @SuppressWarnings("java:S2696")
     @Override
     public void draw(IScreenBuilder builder) {
         int scale = 8;
-        textureName = textureNameRight;
+
+        TagCompound rightTag = itemStackRight.getTagCompound();
+        rightTag.setString("textureName", textureNameRight);
+        itemStackRight.setTagCompound(rightTag);
+
         try (OpenGL.With ignored = OpenGL.matrix()) {
             GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackRight, 0, 0);
         }
-        textureName = textureNameLeft;
+
+        TagCompound leftTag = itemStackLeft.getTagCompound();
+        leftTag.setString("textureName", textureNameLeft);
+        itemStackLeft.setTagCompound(leftTag);
+
         try (OpenGL.With ignored = OpenGL.matrix()) {
             GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackLeft, 0, 0);
         }
-    }
-
-    public static String getTexureName() {
-        return textureName;
     }
 }

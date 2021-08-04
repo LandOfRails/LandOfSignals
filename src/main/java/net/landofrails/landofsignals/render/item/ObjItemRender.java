@@ -8,7 +8,7 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.landofsignals.gui.GuiSignalBox;
+import cam72cam.mod.serialization.TagCompound;
 import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;
@@ -31,7 +31,7 @@ public class ObjItemRender {
 
     public static ItemRender.IItemModel getModelFor(Identifier id, Vec3d translate, Vec3d rotation,
                                                     Collection<String> collection, float scale) {
-        return (stack, world) -> new StandardModel().addCustom(() -> {
+        return (world, stack) -> new StandardModel().addCustom(() -> {
             if (!cache.containsKey(id)) {
                 try {
                     OBJModel model;
@@ -54,11 +54,11 @@ public class ObjItemRender {
                 }
             }
             OBJRender renderer = cache.get(id);
-            String textureName;
-            if (collection != null)
-                textureName = GuiSignalBox.getTexureName();
-            else
-                textureName = null;
+            String textureName = null;
+            TagCompound tag = stack.getTagCompound();
+            if (collection != null && tag.hasKey("textureName")) {
+                textureName = tag.getString("textureName");
+            }
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
                 GL11.glRotated(rotation.x, 1, 0, 0);

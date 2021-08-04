@@ -11,7 +11,6 @@ import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.gui.GuiSignalBox;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -54,11 +53,10 @@ public class ItemSignalPartRender {
                 }
             }
             OBJRender renderer = cache.get(itemId);
-            String textureName;
-            if (collection != null)
-                textureName = GuiSignalBox.getTexureName();
-            else
-                textureName = null;
+            String textureName = null;
+            if (collection != null && tag.hasKey("textureName")) {
+                textureName = tag.getString("textureName");
+            }
             Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART.getItemTranslation(itemId);
             Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getItemScaling(itemId);
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
