@@ -14,7 +14,6 @@ import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 
 import java.util.List;
 
-@SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
@@ -40,7 +39,7 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
-            new SignalBoxTileSignalPartPacket(player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class), getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
+            new SignalBoxTileSignalPartPacket(player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class), getPos()).sendToPlayer(player);
             return true;
         } else return false;
     }

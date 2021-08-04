@@ -34,7 +34,12 @@ public class ItemSignalPartRender {
             Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART.getStates(itemId);
             if (!cache.containsKey(itemId)) {
                 try {
-                    OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
+                    OBJModel model;
+                    if (collection != null) {
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0, collection);
+                    } else {
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
+                    }
                     OBJRender renderer = new OBJRender(model);
                     cache.put(itemId, renderer);
                 } catch (FileNotFoundException e) {

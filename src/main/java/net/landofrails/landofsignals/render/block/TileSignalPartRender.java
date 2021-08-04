@@ -40,7 +40,7 @@ public class TileSignalPartRender {
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0);
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
                 OBJRender renderer = new OBJRender(model);
                 cache.put(id, Pair.of(model, renderer));
             } catch (Exception e) {

@@ -34,7 +34,12 @@ public class ObjItemRender {
         return (stack, world) -> new StandardModel().addCustom(() -> {
             if (!cache.containsKey(id)) {
                 try {
-                    OBJModel model = new OBJModel(id, 0);
+                    OBJModel model;
+                    if (collection != null) {
+                        model = new OBJModel(id, 0, collection);
+                    } else {
+                        model = new OBJModel(id, 0);
+                    }
                     OBJRender renderer = new OBJRender(model);
                     cache.put(id, renderer);
                 } catch (FileNotFoundException e) {
