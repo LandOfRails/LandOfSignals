@@ -34,6 +34,8 @@ jobs:
           architecture: x64 # (x64 or x86) - defaults to x64
       - name: Install deps
         run: sudo apt install -y pngquant findutils xvfb
+      - name: Hack Forge Gradle
+        run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
       - name: Setup Universal Mod Core (and helpers)
         env:
           BRANCH: ${{ matrix.branch }}
