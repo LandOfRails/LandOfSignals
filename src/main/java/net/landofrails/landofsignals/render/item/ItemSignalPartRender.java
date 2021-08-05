@@ -11,7 +11,6 @@ import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.gui.GuiSignalBox;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -34,12 +33,13 @@ public class ItemSignalPartRender {
             Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART.getStates(itemId);
             if (!cache.containsKey(itemId)) {
                 try {
-                    OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
-                    OBJRender renderer;
-                    if (collection != null)
-                        renderer = new OBJRender(model, collection);
-                    else
-                        renderer = new OBJRender(model);
+                    OBJModel model;
+                    if (collection != null) {
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0, collection);
+                    } else {
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
+                    }
+                    OBJRender renderer = new OBJRender(model);
                     cache.put(itemId, renderer);
                 } catch (FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {
@@ -53,16 +53,15 @@ public class ItemSignalPartRender {
                 }
             }
             OBJRender renderer = cache.get(itemId);
-            String textureName;
-            if (collection != null)
-                textureName = GuiSignalBox.getTexureName();
-            else
-                textureName = null;
+            String textureName = null;
+            if (collection != null && tag.hasKey("textureName")) {
+                textureName = tag.getString("textureName");
+            }
             Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART.getItemTranslation(itemId);
-            float scale = (float) LOSBlocks.BLOCK_SIGNAL_PART.getScaling(itemId).x;
+            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getItemScaling(itemId);
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
-                GL11.glScaled(scale, scale, scale);
+                GL11.glScaled(scale.x, scale.y, scale.z);
                 renderer.draw();
             }
         });

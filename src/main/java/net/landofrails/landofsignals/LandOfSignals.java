@@ -17,11 +17,9 @@ import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 
-@SuppressWarnings("java:S112")
 public class LandOfSignals extends ModCore.Mod {
-    @SuppressWarnings("java:S1845")
     public static final String MODID = "landofsignals";
-    public static final String VERSION = "0.0.3";
+    public static final String VERSION = "0.0.4";
 
     @Override
     public String modID() {
@@ -78,7 +76,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
                 ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
 
-                ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/katanagear"));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/signalchest"));
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);

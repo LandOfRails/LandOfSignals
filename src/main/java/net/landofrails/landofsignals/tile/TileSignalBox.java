@@ -12,9 +12,9 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-@SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
@@ -24,6 +24,9 @@ public class TileSignalBox extends BlockEntity {
     private int redstone = 0;
     @TagField("noRedstone")
     private int noRedstone = 0;
+
+    @Nullable
+    private Integer lastRedstone = null;
 
     private TileSignalPart tileSignalPart;
 
@@ -40,13 +43,19 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
-            new SignalBoxTileSignalPartPacket(player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class), getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
+            new SignalBoxTileSignalPartPacket(player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class), getPos()).sendToPlayer(player);
             return true;
         } else return false;
     }
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
+        if (lastRedstone != null && lastRedstone == getWorld().getRedstone(getPos())) {
+            return;
+        } else {
+            lastRedstone = getWorld().getRedstone(getPos());
+        }
+
         if (getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (entity != null) {
