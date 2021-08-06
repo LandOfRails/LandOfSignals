@@ -94,6 +94,14 @@ public class ContentPackSignalPart {
     }
 
     public float[] getItemScaling() {
+        if (itemScaling == null) {
+            if (scaling != null) {
+                itemScaling = scaling;
+            } else {
+                // Emergency value
+                scaling = new float[]{1, 1, 1};
+            }
+        }
         return itemScaling;
     }
 
