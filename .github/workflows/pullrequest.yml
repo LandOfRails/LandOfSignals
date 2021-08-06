@@ -5,14 +5,15 @@ on:
   
 jobs:
   comment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Render template
+      id: template
+      uses: chuhlomin/render-template@v1.2
+      with:
+        template: .github/workflows/pullrequest.md
     - name: Create or Update Comment
-	  uses: peter-evans/create-or-update-comment@v1.4.5
-	  with:
-	    issue-number: ${{ github.event.pull_request.number }}
-		body: |
-		  ### A few things you might want to check:
-		  - [ ] Compilable in every MC version
-		  - [ ] Works on client
-		  - [ ] Works on server
-		  - [ ] Works with content-packs
-		  - [ ] Backwards compatible (Blocks, Tiles)
+      uses: peter-evans/create-or-update-comment@v1.4.5
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ comment.template.outputs.result }}
