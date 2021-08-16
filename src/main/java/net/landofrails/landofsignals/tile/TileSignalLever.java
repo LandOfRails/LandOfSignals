@@ -8,6 +8,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 
 public class TileSignalLever extends BlockEntityTickable implements IRedstoneProvider {
@@ -36,6 +37,10 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         activated = !activated;
+        // Updates the own coordinate
+        getWorld().notifyNeighborsOfStateChange(getPos(), LOSBlocks.BLOCK_SIGNAL_LEVER, true);
+        // Update coordinate below
+        getWorld().notifyNeighborsOfStateChange(getPos().offset(Facing.DOWN), LOSBlocks.BLOCK_SIGNAL_LEVER, true);
         markDirty();
         return true;
     }
@@ -65,19 +70,13 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
         this.activated = activated;
     }
 
-	/**
-	 * <pre>
-	 * Gibt den anliegenden Blöcken ein Redstonesignal.
-	 * <b>HINWEIS:</b> Löst leider kein onNeighborChange aus!
-	 * </pre>
-	 */
     @Override
-	public int getStrongPower(Facing from) {
-		return activated ? 15 : 0;
-	}
+    public int getStrongPower(Facing from) {
+        return activated ? 15 : 0;
+    }
 
-	@Override
+    @Override
     public int getWeakPower(Facing from) {
-		return activated ? 15 : 0;
+        return activated ? 15 : 0;
     }
 }

@@ -12,6 +12,7 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("java:S116")
@@ -24,6 +25,9 @@ public class TileSignalBox extends BlockEntity {
     private int redstone = 0;
     @TagField("noRedstone")
     private int noRedstone = 0;
+
+    @Nullable
+    private Integer lastRedstone = null;
 
     private TileSignalPart tileSignalPart;
     private TileSignalPartAnimated tileSignalPartAnimated;
@@ -44,19 +48,24 @@ public class TileSignalBox extends BlockEntity {
             TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             TileSignalPartAnimated tempSignalPartAnimated = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
             if (tempSignalPart != null) {
-                new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToAllAround(player.getWorld(), player.getPosition(),
-                        1);
+                new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToPlayer(player);
                 return true;
             } else if (tempSignalPartAnimated != null) {
-                new SignalBoxTileSignalPartPacket(tempSignalPartAnimated, getPos()).sendToAllAround(player.getWorld(), player.getPosition(), 1);
+                new SignalBoxTileSignalPartPacket(tempSignalPartAnimated, getPos()).sendToPlayer(player);
                 return true;
             }
-        } else return false;
+        }
         return false;
     }
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
+        if (lastRedstone != null && lastRedstone == getWorld().getRedstone(getPos())) {
+            return;
+        } else {
+            lastRedstone = getWorld().getRedstone(getPos());
+        }
+
         if (getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (tempTileSignalPart != null) {
