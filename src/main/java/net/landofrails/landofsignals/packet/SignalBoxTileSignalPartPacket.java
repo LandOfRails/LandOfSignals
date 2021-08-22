@@ -4,6 +4,7 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.LOSGuis;
+import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
@@ -32,10 +33,14 @@ public class SignalBoxTileSignalPartPacket extends Packet {
 
     @Override
     protected void handle() {
-        if (tileSignalPart != null)
+        if (tileSignalPart != null) {
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
-        else
+            LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
+        } else if (tileSignalPartAnimated != null) {
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPartAnimated(tileSignalPartAnimated);
-        LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
+            LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
+        } else {
+            LandOfSignals.error("Can't open Signalbox, no tile entity given.");
+        }
     }
 }
