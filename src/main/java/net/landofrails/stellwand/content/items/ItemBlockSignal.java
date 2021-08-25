@@ -1,16 +1,5 @@
 package net.landofrails.stellwand.content.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import org.lwjgl.opengl.GL11;
-
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
@@ -39,243 +28,249 @@ import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
+import org.lwjgl.opengl.GL11;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class ItemBlockSignal extends CustomItem {
 
-	// VARIABLES
-	public static final String MISSING = "missing";
-	private static Map<String, OBJModel> models = new HashMap<>();
-	private static Map<String, OBJRender> renderers = new HashMap<>();
-	private static Map<String, float[]> rotations = new HashMap<>();
-	private static Map<String, float[]> translations = new HashMap<>();
-	private static Map<String, Float> scales = new HashMap<>();
-	private static Map<String, String> modes = new HashMap<>();
+    private static final String ITEMID = "itemId";
 
-	public ItemBlockSignal() {
-		super(LandOfSignals.MODID, "stellwand.itemblocksignal");
-	}
+    // VARIABLES
+    public static final String MISSING = "missing";
+    private static Map<String, OBJModel> models = new HashMap<>();
+    private static Map<String, OBJRender> renderers = new HashMap<>();
+    private static Map<String, float[]> rotations = new HashMap<>();
+    private static Map<String, float[]> translations = new HashMap<>();
+    private static Map<String, Float> scales = new HashMap<>();
+    private static Map<String, String> modes = new HashMap<>();
 
-	// Only for Clientside
-	public static void init() {
-		if (renderers.isEmpty()) {
-			try {
-				Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
-				OBJModel model = new OBJModel(id, 0);
-				models.put(MISSING, model);
-				// Renderers in render function
-				rotations.put(MISSING, new float[] { 15, 195, 0 });
-				translations.put(MISSING, new float[] { 0.5f, 0.5f, 0.5f });
-				scales.put(MISSING, 0.7f);
-				modes.put(MISSING, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+    public ItemBlockSignal() {
+        super(LandOfSignals.MODID, "stellwand.itemblocksignal");
+    }
 
-			// ContentPack
-			for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
-				try {
-					ContentPackEntry cpe = entry.getKey();
-					String packId = entry.getValue();
-					String itemName = cpe.getBlockId(packId);
-					ContentPackEntryItem item = cpe.getItem();
-					Identifier id = new Identifier("stellwand", item.getModel());
-					OBJModel model = new OBJModel(id, 0);
+    // Only for Clientside
+    public static void init() {
+        if (models.isEmpty()) {
+            try {
+                Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
+                OBJModel model = new OBJModel(id, 0);
+                models.put(MISSING, model);
+                // Renderers in render function
+                rotations.put(MISSING, new float[]{15, 195, 0});
+                translations.put(MISSING, new float[]{0.5f, 0.5f, 0.5f});
+                scales.put(MISSING, 0.7f);
+                modes.put(MISSING, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-					models.put(itemName, model);
-					// Renderers in render function
-					rotations.put(itemName, item.getRotation());
-					translations.put(itemName, item.getTranslation());
-					scales.put(itemName, item.getScale());
-					modes.put(itemName, item.getMode());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+            // ContentPack
+            for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
+                try {
+                    ContentPackEntry cpe = entry.getKey();
+                    String packId = entry.getValue();
+                    String itemName = cpe.getBlockId(packId);
+                    ContentPackEntryItem item = cpe.getItem();
+                    Identifier id = new Identifier("stellwand", item.getModel());
+                    OBJModel model = new OBJModel(id, 0);
 
-		}
-	}
+                    models.put(itemName, model);
+                    // Renderers in render function
+                    rotations.put(itemName, item.getRotation());
+                    translations.put(itemName, item.getTranslation());
+                    scales.put(itemName, item.getScale());
+                    modes.put(itemName, item.getMode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-	@Override
-	public List<CreativeTab> getCreativeTabs() {
-		return Arrays.asList(CustomTabs.STELLWAND_TAB);
-	}
+        }
+    }
 
-	@Override
-	public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
-		List<ItemStack> items = new ArrayList<>();
+    @Override
+    public List<CreativeTab> getCreativeTabs() {
+        return Collections.singletonList(CustomTabs.STELLWAND_TAB);
+    }
 
-		if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
-			return items;
+    @Override
+    public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+        List<ItemStack> items = new ArrayList<>();
 
-		if (getFirstVarient() != null)
-			items.add(getFirstVarient());
+        if (creativeTab != null && !creativeTab.equals(CustomTabs.STELLWAND_TAB))
+            return items;
 
-		return items;
-	}
+        if (getFirstVarient() != null)
+            items.add(getFirstVarient());
 
-	public ItemStack getFirstVarient() {
-		ItemStack is = null;
-		Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSignals().entrySet().iterator();
-		if (it.hasNext()) {
-			Entry<ContentPackEntry, String> entry = it.next();
+        return items;
+    }
 
-			ContentPackEntry cpe = entry.getKey();
-			is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
-			TagCompound tag = is.getTagCompound();
-			tag.setString("itemId", cpe.getBlockId(entry.getValue()));
-			is.setTagCompound(tag);
+    public ItemStack getFirstVarient() {
+        ItemStack is = null;
+        Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockSignals().entrySet().iterator();
+        if (it.hasNext()) {
+            Entry<ContentPackEntry, String> entry = it.next();
 
-		}
-		return is;
-	}
+            ContentPackEntry cpe = entry.getKey();
+            is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
+            TagCompound tag = is.getTagCompound();
+            tag.setString(ITEMID, cpe.getBlockId(entry.getValue()));
+            is.setTagCompound(tag);
 
-	@Override
-	public void onClickAir(Player player, World world, Hand hand) {
+        }
+        return is;
+    }
 
-		if (world.isServer) {
-			return;
-		}
+    @Override
+    public void onClickAir(Player player, World world, Hand hand) {
 
-		List<ItemStack> itemStackList = new ArrayList<>();
+        if (world.isServer) {
+            return;
+        }
 
-		for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
+        List<ItemStack> itemStackList = new ArrayList<>();
 
-			ContentPackEntry cpe = entry.getKey();
-			ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
-			TagCompound tag = is.getTagCompound();
-			tag.setString("itemId", cpe.getBlockId(entry.getValue()));
-			is.setTagCompound(tag);
-			itemStackList.add(is);
+        for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
 
-		}
+            ContentPackEntry cpe = entry.getKey();
+            ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
+            TagCompound tag = is.getTagCompound();
+            tag.setString(ITEMID, cpe.getBlockId(entry.getValue()));
+            is.setTagCompound(tag);
+            itemStackList.add(is);
 
-		if (itemStackList.isEmpty())
-			itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
+        }
 
-		int sizeInHand = player.getHeldItem(hand).getCount();
-		SelectItem si = new SelectItem();
-		si.open(player, itemStackList, item -> {
-			if (item != null) {
-				player.setHeldItem(hand, item);
-				item.setCount(sizeInHand);
-				ChangeHandHeldItem packet = new ChangeHandHeldItem(player, item, hand);
-				packet.sendToServer();
-			}
-		});
+        if (itemStackList.isEmpty())
+            itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
 
-	}
+        int sizeInHand = player.getHeldItem(hand).getCount();
+        SelectItem si = new SelectItem();
+        si.open(player, itemStackList, item -> {
+            if (item != null) {
+                player.setHeldItem(hand, item);
+                item.setCount(sizeInHand);
+                ChangeHandHeldItem packet = new ChangeHandHeldItem(player, item, hand);
+                packet.sendToServer();
+            }
+        });
 
-	@SuppressWarnings({ "java:S3776", "java:S112" })
-	public static ItemRender.IItemModel getModelFor() {
+    }
 
-		return (world, stack) -> new StandardModel().addCustom(() -> {
+    public static ItemRender.IItemModel getModelFor() {
 
-			ItemBlockSignal.init();
+        return (world, stack) -> new StandardModel().addCustom(() -> {
 
-			TagCompound tag = stack.getTagCompound();
-			String itemId = tag.getString("itemId");
-			if (itemId == null || !models.containsKey(itemId)) {
-				itemId = MISSING;
-			}
+            ItemBlockSignal.init();
 
-			if (renderers.get(itemId) == null) {
-				OBJModel model = models.get(itemId);
-				renderers.put(itemId, new OBJRender(model));
-			}
+            TagCompound tag = stack.getTagCompound();
+            String itemId = tag.getString(ITEMID);
+            if (itemId == null || !models.containsKey(itemId)) {
+                itemId = MISSING;
+            }
 
-			OBJRender renderer = renderers.get(itemId);
+            if (renderers.get(itemId) == null) {
+                OBJModel model = models.get(itemId);
+                renderers.put(itemId, new OBJRender(model));
+            }
 
-			float[] translate = translations.get(itemId);
-			float[] rotation = rotations.get(itemId);
-			// Enables the gui to display different modes
-			String customMode = stack.getTagCompound().getString("customMode");
-			String mode = customMode != null ? customMode : modes.get(itemId);
-			float scale = scales.get(itemId);
-			OBJModel model = models.get(itemId);
-			try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
-				GL11.glTranslated(translate[0], translate[1], translate[2]);
-				GL11.glRotatef(rotation[0], 1, 0, 0);
-				GL11.glRotatef(rotation[1], 0, 1, 0);
-				GL11.glRotatef(rotation[2], 0, 0, 1);
-				GL11.glScaled(scale, scale, scale);
+            OBJRender renderer = renderers.get(itemId);
 
-				if (mode == null) {
+            float[] translate = translations.get(itemId);
+            float[] rotation = rotations.get(itemId);
+            // Enables the gui to display different modes
+            String customMode = stack.getTagCompound().getString("customMode");
+            String mode = customMode != null ? customMode : modes.get(itemId);
+            float scale = scales.get(itemId);
+            OBJModel model = models.get(itemId);
+            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
+                GL11.glTranslated(translate[0], translate[1], translate[2]);
+                GL11.glRotatef(rotation[0], 1, 0, 0);
+                GL11.glRotatef(rotation[1], 0, 1, 0);
+                GL11.glRotatef(rotation[2], 0, 0, 1);
+                GL11.glScaled(scale, scale, scale);
 
-					renderer.draw();
+                if (mode == null) {
 
-				} else {
+                    renderer.draw();
 
-					ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
-							.collect(Collectors.toCollection(ArrayList::new));
+                } else {
 
-					if (!modes.isEmpty()) {
-						ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
-								.collect(Collectors.toCollection(ArrayList::new));
-						modes.addAll(generals);
-						renderer.drawGroups(modes);
-					} else {
-						renderer.drawGroups(model.groups());
-					}
+                    ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
+                            .collect(Collectors.toCollection(ArrayList::new));
 
-				}
-			}
-		});
-	}
+                    if (!modes.isEmpty()) {
+                        ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        modes.addAll(generals);
+                        renderer.drawGroups(modes);
+                    } else {
+                        renderer.drawGroups(model.groups());
+                    }
 
-	@Override
-	public ClickResult onClickBlock(Player player, World world, Vec3i pos, Hand hand, Facing facing, Vec3d inBlockPos) {
-		Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+                }
+            }
+        });
+    }
 
-		if (isStandingInBlock(player.getBlockPosition().subtract(target)))
-			return ClickResult.REJECTED;
+    @Override
+    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Hand hand, Facing facing, Vec3d inBlockPos) {
+        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
 
-		if (world.isAir(target) || world.isReplaceable(target)) {
+        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
+            return ClickResult.REJECTED;
 
-			BlockTypeEntity block = CustomBlocks.BLOCKSIGNAL;
+        if (world.isAir(target) || world.isReplaceable(target)) {
 
-			world.setBlock(target, block);
-			if (!player.isCreative()) {
-				ItemStack is = player.getHeldItem(hand);
-				is.shrink(1);
-				player.setHeldItem(hand, is);
-			}
-			BlockSignalStorageEntity blockEntity = world.getBlockEntity(target,
-					BlockSignalStorageEntity.class);
-			// Set ContentPackBlockId
-			ItemStack item = player.getHeldItem(hand);
-			TagCompound tag = item.getTagCompound();
-			if (blockEntity != null) {
-				if (tag != null && !tag.isEmpty())
-					blockEntity
-							.setContentBlockId(tag.hasKey("itemId")
-									? tag.getString("itemId")
-									: MISSING);
-				else
-					blockEntity.setContentBlockId(MISSING);
-				blockEntity.renderEntity
-						.setRotation(player.getRotationYawHead());
-			}
-			//
+            BlockTypeEntity block = CustomBlocks.BLOCKSIGNAL;
 
-			return ClickResult.ACCEPTED;
-		}
+            world.setBlock(target, block);
+            if (!player.isCreative()) {
+                ItemStack is = player.getHeldItem(hand);
+                is.shrink(1);
+                player.setHeldItem(hand, is);
+            }
+            BlockSignalStorageEntity blockEntity = world.getBlockEntity(target,
+                    BlockSignalStorageEntity.class);
+            // Set ContentPackBlockId
+            ItemStack item = player.getHeldItem(hand);
+            TagCompound tag = item.getTagCompound();
+            if (blockEntity != null) {
+                if (tag != null && !tag.isEmpty())
+                    blockEntity
+                            .setContentBlockId(tag.hasKey(ITEMID)
+                                    ? tag.getString(ITEMID)
+                                    : MISSING);
+                else
+                    blockEntity.setContentBlockId(MISSING);
+                blockEntity.renderEntity
+                        .setRotation(player.getRotationYawHead());
+            }
+            //
 
-		return ClickResult.REJECTED;
-	}
+            return ClickResult.ACCEPTED;
+        }
 
-	private boolean isStandingInBlock(Vec3i vec3i) {
-		return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
-	}
+        return ClickResult.REJECTED;
+    }
 
-	@Override
-	public List<String> getTooltip(ItemStack itemStack) {
-		String lore = "";
-		TagCompound tag = itemStack.getTagCompound();
-		if (tag.hasKey("itemId")) {
-			String itemId = tag.getString("itemId");
-			lore = Content.getNameForId(itemId);
-		}
-		return Arrays.asList(lore);
-	}
+    private boolean isStandingInBlock(Vec3i vec3i) {
+        return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack itemStack) {
+        String lore = "";
+        TagCompound tag = itemStack.getTagCompound();
+        if (tag.hasKey(ITEMID)) {
+            String itemId = tag.getString(ITEMID);
+            lore = Content.getNameForId(itemId);
+        }
+        return Collections.singletonList(lore);
+    }
 
 }
