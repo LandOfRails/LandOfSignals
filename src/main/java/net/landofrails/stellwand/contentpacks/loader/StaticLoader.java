@@ -20,10 +20,7 @@ import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntryIte
 import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.landofrails.stellwand.contentpacks.types.DirectionType.*;
 
@@ -40,6 +37,7 @@ public class StaticLoader {
         Content.addContentPack(contentPack);
     }
 
+    @SuppressWarnings("java:S1192")
     private static List<ContentPackEntry> getEntries() {
 
         List<ContentPackEntry> contentPackEntries = new ArrayList<>();
@@ -228,6 +226,23 @@ public class StaticLoader {
         prop.setModel("models/block/blockfiller/trackdiag/ur/trackdiag.obj");
         contentPackEntries.add(prop.toEntry());
 
+
+        //// Multisignal
+
+        // Streckenblock
+        prop = new Properties().setName("Streckenblock");
+        prop.setType(EntryType.BLOCKMULTISIGNAL);
+        prop.setModel("models/block/blockmultisignal/blockstreckenblock/streckenblock.obj");
+        prop.setFromDir(LEFT).setToDir(RIGHT);
+        Map<String, Map<String, String>> modesList = new HashMap<>();
+        modesList.put("Top left", modes("Black", "topLeftBlack", "White", "topLeftWhite", "Red", "topLeftRed"));
+        modesList.put("Top right", modes("Black", "topRightBlack", "White", "topRightWhite", "Red", "topRightRed"));
+        modesList.put("Bottom left", modes("Black", "bottomLeftBlack", "White", "bottomLeftWhite", "Red", "bottomLeftRed"));
+        modesList.put("Bottom right", modes("Black", "bottomRightBlack", "White", "bottomRightWhite", "Red", "bottomRightRed"));
+        prop.setModesList(modesList);
+        prop.setItemMode("item").setItemTranslation(.5f, .1625f, .5f);
+        contentPackEntries.add(prop.toEntry());
+
         return contentPackEntries;
     }
 
@@ -251,8 +266,8 @@ public class StaticLoader {
         private DirectionType[] toDir;
         private String model;
 
-        private LinkedHashMap<String, String> modes = new LinkedHashMap<>();
-        private List<Map<String, String>> modeList = new ArrayList<>();
+        private Map<String, String> modes = new LinkedHashMap<>();
+        private Map<String, Map<String, String>> modesList = new HashMap<>();
 
         private String itemMode;
         private float[] blockRotation = new float[]{0f, 0f, 0f};
@@ -286,13 +301,13 @@ public class StaticLoader {
             return this;
         }
 
-        public Properties setModes(LinkedHashMap<String, String> modes) {
+        public Properties setModes(Map<String, String> modes) {
             this.modes = modes;
             return this;
         }
 
-        public Properties setModeList(List<Map<String, String>> modeList) {
-            this.modeList = modeList;
+        public Properties setModesList(Map<String, Map<String, String>> modesList) {
+            this.modesList = modesList;
             return this;
         }
 
@@ -341,7 +356,7 @@ public class StaticLoader {
                     BlockSignalEntryItem signalItem = new BlockSignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
                     return new BlockSignalEntry(name, model, signalBlock, signalItem);
                 case BLOCKMULTISIGNAL:
-                    BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modeList);
+                    BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modesList);
                     BlockMultisignalEntryItem multisignalItem = new BlockMultisignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
                     return new BlockMultisignalEntry(name, model, multisignalBlock, multisignalItem);
                 default:
@@ -350,5 +365,6 @@ public class StaticLoader {
         }
 
     }
+
 
 }
