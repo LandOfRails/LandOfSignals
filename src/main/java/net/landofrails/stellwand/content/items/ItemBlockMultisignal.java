@@ -1,5 +1,6 @@
 package net.landofrails.stellwand.content.items;
 
+import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.item.ClickResult;
 import cam72cam.mod.item.CreativeTab;
@@ -18,6 +19,8 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.Stellwand;
+import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
 import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -199,9 +202,7 @@ public class ItemBlockMultisignal extends CustomItem {
                             .collect(Collectors.toCollection(ArrayList::new));
 
                     if (!modes.isEmpty()) {
-                        ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
-                                .collect(Collectors.toCollection(ArrayList::new));
-                        modes.addAll(generals);
+                        model.groups().stream().filter(s -> s.startsWith("general")).forEach(modes::add);
                         renderer.drawGroups(modes);
                     } else {
                         renderer.drawGroups(model.groups());
@@ -214,7 +215,45 @@ public class ItemBlockMultisignal extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+
+        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
+            return ClickResult.REJECTED;
+
+        if (world.isAir(target) || world.isReplaceable(target)) {
+
+            BlockTypeEntity block = CustomBlocks.BLOCKMULTISIGNAL;
+
+            world.setBlock(target, block);
+            if (!player.isCreative()) {
+                ItemStack is = player.getHeldItem(hand);
+                is.shrink(1);
+                player.setHeldItem(hand, is);
+            }
+            BlockMultisignalStorageEntity blockEntity = world.getBlockEntity(target,
+                    BlockMultisignalStorageEntity.class);
+            // Set ContentPackBlockId
+            ItemStack item = player.getHeldItem(hand);
+            TagCompound tag = item.getTagCompound();
+
+            if (blockEntity != null) {
+                if (tag != null && tag.hasKey(ITEMID)) {
+                    blockEntity.setContentBlockId(tag.getString(ITEMID));
+                } else {
+                    blockEntity.setContentBlockId(MISSING);
+                }
+                blockEntity.getRenderEntity()
+                        .setRotation(player.getRotationYawHead());
+            }
+
+            return ClickResult.ACCEPTED;
+        }
+
         return ClickResult.REJECTED;
+    }
+
+    private boolean isStandingInBlock(Vec3i vec3i) {
+        return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
     }
 
     @Override

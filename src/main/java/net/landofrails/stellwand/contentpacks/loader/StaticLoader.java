@@ -233,7 +233,7 @@ public class StaticLoader {
         prop = new Properties().setName("Streckenblock");
         prop.setType(EntryType.BLOCKMULTISIGNAL);
         prop.setModel("models/block/blockmultisignal/blockstreckenblock/streckenblock.obj");
-        prop.setFromDir(LEFT).setToDir(RIGHT);
+        prop.setBlockTranslation(.5f, 0, .5f).setFromDir(LEFT).setToDir(RIGHT);
         Map<String, Map<String, String>> modesList = new HashMap<>();
         modesList.put("Top left", modes("Black", "topLeftBlack", "White", "topLeftWhite", "Red", "topLeftRed"));
         modesList.put("Top right", modes("Black", "topRightBlack", "White", "topRightWhite", "Red", "topRightRed"));
