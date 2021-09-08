@@ -2,6 +2,7 @@ package net.landofrails.stellwand.contentpacks.entries.multisignal;
 
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 
+import java.util.LinkedList;
 import java.util.Map;
 
 public class BlockMultisignalEntryBlock extends ContentPackEntryBlock {
@@ -23,6 +24,8 @@ public class BlockMultisignalEntryBlock extends ContentPackEntryBlock {
      * @formatter:on
      */
     private Map<String, Map<String, String>> modesList;
+    // List of modeGroups that once initialized should stay this way
+    private transient LinkedList<String> modeGroups;
 
     public BlockMultisignalEntryBlock() {
 
@@ -35,6 +38,12 @@ public class BlockMultisignalEntryBlock extends ContentPackEntryBlock {
 
     public Map<String, Map<String, String>> getModesList() {
         return modesList;
+    }
+
+    public LinkedList<String> getModeGroups() {
+        if (modeGroups == null)
+            modeGroups = new LinkedList<>(modesList.keySet());
+        return modeGroups;
     }
 
 }

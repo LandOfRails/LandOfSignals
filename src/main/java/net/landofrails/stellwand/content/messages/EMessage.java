@@ -5,7 +5,7 @@ import net.landofrails.stellwand.Stellwand;
 
 public enum EMessage {
 
-	// @formatter:off
+    // @formatter:off
 	
 	// Sender
 	MESSAGE_NO_SIGNALS_CONNECTED("sender.nosignalsconnected"),
@@ -18,33 +18,45 @@ public enum EMessage {
 	MESSAGE_SIGNAL_CONNECTED("connector.signalconnected"), 
 	MESSAGE_SIGNALS_MUST_BE_EQUAL("connector.sendersignalsmustbeequal"),
 	MESSAGE_NEW_SIGNAL_SELECTED("connector.newsignalselected"),
-	MESSAGE_NEW_SENDER_SELECTED("connector.newsenderselected");
+	MESSAGE_NEW_SENDER_SELECTED("connector.newsenderselected"),
+
+	// GUI
+	GUI_STELLWAND_SELECTSENDERMODES_GROUP("gui." + Stellwand.DOMAIN + ":selectsendermodes.group", true);
+
 	// @formatter:on
 
-	private final String value;
+    private final String value;
 
-	EMessage(String value) {
-		this.value = value;
-	}
+    EMessage(String value) {
+        this(value, false);
+    }
 
-	public String getRaw() {
-		return "message." + Stellwand.DOMAIN + ":" + value;
-	}
+    EMessage(String value, boolean complete) {
+        if (complete) {
+            this.value = value;
+        } else {
+            this.value = "message." + Stellwand.DOMAIN + ":" + value;
+        }
+    }
 
-	@Override
-	public String toString() {
-		return TextUtil.translate(getRaw());
-	}
+    public String getRaw() {
+        return value;
+    }
 
-	public String toString(Object... objects) {
-		return TextUtil.translate(getRaw(), objects);
-	}
+    @Override
+    public String toString() {
+        return TextUtil.translate(getRaw());
+    }
 
-	public static EMessage fromRaw(String raw) {
-		for (EMessage eMessage : values())
-			if (eMessage.getRaw().equals(raw))
-				return eMessage;
-		return null;
-	}
+    public String toString(Object... objects) {
+        return TextUtil.translate(getRaw(), objects);
+    }
+
+    public static EMessage fromRaw(String raw) {
+        for (EMessage eMessage : values())
+            if (eMessage.getRaw().equals(raw))
+                return eMessage;
+        return null;
+    }
 
 }

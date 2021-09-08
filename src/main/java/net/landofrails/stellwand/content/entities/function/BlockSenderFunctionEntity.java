@@ -9,6 +9,8 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
+import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
@@ -17,13 +19,15 @@ import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.content.network.OpenSenderGui;
 import net.landofrails.stellwand.content.network.ServerMessagePacket;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
+import net.landofrails.stellwand.utils.compact.SignalContainer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
     private BlockSenderStorageEntity entity;
 
     // Ein Kommentar damit der Client startet lol
-    public BlockSenderFunctionEntity() {
+    @SuppressWarnings("java:S112")
+    protected BlockSenderFunctionEntity() {
         if (this instanceof BlockSenderStorageEntity)
             entity = (BlockSenderStorageEntity) this;
         else
@@ -58,14 +62,18 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
         if (isAir(item) && p.getWorld().isServer) {
             if (!entity.signals.isEmpty()) {
 
-                Vec3i signalid = entity.signals.get(0);
-                getWorld().keepLoaded(signalid);
-                if (getWorld().hasBlockEntity(signalid, BlockSignalStorageEntity.class)) {
-                    BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalid, BlockSignalStorageEntity.class);
-                    OpenSenderGui packet = new OpenSenderGui(getPos(), signalEntity);
+                Vec3i signalPos = entity.signals.get(0);
+                getWorld().keepLoaded(signalPos);
+                if (getWorld().hasBlockEntity(signalPos, BlockSignalStorageEntity.class)) {
+                    BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockSignalStorageEntity.class);
+                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
+                    packet.sendToPlayer(player);
+                } else if (getWorld().hasBlockEntity(signalPos, BlockMultisignalStorageEntity.class)) {
+                    BlockMultisignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockMultisignalStorageEntity.class);
+                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
                     packet.sendToPlayer(player);
                 } else {
-                    entity.signals.remove(signalid);
+                    entity.signals.remove(signalPos);
                     ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
                 }
 
@@ -93,21 +101,24 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
     }
 
     public void updateSignals() {
-        for (Vec3i signal : entity.signals) {
-            getWorld().keepLoaded(signal);
-            BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+        for (Vec3i signalPos : entity.signals) {
+            getWorld().keepLoaded(signalPos);
 
-            if (s != null) {
-                if (entity.modePowerOn != null && entity.modePowerOff != null) {
-                    s.senderModes.put(getPos(), entity.hasPower ? entity.modePowerOn : entity.modePowerOff);
-                    s.updateSignalMode();
+            if (SignalContainer.isSignal(getWorld(), signalPos)) {
+                SignalContainer<?> signalContainer = SignalContainer.of(getWorld(), signalPos);
+
+                if ((entity.modePowerOn != null && !entity.modePowerOn.isEmpty()) && (entity.modePowerOff != null && !entity.modePowerOff.isEmpty())) {
+
+                    signalContainer.addSenderModesFrom(getPos(), entity.signalGroup, entity.hasPower ? entity.modePowerOn : entity.modePowerOff);
+                    signalContainer.updateSignalModes();
                     if (getWorld().isServer) {
-                        ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+                        ChangeSignalModes packet = new ChangeSignalModes(signalPos, signalContainer.getSenderModes());
                         packet.sendToAll();
                     }
                 }
-            } else if (getWorld().isBlockLoaded(signal)) {
-                entity.signals.remove(signal);
+
+            } else if (getWorld().isBlockLoaded(signalPos)) {
+                entity.signals.remove(signalPos);
             }
         }
     }
@@ -117,14 +128,21 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
         for (Vec3i signal : entity.signals) {
             getWorld().keepLoaded(signal);
-            BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+            SignalContainer<?> signalContainer = null;
+            if (getWorld().isBlock(signal, CustomBlocks.BLOCKSIGNAL)) {
+                BlockSignalStorageEntity s = getWorld().getBlockEntity(signal, BlockSignalStorageEntity.class);
+                signalContainer = SignalContainer.of(s);
+            } else if (getWorld().isBlock(signal, CustomBlocks.BLOCKMULTISIGNAL)) {
+                BlockMultisignalStorageEntity s = getWorld().getBlockEntity(signal, BlockMultisignalStorageEntity.class);
+                signalContainer = SignalContainer.of(s);
+            }
 
-            if (s != null && s.senderModes.containsKey(getPos())) {
-                s.senderModes.remove(getPos());
+            if (signalContainer != null && signalContainer.hasSenderModesFrom(getPos())) {
+                signalContainer.removeSenderModesFrom(getPos());
 
-                s.updateSignalMode();
+                signalContainer.updateSignalModes();
                 if (getWorld().isServer) {
-                    ChangeSignalModes packet = new ChangeSignalModes(signal, s.senderModes);
+                    ChangeSignalModes packet = new ChangeSignalModes(signal, signalContainer.getSenderModes());
                     packet.sendToAll();
                 }
             }

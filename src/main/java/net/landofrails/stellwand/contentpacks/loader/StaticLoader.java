@@ -1,6 +1,7 @@
 package net.landofrails.stellwand.contentpacks.loader;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.gui.Progress;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
@@ -31,10 +32,13 @@ public class StaticLoader {
     }
 
     public static void init() {
-        ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.0", "SeltixSub", new ArrayList<>());
+        Progress.Bar progressBar = Progress.push("Loading static contentpack", 1);
+        ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.1", "SeltixSub", new ArrayList<>());
+        progressBar.step(String.format("Contentpack: %s v%s", contentPack.getName(), contentPack.getPackversion()));
         ModCore.info("Loading ContentPack: %s v%s", contentPack.getName(), contentPack.getPackversion());
         contentPack.setEntries(getEntries());
         Content.addContentPack(contentPack);
+        Progress.pop(progressBar);
     }
 
     @SuppressWarnings("java:S1192")

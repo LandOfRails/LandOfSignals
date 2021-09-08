@@ -1,18 +1,23 @@
 package net.landofrails.stellwand.content.entities.storage;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.function.BlockSenderFunctionEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.utils.StellwandUtils;
+import net.landofrails.stellwand.utils.compact.SignalContainer;
+import net.landofrails.stellwand.utils.mapper.EmptyStringMapper;
 import net.landofrails.stellwand.utils.mapper.Vec3iListMapper;
 
 import java.util.*;
@@ -29,6 +34,9 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
     protected static Map<String, float[]> translations = new HashMap<>();
 
     // TagFields
+    @TagField("version")
+    public int version = 2;
+
     @TagField("contentPackBlockId")
     public String contentPackBlockId = MISSING;
 
@@ -38,19 +46,22 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
     @TagField(value = "signals", typeHint = Vec3i.class, mapper = Vec3iListMapper.class)
     public List<Vec3i> signals = new ArrayList<>();
 
-    @TagField("modePowerOff")
-    public String modePowerOff;
+    @TagField(value = "signalGroup", mapper = EmptyStringMapper.class)
+    public String signalGroup;
 
-    @TagField("modePowerOn")
+    @TagField(value = "modePowerOff", mapper = EmptyStringMapper.class)
+    public String modePowerOff;
+    @TagField(value = "modePowerOn", mapper = EmptyStringMapper.class)
     public String modePowerOn;
 
     @TagField("hasPower")
     public boolean hasPower = false;
 
     // Variables
-    private BlockSignalStorageEntity signalEntity;
+    private SignalContainer<BlockEntity> signalEntity;
 
     // Subclasses
+    @SuppressWarnings("java:S1104")
     public BlockSenderRenderEntity renderEntity;
 
     public BlockSenderStorageEntity() {
@@ -109,25 +120,30 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
         this.contentPackBlockId = contentPackBlockId;
     }
 
-    public boolean isCompatible(BlockSignalStorageEntity otherSignal) {
+    public boolean isCompatible(SignalContainer<?> otherSignal) {
         if (signals.isEmpty())
             return true;
-        
-        Iterator<Vec3i> signal = signals.iterator();
-        BlockSignalStorageEntity signalTile;
+
+        Iterator<Vec3i> signalIterator = signals.iterator();
+        SignalContainer<?> signalContainer = null;
+
         do {
-            signalTile = getWorld().getBlockEntity(signal.next(), BlockSignalStorageEntity.class);
-        } while (signalTile == null && signal.hasNext());
-        if (signalTile == null)
+            Vec3i signalPos = signalIterator.next();
+            if (SignalContainer.isSignal(getWorld(), signalPos)) {
+                signalContainer = SignalContainer.of(getWorld(), signalPos);
+            }
+        } while (signalContainer == null && signalIterator.hasNext());
+
+        if (signalContainer == null)
             return true;
-        return signalTile.getContentPackBlockId().equals(otherSignal.getContentPackBlockId());
+        return signalContainer.isCompatible(otherSignal);
     }
 
-    public void setSignal(BlockSignalStorageEntity signalEntity) {
+    public void setSignal(SignalContainer<BlockEntity> signalEntity) {
         this.signalEntity = signalEntity;
     }
 
-    public BlockSignalStorageEntity getSignal() {
+    public SignalContainer<BlockEntity> getSignal() {
         return this.signalEntity;
     }
 
@@ -148,4 +164,9 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
         return translations;
     }
 
+    // Map old versions to newer ones
+    @Override
+    public void load(TagCompound nbt) {
+        VersionMapper.checkMap(BlockSenderStorageEntity.class, nbt);
+    }
 }

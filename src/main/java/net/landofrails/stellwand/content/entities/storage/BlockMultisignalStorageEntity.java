@@ -16,10 +16,7 @@ import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlo
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.mapper.MapStringStringMapper;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntity {
 
@@ -29,7 +26,7 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     protected static Map<String, OBJRender> renderers = new HashMap<>();
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
-    protected static Map<String, Map<String, Map<String, String>>> possibleModes = new HashMap<>();
+    protected static Map<String, Map<String, Map<String, String>>> possibleModes = new LinkedHashMap<>();
 
     // TagFields
     @TagField("contentPackBlockId")
@@ -38,11 +35,16 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     @TagField("blockRotation")
     public float blockRotation = 0;
 
+    // Signalgroup, Signalname
     @TagField(value = "displayModes", mapper = MapStringStringMapper.class)
     public Map<String, String> displayModes;
 
     // Variables
-    private final Map<Vec3i, List<String>> senderModeslist = new HashMap<>();
+    // Sender, (Signalgroup, Signalname)
+    @SuppressWarnings("java:S1104")
+    public Map<Vec3i, Map<String, String>> senderModeslist = new HashMap<>();
+
+    private static Map<String, LinkedList<String>> modeGroups = new HashMap<>();
 
     private boolean marked = false;
     private float[] markedColor = new float[]{0, 0, 0};
@@ -90,7 +92,8 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
                 models.put(blockId, m);
                 rotations.put(blockId, block.getRotation());
                 translations.put(blockId, block.getTranslation());
-                possibleModes.put(blockId, block.getModesList());
+                possibleModes.put(blockId, new LinkedHashMap<>(block.getModesList()));
+                modeGroups.put(blockId, block.getModeGroups());
             } catch (Exception e) {
                 ModCore.Mod.error("Error while loading contentpack blocks:");
                 ModCore.Mod.error("Block: %s", name);
@@ -112,7 +115,13 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     public Map<String, Map<String, String>> getPossibleModes() {
         if (possibleModes.containsKey(contentPackBlockId))
             return possibleModes.get(contentPackBlockId);
-        return new HashMap<>();
+        return new LinkedHashMap<>();
+    }
+
+    public LinkedList<String> getModeGroups() {
+        if (modeGroups.containsKey(contentPackBlockId))
+            return modeGroups.get(contentPackBlockId);
+        return new LinkedList<>();
     }
 
     public void setModes(Map<String, String> modes) {
@@ -136,7 +145,7 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     }
 
     @SuppressWarnings("java:S1751")
-    public void updateSignalMode() {
+    public void updateSignalModes() {
 
         Map<String, String> actualModes = new HashMap<>();
 
@@ -147,15 +156,23 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
                 actualMode = entry.getValue();
                 break;
             }
+            for (String possibleMode : modes.values()) {
+                for (Map.Entry<Vec3i, Map<String, String>> entry2 : senderModeslist.entrySet()) {
+                    Map<String, String> signalGroupSignalMap = entry2.getValue();
+                    if (signalGroupSignalMap.containsKey(signalGroup) && possibleMode.equals(signalGroupSignalMap.get(signalGroup))) {
+                        actualMode = possibleMode;
+                    }
+                }
+            }
 
             for (String possibleMode : modes.values())
-                if (senderModeslist.get(getPos()).contains(possibleMode))
+                if (senderModeslist.get(getPos()) != null && senderModeslist.get(getPos()).containsValue(possibleMode))
                     actualMode = possibleMode;
 
             actualModes.put(signalGroup, actualMode);
         });
 
-        this.displayModes = actualModes;
+        setModes(actualModes);
 
     }
 
@@ -188,4 +205,5 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     public float[] getMarkedColor() {
         return markedColor;
     }
+
 }
