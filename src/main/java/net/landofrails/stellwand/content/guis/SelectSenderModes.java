@@ -37,6 +37,7 @@ public class SelectSenderModes implements IScreen {
     // Display
     private final ItemStack itemPowerOff;
     private final ItemStack itemPowerOn;
+    private Button groupIdButton;
 
     @SuppressWarnings({"java:S112", "java:S1192"})
     public SelectSenderModes(BlockSenderStorageEntity entity) {
@@ -106,6 +107,23 @@ public class SelectSenderModes implements IScreen {
                         nextMode(mode));
             }
         };
+        groupIdButton = new Button(screen, -100, 0,
+                EMessage.GUI_STELLWAND_SELECTSENDERMODES_GROUP.toString(signalGroup != null ? signalGroup : "-")) {
+            @Override
+            public void onClick(Player.Hand hand) {
+                boolean useNext = false;
+                for (String iterationMode : modeGroups) {
+                    if (useNext) {
+                        setNewSignalGroup(iterationMode);
+                        return;
+                    } else if ((iterationMode == null && signalGroup == null) || (iterationMode != null && iterationMode.contentEquals(signalGroup))) {
+                        useNext = true;
+                    }
+                }
+                setNewSignalGroup(getFirstValue(modes.keySet()));
+            }
+        };
+        groupIdButton.setEnabled(signalGroup != null);
     }
 
     @Override
@@ -152,22 +170,7 @@ public class SelectSenderModes implements IScreen {
 
     @SuppressWarnings("java:S2259")
     private void drawGroupMenu(IScreenBuilder builder) {
-        new Button(builder, -100, 0,
-                EMessage.GUI_STELLWAND_SELECTSENDERMODES_GROUP.toString(signalGroup)) {
-            @Override
-            public void onClick(Player.Hand hand) {
-                boolean useNext = false;
-                for (String iterationMode : modeGroups) {
-                    if (useNext) {
-                        setNewSignalGroup(iterationMode);
-                        return;
-                    } else if ((iterationMode == null && signalGroup == null) || (iterationMode != null && iterationMode.contentEquals(signalGroup))) {
-                        useNext = true;
-                    }
-                }
-                setNewSignalGroup(getFirstValue(modes.keySet()));
-            }
-        };
+        groupIdButton.setText(EMessage.GUI_STELLWAND_SELECTSENDERMODES_GROUP.toString(signalGroup != null ? signalGroup : "-"));
     }
 
     private synchronized void setNewSignalGroup(String newMode) {
