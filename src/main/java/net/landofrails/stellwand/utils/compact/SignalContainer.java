@@ -19,6 +19,9 @@ import java.util.Map;
 @SuppressWarnings({"java:S112", "java:S1117"})
 public class SignalContainer<T extends BlockEntity> {
 
+    private static final String ISCLIENT = "isClient";
+    private static final String TILEENTITY = "tileEntity";
+
     private final T signal;
 
     private SignalContainer(T signal) {
@@ -43,6 +46,18 @@ public class SignalContainer<T extends BlockEntity> {
         } else {
             throw new RuntimeException(String.format("Illegal type for signal! World: %s, Position: %s", world, signalPos.toString()));
         }
+    }
+
+    public static SignalContainer<BlockEntity> of(TagCompound tag) {
+        EntryType type = tag.getEnum("type", EntryType.class);
+        if (type.equals(EntryType.BLOCKSIGNAL)) {
+            BlockSignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
+            return of(entity);
+        } else if (type.equals(EntryType.BLOCKMULTISIGNAL)) {
+            BlockMultisignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
+            return of(entity);
+        }
+        return null;
     }
 
     public static boolean isSignal(World world, Vec3i signalPos) {
@@ -138,21 +153,9 @@ public class SignalContainer<T extends BlockEntity> {
     public TagCompound toTagCompound() {
         TagCompound tag = new TagCompound();
         tag.setEnum("type", getEntryType());
-        tag.setTile("tileEntity", getAs(getSignalClass()));
-        tag.setBoolean("isClient", getRawInstance().getWorld().isClient);
+        tag.setTile(TILEENTITY, getAs(getSignalClass()));
+        tag.setBoolean(ISCLIENT, getRawInstance().getWorld().isClient);
         return tag;
-    }
-
-    public static SignalContainer<BlockEntity> of(TagCompound tag) {
-        EntryType type = tag.getEnum("type", EntryType.class);
-        if (type.equals(EntryType.BLOCKSIGNAL)) {
-            BlockSignalStorageEntity entity = tag.getTile("tileEntity", tag.getBoolean("isClient"));
-            return of(entity);
-        } else if (type.equals(EntryType.BLOCKMULTISIGNAL)) {
-            BlockMultisignalStorageEntity entity = tag.getTile("tileEntity", tag.getBoolean("isClient"));
-            return of(entity);
-        }
-        return null;
     }
 
     public void addSenderModesFrom(Vec3i pos, String groupId, String senderMode) {

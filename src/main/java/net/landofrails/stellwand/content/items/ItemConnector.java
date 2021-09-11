@@ -71,10 +71,41 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
         }
     }
 
-    @SuppressWarnings("java:S3776")
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos,
                                     Hand hand, Facing facing, Vec3d inBlockPos) {
+
+        ItemStack itemStack = player.getHeldItem(hand);
+
+        if (itemStack.is(CustomItems.ITEMCONNECTOR1)) {
+            return onClickBlockWithItemConnector1(player, world, hand, pos);
+        } else if (itemStack.is(CustomItems.ITEMCONNECTOR2)) {
+            return onClickBlockWithItemConnector2(player, world, hand, pos);
+        } else if (itemStack.is(CustomItems.ITEMCONNECTOR3)) {
+            return onClickBlockWithItemConnector3(player, world, hand, pos);
+        }
+
+        return ClickResult.PASS;
+    }
+
+    private ClickResult onClickBlockWithItemConnector1(Player player, World world, Hand hand, Vec3i pos) {
+        LoSPlayer p = new LoSPlayer(player);
+
+        SignalContainer<?> signalEntity = getSignal(world, pos);
+        BlockSenderStorageEntity senderEntity = getSender(world, pos);
+
+        if (signalEntity != null) {
+            selectSignal(p, hand, pos);
+            return ClickResult.ACCEPTED;
+        } else if (senderEntity != null) {
+            selectSender(p, hand, pos);
+            return ClickResult.ACCEPTED;
+        }
+
+        return ClickResult.PASS;
+    }
+
+    private ClickResult onClickBlockWithItemConnector3(Player player, World world, Hand hand, Vec3i pos) {
 
         ItemStack itemStack = player.getHeldItem(hand);
         TagCompound nbt = itemStack.getTagCompound();
@@ -83,52 +114,53 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
         SignalContainer<?> signalEntity = getSignal(world, pos);
         BlockSenderStorageEntity senderEntity = getSender(world, pos);
 
-        if (itemStack.is(CustomItems.ITEMCONNECTOR1)) {
-            if (signalEntity != null) {
-                selectSignal(p, hand, pos);
-                return ClickResult.ACCEPTED;
-            } else if (senderEntity != null) {
-                selectSender(p, hand, pos);
-                return ClickResult.ACCEPTED;
+        if (signalEntity != null) {
+            selectSignal(p, hand, pos);
+            return ClickResult.ACCEPTED;
+        } else if (senderEntity != null && nbt.hasKey(SIGNALKEY)) {
+            Vec3i signalPos = nbt.getVec3i(SIGNALKEY);
+            boolean d = player.isCrouching();
+            if (senderEntity.isCompatible(getSignal(world, signalPos))) {
+                connect(world, senderEntity.getPos(), signalPos, d);
+                if (p.getWorld().isServer)
+                    ServerMessagePacket.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
+            } else {
+                if (p.getWorld().isServer)
+                    ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
             }
-        } else if (itemStack.is(CustomItems.ITEMCONNECTOR2)) {
-            if (signalEntity != null && nbt.hasKey(SENDERKEY)) {
-                Vec3i senderPos = nbt.getVec3i(SENDERKEY);
-                boolean d = player.isCrouching();
-                BlockSenderStorageEntity sender = getSender(world, senderPos);
-                if (sender.isCompatible(signalEntity)) {
-                    connect(world, senderPos, signalEntity.getPos(), d);
-                    if (p.getWorld().isServer)
-                        ServerMessagePacket.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
-                } else {
-                    if (p.getWorld().isServer)
-                        ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
-                }
-                return ClickResult.ACCEPTED;
-            } else if (senderEntity != null) {
-                selectSender(p, hand, pos);
-                return ClickResult.ACCEPTED;
-            }
-        } else if (itemStack.is(CustomItems.ITEMCONNECTOR3)) {
-            if (signalEntity != null) {
-                selectSignal(p, hand, pos);
-                return ClickResult.ACCEPTED;
-            } else if (senderEntity != null && nbt.hasKey(SIGNALKEY)) {
-                Vec3i signalPos = nbt.getVec3i(SIGNALKEY);
-                boolean d = player.isCrouching();
-                if (senderEntity.isCompatible(getSignal(world, signalPos))) {
-                    connect(world, senderEntity.getPos(), signalPos, d);
-                    if (p.getWorld().isServer)
-                        ServerMessagePacket.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
-                } else {
-                    if (p.getWorld().isServer)
-                        ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
-                }
 
-                return ClickResult.ACCEPTED;
-            }
+            return ClickResult.ACCEPTED;
         }
 
+        return ClickResult.PASS;
+    }
+
+    private ClickResult onClickBlockWithItemConnector2(Player player, World world, Hand hand, Vec3i pos) {
+
+        ItemStack itemStack = player.getHeldItem(hand);
+        TagCompound nbt = itemStack.getTagCompound();
+        LoSPlayer p = new LoSPlayer(player);
+
+        SignalContainer<?> signalEntity = getSignal(world, pos);
+        BlockSenderStorageEntity senderEntity = getSender(world, pos);
+
+        if (signalEntity != null && nbt.hasKey(SENDERKEY)) {
+            Vec3i senderPos = nbt.getVec3i(SENDERKEY);
+            boolean d = player.isCrouching();
+            BlockSenderStorageEntity sender = getSender(world, senderPos);
+            if (sender.isCompatible(signalEntity)) {
+                connect(world, senderPos, signalEntity.getPos(), d);
+                if (p.getWorld().isServer)
+                    ServerMessagePacket.send(player, d ? EMessage.MESSAGE_SIGNAL_DISCONNECTED : EMessage.MESSAGE_SIGNAL_CONNECTED);
+            } else {
+                if (p.getWorld().isServer)
+                    ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
+            }
+            return ClickResult.ACCEPTED;
+        } else if (senderEntity != null) {
+            selectSender(p, hand, pos);
+            return ClickResult.ACCEPTED;
+        }
         return ClickResult.PASS;
     }
 
