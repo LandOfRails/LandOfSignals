@@ -1,5 +1,7 @@
 package net.landofrails.stellwand.content.entities.rendering;
 
+import cam72cam.mod.MinecraftClient;
+import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
@@ -126,7 +128,7 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
 
                 // Muss erst translated werden.
                 if (entity.isMarked())
-                    renderMarking(entity.getMarkedColor());
+                    renderMarking(entity);
 
             }
         } catch (Exception e) {
@@ -134,21 +136,38 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
         }
     }
 
-    private static void renderMarking(float[] color) {
+    private static void renderMarking(BlockMultisignalStorageEntity entity) {
+        float[] color = entity.getMarkedColor();
 
         // 0.5 is edge of block
         final float margin = 0.51f;
 
         int[][] points = new int[][]{{+1, +1, +1}, {-1, -1, 1}, {-1, +1, -1}, {+1, -1, -1}};
 
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        double distance = MinecraftClient.getPlayer().getPosition().distanceTo(new Vec3d(entity.getPos()));
+        float width = (10f / (float) distance) + 1;
+        if (width < 0.01f)
+            width = 0.01f;
+        else if (width > 10f)
+            width = 10f;
+        GL11.glLineWidth(width);
+        GL11.glDepthMask(false);
+
+        float[] translation = entity.getRenderEntity().getTranslation();
+        GL11.glTranslated(0.0, 0.5 - translation[1], 0.0);
 
         for (int[] point : points) {
             for (short o = 0; o < 3; o++) {
 
                 GL11.glColor3f(1, 1, 1);
                 GL11.glColor3f(color[0], color[1], color[2]);
-                GL11.glLineWidth(10f);
 
                 GL11.glBegin(GL11.GL_LINE_STRIP);
 
@@ -163,7 +182,8 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
             }
         }
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(true);
+        GL11.glPopAttrib();
 
     }
 

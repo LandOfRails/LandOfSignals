@@ -224,4 +224,25 @@ public class SignalContainer<T extends BlockEntity> {
             return signal.getModeGroups();
         }
     }
+
+    public void setMarked(boolean marked, float[] color) {
+        if (is(BlockSignalStorageEntity.class)) {
+            BlockSignalStorageEntity signal = getAs(BlockSignalStorageEntity.class);
+            signal.setMarked(marked, color);
+        } else {
+            BlockMultisignalStorageEntity signal = getAs(BlockMultisignalStorageEntity.class);
+            signal.setMarked(marked, color);
+        }
+    }
+
+    public boolean isMarked() {
+        if (is(BlockSignalStorageEntity.class)) {
+            BlockSignalStorageEntity signal = getAs(BlockSignalStorageEntity.class);
+            return signal.isMarked();
+        } else {
+            BlockMultisignalStorageEntity signal = getAs(BlockMultisignalStorageEntity.class);
+            return signal.isMarked();
+        }
+    }
+
 }

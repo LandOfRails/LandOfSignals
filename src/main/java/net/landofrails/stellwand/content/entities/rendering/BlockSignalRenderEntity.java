@@ -150,7 +150,7 @@ public class BlockSignalRenderEntity implements IRotatableBlockEntity {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         double distance = MinecraftClient.getPlayer().getPosition().distanceTo(new Vec3d(entity.getPos()));
-        float width = 10f / (float) distance;
+        float width = (10f / (float) distance) + 1;
         if (width < 0.01f)
             width = 0.01f;
         else if (width > 10f)
