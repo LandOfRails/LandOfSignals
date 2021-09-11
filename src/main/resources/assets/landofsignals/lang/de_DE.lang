@@ -25,6 +25,7 @@ item.landofsignals:item_signal_selector.name=Signal-Auswahl-Tool
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler
 item.landofsignals:stellwand.itemblocksender.name=Block Sender
 item.landofsignals:stellwand.itemblocksignal.name=Block Signal
+item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal
 item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
@@ -33,10 +34,12 @@ item.landofsignals:stellwand.magnifyingglass.name=Lupe
 message.stellwand:sender.nosignalsconnected=Modes können ohne verbundenes Signal gesetzt werden!
 message.stellwand:sender.modesset=Modes gesetzt!
 message.stellwand:sender.signalnotfound=Signal konnte nicht gefunden werden: %s
-message.stellwand:sender.error1:Ich weiß nicht wie, aber es ist weg.. [Surprised Pikachu hier einfügen]
+message.stellwand:sender.error1=Ich weiß nicht wie, aber es ist weg.. [Surprised Pikachu hier einfügen]
 
 message.stellwand:connector.signaldisconnected=Signal entfernt!
 message.stellwand:connector.signalconnected=Signal verbunden!
 message.stellwand:connector.sendersignalsmustbeequal=Du kannst nur Signale des gleichen Types an einen Sender verbinden!
 message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s, %s)
+
+gui.stellwand:selectsendermodes.group=Gruppe: %s

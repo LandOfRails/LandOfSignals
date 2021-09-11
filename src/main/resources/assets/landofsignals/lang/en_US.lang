@@ -22,10 +22,10 @@ item.landofsignals:item_signal_selector.name=Signal selector tool
 
 # -- Stellwand --
 
-
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler
 item.landofsignals:stellwand.itemblocksender.name=Block Sender
 item.landofsignals:stellwand.itemblocksignal.name=Block Signal
+item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal
 item.landofsignals:stellwand.itemconnector1.name=Connector
 item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
@@ -34,10 +34,12 @@ item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass
 message.stellwand:sender.nosignalsconnected=Can't select modes without any signals connected!
 message.stellwand:sender.modesset=Modes set!
 message.stellwand:sender.signalnotfound=Signal couldn't be found: %s
-message.stellwand:sender.error1:I dont know how, but its missing.. [Insert surprised Pikachu here]
+message.stellwand:sender.error1=I dont know how, but its missing.. [Insert surprised Pikachu here]
 
 message.stellwand:connector.signaldisconnected=Signal disconnected!
 message.stellwand:connector.signalconnected=Signal connected!
 message.stellwand:connector.sendersignalsmustbeequal=You only can connect the same type of signal with a sender!
 message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
+
+gui.stellwand:selectsendermodes.group=Group: %s

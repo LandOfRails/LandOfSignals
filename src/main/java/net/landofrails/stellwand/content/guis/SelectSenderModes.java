@@ -1,10 +1,7 @@
 package net.landofrails.stellwand.content.guis;
 
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
 import cam72cam.mod.ModCore;
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
@@ -15,127 +12,191 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.render.OpenGL;
 import net.landofrails.landofsignals.gui.GuiText;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
-import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ChangeSenderModes;
+import net.landofrails.stellwand.utils.compact.SignalContainer;
+import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+
+@SuppressWarnings("java:S1192")
 public class SelectSenderModes implements IScreen {
 
-	// List of modes
-	private Map<String, String> modes;
+    // List of modes
+    private Map<String, Map<String, String>> modes;
+    private LinkedList<String> modeGroups;
 
-	// Position for packet
-	private Vec3i pos;
+    // Group
+    private String signalGroup;
 
-	// Display
-	private final ItemStack itemPowerOff;
-	private final ItemStack itemPowerOn;
+    // Position for packet
+    private Vec3i pos;
 
-	@SuppressWarnings({"java:S112", "java:S1192"})
-	public SelectSenderModes(BlockSenderStorageEntity entity) {
+    // Display
+    private final ItemStack itemPowerOff;
+    private final ItemStack itemPowerOn;
+    private Button groupIdButton;
 
-		if (entity.getSignal() != null) {
+    @SuppressWarnings({"java:S112", "java:S1192"})
+    public SelectSenderModes(BlockSenderStorageEntity entity) {
 
-			BlockSignalStorageEntity signalEntity = entity.getSignal();
-			if (signalEntity != null) {
-				modes = signalEntity.getPossibleModes();
+        if (entity.getSignal() != null) {
 
-				// @formatter:off
+            SignalContainer<BlockEntity> signalContainer = entity.getSignal();
+            if (signalContainer != null) {
+                modes = signalContainer.getPossibleModes();
+                modeGroups = signalContainer.getModeGroups();
+
+                signalGroup = entity.signalGroup != null ? entity.signalGroup : getFirstValue(modes.keySet());
+
+                // @formatter:off
+
 				// Item Power off
-				itemPowerOff = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
-				itemPowerOff.getTagCompound().setString("itemId", signalEntity.contentPackBlockId);
-				String customModePowerOff = entity.modePowerOff != null ? entity.modePowerOff : modes.values().iterator().next();
-				itemPowerOff.getTagCompound().setString("customMode", customModePowerOff);
+				itemPowerOff = new ItemStack(signalContainer.getCustomItem(), 1);
+				itemPowerOff.getTagCompound().setString("itemId", signalContainer.getContentPackBlockId());
+				String customModePowerOff = entity.modePowerOff != null ? entity.modePowerOff : getFirstValue(modes.get(signalGroup).values());
+                setItemMode(itemPowerOff, customModePowerOff);
+
 				// Item Power on
-				itemPowerOn = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
-				itemPowerOn.getTagCompound().setString("itemId", signalEntity.contentPackBlockId);
-				String customModePowerOn = entity.modePowerOn != null ? entity.modePowerOn : modes.values().iterator().next();
-				itemPowerOn.getTagCompound().setString("customMode",customModePowerOn);
+				itemPowerOn = new ItemStack(signalContainer.getCustomItem(), 1);
+				itemPowerOn.getTagCompound().setString("itemId", signalContainer.getContentPackBlockId());
+				String customModePowerOn = entity.modePowerOn != null ? entity.modePowerOn : getFirstValue(modes.get(signalGroup).values());
+				setItemMode(itemPowerOn, customModePowerOn);
+
 				// @formatter:on
-				// Position
-				pos = entity.getPos();
 
-				return;
-			} else {
-				ModCore.error("Couldnt get signal: %s", "Signal doesn't exist (anymore)");
-			}
-		} else {
-			ModCore.error("Sender has no signals!");
-		}
-		throw new RuntimeException("Entity does not contain signals.");
+                // Position
+                pos = entity.getPos();
 
-	}
+                return;
+            } else {
+                ModCore.error("Couldnt get signal: %s", "Signal doesn't exist (anymore)");
+            }
+        } else {
+            ModCore.error("Sender has no signals!");
+        }
+        throw new RuntimeException("Entity does not contain signals.");
 
-	@Override
-	public void init(IScreenBuilder screen) {
-		new Button(screen, -100, 40,
-				"<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
-			@Override
-			public void onClick(Player.Hand hand) {
-				String mode = itemPowerOff.getTagCompound()
-						.getString("customMode");
-				itemPowerOff.getTagCompound().setString("customMode",
-						nextMode(mode));
-			}
-		};
-		new Button(screen, -100, 80,
-				GuiText.LABEL_REDSTONE.toString() + " -->") {
-			@Override
-			public void onClick(Player.Hand hand) {
-				String mode = itemPowerOn.getTagCompound()
-						.getString("customMode");
-				itemPowerOn.getTagCompound().setString("customMode",
-						nextMode(mode));
-			}
-		};
-	}
+    }
 
-	@Override
-	public void onEnterKey(IScreenBuilder builder) {
-		builder.close();
-	}
+    private void setItemMode(ItemStack item, String customMode) {
+        item.getTagCompound().setString("customMode", customMode);
+    }
 
-	@Override
-	public void onClose() {
-		String modePowerOff = itemPowerOff.getTagCompound()
-				.getString("customMode");
-		String modePowerOn = itemPowerOn.getTagCompound()
-				.getString("customMode");
-		ChangeSenderModes packet = new ChangeSenderModes(pos, modePowerOff,
-				modePowerOn);
-		packet.sendToServer();
-	}
+    @Override
+    public void init(IScreenBuilder screen) {
+        new Button(screen, -100, 40,
+                "<-- " + GuiText.LABEL_NOREDSTONE) {
+            @Override
+            public void onClick(Player.Hand hand) {
+                String mode = itemPowerOff.getTagCompound()
+                        .getString("customMode");
+                itemPowerOff.getTagCompound().setString("customMode",
+                        nextMode(mode));
+            }
+        };
+        new Button(screen, -100, 80,
+                GuiText.LABEL_REDSTONE + " -->") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                String mode = itemPowerOn.getTagCompound()
+                        .getString("customMode");
+                itemPowerOn.getTagCompound().setString("customMode",
+                        nextMode(mode));
+            }
+        };
+        groupIdButton = new Button(screen, -100, 0,
+                EMessage.GUI_STELLWAND_SELECTSENDERMODES_GROUP.toString(signalGroup != null ? signalGroup : "-")) {
+            @Override
+            public void onClick(Player.Hand hand) {
+                boolean useNext = false;
+                for (String iterationMode : modeGroups) {
+                    if (useNext) {
+                        setNewSignalGroup(iterationMode);
+                        return;
+                    } else if ((iterationMode == null && signalGroup == null) || (iterationMode != null && iterationMode.contentEquals(signalGroup))) {
+                        useNext = true;
+                    }
+                }
+                setNewSignalGroup(getFirstValue(modes.keySet()));
+            }
+        };
+        groupIdButton.setEnabled(signalGroup != null);
+    }
 
-	@Override
-	public void draw(IScreenBuilder builder) {
-		int scale = 8;
-		try (OpenGL.With ignored = OpenGL.matrix()) {
-			GL11.glTranslated(
-					(double) GUIHelpers.getScreenWidth() / 2
-							+ (double) builder.getWidth() / 4,
-					(double) builder.getHeight() / 4, 0);
-			GL11.glScaled(scale, scale, 1);
-			GUIHelpers.drawItem(itemPowerOn, 0, 0);
-		}
-		try (OpenGL.With ignored = OpenGL.matrix()) {
-			GL11.glTranslated(
-					((double) GUIHelpers.getScreenWidth() / 2
-							- (double) builder.getWidth() / 4) - 120,
-					(double) builder.getHeight() / 4, 0);
-			GL11.glScaled(scale, scale, 1);
-			GUIHelpers.drawItem(itemPowerOff, 0, 0);
-		}
-	}
+    @Override
+    public void onEnterKey(IScreenBuilder builder) {
+        builder.close();
+    }
 
-	private String nextMode(String mode) {
-		boolean useNext = false;
-		for (String m : modes.values()) {
-			if (m.equalsIgnoreCase(mode))
-				useNext = true;
-			else if (useNext)
-				return m;
-		}
-		return modes.values().iterator().next();
-	}
+    @Override
+    public void onClose() {
+        String modePowerOff = itemPowerOff.getTagCompound()
+                .getString("customMode");
+        String modePowerOn = itemPowerOn.getTagCompound()
+                .getString("customMode");
+        ChangeSenderModes packet = new ChangeSenderModes(pos, signalGroup, modePowerOff,
+                modePowerOn);
+        packet.sendToServer();
+    }
+
+    @Override
+    public void draw(IScreenBuilder builder) {
+        drawBlocks(builder);
+        drawGroupMenu(builder);
+    }
+
+    private void drawBlocks(IScreenBuilder builder) {
+        int scale = 8;
+        try (OpenGL.With ignored = OpenGL.matrix()) {
+            GL11.glTranslated(
+                    (double) GUIHelpers.getScreenWidth() / 2
+                            + (double) builder.getWidth() / 4,
+                    (double) builder.getHeight() / 4, 0);
+            GL11.glScaled(scale, scale, 1);
+            GUIHelpers.drawItem(itemPowerOn, 0, 0);
+        }
+        try (OpenGL.With ignored = OpenGL.matrix()) {
+            GL11.glTranslated(
+                    ((double) GUIHelpers.getScreenWidth() / 2
+                            - (double) builder.getWidth() / 4) - 120,
+                    (double) builder.getHeight() / 4, 0);
+            GL11.glScaled(scale, scale, 1);
+            GUIHelpers.drawItem(itemPowerOff, 0, 0);
+        }
+    }
+
+    @SuppressWarnings("java:S2259")
+    private void drawGroupMenu(IScreenBuilder builder) {
+        groupIdButton.setText(EMessage.GUI_STELLWAND_SELECTSENDERMODES_GROUP.toString(signalGroup != null ? signalGroup : "-"));
+    }
+
+    private synchronized void setNewSignalGroup(String newMode) {
+        signalGroup = newMode;
+        if (modes != null && modes.size() > 1 && modes.get(signalGroup) != null) {
+            setItemMode(itemPowerOff, getFirstValue(modes.get(signalGroup).values()));
+            setItemMode(itemPowerOn, getFirstValue(modes.get(signalGroup).values()));
+        }
+    }
+
+    private String nextMode(String mode) {
+        boolean useNext = false;
+        for (String m : modes.get(signalGroup).values()) {
+            if (m.equalsIgnoreCase(mode))
+                useNext = true;
+            else if (useNext)
+                return m;
+        }
+        return getFirstValue(modes.get(signalGroup).values());
+    }
+
+    @SuppressWarnings("java:S1751")
+    private static <T> T getFirstValue(Collection<T> collection) {
+        for (T object : collection)
+            return object;
+        return null;
+    }
 
 }
