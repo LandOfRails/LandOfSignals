@@ -66,6 +66,7 @@ public class Stellwand {
             case RELOAD:
             case START:
             case FINALIZE:
+            default:
                 break;
         }
 
@@ -90,6 +91,7 @@ public class Stellwand {
             case RELOAD:
             case START:
             case FINALIZE:
+            default:
                 break;
         }
 
@@ -108,6 +110,7 @@ public class Stellwand {
             case RELOAD:
             case START:
             case FINALIZE:
+            default:
                 break;
         }
 
