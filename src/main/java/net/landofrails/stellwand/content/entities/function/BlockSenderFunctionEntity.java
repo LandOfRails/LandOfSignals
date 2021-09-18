@@ -18,7 +18,6 @@ import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ChangeSignalModes;
 import net.landofrails.stellwand.content.network.OpenSenderGui;
 import net.landofrails.stellwand.content.network.ServerMessagePacket;
-import net.landofrails.stellwand.utils.compact.LoSPlayer;
 import net.landofrails.stellwand.utils.compact.SignalContainer;
 
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
@@ -53,13 +52,12 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
     @Override
     public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
         ItemStack item = player.getHeldItem(hand);
-        LoSPlayer p = new LoSPlayer(player);
 
         ItemStack heldItem = player.getHeldItem(hand);
         if (heldItem != null && heldItem.is(CustomItems.ITEMMAGNIFYINGGLASS))
             return false;
 
-        if (isAir(item) && p.getWorld().isServer) {
+        if (isAir(item) && getWorld().isServer) {
             if (!entity.signals.isEmpty()) {
 
                 Vec3i signalPos = entity.signals.get(0);
@@ -74,11 +72,13 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
                     packet.sendToPlayer(player);
                 } else {
                     entity.signals.remove(signalPos);
-                    ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
+                    if (!getWorld().isClient)
+                        ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
                 }
 
             } else {
-                ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
+                if (!getWorld().isClient)
+                    ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
             }
 
             return true;

@@ -3,7 +3,6 @@ package net.landofrails.stellwand.content.network;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
-import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.utils.compact.LoSPlayer;
 import net.landofrails.stellwand.utils.mapper.EMessageTagMapper;
@@ -39,17 +38,14 @@ public class ServerMessagePacket extends Packet {
 
     @Override
     protected void handle() {
-        if (player.getUUID().equals(getPlayer().getUUID())) {
-            LoSPlayer lp = new LoSPlayer(getPlayer());
-            lp.direct(message.name(), arguments);
-        } else {
-            player.sendMessage(PlayerMessage.direct("Something went wrong... i think"));
-        }
+        LoSPlayer lp = new LoSPlayer(getPlayer());
+        lp.direct(message.name(), arguments);
     }
 
     // Calling other send() method
     public static void send(Player player, EMessage message) {
-        send(player, message, new String[0]);
+        String[] emptyArray = new String[0];
+        send(player, message, emptyArray);
     }
 
     public static void send(Player player, EMessage message, String... args) {
