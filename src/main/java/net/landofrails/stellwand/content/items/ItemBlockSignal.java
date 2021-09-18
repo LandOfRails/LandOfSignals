@@ -28,6 +28,7 @@ import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
+import net.landofrails.stellwand.contentpacks.types.EntryType;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -132,25 +133,9 @@ public class ItemBlockSignal extends CustomItem {
             return;
         }
 
-        List<ItemStack> itemStackList = new ArrayList<>();
-
-        for (Entry<ContentPackEntry, String> entry : Content.getBlockSignals().entrySet()) {
-
-            ContentPackEntry cpe = entry.getKey();
-            ItemStack is = new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1);
-            TagCompound tag = is.getTagCompound();
-            tag.setString(ITEMID, cpe.getBlockId(entry.getValue()));
-            is.setTagCompound(tag);
-            itemStackList.add(is);
-
-        }
-
-        if (itemStackList.isEmpty())
-            itemStackList.add(new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1));
-
         int sizeInHand = player.getHeldItem(hand).getCount();
         SelectItem si = new SelectItem();
-        si.open(player, itemStackList, item -> {
+        si.open(player, EntryType.BLOCKSIGNAL, new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1), item -> {
             if (item != null) {
                 player.setHeldItem(hand, item);
                 item.setCount(sizeInHand);

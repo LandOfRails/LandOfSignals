@@ -33,7 +33,7 @@ public class StaticLoader {
 
     public static void init() {
         Progress.Bar progressBar = Progress.push("Loading static contentpack", 1);
-        ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.1", "SeltixSub", new ArrayList<>());
+        ContentPack contentPack = new ContentPack(Stellwand.ADDON_VERSION, "LandOfSignals", "1.0.1", "SeltixSub");
         progressBar.step(String.format("Contentpack: %s v%s", contentPack.getName(), contentPack.getPackversion()));
         ModCore.info("Loading ContentPack: %s v%s", contentPack.getName(), contentPack.getPackversion());
         contentPack.setEntries(getEntries());
