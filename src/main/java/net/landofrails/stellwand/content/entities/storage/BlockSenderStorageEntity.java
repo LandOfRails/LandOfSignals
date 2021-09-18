@@ -167,6 +167,6 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
     // Map old versions to newer ones
     @Override
     public void load(TagCompound nbt) {
-        VersionMapper.checkMap(BlockSenderStorageEntity.class, nbt);
+        VersionMapper.checkMap(this.getClass(), nbt);
     }
 }

@@ -26,7 +26,7 @@ public abstract class VersionMapper {
 
         if (versionMapperList.isEmpty()) {
             // Info: Sort from lowest to highest version
-            versionMapperList.add(VMContainer.create(BlockSenderStorageEntity.class, new SenderMapperV1toV2(), 1));
+            registerMappers();
         }
 
         int version = nbt.hasKey("version") ? nbt.getInteger("version") : 1;
@@ -35,6 +35,10 @@ public abstract class VersionMapper {
                 version = vmContainer.getVersionMapper().checkTagCompound(nbt);
             }
         }
+    }
+
+    private static void registerMappers() {
+        versionMapperList.add(VMContainer.create(BlockSenderStorageEntity.class, new SenderMapperV1toV2(), 1));
     }
 
 }

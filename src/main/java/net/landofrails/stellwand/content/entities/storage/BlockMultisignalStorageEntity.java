@@ -5,10 +5,12 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.function.BlockMultisignalFunctionEntity;
 import net.landofrails.stellwand.content.entities.rendering.BlockMultisignalRenderEntity;
+import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
@@ -39,6 +41,9 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     @TagField(value = "displayModes", mapper = MapStringStringMapper.class)
     public Map<String, String> displayModes;
 
+    @TagField("version")
+    public int version = 1;
+
     // Variables
     // Sender, (Signalgroup, Signalname)
     @SuppressWarnings("java:S1104")
@@ -60,6 +65,7 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
         return renderEntity;
     }
 
+    @SuppressWarnings({"java:S3252"})
     public static void prepare() {
 
         Stellwand.debug("Preparing Multisignals..");
@@ -204,6 +210,12 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
 
     public float[] getMarkedColor() {
         return markedColor;
+    }
+
+    // Map old versions to newer ones
+    @Override
+    public void load(TagCompound nbt) {
+        VersionMapper.checkMap(this.getClass(), nbt);
     }
 
 }
