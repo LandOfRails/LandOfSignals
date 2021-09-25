@@ -31,7 +31,7 @@ item.landofsignals:stellwand.itemconnector2.name=Connector
 item.landofsignals:stellwand.itemconnector3.name=Connector
 item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass
 
-message.stellwand:sender.nosignalsconnected=Can't select modes without any signals connected!
+message.stellwand:sender.nosignalsconnected=No signals connected yet!
 message.stellwand:sender.modesset=Modes set!
 message.stellwand:sender.signalnotfound=Signal couldn't be found: %s
 message.stellwand:sender.error1=I dont know how, but its missing.. [Insert surprised Pikachu here]

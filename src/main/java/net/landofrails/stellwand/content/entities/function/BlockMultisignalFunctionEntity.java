@@ -6,12 +6,12 @@ import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
 
-public class BlockMultisignalFunctionEntity extends BlockEntity {
+public abstract class BlockMultisignalFunctionEntity extends BlockEntity {
 
     private BlockMultisignalStorageEntity entity;
 
     @SuppressWarnings("java:S112")
-    public BlockMultisignalFunctionEntity() {
+    protected BlockMultisignalFunctionEntity() {
         if (this instanceof BlockMultisignalStorageEntity)
             entity = (BlockMultisignalStorageEntity) this;
         else

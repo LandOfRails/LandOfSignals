@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Content {
 
@@ -98,4 +99,25 @@ public class Content {
 
     }
 
+    public static List<ContentPack> getContentPacksFor(EntryType type) {
+        // @formatter:off
+        return contentPacks.stream()
+                .filter(
+                        cp -> cp.getEntries().stream()
+                                .anyMatch(
+                                        cpe -> cpe.isType(type)
+                                )
+                )
+                .distinct().collect(Collectors.toList());
+        // @formatter:on
+    }
+
+    public static Map<ContentPackEntry, String> getBlocks(ContentPack pack, EntryType type) {
+        // @formatter:off
+        return pack.getEntries().stream()
+                .filter(cpe -> cpe.isType(type))
+                .collect(Collectors.toMap(k -> k, v -> pack.getId())
+        );
+        // @formatter:on
+    }
 }
