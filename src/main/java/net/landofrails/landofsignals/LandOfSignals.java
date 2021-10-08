@@ -99,6 +99,6 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void serverEvent(ModEvent event) {
-        // Do nothing for now
+        // Do nothing forever
     }
 }
