@@ -12,6 +12,9 @@ import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisign
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
+import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryItem;
@@ -247,6 +250,17 @@ public class StaticLoader {
         prop.setItemMode("item").setItemTranslation(.5f, .1625f, .5f);
         contentPackEntries.add(prop.toEntry());
 
+
+        //// Recevier
+
+        // Blockreceiver
+        prop = new Properties().setName("Blockreceiver");
+        prop.setType(EntryType.BLOCKRECEIVER);
+        prop.setModel("models/block/blockreceiver/blockreceiver/blockreceiver.obj");
+        prop.setBlockTranslation(.5f, 0, .5f);
+        prop.setItemMode("on").setItemTranslation(.5f, .1625f, .5f);
+        contentPackEntries.add(prop.toEntry());
+
         return contentPackEntries;
     }
 
@@ -270,6 +284,7 @@ public class StaticLoader {
         private DirectionType[] toDir;
         private String model;
 
+        private Boolean wallMountable = null;
         private Map<String, String> modes = new LinkedHashMap<>();
         private Map<String, Map<String, String>> modesList = new HashMap<>();
 
@@ -302,6 +317,11 @@ public class StaticLoader {
 
         public Properties setModel(String model) {
             this.model = model;
+            return this;
+        }
+
+        public Properties setWallMountable(Boolean wallMountable) {
+            this.wallMountable = wallMountable;
             return this;
         }
 
@@ -363,6 +383,10 @@ public class StaticLoader {
                     BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modesList);
                     BlockMultisignalEntryItem multisignalItem = new BlockMultisignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
                     return new BlockMultisignalEntry(name, model, multisignalBlock, multisignalItem);
+                case BLOCKRECEIVER:
+                    BlockReceiverEntryBlock receiverEntryBlock = new BlockReceiverEntryBlock(blockRotation, blockTranslation, wallMountable);
+                    BlockReceiverEntryItem receiverEntryItem = new BlockReceiverEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
+                    return new BlockReceiverEntry(name, model, receiverEntryBlock, receiverEntryItem);
                 default:
                     return null;
             }

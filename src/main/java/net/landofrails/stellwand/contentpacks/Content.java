@@ -84,6 +84,16 @@ public class Content {
         return entries;
     }
 
+    public static Map<ContentPackEntry, String> getBlockReceivers() {
+        Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
+        for (ContentPack pack : contentPacks) {
+            for (ContentPackEntry entry : pack.getEntries())
+                if (entry.isType(EntryType.BLOCKRECEIVER))
+                    entries.put(entry, pack.getId());
+        }
+        return entries;
+    }
+
     public static String getNameForId(String itemId) {
         if (itemId == null || !itemId.contains(":"))
             return ItemBlockSignal.MISSING;
