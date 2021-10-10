@@ -26,6 +26,7 @@ public class CustomItems {
     public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
     public static final ItemBlockSender ITEMBLOCKSENDER = new ItemBlockSender();
     public static final ItemBlockMultisignal ITEMBLOCKMULTISIGNAL = new ItemBlockMultisignal();
+    public static final ItemBlockReceiver ITEMBLOCKRECEIVER = new ItemBlockReceiver();
 
     public static void register() {
         itemList.add(ITEMCONNECTOR1);
@@ -37,6 +38,7 @@ public class CustomItems {
         ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
         ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
         ItemRender.register(ITEMBLOCKMULTISIGNAL, ItemBlockMultisignal.getModelFor());
+        ItemRender.register(ITEMBLOCKRECEIVER, ItemBlockReceiver.getModelFor());
 
     }
 

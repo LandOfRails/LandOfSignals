@@ -71,6 +71,8 @@ public abstract class ContentPackEntry {
     public abstract EntryType getType();
 
     public boolean isType(EntryType type) {
+        if (type == null)
+            return false;
         return type.equals(getType());
     }
 

@@ -5,10 +5,7 @@ import cam72cam.mod.ModEvent;
 import cam72cam.mod.config.ConfigFile;
 import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.*;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.network.CustomPackets;
@@ -62,6 +59,7 @@ public class Stellwand {
                 BlockSignalStorageEntity.prepare();
                 BlockSenderStorageEntity.prepare();
                 BlockMultisignalStorageEntity.prepare();
+                BlockReceiverStorageEntity.prepare();
                 break;
             case RELOAD:
             case START:
