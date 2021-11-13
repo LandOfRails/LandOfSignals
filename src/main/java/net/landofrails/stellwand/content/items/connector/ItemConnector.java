@@ -1,5 +1,6 @@
-package net.landofrails.stellwand.content.items;
+package net.landofrails.stellwand.content.items.connector;
 
+import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.Player.Hand;
 import cam72cam.mod.item.ClickResult;
@@ -13,6 +14,7 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
+import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ServerMessagePacket;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -23,12 +25,14 @@ import net.landofrails.stellwand.utils.compact.SignalContainer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
     // Constants
     private static final String SENDERKEY = "senderPos";
     private static final String SIGNALKEY = "signalPos";
+
     //
 
     private int variation;
@@ -75,7 +79,20 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
     public ClickResult onClickBlock(Player player, World world, Vec3i pos,
                                     Hand hand, Facing facing, Vec3d inBlockPos) {
 
-        ItemStack itemStack = player.getHeldItem(hand);
+        if (world.isServer) {
+            LoSPlayer p = new LoSPlayer(player);
+            if (ConnectionHandler.Checker.isConnectable(world, pos)) {
+                ItemStack itemStack = player.getHeldItem(hand);
+
+                return Objects.requireNonNull(ConnectionHandler.Connector.connect(p, world, pos, itemStack), "ConnectionHandler should not return null!");
+            } else {
+                ServerMessagePacket.send(player, EMessage.MESSAGE_BLOCK_NOT_CONNECTABLE);
+                return ClickResult.REJECTED;
+            }
+        } else {
+            return ClickResult.PASS;
+        }
+
 
         if (itemStack.is(CustomItems.ITEMCONNECTOR1)) {
             return onClickBlockWithItemConnector1(player, world, hand, pos);
@@ -144,6 +161,14 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
         SignalContainer<?> signalEntity = getSignal(world, pos);
         BlockSenderStorageEntity senderEntity = getSender(world, pos);
 
+        for (Class<? extends BlockEntity> clazz : connectableClasses) {
+            if (IConnectable.class.isAssignableFrom(clazz)) {
+                if (world.hasBlockEntity(pos, clazz)) {
+                    connect(clazz, world, pos, itemStack, p, hand);
+                }
+            }
+        }
+
         if (signalEntity != null && nbt.hasKey(SENDERKEY)) {
             Vec3i senderPos = nbt.getVec3i(SENDERKEY);
             boolean d = player.isCrouching();
@@ -162,6 +187,22 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
             return ClickResult.ACCEPTED;
         }
         return ClickResult.PASS;
+    }
+
+    private static <T extends BlockEntity> void connect(Class<T> clazz, World world, Vec3i pos, ItemStack connector, LoSPlayer p, Player.Hand hand) {
+
+        if (connector.is(CustomItems.ITEMCONNECTOR1)) {
+            return onClickBlockWithItemConnector1(p, world, hand, pos);
+        } else if (connector.is(CustomItems.ITEMCONNECTOR2)) {
+            return onClickBlockWithItemConnector2(p, world, hand, pos);
+        } else if (connector.is(CustomItems.ITEMCONNECTOR3)) {
+            return onClickBlockWithItemConnector3(p, world, hand, pos);
+        }
+
+        T blockEntity = world.getBlockEntity(pos, clazz);
+        if (blockEntity instanceof IConnectable) {
+            ((IConnectable) blockEntity).tryConnect(connector, 0, p, hand);
+        }
     }
 
     // Helper

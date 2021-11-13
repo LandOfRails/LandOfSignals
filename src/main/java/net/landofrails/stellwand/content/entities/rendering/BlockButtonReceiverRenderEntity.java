@@ -6,23 +6,23 @@ import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
-import net.landofrails.stellwand.content.entities.storage.BlockReceiverStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockButtonReceiverStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
+public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
 
-    private BlockReceiverStorageEntity entity;
+    private BlockButtonReceiverStorageEntity entity;
 
     private OBJModel model;
     private OBJRender renderer;
     private float[] defaultRotation;
     private float[] defaultTranslation;
 
-    public BlockReceiverRenderEntity(BlockReceiverStorageEntity entity) {
+    public BlockButtonReceiverRenderEntity(BlockButtonReceiverStorageEntity entity) {
         this.entity = entity;
     }
 
@@ -36,10 +36,10 @@ public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
     public OBJModel getModel() {
 
         if (model == null) {
-            if (entity.contentPackBlockId != null && BlockReceiverStorageEntity.getModels().containsKey(entity.contentPackBlockId))
-                model = BlockReceiverStorageEntity.getModels().get(entity.contentPackBlockId);
+            if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getModels().containsKey(entity.contentPackBlockId))
+                model = BlockButtonReceiverStorageEntity.getModels().get(entity.contentPackBlockId);
             else
-                model = BlockReceiverStorageEntity.getModels().get(BlockReceiverStorageEntity.MISSING);
+                model = BlockButtonReceiverStorageEntity.getModels().get(BlockButtonReceiverStorageEntity.MISSING);
         }
 
         return model;
@@ -47,18 +47,18 @@ public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
 
     public OBJRender getRenderer() {
         if (renderer == null) {
-            if (entity.contentPackBlockId != null && BlockReceiverStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-                if (!BlockReceiverStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-                    OBJModel m = BlockReceiverStorageEntity.getModels().get(entity.contentPackBlockId);
-                    BlockReceiverStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
+            if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
+                if (!BlockButtonReceiverStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
+                    OBJModel m = BlockButtonReceiverStorageEntity.getModels().get(entity.contentPackBlockId);
+                    BlockButtonReceiverStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
                 }
-                renderer = BlockReceiverStorageEntity.getRenderers().get(entity.contentPackBlockId);
+                renderer = BlockButtonReceiverStorageEntity.getRenderers().get(entity.contentPackBlockId);
             } else {
-                if (BlockReceiverStorageEntity.getRenderers().containsKey(BlockReceiverStorageEntity.MISSING)) {
-                    OBJModel m = BlockReceiverStorageEntity.getModels().get(BlockReceiverStorageEntity.MISSING);
-                    BlockReceiverStorageEntity.getRenderers().put(BlockReceiverStorageEntity.MISSING, new OBJRender(m));
+                if (BlockButtonReceiverStorageEntity.getRenderers().containsKey(BlockButtonReceiverStorageEntity.MISSING)) {
+                    OBJModel m = BlockButtonReceiverStorageEntity.getModels().get(BlockButtonReceiverStorageEntity.MISSING);
+                    BlockButtonReceiverStorageEntity.getRenderers().put(BlockButtonReceiverStorageEntity.MISSING, new OBJRender(m));
                 }
-                renderer = BlockReceiverStorageEntity.getRenderers().get(BlockReceiverStorageEntity.MISSING);
+                renderer = BlockButtonReceiverStorageEntity.getRenderers().get(BlockButtonReceiverStorageEntity.MISSING);
             }
         }
         return renderer;
@@ -66,8 +66,8 @@ public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
 
     public float[] getTranslation() {
         if (defaultTranslation == null) {
-            if (entity.contentPackBlockId != null && BlockReceiverStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
-                defaultTranslation = BlockReceiverStorageEntity.getTranslations().get(entity.contentPackBlockId);
+            if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
+                defaultTranslation = BlockButtonReceiverStorageEntity.getTranslations().get(entity.contentPackBlockId);
             else
                 defaultTranslation = new float[]{0.5f, 0, 0.5f};
         }
@@ -76,20 +76,20 @@ public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
 
     public float[] getRotation() {
         if (defaultRotation == null) {
-            if (entity.contentPackBlockId != null && BlockReceiverStorageEntity.getRotations().containsKey(entity.contentPackBlockId))
-                defaultRotation = BlockReceiverStorageEntity.getRotations().get(entity.contentPackBlockId);
+            if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getRotations().containsKey(entity.contentPackBlockId))
+                defaultRotation = BlockButtonReceiverStorageEntity.getRotations().get(entity.contentPackBlockId);
             else
                 defaultRotation = new float[]{0, 0, 0};
         }
         return defaultRotation;
     }
 
-    public static StandardModel render(BlockReceiverStorageEntity entity) {
+    public static StandardModel render(BlockButtonReceiverStorageEntity entity) {
         return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
     }
 
     @SuppressWarnings("java:S1172")
-    private static void renderStuff(BlockReceiverStorageEntity entity, float partialTicks) {
+    private static void renderStuff(BlockButtonReceiverStorageEntity entity, float partialTicks) {
 
         OBJModel model = entity.renderEntity.getModel();
         OBJRender renderer = entity.renderEntity.getRenderer();
@@ -130,7 +130,7 @@ public class BlockReceiverRenderEntity implements IRotatableBlockEntity {
         }
     }
 
-    private static void renderMarking(BlockReceiverStorageEntity entity) {
+    private static void renderMarking(BlockButtonReceiverStorageEntity entity) {
         float[] color = entity.getMarkedColor();
 
         // 0.5 is edge of block

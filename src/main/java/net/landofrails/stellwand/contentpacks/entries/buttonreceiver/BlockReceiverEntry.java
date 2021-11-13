@@ -1,4 +1,4 @@
-package net.landofrails.stellwand.contentpacks.entries.receiver;
+package net.landofrails.stellwand.contentpacks.entries.buttonreceiver;
 
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;

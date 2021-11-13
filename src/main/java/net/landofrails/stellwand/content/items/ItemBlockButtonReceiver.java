@@ -20,7 +20,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.storage.BlockReceiverStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockButtonReceiverStorageEntity;
 import net.landofrails.stellwand.content.guis.SelectItem;
 import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -33,7 +33,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ItemBlockReceiver extends CustomItem {
+public class ItemBlockButtonReceiver extends CustomItem {
 
     private static final String ITEMID = "itemId";
 
@@ -46,8 +46,8 @@ public class ItemBlockReceiver extends CustomItem {
     private static Map<String, Float> scales = new HashMap<>();
     private static Map<String, String> modes = new HashMap<>();
 
-    public ItemBlockReceiver() {
-        super(LandOfSignals.MODID, "stellwand.itemblockreceiver");
+    public ItemBlockButtonReceiver() {
+        super(LandOfSignals.MODID, "stellwand.itemblockbuttonreceiver");
     }
 
     // Only for Clientside
@@ -148,7 +148,7 @@ public class ItemBlockReceiver extends CustomItem {
 
         return (world, stack) -> new StandardModel().addCustom(() -> {
 
-            ItemBlockReceiver.init();
+            ItemBlockButtonReceiver.init();
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString(ITEMID);
@@ -217,8 +217,8 @@ public class ItemBlockReceiver extends CustomItem {
                 is.shrink(1);
                 player.setHeldItem(hand, is);
             }
-            BlockReceiverStorageEntity blockEntity = world.getBlockEntity(target,
-                    BlockReceiverStorageEntity.class);
+            BlockButtonReceiverStorageEntity blockEntity = world.getBlockEntity(target,
+                    BlockButtonReceiverStorageEntity.class);
             // Set ContentPackBlockId
             ItemStack item = player.getHeldItem(hand);
             TagCompound tag = item.getTagCompound();

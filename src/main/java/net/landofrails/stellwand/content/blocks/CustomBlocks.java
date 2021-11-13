@@ -16,7 +16,7 @@ public class CustomBlocks {
     public static final BlockSender BLOCKSENDER = new BlockSender();
     public static final BlockSignal BLOCKSIGNAL = new BlockSignal();
     public static final BlockMultisignal BLOCKMULTISIGNAL = new BlockMultisignal();
-    public static final BlockReceiver BLOCKRECEIVER = new BlockReceiver();
+    public static final BlockButtonReceiver BLOCKRECEIVER = new BlockButtonReceiver();
 
     public static void init() {
         // WICHTIG: Triggert das Laden der Blöcke.
@@ -30,7 +30,7 @@ public class CustomBlocks {
         BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render,
                 BlockSenderStorageEntity.class);
         BlockRender.register(BLOCKMULTISIGNAL, BlockMultisignalRenderEntity::render, BlockMultisignalStorageEntity.class);
-        BlockRender.register(BLOCKRECEIVER, BlockReceiverRenderEntity::render, BlockReceiverStorageEntity.class);
+        BlockRender.register(BLOCKRECEIVER, BlockButtonReceiverRenderEntity::render, BlockButtonReceiverStorageEntity.class);
 
     }
 

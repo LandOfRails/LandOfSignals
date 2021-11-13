@@ -7,19 +7,19 @@ import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.stellwand.Stellwand;
-import net.landofrails.stellwand.content.entities.function.BlockReceiverFunctionEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockReceiverRenderEntity;
+import net.landofrails.stellwand.content.entities.function.BlockButtonReceiverFunctionEntity;
+import net.landofrails.stellwand.content.entities.rendering.BlockButtonReceiverRenderEntity;
 import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
-import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntryBlock;
 import net.landofrails.stellwand.utils.StellwandUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockReceiverStorageEntity extends BlockReceiverFunctionEntity {
+public class BlockButtonReceiverStorageEntity extends BlockButtonReceiverFunctionEntity {
 
     // Statics
     public static final String MISSING = "missing";
@@ -51,10 +51,10 @@ public class BlockReceiverStorageEntity extends BlockReceiverFunctionEntity {
 
     // Subclasses
     @SuppressWarnings({"java:S1104"})
-    public BlockReceiverRenderEntity renderEntity;
+    public BlockButtonReceiverRenderEntity renderEntity;
 
-    public BlockReceiverStorageEntity() {
-        renderEntity = new BlockReceiverRenderEntity(this);
+    public BlockButtonReceiverStorageEntity() {
+        renderEntity = new BlockButtonReceiverRenderEntity(this);
     }
 
     @SuppressWarnings("java:S3252")

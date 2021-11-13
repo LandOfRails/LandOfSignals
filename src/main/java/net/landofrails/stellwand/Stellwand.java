@@ -59,7 +59,7 @@ public class Stellwand {
                 BlockSignalStorageEntity.prepare();
                 BlockSenderStorageEntity.prepare();
                 BlockMultisignalStorageEntity.prepare();
-                BlockReceiverStorageEntity.prepare();
+                BlockButtonReceiverStorageEntity.prepare();
                 break;
             case RELOAD:
             case START:

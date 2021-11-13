@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
         maven { url = 'https://teamopenindustry.cc/maven/' }
     }
     dependencies {
         classpath 'cam72cam.universalmodcore:UniversalModCoreGradle:0.1.3'
+        classpath 'org.jetbrains:annotations:22.0.0'
     }
 }
 
@@ -19,7 +21,7 @@ universalmodcore {
     modName = 'LandOfSignals'
     modId = 'landofsignals'
     modVersion = version
-    umcVersion = '1.1.2'
+    umcVersion = '0.1.3'
 }
 
 task('umcIntegration') {
@@ -49,4 +51,8 @@ task('showBuildInfo') {
         System.out.println("https://teamopenindustry.cc/maven/cam72cam/immersiverailroading/ImmersiveRailroading/${version}/ImmersiveRailroading-${version}.jar")
         System.out.println("https://teamopenindustry.cc/maven/cam72cam/universalmodcore/UniversalModCore/${umcVersionString}/UniversalModCore-${umcVersionString}.jar")
     }
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
 }

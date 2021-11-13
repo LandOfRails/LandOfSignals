@@ -12,9 +12,9 @@ import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisign
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
-import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntry;
-import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntryBlock;
-import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntryItem;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryItem;
@@ -255,7 +255,7 @@ public class StaticLoader {
 
         // Blockreceiver
         prop = new Properties().setName("Blockreceiver");
-        prop.setType(EntryType.BLOCKRECEIVER);
+        prop.setType(EntryType.BLOCKRECEIVER).setWallMountable(true);
         prop.setModel("models/block/blockreceiver/blockreceiver/blockreceiver.obj");
         prop.setBlockTranslation(.5f, 0, .5f);
         prop.setItemMode("on").setItemTranslation(.5f, .1625f, .5f);

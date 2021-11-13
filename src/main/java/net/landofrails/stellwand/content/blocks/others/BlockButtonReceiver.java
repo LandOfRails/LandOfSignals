@@ -4,17 +4,17 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.block.Material;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.stellwand.content.entities.storage.BlockReceiverStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.BlockButtonReceiverStorageEntity;
 
-public class BlockReceiver extends BlockTypeEntity {
+public class BlockButtonReceiver extends BlockTypeEntity {
 
-    public BlockReceiver() {
-        super(LandOfSignals.MODID, "stellwand.blockreceiver");
+    public BlockButtonReceiver() {
+        super(LandOfSignals.MODID, "stellwand.blockbuttonreceiver");
     }
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return new BlockReceiverStorageEntity();
+        return new BlockButtonReceiverStorageEntity();
     }
 
     @Override

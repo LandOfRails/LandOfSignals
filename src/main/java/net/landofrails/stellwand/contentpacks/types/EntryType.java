@@ -3,7 +3,7 @@ package net.landofrails.stellwand.contentpacks.types;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
-import net.landofrails.stellwand.contentpacks.entries.receiver.BlockReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntry;
 

@@ -41,5 +41,6 @@ message.stellwand:connector.signalconnected=Signal connected!
 message.stellwand:connector.sendersignalsmustbeequal=You only can connect the same type of signal with a sender!
 message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
+message.stellwand:connector.blocknotconnectable=This block is not connectable!
 
 gui.stellwand:selectsendermodes.group=Group: %s
