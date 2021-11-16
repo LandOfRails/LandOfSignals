@@ -5,6 +5,9 @@ import cam72cam.mod.gui.Progress;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryItem;
@@ -12,9 +15,6 @@ import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisign
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntry;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntryItem;
@@ -256,7 +256,7 @@ public class StaticLoader {
         // Blockreceiver
         prop = new Properties().setName("Blockreceiver");
         prop.setType(EntryType.BLOCKRECEIVER).setWallMountable(true);
-        prop.setModel("models/block/blockreceiver/blockreceiver/blockreceiver.obj");
+        prop.setModel("models/block/blockbuttonreceiver/blockbuttonreceiver/blockreceiver.obj");
         prop.setBlockTranslation(.5f, 0, .5f);
         prop.setItemMode("on").setItemTranslation(.5f, .1625f, .5f);
         contentPackEntries.add(prop.toEntry());

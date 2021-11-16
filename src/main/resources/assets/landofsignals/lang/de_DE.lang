@@ -34,7 +34,7 @@ item.landofsignals:stellwand.magnifyingglass.name=Lupe
 message.stellwand:sender.nosignalsconnected=Es ist noch kein Signal verbunden!
 message.stellwand:sender.modesset=Modes gesetzt!
 message.stellwand:sender.signalnotfound=Signal konnte nicht gefunden werden: %s
-message.stellwand:sender.error1=Ich weiß nicht wie, aber es ist weg.. [Surprised Pikachu hier einfügen]
+message.stellwand:sender.error1=Scheint als sei der Signalblock nicht mehr da..
 
 message.stellwand:connector.signaldisconnected=Signal entfernt!
 message.stellwand:connector.signalconnected=Signal verbunden!
@@ -42,5 +42,6 @@ message.stellwand:connector.sendersignalsmustbeequal=Du kannst nur Signale des g
 message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=Dieser Block lässt sich nicht verbinden!
+message.stellwand:connector.notthesameworld=Blöcke aus unterschiedlichen Welten lassen sich nicht verbinden!
 
 gui.stellwand:selectsendermodes.group=Gruppe: %s

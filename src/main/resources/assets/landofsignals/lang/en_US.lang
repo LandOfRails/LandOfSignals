@@ -34,7 +34,7 @@ item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass
 message.stellwand:sender.nosignalsconnected=No signals connected yet!
 message.stellwand:sender.modesset=Modes set!
 message.stellwand:sender.signalnotfound=Signal couldn't be found: %s
-message.stellwand:sender.error1=I dont know how, but its missing.. [Insert surprised Pikachu here]
+message.stellwand:sender.error1=Seems like the signalblock does not exist anymore..
 
 message.stellwand:connector.signaldisconnected=Signal disconnected!
 message.stellwand:connector.signalconnected=Signal connected!
@@ -42,5 +42,6 @@ message.stellwand:connector.sendersignalsmustbeequal=You only can connect the sa
 message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=This block is not connectable!
+message.stellwand:connector.notthesameworld=Can't connect blocks between different worlds!
 
 gui.stellwand:selectsendermodes.group=Group: %s

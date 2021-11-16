@@ -12,10 +12,12 @@ import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
-import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class SelectItem implements IScreen {
@@ -26,7 +28,7 @@ public class SelectItem implements IScreen {
     // Initialized every call
     private List<Button> contentPackButtons = new LinkedList<>();
     private Consumer<ItemStack> selectedItem;
-    private ItemStack current;
+    private ItemStack current = null;
     private EntryType entryType;
     private ItemStack defaultItem;
 
@@ -48,7 +50,8 @@ public class SelectItem implements IScreen {
 
     @Override
     public void onClose() {
-        selectedItem.accept(current);
+        if (current != null)
+            selectedItem.accept(current);
         // Reset variables
         contentPackButtons.clear();
         selectedItem = null;
@@ -64,14 +67,13 @@ public class SelectItem implements IScreen {
 
     private List<ItemStack> getItemStackForContentPack(ContentPack pack, EntryType type) {
         List<ItemStack> items = new ArrayList<>();
-        for (Map.Entry<ContentPackEntry, String> entry : Content.getBlocks(pack, type).entrySet()) {
-            ContentPackEntry cpe = entry.getKey();
+        Content.getBlocks(pack, type).forEach((cpe, value) -> {
             ItemStack is = new ItemStack(getCustomItemForEntryType(Objects.requireNonNull(type)), 1);
             TagCompound tag = is.getTagCompound();
-            tag.setString("itemId", cpe.getBlockId(entry.getValue()));
+            tag.setString("itemId", cpe.getBlockId(value));
             is.setTagCompound(tag);
             items.add(is);
-        }
+        });
         if (items.isEmpty())
             items.add(defaultItem);
         return items;

@@ -8,6 +8,7 @@ import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.*;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.items.connector.AItemConnector;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -36,6 +37,8 @@ public class Stellwand {
 
                 if (!StellwandConfig.disableStellwand) {
                     Loader.init();
+
+                    AItemConnector.registerConnectors();
 
                     CustomGuis.register();
                     CustomTabs.register();

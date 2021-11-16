@@ -20,6 +20,7 @@ public enum EMessage {
 	MESSAGE_NEW_SIGNAL_SELECTED("connector.newsignalselected"),
 	MESSAGE_NEW_SENDER_SELECTED("connector.newsenderselected"),
 	MESSAGE_BLOCK_NOT_CONNECTABLE("connector.blocknotconnectable"),
+    MESSAGE_NOT_THE_SAME_WORLD("connector.notthesameworld"),
 
 	// GUI
 	GUI_STELLWAND_SELECTSENDERMODES_GROUP("gui." + Stellwand.DOMAIN + ":selectsendermodes.group", true);

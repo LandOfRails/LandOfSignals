@@ -143,6 +143,19 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
         this.signalEntity = signalEntity;
     }
 
+    public Vec3i getFirstSignal() {
+        refreshSignals();
+        for (Vec3i pos : this.signals)
+            if (SignalContainer.isSignal(getWorld(), pos))
+                return pos;
+        return null;
+    }
+
+    public void refreshSignals() {
+        this.signals.forEach(signal -> getWorld().keepLoaded(signal));
+        this.signals.removeIf(vec3i -> !SignalContainer.isSignal(getWorld(), vec3i) && getWorld().isBlockLoaded(vec3i));
+    }
+
     public SignalContainer<BlockEntity> getSignal() {
         return this.signalEntity;
     }
