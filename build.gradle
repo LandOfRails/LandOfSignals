@@ -1,12 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         maven { url = 'https://teamopenindustry.cc/maven/' }
     }
     dependencies {
         classpath 'cam72cam.universalmodcore:UniversalModCoreGradle:0.1.3'
-        classpath 'org.jetbrains:annotations:22.0.0'
     }
 }
 
@@ -26,7 +24,7 @@ universalmodcore {
 
 task('umcIntegration') {
     doLast {
-        String umcLoader = System.getProperty("umc.loader")
+        System.getProperty("umc.loader")
     }
 }
 
@@ -53,6 +51,6 @@ task('showBuildInfo') {
     }
 }
 
-dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
+repositories {
+    mavenCentral()
 }
