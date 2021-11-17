@@ -73,7 +73,7 @@ public abstract class AItemConnector {
      *
      * @param world World
      * @param pos   Position
-     * @return Suitable Connector, may be null
+     * @return Suitable connector, may be null
      */
     public static AItemConnector getConnector(World world, Vec3i pos) {
         Class<? extends AItemConnector> clazz = getImplementor(world, pos);
@@ -93,7 +93,7 @@ public abstract class AItemConnector {
      * Returns instance of a connector if one exists
      *
      * @param itemStack ItemStack
-     * @return The suitable connector, may be null
+     * @return Suitable connector, may be null
      */
     public static AItemConnector getConnector(ItemStack itemStack) {
         Class<? extends AItemConnector> clazz = getImplementor(itemStack);
