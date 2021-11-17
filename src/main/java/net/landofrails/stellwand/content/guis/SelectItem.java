@@ -26,7 +26,7 @@ public class SelectItem implements IScreen {
     private static GuiRegistry.GUI gui;
 
     // Initialized every call
-    private List<Button> contentPackButtons = new LinkedList<>();
+    private final List<Button> contentPackButtons = new LinkedList<>();
     private Consumer<ItemStack> selectedItem;
     private ItemStack current = null;
     private EntryType entryType;
