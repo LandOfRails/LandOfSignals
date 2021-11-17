@@ -1,19 +1,20 @@
 package net.landofrails.api;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Vector3d;
+
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 
-import javax.annotation.Nullable;
-import javax.vecmath.Vector3d;
-import java.util.List;
-
 public class LandOfSignalsAPI {
 
     private LandOfSignalsAPI() {
 
-    }
+	}
 
     static class LandOfSignals {
 

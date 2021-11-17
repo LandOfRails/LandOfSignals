@@ -12,10 +12,17 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
+import net.landofrails.stellwand.Stellwand;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
     public static final String MODID = "landofsignals";
@@ -29,11 +36,13 @@ public class LandOfSignals extends ModCore.Mod {
     @Override
     public void commonEvent(ModEvent event) {
 
+        // Stellwand commonEvent
+        Stellwand.commonEvent(event);
+
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-
-            // Stellwand
-//            Stellwand.commonEvent();
+            Optional<String> mcVersion = getMCVersion();
+            ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed to receive"));
 
             ContentPackHandler.init();
 
@@ -53,12 +62,13 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void clientEvent(ModEvent event) {
+
+        // Stellwand
+        Stellwand.clientEvent(event);
+
         switch (event) {
             case CONSTRUCT:
                 ModCore.Mod.info("Starting client construct...");
-
-                // Stellwand
-//                Stellwand.clientEvent();
 
                 // Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
@@ -80,9 +90,11 @@ public class LandOfSignals extends ModCore.Mod {
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 break;
             case INITIALIZE:
                 break;
@@ -97,8 +109,31 @@ public class LandOfSignals extends ModCore.Mod {
         }
     }
 
+    public Optional<String> getMCVersion() {
+
+        for (Annotation annotation : ModCore.class.getAnnotations()) {
+            System.out.println("Annotation: " + annotation.annotationType().getName());
+            if (annotation.annotationType().getName().contains("Mod")) {
+                for (Method method : Mod.class.getDeclaredMethods()) {
+                    if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
+                        try {
+                            return Optional.of((String) method.invoke(annotation));
+                        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                            return Optional.empty();
+                        }
+                    }
+                }
+            }
+        }
+
+        return Optional.empty();
+
+    }
+
     @Override
     public void serverEvent(ModEvent event) {
         // Do nothing forever
+        Stellwand.serverEvent(event);
     }
 }

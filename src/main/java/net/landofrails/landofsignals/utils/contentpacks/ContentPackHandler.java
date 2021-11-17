@@ -52,11 +52,13 @@ public class ContentPackHandler {
         try (ZipFile zip = new ZipFile(asset)) {
 
             List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
-            Optional<ZipEntry> landofsignalsJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json")).findFirst();
-            if (landofsignalsJson.isPresent())
-                load(zip, landofsignalsJson.get());
-            else
+            Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
+                    .findFirst();
+            if (stellwandJson.isPresent()) {
+                load(zip, stellwandJson.get());
+            } else {
                 throw new ContentPackException("[" + asset.getName() + "] Missing landofsignals.json");
+            }
 
         } catch (ZipException zipException) {
             ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
@@ -94,7 +96,10 @@ public class ContentPackHandler {
                                     }
                                     states.add(0, null);
                                     contentPackSignalPart.setStates(states);
-                                    LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
+                                    if (contentPackSignalPart.getAnimations() != null)
+                                        LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(contentPackSignalPart);
+                                    else
+                                        LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
                                     break;
                                 }
                             }

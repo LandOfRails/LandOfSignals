@@ -26,7 +26,9 @@ public class SignalBoxGuiToClientPacket extends Packet {
     @Override
     protected void handle() {
         TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
-        box.setRedstone(textureNameRedstone);
-        box.setNoRedstone(textureNameNoRedstone);
+		if (box != null) {
+			box.setRedstone(textureNameRedstone);
+			box.setNoRedstone(textureNameNoRedstone);
+		}
     }
 }

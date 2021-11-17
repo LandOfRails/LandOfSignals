@@ -1,0 +1,17 @@
+name: Test Pipeline
+
+on: [ workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Read CHANGELOG.md file
+        id: getchangelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
+      - name: Output getchangelog
+        run: echo "${{ steps.getchangelog.outputs.content }}"

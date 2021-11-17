@@ -29,7 +29,7 @@ public class SignalBoxGuiToServerPacket extends Packet {
         box.setRedstone(textureNameRedstone);
         box.setNoRedstone(textureNameNoRedstone);
 
-        SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(textureNameRedstone, textureNameNoRedstone, pos);
-        packet.sendToAll();
+		SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(textureNameRedstone, textureNameNoRedstone, pos);
+		packet.sendToAll();
     }
 }

@@ -7,6 +7,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class ContentPackSignalPart {
 
@@ -22,6 +23,8 @@ public class ContentPackSignalPart {
 
     private List<String> states;
 
+    private Map<String, List<ContentPackAnimation>> animations;
+
     public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
         this(id, name, model, translation, itemTranslation, scaling, scaling, states);
     }
@@ -35,6 +38,16 @@ public class ContentPackSignalPart {
         this.scaling = scaling;
         this.itemScaling = itemScaling;
         this.states = states;
+    }
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
+        this(id, name, model, translation, itemTranslation, scaling, scaling, states);
+        this.animations = animations;
+    }
+
+    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
+        this(id, name, model, translation, itemTranslation, scaling, itemScaling, states);
+        this.animations = animations;
     }
 
     public String getId() {
@@ -99,7 +112,7 @@ public class ContentPackSignalPart {
                 itemScaling = scaling;
             } else {
                 // Emergency value
-                scaling = new float[]{1, 1, 1};
+                itemScaling = new float[]{1, 1, 1};
             }
         }
         return itemScaling;
@@ -107,6 +120,14 @@ public class ContentPackSignalPart {
 
     public void setItemScaling(float[] itemScaling) {
         this.itemScaling = itemScaling;
+    }
+
+    public Map<String, List<ContentPackAnimation>> getAnimations() {
+        return animations;
+    }
+
+    public void setAnimations(Map<String, List<ContentPackAnimation>> animations) {
+        this.animations = animations;
     }
 
     public static ContentPackSignalPart fromJson(InputStream inputStream) {

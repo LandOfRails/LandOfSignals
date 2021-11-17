@@ -64,7 +64,7 @@ jobs:
         id: getsuffix
         run: echo "::set-output name=suffix::$(cat SUFFIX)"
       - name: Rename with suffix
-        run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar 
+        run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload to CurseForge ${{matrix.branch}}
         uses: MarkenJaden/curseforge-upload@master
         with:
