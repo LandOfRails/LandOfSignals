@@ -19,12 +19,12 @@ universalmodcore {
     modName = 'LandOfSignals'
     modId = 'landofsignals'
     modVersion = version
-    umcVersion = '1.1.3'
+    umcVersion = '1.1.2'
 }
 
 task('umcIntegration') {
     doLast {
-        System.getProperty("umc.loader")
+        String umcLoader = System.getProperty("umc.loader")
     }
 }
 

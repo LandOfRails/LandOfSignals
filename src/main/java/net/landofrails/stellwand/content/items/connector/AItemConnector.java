@@ -46,7 +46,7 @@ public abstract class AItemConnector {
      * Returns true if itemstack contains a connector
      *
      * @param itemStack The itemstack
-     * @return true if it contains a connector
+     * @return True if it contains a connector
      */
     public static boolean hasConnectorData(ItemStack itemStack) {
         if (itemStack.is(CustomItems.ITEMCONNECTOR2) || itemStack.is(CustomItems.ITEMCONNECTOR3)) {
@@ -61,7 +61,7 @@ public abstract class AItemConnector {
      *
      * @param world World
      * @param pos   Position
-     * @return true if a suitable connector exists
+     * @return True if a suitable connector exists
      */
     public static boolean suitableConnectorExists(World world, Vec3i pos) {
         assert !CONNECTORS.isEmpty();
