@@ -43,7 +43,7 @@ public class CustomItems {
 
     }
 
-    // Clientsided
+    // Clientside
     public static void registerRenderers() {
         for (CustomItem item : itemList) {
             if (item instanceof ICustomTexturePath) {

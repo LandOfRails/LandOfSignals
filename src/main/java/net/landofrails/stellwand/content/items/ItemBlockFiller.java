@@ -141,8 +141,7 @@ public class ItemBlockFiller extends CustomItem {
             return;
 
         int sizeInHand = player.getHeldItem(hand).getCount();
-        SelectItem si = new SelectItem();
-        si.open(player, EntryType.BLOCKFILLER, new ItemStack(CustomItems.ITEMBLOCKFILLER, 1), item -> {
+        SelectItem.open(player, EntryType.BLOCKFILLER, new ItemStack(CustomItems.ITEMBLOCKFILLER, 1), item -> {
             if (item != null) {
                 player.setHeldItem(hand, item);
                 item.setCount(sizeInHand);

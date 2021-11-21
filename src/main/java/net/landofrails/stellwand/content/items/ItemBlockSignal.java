@@ -134,8 +134,7 @@ public class ItemBlockSignal extends CustomItem {
         }
 
         int sizeInHand = player.getHeldItem(hand).getCount();
-        SelectItem si = new SelectItem();
-        si.open(player, EntryType.BLOCKSIGNAL, new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1), item -> {
+        SelectItem.open(player, EntryType.BLOCKSIGNAL, new ItemStack(CustomItems.ITEMBLOCKSIGNAL, 1), item -> {
             if (item != null) {
                 player.setHeldItem(hand, item);
                 item.setCount(sizeInHand);

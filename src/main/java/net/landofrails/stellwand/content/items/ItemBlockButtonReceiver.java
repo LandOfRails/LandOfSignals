@@ -31,6 +31,7 @@ import net.landofrails.stellwand.contentpacks.types.EntryType;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class ItemBlockButtonReceiver extends CustomItem {
@@ -67,7 +68,7 @@ public class ItemBlockButtonReceiver extends CustomItem {
             }
 
             // ContentPack
-            for (Map.Entry<ContentPackEntry, String> entry : Content.getBlockReceivers().entrySet()) {
+            for (Entry<ContentPackEntry, String> entry : Content.getBlockReceivers().entrySet()) {
                 try {
                     ContentPackEntry cpe = entry.getKey();
                     String packId = entry.getValue();
@@ -110,9 +111,9 @@ public class ItemBlockButtonReceiver extends CustomItem {
 
     public ItemStack getFirstVarient() {
         ItemStack is = null;
-        Iterator<Map.Entry<ContentPackEntry, String>> it = Content.getBlockReceivers().entrySet().iterator();
+        Iterator<Entry<ContentPackEntry, String>> it = Content.getBlockReceivers().entrySet().iterator();
         if (it.hasNext()) {
-            Map.Entry<ContentPackEntry, String> entry = it.next();
+            Entry<ContentPackEntry, String> entry = it.next();
 
             ContentPackEntry cpe = entry.getKey();
             is = new ItemStack(CustomItems.ITEMBLOCKRECEIVER, 1);
@@ -132,8 +133,7 @@ public class ItemBlockButtonReceiver extends CustomItem {
         }
 
         int sizeInHand = player.getHeldItem(hand).getCount();
-        SelectItem si = new SelectItem();
-        si.open(player, EntryType.BLOCKRECEIVER, new ItemStack(CustomItems.ITEMBLOCKRECEIVER, 1), item -> {
+        SelectItem.open(player, EntryType.BLOCKRECEIVER, new ItemStack(CustomItems.ITEMBLOCKRECEIVER, 1), item -> {
             if (item != null) {
                 player.setHeldItem(hand, item);
                 item.setCount(sizeInHand);
@@ -232,11 +232,7 @@ public class ItemBlockButtonReceiver extends CustomItem {
                     blockEntity.setContentBlockId(MISSING);
                 blockEntity.renderEntity
                         .setRotation(player.getRotationYawHead());
-                if (facing.equals(Facing.DOWN) || facing.equals(Facing.UP)) {
-                    blockEntity.setWallMounted(false);
-                } else {
-                    blockEntity.setWallMounted(true);
-                }
+                blockEntity.setWallMounted(!facing.equals(Facing.DOWN) && !facing.equals(Facing.UP));
             }
             //
 

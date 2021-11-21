@@ -1,5 +1,6 @@
 package net.landofrails.stellwand.content.guis;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.GuiRegistry;
 import cam72cam.mod.gui.helpers.ItemPickerGUI;
@@ -13,31 +14,34 @@ import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
+import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class SelectItem implements IScreen {
 
     // Only initialized once
+    private static final Map<EntryType, Map.Entry<ItemStack, Consumer<ItemStack>>> ENTRYTYPES = new HashMap<>();
     private static GuiRegistry.GUI gui;
 
     // Initialized every call
-    private final List<Button> contentPackButtons = new LinkedList<>();
-    private Consumer<ItemStack> selectedItem;
-    private ItemStack current = null;
+    private ItemStack current;
     private EntryType entryType;
-    private ItemStack defaultItem;
 
     public static void init(GuiRegistry.GUI gui) {
         SelectItem.gui = gui;
     }
 
+    public static void setEntryType(EntryType type, Map.Entry<ItemStack, Consumer<ItemStack>> defaultAndSelectedItem) {
+        ENTRYTYPES.putIfAbsent(type, defaultAndSelectedItem);
+    }
+
     @Override
     public void init(IScreenBuilder screen) {
+
+        ItemStack itemStack = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
+        this.entryType = getEntryTypeFromItem(itemStack);
 
         generateContentPackButtons(screen, Content.getContentPacksFor(entryType));
 
@@ -51,13 +55,9 @@ public class SelectItem implements IScreen {
     @Override
     public void onClose() {
         if (current != null)
-            selectedItem.accept(current);
+            ENTRYTYPES.get(entryType).getValue().accept(current);
         // Reset variables
-        contentPackButtons.clear();
-        selectedItem = null;
         entryType = null;
-        current = null;
-        defaultItem = null;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SelectItem implements IScreen {
             items.add(is);
         });
         if (items.isEmpty())
-            items.add(defaultItem);
+            items.add(ENTRYTYPES.get(entryType).getKey());
         return items;
     }
 
@@ -88,21 +88,25 @@ public class SelectItem implements IScreen {
             case BLOCKSIGNAL:
                 return CustomItems.ITEMBLOCKSIGNAL;
             case BLOCKFILLER:
-            default:
                 return CustomItems.ITEMBLOCKFILLER;
+            case BLOCKRECEIVER:
+                return CustomItems.ITEMBLOCKRECEIVER;
+            default:
+                throw new ContentPackException("I must have forgot to add this EntryType to this method: " + type);
         }
     }
 
-    private void generateContentPackButtons(IScreenBuilder screen, List<ContentPack> contentPacks) {
-        for (int i = 0; i < contentPacks.size(); i++) {
-            ContentPack contentPack = contentPacks.get(i);
+    private void generateContentPackButtons(IScreenBuilder screen, Collection<ContentPack> contentPacks) {
+        int index = 0;
+        for (ContentPack contentPack : contentPacks) {
             int height = 20;
             int width = 200;
             int x = -width / 2;
             int marginY = 5;
             int offsetY = -50;
-            int y = ((height + marginY) * i) + offsetY;
-            Button button = new Button(screen, x, y, width, height, contentPack.getButtonName()) {
+            int y = ((height + marginY) * index) + offsetY;
+
+            new Button(screen, x, y, width, height, contentPack.getButtonName()) {
                 @Override
                 public void onClick(Player.Hand hand) {
                     List<ItemStack> selection = getItemStackForContentPack(contentPack, entryType);
@@ -113,8 +117,24 @@ public class SelectItem implements IScreen {
                     ip.show();
                 }
             };
-            contentPackButtons.add(button);
+
+            index++;
         }
+    }
+
+    private EntryType getEntryTypeFromItem(ItemStack itemStack) {
+        if (itemStack.is(CustomItems.ITEMBLOCKFILLER)) {
+            return EntryType.BLOCKFILLER;
+        } else if (itemStack.is(CustomItems.ITEMBLOCKMULTISIGNAL)) {
+            return EntryType.BLOCKMULTISIGNAL;
+        } else if (itemStack.is(CustomItems.ITEMBLOCKRECEIVER)) {
+            return EntryType.BLOCKRECEIVER;
+        } else if (itemStack.is(CustomItems.ITEMBLOCKSENDER)) {
+            return EntryType.BLOCKSENDER;
+        } else if (itemStack.is(CustomItems.ITEMBLOCKSIGNAL)) {
+            return EntryType.BLOCKSIGNAL;
+        }
+        return null;
     }
 
     /**
@@ -125,10 +145,8 @@ public class SelectItem implements IScreen {
      * @param defaultItem  Default item if no items are found
      * @param selectedItem Consumer for returning itemstack
      */
-    public void open(Player player, EntryType type, ItemStack defaultItem, Consumer<ItemStack> selectedItem) {
-        this.selectedItem = selectedItem;
-        entryType = type;
-        this.defaultItem = defaultItem;
+    public static void open(Player player, EntryType type, ItemStack defaultItem, Consumer<ItemStack> selectedItem) {
+        setEntryType(type, new AbstractMap.SimpleEntry<>(defaultItem, selectedItem));
         gui.open(player);
     }
 
