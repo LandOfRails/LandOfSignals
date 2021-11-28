@@ -112,7 +112,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
-        this.TileSignalPartPos = pos;
+        TileSignalPartPos = pos;
         markDirty();
     }
 
