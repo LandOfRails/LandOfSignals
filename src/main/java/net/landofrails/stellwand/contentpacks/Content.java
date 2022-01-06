@@ -81,11 +81,21 @@ public class Content {
         return entries;
     }
 
-    public static Map<ContentPackEntry, String> getBlockReceivers() {
+    public static Map<ContentPackEntry, String> getBlockButtonReceivers() {
         Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
         for (ContentPack pack : contentPacks) {
             for (ContentPackEntry entry : pack.getEntries())
-                if (entry.isType(EntryType.BLOCKRECEIVER))
+                if (entry.isType(EntryType.BLOCKBUTTONRECEIVER))
+                    entries.put(entry, pack.getId());
+        }
+        return entries;
+    }
+
+    public static Map<ContentPackEntry, String> getBlockButtons() {
+        Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
+        for (ContentPack pack : contentPacks) {
+            for (ContentPackEntry entry : pack.getEntries())
+                if (entry.isType(EntryType.BLOCKBUTTON))
                     entries.put(entry, pack.getId());
         }
         return entries;
@@ -126,4 +136,5 @@ public class Content {
         );
         // @formatter:on
     }
+
 }

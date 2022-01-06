@@ -2,15 +2,15 @@ package net.landofrails.stellwand.contentpacks.entries.buttonreceiver;
 
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 
-public class BlockReceiverEntryBlock extends ContentPackEntryBlock {
+public class BlockButtonReceiverEntryBlock extends ContentPackEntryBlock {
 
     private Boolean wallMountable;
 
-    public BlockReceiverEntryBlock() {
+    public BlockButtonReceiverEntryBlock() {
         wallMountable = false;
     }
 
-    public BlockReceiverEntryBlock(float[] rotation, float[] translation, Boolean wallMountable) {
+    public BlockButtonReceiverEntryBlock(float[] rotation, float[] translation, Boolean wallMountable) {
         super(rotation, translation);
         this.wallMountable = wallMountable;
     }

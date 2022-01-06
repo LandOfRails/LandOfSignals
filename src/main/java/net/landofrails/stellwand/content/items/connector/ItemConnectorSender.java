@@ -74,6 +74,8 @@ public class ItemConnectorSender extends AItemConnector {
                     sender.updateSignals();
                     sender.markDirty();
                     return true;
+
+
                 } else {
                     ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNALS_MUST_BE_EQUAL);
                 }

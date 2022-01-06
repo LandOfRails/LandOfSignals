@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class ItemBlockButtonReceiver extends CustomItem {
+public class ItemBlockButton extends CustomItem {
 
     private static final String ITEMID = "itemId";
 
@@ -47,8 +47,8 @@ public class ItemBlockButtonReceiver extends CustomItem {
     private static Map<String, Float> scales = new HashMap<>();
     private static Map<String, String> modes = new HashMap<>();
 
-    public ItemBlockButtonReceiver() {
-        super(LandOfSignals.MODID, "stellwand.itemblockbuttonreceiver");
+    public ItemBlockButton() {
+        super(LandOfSignals.MODID, "stellwand.itemblockbutton");
     }
 
     // Only for Clientside
@@ -68,7 +68,7 @@ public class ItemBlockButtonReceiver extends CustomItem {
             }
 
             // ContentPack
-            for (Entry<ContentPackEntry, String> entry : Content.getBlockButtonReceivers().entrySet()) {
+            for (Entry<ContentPackEntry, String> entry : Content.getBlockButtons().entrySet()) {
                 try {
                     ContentPackEntry cpe = entry.getKey();
                     String packId = entry.getValue();

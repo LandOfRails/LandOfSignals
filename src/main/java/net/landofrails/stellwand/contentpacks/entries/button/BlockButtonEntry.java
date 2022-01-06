@@ -1,24 +1,24 @@
-package net.landofrails.stellwand.contentpacks.entries.buttonreceiver;
+package net.landofrails.stellwand.contentpacks.entries.button;
 
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
-public class BlockReceiverEntry extends ContentPackEntry {
+public class BlockButtonEntry extends ContentPackEntry {
 
-    private BlockReceiverEntryBlock block;
-    private BlockReceiverEntryItem item;
+    private BlockButtonEntryBlock block;
+    private BlockButtonEntryItem item;
 
-    public BlockReceiverEntry() {
+    public BlockButtonEntry() {
 
     }
 
-    public BlockReceiverEntry(
+    public BlockButtonEntry(
             String name,
             String model,
-            BlockReceiverEntryBlock block,
-            BlockReceiverEntryItem item
+            BlockButtonEntryBlock block,
+            BlockButtonEntryItem item
     ) {
         super(name, model);
         this.block = block;
@@ -37,6 +37,6 @@ public class BlockReceiverEntry extends ContentPackEntry {
 
     @Override
     public EntryType getType() {
-        return EntryType.BLOCKRECEIVER;
+        return EntryType.BLOCKBUTTON;
     }
 }

@@ -52,10 +52,12 @@ public class SignalContainer<T extends BlockEntity> {
         EntryType type = tag.getEnum("type", EntryType.class);
         if (type.equals(EntryType.BLOCKSIGNAL)) {
             BlockSignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
-            return of(entity);
+            if (entity != null)
+                return of(entity);
         } else if (type.equals(EntryType.BLOCKMULTISIGNAL)) {
             BlockMultisignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
-            return of(entity);
+            if (entity != null)
+                return of(entity);
         }
         return null;
     }
@@ -149,12 +151,20 @@ public class SignalContainer<T extends BlockEntity> {
         return null;
     }
 
+    /**
+     * Turns the SignalContainer to a TagCompound.
+     * isTargetClient needs to specify if the tileentity is to be
+     * extracted on client or server side.
+     *
+     * @param isTargetClient is target client?
+     * @return TagCompound containing tileentity and additional information
+     */
     @SuppressWarnings("java:S1192")
-    public TagCompound toTagCompound() {
+    public TagCompound toTagCompound(boolean isTargetClient) {
         TagCompound tag = new TagCompound();
         tag.setEnum("type", getEntryType());
         tag.setTile(TILEENTITY, getAs(getSignalClass()));
-        tag.setBoolean(ISCLIENT, getRawInstance().getWorld().isClient);
+        tag.setBoolean(ISCLIENT, isTargetClient);
         return tag;
     }
 

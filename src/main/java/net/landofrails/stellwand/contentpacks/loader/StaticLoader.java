@@ -5,9 +5,9 @@ import cam72cam.mod.gui.Progress;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntry;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryItem;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryItem;
@@ -255,7 +255,7 @@ public class StaticLoader {
 
         // Blockreceiver
         prop = new Properties().setName("Blockreceiver");
-        prop.setType(EntryType.BLOCKRECEIVER).setWallMountable(true);
+        prop.setType(EntryType.BLOCKBUTTONRECEIVER).setWallMountable(true);
         prop.setModel("models/block/blockbuttonreceiver/blockbuttonreceiver/blockreceiver.obj");
         prop.setBlockTranslation(.5f, 0, .5f);
         prop.setItemMode("on").setItemTranslation(.5f, .1625f, .5f);
@@ -383,10 +383,10 @@ public class StaticLoader {
                     BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modesList);
                     BlockMultisignalEntryItem multisignalItem = new BlockMultisignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
                     return new BlockMultisignalEntry(name, model, multisignalBlock, multisignalItem);
-                case BLOCKRECEIVER:
-                    BlockReceiverEntryBlock receiverEntryBlock = new BlockReceiverEntryBlock(blockRotation, blockTranslation, wallMountable);
-                    BlockReceiverEntryItem receiverEntryItem = new BlockReceiverEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
-                    return new BlockReceiverEntry(name, model, receiverEntryBlock, receiverEntryItem);
+                case BLOCKBUTTONRECEIVER:
+                    BlockButtonReceiverEntryBlock receiverEntryBlock = new BlockButtonReceiverEntryBlock(blockRotation, blockTranslation, wallMountable);
+                    BlockButtonReceiverEntryItem receiverEntryItem = new BlockButtonReceiverEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
+                    return new BlockButtonReceiverEntry(name, model, receiverEntryBlock, receiverEntryItem);
                 default:
                     return null;
             }

@@ -11,7 +11,7 @@ import net.landofrails.stellwand.content.entities.function.BlockButtonReceiverFu
 import net.landofrails.stellwand.content.entities.rendering.BlockButtonReceiverRenderEntity;
 import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
-import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.utils.StellwandUtils;
@@ -73,7 +73,7 @@ public class BlockButtonReceiverStorageEntity extends BlockButtonReceiverFunctio
             ModCore.Mod.error("Error while loading blocknotfound.obj: %s", e.getMessage());
         }
         // Add contentpack stuff
-        for (Map.Entry<ContentPackEntry, String> entry : Content.getBlockReceivers().entrySet()) {
+        for (Map.Entry<ContentPackEntry, String> entry : Content.getBlockButtonReceivers().entrySet()) {
             String name = null;
             String type = null;
             ContentPackEntryBlock cpeb = null;
@@ -84,7 +84,7 @@ public class BlockButtonReceiverStorageEntity extends BlockButtonReceiverFunctio
                 cpeb = entry.getKey().getBlock();
                 name = blockId;
                 type = cpe.getType() != null ? cpe.getType().name() : "null";
-                BlockReceiverEntryBlock block = cpe.getBlock(BlockReceiverEntryBlock.class);
+                BlockButtonReceiverEntryBlock block = cpe.getBlock(BlockButtonReceiverEntryBlock.class);
                 String objPath = cpe.getModel();
                 Identifier id = new Identifier("stellwand", objPath);
                 OBJModel m = new OBJModel(id, 0);
@@ -122,7 +122,7 @@ public class BlockButtonReceiverStorageEntity extends BlockButtonReceiverFunctio
     }
 
     public void setWallMounted(boolean wallMounted) {
-        if (wallMountable.containsKey(contentPackBlockId) && wallMountable.get(contentPackBlockId).booleanValue())
+        if (wallMountable.containsKey(contentPackBlockId) && Boolean.TRUE.equals(wallMountable.get(contentPackBlockId)))
             this.wallMounted = wallMounted;
     }
 

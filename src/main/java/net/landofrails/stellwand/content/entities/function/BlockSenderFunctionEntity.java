@@ -70,13 +70,9 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
             if (signalPos != null) {
 
                 getWorld().keepLoaded(signalPos);
-                if (getWorld().hasBlockEntity(signalPos, BlockSignalStorageEntity.class)) {
-                    BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockSignalStorageEntity.class);
-                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
-                    packet.sendToPlayer(player);
-                } else if (getWorld().hasBlockEntity(signalPos, BlockMultisignalStorageEntity.class)) {
-                    BlockMultisignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockMultisignalStorageEntity.class);
-                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
+
+                if (SignalContainer.isSignal(getWorld(), signalPos)) {
+                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(getWorld(), signalPos));
                     packet.sendToPlayer(player);
                 } else {
                     entity.signals.remove(signalPos);

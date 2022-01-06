@@ -20,7 +20,7 @@ public class BlockButtonReceiverFunctionEntity extends BlockEntity {
 
     @Override
     public ItemStack onPick() {
-        ItemStack is = new ItemStack(CustomItems.ITEMBLOCKRECEIVER, 1);
+        ItemStack is = new ItemStack(CustomItems.ITEMBLOCKBUTTONRECEIVER, 1);
         TagCompound tag = is.getTagCompound();
         tag.setString("itemId", entity.getContentPackBlockId());
         is.setTagCompound(tag);

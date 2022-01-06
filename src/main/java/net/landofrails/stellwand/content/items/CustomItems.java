@@ -12,6 +12,7 @@ import java.util.List;
 
 public class CustomItems {
 
+
     private CustomItems() {
 
     }
@@ -27,7 +28,9 @@ public class CustomItems {
     public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
     public static final ItemBlockSender ITEMBLOCKSENDER = new ItemBlockSender();
     public static final ItemBlockMultisignal ITEMBLOCKMULTISIGNAL = new ItemBlockMultisignal();
-    public static final ItemBlockButtonReceiver ITEMBLOCKRECEIVER = new ItemBlockButtonReceiver();
+    // TODO: Implement
+    public static final ItemBlockButton ITEMBLOCKBUTTON = null;
+    public static final ItemBlockButtonReceiver ITEMBLOCKBUTTONRECEIVER = new ItemBlockButtonReceiver();
 
     public static void register() {
         itemList.add(ITEMCONNECTOR1);
@@ -39,7 +42,7 @@ public class CustomItems {
         ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
         ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
         ItemRender.register(ITEMBLOCKMULTISIGNAL, ItemBlockMultisignal.getModelFor());
-        ItemRender.register(ITEMBLOCKRECEIVER, ItemBlockButtonReceiver.getModelFor());
+        ItemRender.register(ITEMBLOCKBUTTONRECEIVER, ItemBlockButtonReceiver.getModelFor());
 
     }
 
