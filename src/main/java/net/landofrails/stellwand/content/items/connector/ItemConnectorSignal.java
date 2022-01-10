@@ -68,6 +68,11 @@ public class ItemConnectorSignal extends AItemConnector {
                         sender.signals.add(getStartPos());
                         ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNAL_CONNECTED);
                     } else {
+                        // Remove signalmode from signal
+                        SignalContainer<?> signalContainer = SignalContainer.of(getStartWorld(), getStartPos());
+                        signalContainer.removeSenderModesFrom(pos);
+                        signalContainer.updateSignalModes();
+                        // Remove signal from sender
                         sender.signals.remove(getStartPos());
                         ServerMessagePacket.send(player, EMessage.MESSAGE_SIGNAL_DISCONNECTED);
                     }
