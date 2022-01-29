@@ -5,6 +5,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.utils.compact.SignalContainer;
 
 import javax.annotation.Nullable;
@@ -211,6 +212,30 @@ public class LandOfSignalsAPI {
             return false;
         }
 
+        public DirectionType[] getDirectionFrom(net.minecraft.world.World mcWorld, Vector3d signalPos) {
+            World world = World.get(mcWorld);
+            Vec3i position = new Vec3i(signalPos.x, signalPos.y, signalPos.z);
+            if (SignalContainer.isSignal(world, position)) {
+                SignalContainer<?> container = SignalContainer.of(world, position);
+                return container.getDirectionFrom();
+            }
+            return new DirectionType[0];
+        }
+
+        public DirectionType[] getDirectionTo(net.minecraft.world.World mcWorld, Vector3d signalPos) {
+            World world = World.get(mcWorld);
+            Vec3i position = new Vec3i(signalPos.x, signalPos.y, signalPos.z);
+            if (SignalContainer.isSignal(world, position)) {
+                SignalContainer<?> container = SignalContainer.of(world, position);
+                return container.getDirectionTo();
+            }
+            return new DirectionType[0];
+        }
+
+        /* TODO
+        Add documentation
+        Add API for sender/decoration blocks to get directionsTo/directionsFrom
+        */
     }
 
 }

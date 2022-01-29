@@ -11,8 +11,10 @@ import net.landofrails.stellwand.content.entities.function.BlockFillerFunctionEn
 import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
 import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.utils.StellwandUtils;
 
 import java.util.HashMap;
@@ -28,6 +30,8 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
     protected static Map<String, OBJRender> renderers = new HashMap<>();
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionFrom = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionTo = new HashMap<>();
 
     // TagFields
     @TagField("contentPackBlockId")
@@ -87,6 +91,9 @@ public class BlockFillerStorageEntity extends BlockFillerFunctionEntity {
                 models.put(blockId, m);
                 rotations.put(blockId, block.getRotation());
                 translations.put(blockId, block.getTranslation());
+                BlockFillerEntry blockFillerEntry = (BlockFillerEntry) cpe;
+                directionFrom.put(blockId, blockFillerEntry.getDirectionFrom());
+                directionTo.put(blockId, blockFillerEntry.getDirectionTo());
             } catch (Exception e) {
                 ModCore.Mod.error("Error while loading contentpack blocks:");
                 ModCore.Mod.error("Block: %s", name);

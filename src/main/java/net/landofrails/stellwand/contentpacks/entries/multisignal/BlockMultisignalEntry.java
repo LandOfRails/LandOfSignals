@@ -3,12 +3,16 @@ package net.landofrails.stellwand.contentpacks.entries.multisignal;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
 public class BlockMultisignalEntry extends ContentPackEntry {
 
     private BlockMultisignalEntryBlock block;
     private BlockMultisignalEntryItem item;
+
+    private DirectionType[] directionFrom;
+    private DirectionType[] directionTo;
 
     public BlockMultisignalEntry() {
 
@@ -17,11 +21,15 @@ public class BlockMultisignalEntry extends ContentPackEntry {
     // @formatter:off
     public BlockMultisignalEntry(
             String name,
+            DirectionType[] directionFrom,
+            DirectionType[] directionTo,
             String model,
             BlockMultisignalEntryBlock block,
             BlockMultisignalEntryItem item
     ) {
         super(name, model);
+        this.directionFrom = directionFrom;
+        this.directionTo = directionTo;
         this.block = block;
         this.item = item;
     }
@@ -40,5 +48,13 @@ public class BlockMultisignalEntry extends ContentPackEntry {
     @Override
     public EntryType getType() {
         return EntryType.BLOCKMULTISIGNAL;
+    }
+
+    public DirectionType[] getDirectionFrom() {
+        return directionFrom;
+    }
+
+    public DirectionType[] getDirectionTo() {
+        return directionTo;
     }
 }

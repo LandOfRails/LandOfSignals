@@ -9,6 +9,7 @@ import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
 import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 
 import java.util.Collections;
@@ -255,6 +256,26 @@ public class SignalContainer<T extends BlockEntity> {
         } else {
             BlockMultisignalStorageEntity signal = getAs(BlockMultisignalStorageEntity.class);
             return signal.isMarked();
+        }
+    }
+
+    public DirectionType[] getDirectionFrom() {
+        if (is(BlockSignalStorageEntity.class)) {
+            BlockSignalStorageEntity signal = getAs(BlockSignalStorageEntity.class);
+            return signal.getDirectionFrom();
+        } else {
+            BlockMultisignalStorageEntity signal = getAs(BlockMultisignalStorageEntity.class);
+            return signal.getDirectionFrom();
+        }
+    }
+
+    public DirectionType[] getDirectionTo() {
+        if (is(BlockSignalStorageEntity.class)) {
+            BlockSignalStorageEntity signal = getAs(BlockSignalStorageEntity.class);
+            return signal.getDirectionTo();
+        } else {
+            BlockMultisignalStorageEntity signal = getAs(BlockMultisignalStorageEntity.class);
+            return signal.getDirectionTo();
         }
     }
 

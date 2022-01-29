@@ -15,6 +15,8 @@ import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionM
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.compact.SignalContainer;
 import net.landofrails.stellwand.utils.mapper.EmptyStringMapper;
@@ -32,6 +34,8 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
     protected static Map<String, OBJRender> renderers = new HashMap<>();
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionFrom = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionTo = new HashMap<>();
 
     // TagFields
     @TagField("version")
@@ -100,6 +104,9 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
                 models.put(blockId, m);
                 rotations.put(blockId, block.getRotation());
                 translations.put(blockId, block.getTranslation());
+                BlockSenderEntry blockSenderEntry = (BlockSenderEntry) cpe;
+                directionFrom.put(blockId, blockSenderEntry.getDirectionFrom());
+                directionTo.put(blockId, blockSenderEntry.getDirectionTo());
             } catch (Exception e) {
                 ModCore.Mod.error("Error while loading contentpack blocks:");
                 ModCore.Mod.error("Block: %s", name);
