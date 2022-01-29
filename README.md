@@ -11,18 +11,21 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/landofrails/landofsignals/badge)](https://www.codefactor.io/repository/github/landofrails/landofsignals)
 [![wakatime](https://wakatime.com/badge/github/LandOfRails/LandOfSignals.svg)](https://wakatime.com/badge/github/LandOfRails/LandOfSignals)
 
-### This mod **requires** [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
+### This mod _requires_ [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 Author: [MarkenJaden](https://github.com/MarkenJaden)
 <br>
 Author: [Danielxs01](https://github.com/Danielxs01)
+<hr>
 
-<br>
+### LandOfSignals
+
 Adds many different signals in different designs, so far without a consistent recognizable pattern or organization.
 <br>
 <br>
 
 <details>
+
 <summary>Content</summary>
 
 ## Content:
@@ -41,34 +44,28 @@ Adds many different signals in different designs, so far without a consistent re
 
 </details>
 
-**Usage**
-------------------
+[Click here to open the full landofsignals documentation]()
+<hr>
 
-1. Select a signal with the "Signal selector" by right-clicking in the air. It will be placed in your inventory
-2. Place the signal at the desired position
-3. Place the "Signal box" in any location
-4. Take the "Connector tool" and connect with a right click the box with the place signal
-5. Open the GUI with a right click on the box and select the desired signal image
-6. Control the signal with a redstone signal to the signal box
+### Stellwand
 
-## Development
+Adds different signalblocks used in a railway lane plan. Preexisting laneblocks are mostly swiss related.
 
-**IntelliJ**
+[Click here to open the full stellwand documentation]()
 
-1. Get the project from GitHub
+<hr>
+
+### Development
+
+**IntelliJ | Eclipse**
+
+1. Get the project from GitHub (via git)
 2. ``gradle umc -D umc.loader=1.12.2-forge``
 3. Load gradle changes
 
-You are ready to go ^^
+You should be ready to go ^^
 
-**Eclipse**
-
-The same I think? I don't know anything about Eclipse at all
-
-
-<br>
-<br>
-<br>
+<hr>
 
 ## Legal
 
