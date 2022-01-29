@@ -378,7 +378,7 @@ public class StaticLoader {
                 case BLOCKSIGNAL:
                     BlockSignalEntryBlock signalBlock = new BlockSignalEntryBlock(blockRotation, blockTranslation, modes);
                     BlockSignalEntryItem signalItem = new BlockSignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
-                    return new BlockSignalEntry(name, model, signalBlock, signalItem);
+                    return new BlockSignalEntry(name, fromDir, toDir, model, signalBlock, signalItem);
                 case BLOCKMULTISIGNAL:
                     BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modesList);
                     BlockMultisignalEntryItem multisignalItem = new BlockMultisignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
