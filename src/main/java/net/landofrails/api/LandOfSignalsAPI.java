@@ -15,7 +15,10 @@ import java.util.Map;
 import java.util.Random;
 
 @SuppressWarnings("unused")
-/**
+/*
+ * @Author Danielxs01
+ * @since 0.0.4
+ *
  * Official LandOfSignalsAPI
  */
 public class LandOfSignalsAPI {
@@ -31,9 +34,9 @@ public class LandOfSignalsAPI {
         /**
          * Returns true if block at given position is of type
          *
-         * @param mcWorld
-         * @param pos
-         * @return
+         * @param mcWorld The Minecraft world
+         * @param pos     The Minecraft position
+         * @return true if landofsignal-block exists
          */
         public boolean isSignalblock(net.minecraft.world.World mcWorld,
                                      Vector3d pos) {
@@ -99,9 +102,9 @@ public class LandOfSignalsAPI {
         /**
          * Returns true if world and position point to a (multi-)signal block.
          *
-         * @param mcWorld
-         * @param pos
-         * @return true if signal
+         * @param mcWorld The Minecraft world
+         * @param pos     The Minecraft position
+         * @return true if stellwand-signal exist
          */
         public static boolean isSignal(net.minecraft.world.World mcWorld, Vector3d pos) {
             World world = World.get(mcWorld);
@@ -112,9 +115,9 @@ public class LandOfSignalsAPI {
         /**
          * Returns true if world and position point to a sender block.
          *
-         * @param mcWorld
-         * @param pos
-         * @return true if sender
+         * @param mcWorld The Minecraft world
+         * @param pos     The Minecraft position
+         * @return true if the sender exists
          */
         public static boolean isSender(net.minecraft.world.World mcWorld, Vector3d pos) {
             World world = World.get(mcWorld);
@@ -138,8 +141,8 @@ public class LandOfSignalsAPI {
          * signalmodeid = Id of the signalmode which is unique for the whole modes contained in the map.
          * </pre>
          *
-         * @param mcWorld
-         * @param pos
+         * @param mcWorld The Minecraft World
+         * @param pos     The Minecraft Position
          * @return Map with all possible modes
          */
         public static Map<String, Map<String, String>> getPossibleStates(net.minecraft.world.World mcWorld, Vector3d pos) {
