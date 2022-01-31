@@ -187,7 +187,9 @@ What happens if you still do it? Older blocks loose their reference and will be 
       0.5,
       0.5
     ],
+    // Different signalstates
     "modes": {
+      // Groupname: Groupid (Should both be unique, Id is used for .obj)
       "Off": "off",
       "White": "white"
     }
@@ -239,8 +241,11 @@ What happens if you still do it? Older blocks loose their reference and will be 
       0.5,
       0.5
     ],
+    // Different signals
     "modes": {
+      // Signalname
       "Left track": {
+        // Groupname: Groupid (Should both be unique, Id is used for .obj)
         "Off": "leftStraightOff",
         "White": "leftStraightWhite",
         "Red": "leftStraightRed"
@@ -286,4 +291,4 @@ What happens if you still do it? Older blocks loose their reference and will be 
 
 ## Example pack
 
-See [Resources/stellwand]("../../../Resources/stellwand/")
+See [Resources/stellwand](../../../Resources/stellwand/)

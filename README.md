@@ -44,14 +44,14 @@ Adds many different signals in different designs, so far without a consistent re
 
 </details>
 
-[Click here to open the full landofsignals documentation]()
+[Click here to open the full landofsignals documentation](./docs/landofsignals/LandOfSignals.md)
 <hr>
 
 ### Stellwand
 
 Adds different signalblocks used in a railway lane plan. Preexisting laneblocks are mostly swiss related.
 
-[Click here to open the full stellwand documentation]()
+[Click here to open the full stellwand documentation](./docs/stellwand/Stellwand.md)
 
 <hr>
 
