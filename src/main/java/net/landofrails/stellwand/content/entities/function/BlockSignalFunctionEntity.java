@@ -14,8 +14,8 @@ import net.landofrails.stellwand.content.items.CustomItems;
 
 public abstract class BlockSignalFunctionEntity extends BlockEntity {
 
-    private static final String SIGNALKEY = "signalPos";
     private BlockSignalStorageEntity entity;
+    private boolean lastTryBreakByCreativePlayer = false;
 
     @SuppressWarnings("java:S112")
     protected BlockSignalFunctionEntity() {
@@ -45,9 +45,16 @@ public abstract class BlockSignalFunctionEntity extends BlockEntity {
     }
 
     @Override
-    public void onBreak() {
-        getWorld().dropItem(onPick(), getPos());
+    public boolean tryBreak(Player player) {
+        lastTryBreakByCreativePlayer = player.isCreative();
+        return true;
     }
 
+    @Override
+    public void onBreak() {
+        if (!lastTryBreakByCreativePlayer) {
+            getWorld().dropItem(onPick(), getPos());
+        }
+    }
 
 }
