@@ -1,7 +1,5 @@
-#### Release 0.0.4
+#### Release 1.0.0
 
-* Upgraded to UMC 1.1.2
-* Fixed issue with lever not emitting redstone to block below ground.
-* Fixed issue with Signal and Sender being directly next to each other and because of that not working
-* Added feature of scaling items separately from blocks
-* Changed texture for signal selector
+* Upgraded to UMC 1.1.3
+* Added Stellwand (see Documentation)
+* Fixed NullPointerException (#35)

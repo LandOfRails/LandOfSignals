@@ -1,9 +1,11 @@
 package net.landofrails.stellwand.content.network;
 
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
+import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.guis.CustomGuis;
@@ -28,13 +30,25 @@ public class OpenSenderGui extends Packet {
     }
 
     @Override
+    public void sendToPlayer(Player player) {
+        if (signalTile == null) {
+            player.sendMessage(PlayerMessage.direct("SignalContainer is empty! This is a technical error."));
+        }
+        super.sendToPlayer(player);
+    }
+
+    @Override
     protected void handle() {
 
         Stellwand.info("Opening SelectSenderModesGui");
 
-        BlockSenderStorageEntity sender = getWorld().getBlockEntity(senderPos, BlockSenderStorageEntity.class);
-        sender.setSignal(signalTile);
-        CustomGuis.selectSenderModes.open(getPlayer(), senderPos);
+        if (signalTile != null) {
+            BlockSenderStorageEntity sender = getWorld().getBlockEntity(senderPos, BlockSenderStorageEntity.class);
+            sender.setSignal(signalTile);
+            CustomGuis.selectSenderModes.open(getPlayer(), senderPos);
+        } else {
+            getPlayer().sendMessage(PlayerMessage.direct("No signalentity transmitted. This seems to be a technical error."));
+        }
 
     }
 

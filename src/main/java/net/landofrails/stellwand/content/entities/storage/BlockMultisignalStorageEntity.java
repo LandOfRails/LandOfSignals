@@ -12,9 +12,11 @@ import net.landofrails.stellwand.content.entities.function.BlockMultisignalFunct
 import net.landofrails.stellwand.content.entities.rendering.BlockMultisignalRenderEntity;
 import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionMapper;
 import net.landofrails.stellwand.contentpacks.Content;
+import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntry;
 import net.landofrails.stellwand.contentpacks.entries.multisignal.BlockMultisignalEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.utils.StellwandUtils;
 import net.landofrails.stellwand.utils.mapper.MapStringStringMapper;
 
@@ -29,6 +31,8 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
     protected static Map<String, Map<String, Map<String, String>>> possibleModes = new LinkedHashMap<>();
+    protected static Map<String, DirectionType[]> directionFrom = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionTo = new HashMap<>();
 
     // TagFields
     @TagField("contentPackBlockId")
@@ -65,7 +69,7 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
         return renderEntity;
     }
 
-    @SuppressWarnings({"java:S3252"})
+    @SuppressWarnings("java:S3252")
     public static void prepare() {
 
         Stellwand.debug("Preparing Multisignals..");
@@ -100,6 +104,9 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
                 translations.put(blockId, block.getTranslation());
                 possibleModes.put(blockId, new LinkedHashMap<>(block.getModesList()));
                 modeGroups.put(blockId, block.getModeGroups());
+                BlockMultisignalEntry blockMultisignalEntry = (BlockMultisignalEntry) cpe;
+                directionFrom.put(blockId, blockMultisignalEntry.getDirectionFrom());
+                directionTo.put(blockId, blockMultisignalEntry.getDirectionTo());
             } catch (Exception e) {
                 ModCore.Mod.error("Error while loading contentpack blocks:");
                 ModCore.Mod.error("Block: %s", name);
@@ -218,4 +225,11 @@ public class BlockMultisignalStorageEntity extends BlockMultisignalFunctionEntit
         VersionMapper.checkMap(this.getClass(), nbt);
     }
 
+    public DirectionType[] getDirectionFrom() {
+        return directionFrom.get(contentPackBlockId);
+    }
+
+    public DirectionType[] getDirectionTo() {
+        return directionTo.get(contentPackBlockId);
+    }
 }

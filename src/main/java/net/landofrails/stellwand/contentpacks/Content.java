@@ -8,10 +8,7 @@ import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Content {
@@ -20,7 +17,7 @@ public class Content {
 
     }
 
-    private static List<ContentPack> contentPacks = new LinkedList<>();
+    private static final List<ContentPack> contentPacks = new LinkedList<>();
 
     public static void addContentPack(ContentPack pack) {
 
@@ -84,6 +81,26 @@ public class Content {
         return entries;
     }
 
+    public static Map<ContentPackEntry, String> getBlockButtonReceivers() {
+        Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
+        for (ContentPack pack : contentPacks) {
+            for (ContentPackEntry entry : pack.getEntries())
+                if (entry.isType(EntryType.BLOCKBUTTONRECEIVER))
+                    entries.put(entry, pack.getId());
+        }
+        return entries;
+    }
+
+    public static Map<ContentPackEntry, String> getBlockButtons() {
+        Map<ContentPackEntry, String> entries = new LinkedHashMap<>();
+        for (ContentPack pack : contentPacks) {
+            for (ContentPackEntry entry : pack.getEntries())
+                if (entry.isType(EntryType.BLOCKBUTTON))
+                    entries.put(entry, pack.getId());
+        }
+        return entries;
+    }
+
     public static String getNameForId(String itemId) {
         if (itemId == null || !itemId.contains(":"))
             return ItemBlockSignal.MISSING;
@@ -99,7 +116,7 @@ public class Content {
 
     }
 
-    public static List<ContentPack> getContentPacksFor(EntryType type) {
+    public static Collection<ContentPack> getContentPacksFor(EntryType type) {
         // @formatter:off
         return contentPacks.stream()
                 .filter(
@@ -107,8 +124,7 @@ public class Content {
                                 .anyMatch(
                                         cpe -> cpe.isType(type)
                                 )
-                )
-                .distinct().collect(Collectors.toList());
+                ).collect(Collectors.toSet());
         // @formatter:on
     }
 
@@ -120,4 +136,5 @@ public class Content {
         );
         // @formatter:on
     }
+
 }

@@ -14,7 +14,9 @@ import net.landofrails.stellwand.content.entities.storage.versionmapper.VersionM
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntry;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntryBlock;
+import net.landofrails.stellwand.contentpacks.types.DirectionType;
 import net.landofrails.stellwand.utils.StellwandUtils;
 
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
     protected static Map<String, Map<String, String>> possibleModes = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionFrom = new HashMap<>();
+    protected static Map<String, DirectionType[]> directionTo = new HashMap<>();
 
     // TagFields
     @TagField("contentPackBlockId")
@@ -93,6 +97,9 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
                 rotations.put(blockId, block.getRotation());
                 translations.put(blockId, block.getTranslation());
                 possibleModes.put(blockId, block.getModes());
+                BlockSignalEntry blockSignalEntry = (BlockSignalEntry) cpe;
+                directionFrom.put(blockId, blockSignalEntry.getDirectionFrom());
+                directionTo.put(blockId, blockSignalEntry.getDirectionTo());
             } catch (Exception e) {
                 ModCore.Mod.error("Error while loading contentpack blocks:");
                 ModCore.Mod.error("Block: %s", name);
@@ -186,6 +193,14 @@ public class BlockSignalStorageEntity extends BlockSignalFunctionEntity {
     @Override
     public void load(TagCompound nbt) {
         VersionMapper.checkMap(this.getClass(), nbt);
+    }
+
+    public DirectionType[] getDirectionFrom() {
+        return directionFrom.get(contentPackBlockId);
+    }
+
+    public DirectionType[] getDirectionTo() {
+        return directionTo.get(contentPackBlockId);
     }
 
 }

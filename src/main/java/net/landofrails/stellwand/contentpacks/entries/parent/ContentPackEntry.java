@@ -15,11 +15,11 @@ public abstract class ContentPackEntry {
     protected String model;
 
 
-    public ContentPackEntry() {
+    protected ContentPackEntry() {
 
     }
 
-    public ContentPackEntry(String name, String model) {
+    protected ContentPackEntry(String name, String model) {
         this.name = name;
         this.model = model;
     }
@@ -42,13 +42,6 @@ public abstract class ContentPackEntry {
     public <T extends ContentPackEntryBlock> T getBlock(Class<T> cls) {
 
         try {
-            return (T) getBlock();
-        } catch (ClassCastException e) {
-            // If it fails: try next
-
-        }
-
-        try {
             return cls.cast(getBlock());
         } catch (ClassCastException e2) {
             ModCore.error("Tried to cast blockclass: %s",
@@ -64,13 +57,15 @@ public abstract class ContentPackEntry {
 
     public <T extends ContentPackEntryItem> T getItem(Class<T> cls) {
         if (cls.isInstance(getItem()))
-            return (T) getItem();
+            return cls.cast(getItem());
         return null;
     }
 
     public abstract EntryType getType();
 
     public boolean isType(EntryType type) {
+        if (type == null)
+            return false;
         return type.equals(getType());
     }
 
@@ -78,7 +73,7 @@ public abstract class ContentPackEntry {
     public static ContentPackEntry fromJson(InputStream inputStream, EntryType type) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
-        int read = 0;
+        int read;
 
         try {
             while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
@@ -90,7 +85,7 @@ public abstract class ContentPackEntry {
 
         String json = s.toString();
         Gson gson = new GsonBuilder().create();
-        return (ContentPackEntry) gson.fromJson(json, type.getTypeClass());
+        return gson.fromJson(json, type.getTypeClass());
 
     }
 

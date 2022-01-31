@@ -4,12 +4,14 @@ import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.stellwand.Stellwand;
+import net.landofrails.stellwand.content.items.connector.ItemConnector;
 import net.landofrails.stellwand.utils.ICustomTexturePath;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomItems {
+
 
     private CustomItems() {
 
@@ -26,6 +28,8 @@ public class CustomItems {
     public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
     public static final ItemBlockSender ITEMBLOCKSENDER = new ItemBlockSender();
     public static final ItemBlockMultisignal ITEMBLOCKMULTISIGNAL = new ItemBlockMultisignal();
+    public static final ItemBlockButton ITEMBLOCKBUTTON = null; // TODO Implement
+    public static final ItemBlockButtonReceiver ITEMBLOCKBUTTONRECEIVER = null; // FIXME new ItemBlockButtonReceiver();
 
     public static void register() {
         itemList.add(ITEMCONNECTOR1);
@@ -37,10 +41,11 @@ public class CustomItems {
         ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
         ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
         ItemRender.register(ITEMBLOCKMULTISIGNAL, ItemBlockMultisignal.getModelFor());
+        // FIXME ItemRender.register(ITEMBLOCKBUTTONRECEIVER, ItemBlockButtonReceiver.getModelFor());
 
     }
 
-    // Clientsided
+    // Clientside
     public static void registerRenderers() {
         for (CustomItem item : itemList) {
             if (item instanceof ICustomTexturePath) {

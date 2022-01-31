@@ -142,8 +142,7 @@ public class ItemBlockSender extends CustomItem {
             return;
 
         int sizeInHand = player.getHeldItem(hand).getCount();
-        SelectItem si = new SelectItem();
-        si.open(player, EntryType.BLOCKSENDER, new ItemStack(CustomItems.ITEMBLOCKSENDER, 1), item -> {
+        SelectItem.open(player, EntryType.BLOCKSENDER, new ItemStack(CustomItems.ITEMBLOCKSENDER, 1), item -> {
             if (item != null) {
                 player.setHeldItem(hand, item);
                 item.setCount(sizeInHand);

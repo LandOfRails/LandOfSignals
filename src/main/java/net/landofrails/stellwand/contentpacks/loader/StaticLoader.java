@@ -5,6 +5,9 @@ import cam72cam.mod.gui.Progress;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntry;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntryBlock;
+import net.landofrails.stellwand.contentpacks.entries.buttonreceiver.BlockButtonReceiverEntryItem;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntry;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryBlock;
 import net.landofrails.stellwand.contentpacks.entries.filler.BlockFillerEntryItem;
@@ -247,6 +250,17 @@ public class StaticLoader {
         prop.setItemMode("item").setItemTranslation(.5f, .1625f, .5f);
         contentPackEntries.add(prop.toEntry());
 
+
+        //// Recevier
+
+        // Blockreceiver
+        prop = new Properties().setName("Blockreceiver");
+        prop.setType(EntryType.BLOCKBUTTONRECEIVER).setWallMountable(true);
+        prop.setModel("models/block/blockbuttonreceiver/blockbuttonreceiver/blockreceiver.obj");
+        prop.setBlockTranslation(.5f, 0, .5f);
+        prop.setItemMode("on").setItemTranslation(.5f, .1625f, .5f);
+        contentPackEntries.add(prop.toEntry());
+
         return contentPackEntries;
     }
 
@@ -270,6 +284,7 @@ public class StaticLoader {
         private DirectionType[] toDir;
         private String model;
 
+        private Boolean wallMountable = null;
         private Map<String, String> modes = new LinkedHashMap<>();
         private Map<String, Map<String, String>> modesList = new HashMap<>();
 
@@ -302,6 +317,11 @@ public class StaticLoader {
 
         public Properties setModel(String model) {
             this.model = model;
+            return this;
+        }
+
+        public Properties setWallMountable(Boolean wallMountable) {
+            this.wallMountable = wallMountable;
             return this;
         }
 
@@ -358,11 +378,15 @@ public class StaticLoader {
                 case BLOCKSIGNAL:
                     BlockSignalEntryBlock signalBlock = new BlockSignalEntryBlock(blockRotation, blockTranslation, modes);
                     BlockSignalEntryItem signalItem = new BlockSignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
-                    return new BlockSignalEntry(name, model, signalBlock, signalItem);
+                    return new BlockSignalEntry(name, fromDir, toDir, model, signalBlock, signalItem);
                 case BLOCKMULTISIGNAL:
                     BlockMultisignalEntryBlock multisignalBlock = new BlockMultisignalEntryBlock(blockRotation, blockTranslation, modesList);
                     BlockMultisignalEntryItem multisignalItem = new BlockMultisignalEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
-                    return new BlockMultisignalEntry(name, model, multisignalBlock, multisignalItem);
+                    return new BlockMultisignalEntry(name, fromDir, toDir, model, multisignalBlock, multisignalItem);
+                case BLOCKBUTTONRECEIVER:
+                    BlockButtonReceiverEntryBlock receiverEntryBlock = new BlockButtonReceiverEntryBlock(blockRotation, blockTranslation, wallMountable);
+                    BlockButtonReceiverEntryItem receiverEntryItem = new BlockButtonReceiverEntryItem(itemRotation, itemTranslation, scale, model, itemMode);
+                    return new BlockButtonReceiverEntry(name, model, receiverEntryBlock, receiverEntryItem);
                 default:
                     return null;
             }

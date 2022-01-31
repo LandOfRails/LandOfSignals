@@ -5,12 +5,10 @@ import cam72cam.mod.ModEvent;
 import cam72cam.mod.config.ConfigFile;
 import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
+import net.landofrails.stellwand.content.entities.storage.*;
 import net.landofrails.stellwand.content.guis.CustomGuis;
 import net.landofrails.stellwand.content.items.CustomItems;
+import net.landofrails.stellwand.content.items.connector.AItemConnector;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
@@ -40,6 +38,8 @@ public class Stellwand {
                 if (!StellwandConfig.disableStellwand) {
                     Loader.init();
 
+                    AItemConnector.registerConnectors();
+
                     CustomGuis.register();
                     CustomTabs.register();
                     CustomItems.register();
@@ -62,6 +62,7 @@ public class Stellwand {
                 BlockSignalStorageEntity.prepare();
                 BlockSenderStorageEntity.prepare();
                 BlockMultisignalStorageEntity.prepare();
+                BlockButtonReceiverStorageEntity.prepare();
                 break;
             case RELOAD:
             case START:

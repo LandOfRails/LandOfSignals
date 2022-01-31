@@ -2,18 +2,9 @@ package net.landofrails.stellwand.content.blocks;
 
 import cam72cam.mod.render.BlockRender;
 import net.landofrails.stellwand.Stellwand;
-import net.landofrails.stellwand.content.blocks.others.BlockFiller;
-import net.landofrails.stellwand.content.blocks.others.BlockMultisignal;
-import net.landofrails.stellwand.content.blocks.others.BlockSender;
-import net.landofrails.stellwand.content.blocks.others.BlockSignal;
-import net.landofrails.stellwand.content.entities.rendering.BlockFillerRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockMultisignalRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSenderRenderEntity;
-import net.landofrails.stellwand.content.entities.rendering.BlockSignalRenderEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
-import net.landofrails.stellwand.content.entities.storage.BlockSignalStorageEntity;
+import net.landofrails.stellwand.content.blocks.others.*;
+import net.landofrails.stellwand.content.entities.rendering.*;
+import net.landofrails.stellwand.content.entities.storage.*;
 
 public class CustomBlocks {
 
@@ -25,6 +16,7 @@ public class CustomBlocks {
     public static final BlockSender BLOCKSENDER = new BlockSender();
     public static final BlockSignal BLOCKSIGNAL = new BlockSignal();
     public static final BlockMultisignal BLOCKMULTISIGNAL = new BlockMultisignal();
+    public static final BlockButtonReceiver BLOCKRECEIVER = new BlockButtonReceiver();
 
     public static void init() {
         // WICHTIG: Triggert das Laden der Blöcke.
@@ -38,6 +30,7 @@ public class CustomBlocks {
         BlockRender.register(BLOCKSENDER, BlockSenderRenderEntity::render,
                 BlockSenderStorageEntity.class);
         BlockRender.register(BLOCKMULTISIGNAL, BlockMultisignalRenderEntity::render, BlockMultisignalStorageEntity.class);
+        BlockRender.register(BLOCKRECEIVER, BlockButtonReceiverRenderEntity::render, BlockButtonReceiverStorageEntity.class);
 
     }
 

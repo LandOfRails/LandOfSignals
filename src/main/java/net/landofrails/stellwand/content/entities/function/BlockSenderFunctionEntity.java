@@ -51,34 +51,36 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Hand hand, Facing facing, Vec3d hit) {
-        ItemStack item = player.getHeldItem(hand);
-
         ItemStack heldItem = player.getHeldItem(hand);
-        if (heldItem != null && heldItem.is(CustomItems.ITEMMAGNIFYINGGLASS))
+
+        // @formatter:off
+        if (heldItem != null &&
+            (
+                heldItem.is(CustomItems.ITEMMAGNIFYINGGLASS) ||
+                heldItem.is(CustomItems.ITEMCONNECTOR1) ||
+                heldItem.is(CustomItems.ITEMCONNECTOR2) ||
+                heldItem.is(CustomItems.ITEMCONNECTOR3)
+            )
+        )
             return false;
+        // @formatter:on
 
-        if (isAir(item) && getWorld().isServer) {
-            if (!entity.signals.isEmpty()) {
+        if (isAir(heldItem) && hand.equals(Hand.PRIMARY) && getWorld().isServer) {
+            Vec3i signalPos = entity.getFirstSignal();
+            if (signalPos != null) {
 
-                Vec3i signalPos = entity.signals.get(0);
                 getWorld().keepLoaded(signalPos);
-                if (getWorld().hasBlockEntity(signalPos, BlockSignalStorageEntity.class)) {
-                    BlockSignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockSignalStorageEntity.class);
-                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
-                    packet.sendToPlayer(player);
-                } else if (getWorld().hasBlockEntity(signalPos, BlockMultisignalStorageEntity.class)) {
-                    BlockMultisignalStorageEntity signalEntity = getWorld().getBlockEntity(signalPos, BlockMultisignalStorageEntity.class);
-                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(signalEntity));
+
+                if (SignalContainer.isSignal(getWorld(), signalPos)) {
+                    OpenSenderGui packet = new OpenSenderGui(getPos(), SignalContainer.of(getWorld(), signalPos));
                     packet.sendToPlayer(player);
                 } else {
                     entity.signals.remove(signalPos);
-                    if (!getWorld().isClient)
-                        ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
+                    ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNAL_FOUND, EMessage.MESSAGE_ERROR1.getRaw());
                 }
 
             } else {
-                if (!getWorld().isClient)
-                    ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
+                ServerMessagePacket.send(player, EMessage.MESSAGE_NO_SIGNALS_CONNECTED);
             }
 
             return true;
@@ -101,6 +103,7 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
     }
 
     public void updateSignals() {
+        entity.refreshSignals();
         for (Vec3i signalPos : entity.signals) {
             getWorld().keepLoaded(signalPos);
 
@@ -152,7 +155,9 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
     }
 
     private boolean isAir(ItemStack item) {
-        return item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY);
+        if (item == null)
+            return true;
+        return (item.is(ItemStack.EMPTY) || item.equals(ItemStack.EMPTY)) && item.getTagCompound().isEmpty();
     }
 
 }

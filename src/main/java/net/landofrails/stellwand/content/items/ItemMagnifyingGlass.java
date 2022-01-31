@@ -49,6 +49,7 @@ public class ItemMagnifyingGlass extends CustomItem implements ICustomTexturePat
             float g = (float) (RANDOM.nextFloat() / 2f + 0.5);
             float b = (float) (RANDOM.nextFloat() / 2f + 0.5);
 
+            sender.refreshSignals();
             sender.signals.forEach(vec -> {
                 if (SignalContainer.isSignal(sender.getWorld(), vec)) {
                     SignalContainer<BlockEntity> signalContainer = SignalContainer.of(sender.getWorld(), vec);

@@ -101,9 +101,8 @@ public class LandOfSignals extends ModCore.Mod {
             case INITIALIZE:
                 break;
             case SETUP:
-                GlobalRender.registerOverlay(pt -> {
-                    new ManipualtorOverlay().draw();
-                });
+                GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
+                break;
             case RELOAD:
             case START:
             case FINALIZE:
@@ -114,7 +113,6 @@ public class LandOfSignals extends ModCore.Mod {
     public Optional<String> getMCVersion() {
 
         for (Annotation annotation : ModCore.class.getAnnotations()) {
-            System.out.println("Annotation: " + annotation.annotationType().getName());
             if (annotation.annotationType().getName().contains("Mod")) {
                 for (Method method : Mod.class.getDeclaredMethods()) {
                     if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
