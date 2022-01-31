@@ -44,8 +44,6 @@ Connecting senders and signals:
 
 ### Creating a contentpack:
 
-> TODO
-
 [Documentation on how to create a contentpack](./contentpacks/Stellwand_Contentpacks.md)
 </details>
 <hr>
@@ -55,13 +53,16 @@ Connecting senders and signals:
 <details>
 <summary>Features planned</summary>
 
-> TODO
+* Buttons for interaction (currently in development)
+* Sender with multiple functions (blinking)
+
 </details>
 <hr>
 
 ### Changes to documentation
 
-| _Date_     | _Author_   | _Changes_        |
-|------------|------------|------------------|
-| 15.01.2022 | Danielxs01 | Initial creation |
-|            |            |                  |
+| _Date_     | _Author_   | _Changes_         |
+|------------|------------|-------------------|
+| 15.01.2022 | Danielxs01 | Initial creation  |
+| 31.01.2022 | Danielxs01 | Finalization v1.0 |
+|            |            |                   |

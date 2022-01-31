@@ -1,3 +1,6 @@
+[..back to Stellwand.md](../Stellwand.md)
+<hr>
+
 # Creating contentpacks
 
 ## Basics
@@ -53,8 +56,8 @@ What have I used?
 ```
 
 > <h3>*Important:*</h3>
-The packId is created from `name` and `author`. This should not be changed after being initially set!
-What happens if you still do it? Older blocks loose their reference and will be broken.
+> The packId is created from `name` and `author`. This should not be changed after being initially set!
+> What happens if you still do it? Older blocks loose their reference and will be broken.
 
 <br>Available Blocktypes:
 
@@ -292,3 +295,7 @@ What happens if you still do it? Older blocks loose their reference and will be 
 ## Example pack
 
 See [Resources/stellwand](../../../Resources/stellwand/)
+
+<hr>
+
+[..back to Stellwand.md](../Stellwand.md)
