@@ -44,7 +44,7 @@ Adds many different signals in different designs, so far without a consistent re
 
 </details>
 
-[Click here to open the full landofsignals documentation](./docs/landofsignals/LandOfSignals.md)
+[Click here to open the landofsignals contentpack wiki](https://github.com/LandOfRails/LandOfSignals/wiki/Content-Packs)
 <hr>
 
 ### Stellwand
