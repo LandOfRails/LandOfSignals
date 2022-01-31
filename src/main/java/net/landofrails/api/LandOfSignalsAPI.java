@@ -231,11 +231,7 @@ public class LandOfSignalsAPI {
             }
             return new DirectionType[0];
         }
-
-        /* TODO
-        Add documentation
-        Add API for sender/decoration blocks to get directionsTo/directionsFrom
-        */
+        
     }
 
 }

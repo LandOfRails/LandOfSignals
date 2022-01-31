@@ -26,19 +26,19 @@ public class SelectItem implements IScreen {
     private ItemStack current;
     private EntryType entryType;
 
+    @Override
+    public void init(IScreenBuilder screen) {
+        ItemStack itemStack = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
+        this.entryType = EntryType.getEntryTypeFromItem(itemStack);
+        generateContentPackButtons(screen, Content.getContentPacksFor(entryType));
+    }
+
     public static void init(GuiRegistry.GUI gui) {
         SelectItem.gui = gui;
     }
 
     public static void setEntryType(EntryType type, Map.Entry<ItemStack, Consumer<ItemStack>> defaultAndSelectedItem) {
         ENTRYTYPES.putIfAbsent(type, defaultAndSelectedItem);
-    }
-
-    @Override
-    public void init(IScreenBuilder screen) {
-        ItemStack itemStack = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
-        this.entryType = EntryType.getEntryTypeFromItem(itemStack);
-        generateContentPackButtons(screen, Content.getContentPacksFor(entryType));
     }
 
     @Override
