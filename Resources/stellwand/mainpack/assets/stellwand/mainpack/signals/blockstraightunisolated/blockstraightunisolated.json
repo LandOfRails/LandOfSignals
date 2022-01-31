@@ -1,38 +1,38 @@
 {
-    "type": "blockSignal",
-    "name": "Block Straight Unisolated",
-    "directionFrom": "Left",
-    "directionTo": "Right",
-    "model": "mainpack/signals/blockstraightunisolated/unisolatedtrack.obj",
-    "block": {
-        "rotation": [
-            0,
-            0,
-            0
-        ],
-        "translation": [
-            0.5,
-            0.5,
-            0.5
-        ],
-        "modes": {
-            "Off": "off",
-            "White": "white"
-        }
-    },
-    "item": {
-        "rotation": [
-            15,
-            195,
-            0
-        ],
-        "translation": [
-            0.5,
-            0.5,
-            0.5
-        ],
-        "scale": 0.7,
-        "model": "mainpack/signals/blockstraightunisolated/unisolatedtrack.obj",
-        "mode": "white"
+  "type": "blockSignal",
+  "name": "Block Straight Unisolated",
+  "directionFrom": "LEFT",
+  "directionTo": "RIGHT",
+  "model": "mainpack/signals/blockstraightunisolated/unisolatedtrack.obj",
+  "block": {
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "translation": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "modes": {
+      "Off": "off",
+      "White": "white"
     }
+  },
+  "item": {
+    "rotation": [
+      15,
+      195,
+      0
+    ],
+    "translation": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "scale": 0.7,
+    "model": "mainpack/signals/blockstraightunisolated/unisolatedtrack.obj",
+    "mode": "white"
+  }
 }

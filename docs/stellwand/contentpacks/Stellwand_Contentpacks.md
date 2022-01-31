@@ -170,10 +170,10 @@ What happens if you still do it? Older blocks loose their reference and will be 
 {
   "name": "Custom Block Straight Unisolated",
   "directionFrom": [
-    "Left"
+    "LEFT"
   ],
   "directionTo": [
-    "Right"
+    "RIGHT"
   ],
   "model": "mainpack/signals/blockstraightunisolated/unisolatedtrack.obj",
   "block": {
@@ -212,8 +212,78 @@ What happens if you still do it? Older blocks loose their reference and will be 
 
 </details>
 
+<details open>
+
+<summary>Type: BLOCKMULTISIGNAL</summary>
+
+```json
+{
+  "name": "Custom Multiblock Straight and Diagonal",
+  "directionFrom": [
+    "LEFT",
+    "TOP_LEFT"
+  ],
+  "directionTo": [
+    "RIGHT",
+    "BOTTOM_RIGHT"
+  ],
+  "model": "mainpack/multisignals/blockstraightanddiagonal/blockstraightanddiagonal.obj",
+  "block": {
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "translation": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "modes": {
+      "Left track": {
+        "Off": "leftStraightOff",
+        "White": "leftStraightWhite",
+        "Red": "leftStraightRed"
+      },
+      "Left top track": {
+        "Off": "leftTopOff",
+        "White": "leftTopWhite",
+        "Red": "leftTopRight"
+      },
+      "Right track": {
+        "Off": "rightStraightOff",
+        "White": "rightStraightWhite",
+        "Red": "rightStraightRed"
+      },
+      "Right bottom track": {
+        "Off": "rightBottomOff",
+        "White": "rightBottomWhite",
+        "Red": "rightBottomRed"
+      }
+    }
+  },
+  "item": {
+    "rotation": [
+      15,
+      195,
+      0
+    ],
+    "translation": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "scale": 0.7,
+    "model": "mainpack/multisignals/blockstraightanddiagonal/blockstraightanddiagonal.obj",
+    "mode": "white"
+  }
+}
+```
+
+</details>
+
 </details>
 
 ## Example pack
 
-`TODO`
+See [Resources/stellwand]("../../../Resources/stellwand/")
