@@ -28,8 +28,8 @@ public class CustomItems {
     public static final ItemBlockSignal ITEMBLOCKSIGNAL = new ItemBlockSignal();
     public static final ItemBlockSender ITEMBLOCKSENDER = new ItemBlockSender();
     public static final ItemBlockMultisignal ITEMBLOCKMULTISIGNAL = new ItemBlockMultisignal();
-    public static final ItemBlockButton ITEMBLOCKBUTTON = null; // TODO Implement
-    public static final ItemBlockButtonReceiver ITEMBLOCKBUTTONRECEIVER = null; // FIXME new ItemBlockButtonReceiver();
+    public static final ItemBlockButton ITEMBLOCKBUTTON = null;
+    public static final ItemBlockButtonReceiver ITEMBLOCKBUTTONRECEIVER = null;
 
     public static void register() {
         itemList.add(ITEMCONNECTOR1);
@@ -41,7 +41,6 @@ public class CustomItems {
         ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
         ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
         ItemRender.register(ITEMBLOCKMULTISIGNAL, ItemBlockMultisignal.getModelFor());
-        // FIXME ItemRender.register(ITEMBLOCKBUTTONRECEIVER, ItemBlockButtonReceiver.getModelFor());
 
     }
 
