@@ -50,9 +50,13 @@ our [Discord](https://discord.gg/ykAqHKYjVM) in the #content-packs channel.
 
 [Here](https://github.com/LandOfRails/LandOfSignals/wiki/Content-Packs) you will learn how to create your own signals.
 
-### **List of content packs** (as of 03/27/2021)
+### **List of content packs** (as of 10/01/2022)
 
-* [German Hv Signals (Pack by Skyman_Luna#2484)](https://cdn.discordapp.com/attachments/797795720785690655/824716385598701628/hv_signalpack.zip)
+* [German KS Signals Pack (by Skyman_Luna#2484)](https://cdn.discordapp.com/attachments/797795720785690655/925159720019460106/ks_signalpack.zip)
+* [German Hv Signals (by Skyman_Luna#2484)](https://cdn.discordapp.com/attachments/602923463560396800/826945770941841458/hv_signalpack.zip)
+* [German Sperrsignal Pack (by Skyman_Luna#2484)](https://cdn.discordapp.com/attachments/797795720785690655/835578731431067678/diekleinensignale.zip)
+* [Danish Signals Pack (by Mr. J.#1997)](https://www.curseforge.com/minecraft/mc-addons/dansh-signals-for-land-of-signals/)
+* [UK Signals Pack (by Oxalin#3020)](https://www.curseforge.com/minecraft/mc-addons/uk-signals-for-land-of-signals)
 
 Please note that the mod is still quite new, so not many packs exist yet. Especially therefore we would be very happy if
 you feel like creating your own pack!
