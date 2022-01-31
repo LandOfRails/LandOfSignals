@@ -55,6 +55,7 @@ Connecting senders and signals:
 
 * Buttons for interaction (currently in development)
 * Sender with multiple functions (blinking)
+* LandOfSignalsAPI containing methods for retrieving directionFrom/directionTo from all blocks available
 
 </details>
 <hr>
