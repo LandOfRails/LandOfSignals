@@ -23,8 +23,8 @@ import net.landofrails.stellwand.utils.compact.SignalContainer;
 public abstract class BlockSenderFunctionEntity extends BlockEntity {
 
     private BlockSenderStorageEntity entity;
+    private boolean lastTryBreakByCreativePlayer = false;
 
-    // Ein Kommentar damit der Client startet lol
     @SuppressWarnings("java:S112")
     protected BlockSenderFunctionEntity() {
         if (this instanceof BlockSenderStorageEntity)
@@ -127,6 +127,12 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
     }
 
     @Override
+    public boolean tryBreak(Player player) {
+        lastTryBreakByCreativePlayer = player.isCreative();
+        return true;
+    }
+
+    @Override
     public void onBreak() {
 
         for (Vec3i signal : entity.signals) {
@@ -151,7 +157,9 @@ public abstract class BlockSenderFunctionEntity extends BlockEntity {
             }
         }
 
-        getWorld().dropItem(onPick(), getPos());
+        if (!lastTryBreakByCreativePlayer) {
+            getWorld().dropItem(onPick(), getPos());
+        }
     }
 
     private boolean isAir(ItemStack item) {
