@@ -1,3 +1,6 @@
+[... back to README.md][README]
+<hr>
+
 # Stellwand
 
 ![Stellwand logo](stellwand.png)
@@ -33,6 +36,82 @@ Connecting senders and signals:
 </details>
 <hr>
 
+## Recipes
+
+<details open>
+<summary>Recipes</summary>
+
+### Blockfiller
+
+![Recipe for Blockfiller](recipe_filler.png)
+
+`4 Terracotta` create `4 Blockfillers`.
+
+### Blocksignal
+
+![Recipe for Blocksignal](recipe_signal.png)
+
+`2 Blockfillers and 2 Redstonedust` create `2 Blocksignals`.
+
+### Blockmultisignal
+
+![Recipe for Blockmultisignal](recipe_multisignal.png)
+
+`2 Blocksignals` create `1 Blockmultisignal`.<br>
+***Info:*** The `Blocksignals` need to be on top of each other.
+
+### Blocksender
+
+![Recipe for Blocksender](recipe_sender.png)
+
+`2 Blockfillers and 2 Redstonetorches` create `2 Blocksenders`.
+
+### Connector
+
+![Recipe for Connector](recipe_connector.png)
+
+`1 Blockfiller and 1 Redstonedust` create `1 Connector`.<br>
+***Info:*** The `Blockfiller` needs to be left of the `Redstonedust`.
+
+### Magnifying glass
+
+![Recipe for Magnifying glass](recipe_magnifyingglass.png)
+
+`2 Blockfillers, 1 Glasspane and 1 Stick` create `1 Magnifying glass`.
+
+</details>
+
+## Config
+
+<details>
+<summary>Config</summary>
+
+Configurations done over the stellwand.cfg only refresh on restart.
+
+### debugging > debugOutput
+
+> Default: false
+
+Enables debug logging for further inspection of issues.
+
+### disableRecipes
+
+> Default: false
+
+Removes every recipe; effectively making it creative-only.
+
+### disableStellwand
+
+> Default: false
+
+**Extreme option. Disables the stellwand part completely.<br>
+Will break every already existing block/item from stellwand.<br>
+Should only be used with the intention of disabling it from the start.**<br>
+
+***If you have issues if the stellwand part, state your issue on our discord first.***
+
+</details>
+
 ## Contentpacks
 
 <details>
@@ -62,8 +141,17 @@ Connecting senders and signals:
 
 ### Changes to documentation
 
-| _Date_     | _Author_   | _Changes_         |
-|------------|------------|-------------------|
-| 15.01.2022 | Danielxs01 | Initial creation  |
-| 31.01.2022 | Danielxs01 | Finalization v1.0 |
-|            |            |                   |
+| _Date_     | _Author_   | _Changes_                       |
+|------------|------------|---------------------------------|
+| 15.01.2022 | Danielxs01 | Initial creation                |
+| 31.01.2022 | Danielxs01 | Finalization v1.0               |
+| 02.02.2022 | Danielxs01 | Added Recipes and Configoptions |
+|            |            |                                 |
+
+<hr>
+
+[... back to README.md][README]
+
+<!-- Links -->
+
+[README]: ../../README.md
