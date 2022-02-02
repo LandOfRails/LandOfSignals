@@ -1,3 +1,6 @@
+[... back to README.md][README]
+<hr>
+
 # Stellwand
 
 ![Stellwand logo](stellwand.png)
@@ -33,6 +36,51 @@ Connecting senders and signals:
 </details>
 <hr>
 
+## Recipes
+
+<details open>
+<summary>Recipes</summary>
+
+### Blockfiller
+
+![Recipe for Blockfiller](recipe_filler.png)
+
+`4 Terracotta` create `4 Blockfillers`.
+
+### Blocksignal
+
+![Recipe for Blocksignal](recipe_signal.png)
+
+`2 Blockfillers and 2 Redstonedust` create `2 Blocksignals`.
+
+### Blockmultisignal
+
+![Recipe for Blockmultisignal](recipe_multisignal.png)
+
+`2 Blocksignals` create `1 Blockmultisignal`.<br>
+***Info:*** The `Blocksignals` need to be on top of each other.
+
+### Blocksender
+
+![Recipe for Blocksender](recipe_sender.png)
+
+`2 Blockfillers and 2 Redstonetorches` create `2 Blocksenders`.
+
+### Connector
+
+![Recipe for Connector](recipe_connector.png)
+
+`1 Blockfiller and 1 Redstonedust` create `1 Connector`.<br>
+***Info:*** The `Blockfiller` needs to be left of the `Redstonedust`.
+
+### Magnifying glass
+
+![Recipe for Magnifying glass](recipe_magnifyingglass.png)
+
+`2 Blockfillers, 1 Glasspane and 1 Stick` create `1 Magnifying glass`.
+
+</details>
+
 ## Contentpacks
 
 <details>
@@ -66,4 +114,13 @@ Connecting senders and signals:
 |------------|------------|-------------------|
 | 15.01.2022 | Danielxs01 | Initial creation  |
 | 31.01.2022 | Danielxs01 | Finalization v1.0 |
+| 02.02.2022 | Danielxs01 | Added Recipes     |
 |            |            |                   |
+
+<hr>
+
+[... back to README.md][README]
+
+<!-- Links -->
+
+[README]: ../../README.md
