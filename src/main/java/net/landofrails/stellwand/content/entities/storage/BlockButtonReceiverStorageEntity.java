@@ -161,6 +161,14 @@ public class BlockButtonReceiverStorageEntity extends BlockButtonReceiverFunctio
         return markedColor;
     }
 
+    /**
+     * Releases the renderer in to the wild and frees the cache preventing a deadlock situation
+     */
+    public static void releaseRenderersIntoTheWild() {
+        getRenderers().forEach((k, v) -> v.free());
+        getRenderers().clear();
+    }
+
     // Map old versions to newer ones
     @Override
     public void load(TagCompound nbt) {

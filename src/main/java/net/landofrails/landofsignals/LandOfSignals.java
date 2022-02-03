@@ -47,7 +47,7 @@ public class LandOfSignals extends ModCore.Mod {
             ContentPackHandler.init();
 
             LOSTabs.register();
-            
+
             LOSBlocks.register();
             LOSItems.register();
             LOSGuis.register();
@@ -98,14 +98,23 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 break;
-            case INITIALIZE:
-                break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
                 break;
             case RELOAD:
-            case START:
+
+                // Release renderers after reload (rejoining a world for example)
+                TileSignalBoxRender.releaseRenderersIntoTheWild();
+                TileSignalLeverRender.releaseRenderersIntoTheWild();
+                TileSignalPartAnimatedRender.releaseRenderersIntoTheWild();
+                TileSignalPartRender.releaseRenderersIntoTheWild();
+                TileSignalSO12Render.releaseRenderersIntoTheWild();
+                TileTicketMachineDBRender.releaseRenderersIntoTheWild();
+                TileTicketMachineSBBRender.releaseRenderersIntoTheWild();
+
+                break;
             case FINALIZE:
+            default:
                 break;
         }
     }

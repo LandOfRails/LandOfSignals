@@ -121,4 +121,12 @@ public class TileSignalPartAnimatedRender {
 //
 //        return new Vec3d(cosPitch * cosYaw, cosPitch * sinYaw, -sinPitch);
 //    }
+
+    /**
+     * Releases the renderer in to the wild and frees the cache preventing a deadlock situation
+     */
+    public static void releaseRenderersIntoTheWild() {
+        cache.values().forEach(pair -> pair.getValue().free());
+        cache.clear();
+    }
 }

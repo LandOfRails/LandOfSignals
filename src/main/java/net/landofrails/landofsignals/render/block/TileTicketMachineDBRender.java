@@ -44,4 +44,14 @@ public class TileTicketMachineDBRender {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Releases the renderer in to the wild and frees the cache preventing a deadlock situation
+     */
+    public static void releaseRenderersIntoTheWild() {
+        renderer.free();
+        renderer = null;
+        model = null;
+    }
+
 }

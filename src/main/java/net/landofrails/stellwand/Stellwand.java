@@ -87,11 +87,14 @@ public class Stellwand {
                 CustomBlocks.registerBlockRenderers();
 
                 break;
-            case INITIALIZE:
-            case SETUP:
             case RELOAD:
-            case START:
-            case FINALIZE:
+                // Release renderers after reload (rejoining a world for example)
+                BlockButtonReceiverStorageEntity.releaseRenderersIntoTheWild();
+                BlockFillerStorageEntity.releaseRenderersIntoTheWild();
+                BlockMultisignalStorageEntity.releaseRenderersIntoTheWild();
+                BlockSenderStorageEntity.releaseRenderersIntoTheWild();
+                BlockSignalStorageEntity.releaseRenderersIntoTheWild();
+                break;
             default:
                 break;
         }
