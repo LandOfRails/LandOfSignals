@@ -18,10 +18,8 @@ import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
+import net.minecraftforge.fml.common.Loader;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
@@ -104,6 +102,8 @@ public class LandOfSignals extends ModCore.Mod {
             case RELOAD:
 
                 // Release renderers after reload (rejoining a world for example)
+                System.out.println();
+
                 TileSignalBoxRender.releaseRenderersIntoTheWild();
                 TileSignalLeverRender.releaseRenderersIntoTheWild();
                 TileSignalPartAnimatedRender.releaseRenderersIntoTheWild();
@@ -120,23 +120,12 @@ public class LandOfSignals extends ModCore.Mod {
     }
 
     public Optional<String> getMCVersion() {
+        try {
+            return Optional.ofNullable(Loader.instance().getMCVersionString());
+        } catch (Exception e) {
 
-        for (Annotation annotation : ModCore.class.getAnnotations()) {
-            if (annotation.annotationType().getName().contains("Mod")) {
-                for (Method method : Mod.class.getDeclaredMethods()) {
-                    if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
-                        try {
-                            return Optional.of((String) method.invoke(annotation));
-                        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                            e.printStackTrace();
-                            return Optional.empty();
-                        }
-                    }
-                }
-            }
+            return Optional.empty();
         }
-
-        return Optional.empty();
 
     }
 

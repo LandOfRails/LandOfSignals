@@ -12,7 +12,14 @@ import net.landofrails.stellwand.content.items.connector.AItemConnector;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
-import net.landofrails.stellwand.contentpacks.loader.Loader;
+import net.minecraftforge.fml.common.Loader;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class Stellwand {
 
@@ -36,7 +43,7 @@ public class Stellwand {
                 ConfigFile.sync(StellwandConfig.class);
 
                 if (!StellwandConfig.disableStellwand) {
-                    Loader.init();
+                    net.landofrails.stellwand.contentpacks.loader.Loader.init();
 
                     AItemConnector.registerConnectors();
 
@@ -94,6 +101,27 @@ public class Stellwand {
                 BlockMultisignalStorageEntity.releaseRenderersIntoTheWild();
                 BlockSenderStorageEntity.releaseRenderersIntoTheWild();
                 BlockSignalStorageEntity.releaseRenderersIntoTheWild();
+
+                File configDir = Loader.instance().getConfigDir();
+                File cacheDir = Paths.get(configDir.getParentFile().getPath(), "cache", "universalmodcore").toFile();
+                if (cacheDir.exists()) {
+                    File[] files = cacheDir.listFiles();
+                    if (files == null)
+                        files = new File[0];
+                    for (File dir : files) {
+                        Path meta = Paths.get(cacheDir.getPath(), "meta.nbt");
+                        try (Stream<String> stream = Files.lines(meta)) {
+                            boolean remove = stream.anyMatch(lines -> lines.contains("landofsignals"));
+                            if (remove) {
+                                ModCore.warn("Removeing: " + dir.getName());
+                                Files.deleteIfExists(dir.toPath());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 break;
             default:
                 break;
