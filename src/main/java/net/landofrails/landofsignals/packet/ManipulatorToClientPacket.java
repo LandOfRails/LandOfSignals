@@ -16,8 +16,6 @@ public class ManipulatorToClientPacket extends Packet {
     private Vec3d movement;
     @TagField("mainPos")
     private Vec3d mainPos;
-    @TagField("player")
-    private Player player;
     @TagField("blockPos")
     private Vec3i blockPos;
     @TagField("gui")
@@ -31,10 +29,9 @@ public class ManipulatorToClientPacket extends Packet {
 
     }
 
-    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, Vec3i blockPos, boolean sneak) {
+    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Vec3i blockPos, boolean sneak) {
         this.mainPos = mainPos;
         this.movement = movement;
-        this.player = player;
         this.blockPos = blockPos;
         gui = false;
         this.sneak = sneak;
@@ -68,7 +65,7 @@ public class ManipulatorToClientPacket extends Packet {
         } else blockPosList.add(blockPos);
 
         if (!gui) {
-            player.setPosition(mainPos);
+            getPlayer().setPosition(mainPos);
             for (Vec3i bp : blockPosList) {
                 BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {

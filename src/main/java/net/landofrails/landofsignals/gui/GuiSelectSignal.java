@@ -43,14 +43,14 @@ public class GuiSelectSignal implements IScreen {
                 IInventory inv = MinecraftClient.getPlayer().getInventory();
                 for (int i = 0; i != inv.getSlotCount(); i++) {
                     if (inv.get(i).isEmpty()) {
-                        SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), i, false);
+                        SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, i, false);
                         packet.sendToServer();
                         intoInv = true;
                         break;
                     }
                 }
                 if (!intoInv) {
-                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, MinecraftClient.getPlayer(), 0, true);
+                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, 0, true);
                     packet.sendToServer();
                 }
             }
@@ -61,16 +61,16 @@ public class GuiSelectSignal implements IScreen {
 
     @Override
     public void onEnterKey(IScreenBuilder builder) {
-
+        //Not finished
     }
 
     @Override
     public void onClose() {
-
+        //Not finished
     }
 
     @Override
     public void draw(IScreenBuilder builder) {
-
+        //Not finished
     }
 }

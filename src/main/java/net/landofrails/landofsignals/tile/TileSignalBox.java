@@ -19,15 +19,15 @@ import java.util.List;
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
-    private Vec3i TileSignalPartPos;
+    private Vec3i TileSignalPartPos = Vec3i.ZERO;;
 
     @TagField("redstone")
-    private int redstone = 0;
+    private int redstone;
     @TagField("noRedstone")
-    private int noRedstone = 0;
+    private int noRedstone;
 
     @Nullable
-    private Integer lastRedstone = null;
+    private Integer lastRedstone;
 
     private TileSignalPart tileSignalPart;
     private TileSignalPartAnimated tileSignalPartAnimated;
@@ -107,8 +107,9 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public void onBreak() {
         super.onBreak();
+        if (TileSignalPartPos == null) return;
         TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
-        entity.setTexturePath(LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId()).get(0));
+        if (entity != null) entity.setTexturePath(LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId()).get(0));
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
