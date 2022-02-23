@@ -23,11 +23,11 @@ public class TileSignalSO12Render {
     private static OBJRender renderer;
     private static OBJModel model;
 
-    public static StandardModel render(TileSignalSO12 ts) {
+    public static StandardModel render(final TileSignalSO12 ts) {
         return new StandardModel().addCustom(() -> renderStuff(ts));
     }
 
-    private static void renderStuff(TileSignalSO12 ts) {
+    private static void renderStuff(final TileSignalSO12 ts) {
         try {
             if (renderer == null || model == null) {
                 model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), 0);
@@ -36,11 +36,11 @@ public class TileSignalSO12Render {
             ts.setFullHeight(model.heightOfGroups(groupNames));
             ts.setFullWidth(model.widthOfGroups(groupNames));
             ts.setFullLength(model.lengthOfGroups(groupNames));
-            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+            try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture()) {
                 GL11.glTranslated(0.5, 0, 0.5);
                 renderer.draw();
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

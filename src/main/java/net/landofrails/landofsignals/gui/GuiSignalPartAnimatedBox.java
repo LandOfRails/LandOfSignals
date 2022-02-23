@@ -17,9 +17,9 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
     private final TileSignalBox tsb;
-    private static String name = null;
-    private static String nameRight = null;
-    private static String nameLeft = null;
+    private static String name;
+    private static String nameRight;
+    private static String nameLeft;
     private int stateRight;
     private int stateLeft;
 
@@ -27,17 +27,17 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     private final String[] listAnimationNames;
 
     @SuppressWarnings("java:S3010")
-    public GuiSignalPartAnimatedBox(TileSignalBox tsb) {
+    public GuiSignalPartAnimatedBox(final TileSignalBox tsb) {
         this.tsb = tsb;
-        TileSignalPartAnimated tsp = tsb.getTileSignalPartAnimated();
+        final TileSignalPartAnimated tsp = tsb.getTileSignalPartAnimated();
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
-        TagCompound tag = itemStackLeft.getTagCompound();
+        final TagCompound tag = itemStackLeft.getTagCompound();
         tag.setString("itemId", tsp.getId());
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
-        TagCompound tag2 = itemStackRight.getTagCompound();
+        final TagCompound tag2 = itemStackRight.getTagCompound();
         tag2.setString("itemId", tsp.getId());
         itemStackRight.setTagCompound(tag2);
 
@@ -63,10 +63,10 @@ public class GuiSignalPartAnimatedBox implements IScreen {
 
     @SuppressWarnings("java:S2696")
     @Override
-    public void init(IScreenBuilder screen) {
-        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString() + " : " + nameLeft) {
+    public void init(final IScreenBuilder screen) {
+        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 stateLeft++;
                 if (stateLeft == listTexureNames.length + listAnimationNames.length) {
                     stateLeft = 0;
@@ -74,12 +74,12 @@ public class GuiSignalPartAnimatedBox implements IScreen {
                 if (stateLeft < listTexureNames.length) nameLeft = listTexureNames[stateLeft];
                 else nameLeft = listAnimationNames[stateLeft - listTexureNames.length];
 
-                this.setText("<-- " + GuiText.LABEL_NOREDSTONE.toString() + " : " + nameLeft);
+                setText("<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft);
             }
         };
-        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE.toString() + " : " + nameRight + " -->") {
+        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE + " : " + nameRight + " -->") {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 stateRight++;
                 if (stateRight == listTexureNames.length + listAnimationNames.length) {
                     stateRight = 0;
@@ -87,13 +87,13 @@ public class GuiSignalPartAnimatedBox implements IScreen {
                 if (stateRight < listTexureNames.length) nameRight = listTexureNames[stateRight];
                 else nameRight = listAnimationNames[stateRight - listTexureNames.length];
 
-                this.setText(GuiText.LABEL_REDSTONE.toString() + " : " + nameRight + " -->");
+                setText(GuiText.LABEL_REDSTONE + " : " + nameRight + " -->");
             }
         };
     }
 
     @Override
-    public void onEnterKey(IScreenBuilder builder) {
+    public void onEnterKey(final IScreenBuilder builder) {
         builder.close();
     }
 
@@ -103,13 +103,13 @@ public class GuiSignalPartAnimatedBox implements IScreen {
         name = null;
         tsb.setNoRedstone(stateLeft);
         tsb.setRedstone(stateRight);
-        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
+        final SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
         packet.sendToServer();
     }
 
     @SuppressWarnings("java:S2696")
     @Override
-    public void draw(IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder) {
 //        int scale = 8;
 //        name = nameRight;
 //        try (OpenGL.With ignored = OpenGL.matrix()) {

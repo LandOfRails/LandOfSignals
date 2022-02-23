@@ -5,7 +5,7 @@ import cam72cam.mod.block.BlockTypeEntity;
 import net.landofrails.landofsignals.tile.TileSignalSO12;
 
 public class BlockSignalSO12 extends BlockTypeEntity {
-    public BlockSignalSO12(String modID, String name) {
+    public BlockSignalSO12(final String modID, final String name) {
         super(modID, name);
     }
 

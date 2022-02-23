@@ -27,36 +27,36 @@ public class ManipualtorOverlay {
     Vec3d offset;
 
     public void draw() {
-        ItemStack item = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
+        final ItemStack item = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
         if (!item.is(LOSItems.ITEM_MANIPULATOR) || !ItemManipulator.editIngame) return;
-        BlockEntity block = LOSItems.ITEM_MANIPULATOR.getBlock();
+        final BlockEntity block = LOSItems.ITEM_MANIPULATOR.getBlock();
         if (block != null && block instanceof IManipulate) {
-            Player player = MinecraftClient.getPlayer();
+            final Player player = MinecraftClient.getPlayer();
             if (player.isCrouching()) {
                 LOSGuis.MANIPULATOR.open(player, block.getPos());
                 ItemManipulator.editIngame = false;
                 return;
             }
             if (!ItemManipulator.editHeight) {
-                Vec3d fastMovement = player.getMovementInput();
-                Vec3d movement = new Vec3d(Static.round(fastMovement.x / 10, 3), 0, Static.round(fastMovement.z / 10, 3));
+                final Vec3d fastMovement = player.getMovementInput();
+                final Vec3d movement = new Vec3d(Static.round(fastMovement.x / 10, 3), 0, Static.round(fastMovement.z / 10, 3));
                 handlePacket(block, player, movement);
                 GUIHelpers.drawCenteredString("X: " + Static.round(offset.x, 3), screenWidth - 50, screenHeight - 50, 0xffffff);
                 GUIHelpers.drawCenteredString("Z: " + Static.round(offset.z, 3), screenWidth - 50, screenHeight - 70, 0xffffff);
             } else {
-                Vec3d fastMovement = player.getVelocity();
-                Vec3d movement = new Vec3d(0, Static.round(fastMovement.x / 10, 3), 0);
+                final Vec3d fastMovement = player.getVelocity();
+                final Vec3d movement = new Vec3d(0, Static.round(fastMovement.x / 10, 3), 0);
                 handlePacket(block, player, movement);
                 GUIHelpers.drawCenteredString("Y: " + Static.round(offset.y, 3), screenWidth - 50, screenHeight - 50, 0xffffff);
             }
         }
     }
 
-    private void handlePacket(BlockEntity block, Player player, Vec3d movement) {
-        ManipulatorToClientPacket packet = new ManipulatorToClientPacket(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos(), movement, block.getPos(), ItemManipulator.sneak);
+    private void handlePacket(final BlockEntity block, final Player player, final Vec3d movement) {
+        final ManipulatorToClientPacket packet = new ManipulatorToClientPacket(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos(), movement, block.getPos(), ItemManipulator.sneak);
         packet.sendToAll();
         player.setPosition(LOSItems.ITEM_MANIPULATOR.getPlayerMainPos());
-        IManipulate manipulate = (IManipulate) block;
+        final IManipulate manipulate = (IManipulate) block;
         manipulate.setOffset(manipulate.getOffset().add(movement));
 
         GUIHelpers.drawCenteredString(GuiText.LABEL_UNATTACH.toString(), screenWidth - 100, screenHeight - 30, 0xffffff);

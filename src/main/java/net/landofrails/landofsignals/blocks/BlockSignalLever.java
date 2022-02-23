@@ -8,7 +8,7 @@ public class BlockSignalLever extends BlockTypeEntity {
 
     private float rot;
 
-    public BlockSignalLever(String modID, String name) {
+    public BlockSignalLever(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -17,7 +17,7 @@ public class BlockSignalLever extends BlockTypeEntity {
         return new TileSignalLever(rot);
     }
 
-    public void setRot(float rot) {
+    public void setRot(final float rot) {
         this.rot = rot;
     }
 }

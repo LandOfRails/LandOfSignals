@@ -8,9 +8,9 @@ import net.landofrails.landofsignals.LOSItems;
 
 public class TileSignalSO12 extends BlockEntity {
 
-    private double fullHeight = 0;
-    private double fullWidth = 0;
-    private double fullLength = 0;
+    private double fullHeight;
+    private double fullWidth;
+    private double fullLength;
 
     @Override
     public ItemStack onPick() {
@@ -22,15 +22,15 @@ public class TileSignalSO12 extends BlockEntity {
         return IBoundingBox.ORIGIN.expand(new Vec3d(fullWidth, fullHeight, fullLength)).offset(new Vec3d(0.5 - fullWidth / 2, 0, 0.5 - fullLength / 2));
     }
 
-    public void setFullHeight(double fullHeight) {
+    public void setFullHeight(final double fullHeight) {
         this.fullHeight = fullHeight;
     }
 
-    public void setFullWidth(double fullWidth) {
+    public void setFullWidth(final double fullWidth) {
         this.fullWidth = fullWidth;
     }
 
-    public void setFullLength(double fullLength) {
+    public void setFullLength(final double fullLength) {
         this.fullLength = fullLength;
     }
 }

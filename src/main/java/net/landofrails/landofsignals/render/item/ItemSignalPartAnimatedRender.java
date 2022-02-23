@@ -26,42 +26,42 @@ public class ItemSignalPartAnimatedRender {
 
     public static ItemRender.IItemModel getModelFor() {
         return (world, stack) -> new StandardModel().addCustom(() -> {
-            TagCompound tag = stack.getTagCompound();
+            final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
             if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().containsKey(itemId)) {
                 itemId = Static.MISSING;
             }
-            Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(itemId);
+            final Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(itemId);
             if (!cache.containsKey(itemId)) {
                 try {
-                    OBJModel model;
+                    final OBJModel model;
                     if (collection != null)
                         model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0, collection);
                     else
                         model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0);
-                    OBJRender renderer = new OBJRender(model);
+                    final OBJRender renderer = new OBJRender(model);
                     cache.put(itemId, renderer);
-                } catch (FileNotFoundException e) {
+                } catch (final FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {
                         ModCore.Mod.error("Model not found: " + e.getMessage(), e.getMessage());
                         return;
                     } else {
                         throw new RuntimeException("Error loading item model...", e);
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     throw new RuntimeException("Error loading item model...", e);
                 }
             }
-            OBJRender renderer = cache.get(itemId);
+            final OBJRender renderer = cache.get(itemId);
             String textureName;
             if (collection != null) {
                 textureName = GuiSignalPartAnimatedBox.getTexureName();
                 if (!collection.contains(textureName)) textureName = null;
             } else
                 textureName = null;
-            Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getItemTranslation(itemId);
-            float scale = (float) LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getScaling(itemId).x;
-            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
+            final Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getItemTranslation(itemId);
+            final float scale = (float) LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getScaling(itemId).x;
+            try (final OpenGL.With ignored = OpenGL.matrix(); final OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
                 GL11.glScaled(scale, scale, scale);
                 renderer.draw();

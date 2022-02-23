@@ -14,7 +14,7 @@ public class UUIDVec3iMapMapper implements TagMapper<Map<UUID, Vec3i>> {
     private static final String KEYNAME = "entry";
 
     @Override
-    public TagAccessor<Map<UUID, Vec3i>> apply(Class<Map<UUID, Vec3i>> type, String fieldName, TagField tag) throws SerializationException {
+    public TagAccessor<Map<UUID, Vec3i>> apply(final Class<Map<UUID, Vec3i>> type, final String fieldName, final TagField tag) throws SerializationException {
         return new TagAccessor<>(
                 (nbt, map) -> {
                     // From Map to Tag

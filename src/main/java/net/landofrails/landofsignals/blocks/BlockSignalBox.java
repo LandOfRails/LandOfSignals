@@ -6,7 +6,7 @@ import net.landofrails.landofsignals.tile.TileSignalBox;
 
 public class BlockSignalBox extends BlockTypeEntity {
 
-    public BlockSignalBox(String modID, String name) {
+    public BlockSignalBox(final String modID, final String name) {
         super(modID, name);
     }
 

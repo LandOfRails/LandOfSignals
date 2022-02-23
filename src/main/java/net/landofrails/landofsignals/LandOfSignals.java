@@ -34,14 +34,14 @@ public class LandOfSignals extends ModCore.Mod {
     }
 
     @Override
-    public void commonEvent(ModEvent event) {
+    public void commonEvent(final ModEvent event) {
 
         // Stellwand commonEvent
         Stellwand.commonEvent(event);
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-            Optional<String> mcVersion = getMCVersion();
+            final Optional<String> mcVersion = getMCVersion();
             ModCore.Mod.info("Detected MC Version: " + mcVersion.orElse("Failed to receive"));
 
             ContentPackHandler.init();
@@ -63,7 +63,7 @@ public class LandOfSignals extends ModCore.Mod {
     }
 
     @Override
-    public void clientEvent(ModEvent event) {
+    public void clientEvent(final ModEvent event) {
 
         // Stellwand
         Stellwand.clientEvent(event);
@@ -80,13 +80,13 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
 
                 // Items
-                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
-                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
-                ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
+                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
+                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
+                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(MODID, "items/itemconnector1"));
+                ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(MODID, "items/manipulator"));
 
                 ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/signalchest"));
 
@@ -112,13 +112,13 @@ public class LandOfSignals extends ModCore.Mod {
 
     public Optional<String> getMCVersion() {
 
-        for (Annotation annotation : ModCore.class.getAnnotations()) {
+        for (final Annotation annotation : ModCore.class.getAnnotations()) {
             if (annotation.annotationType().getName().contains("Mod")) {
-                for (Method method : Mod.class.getDeclaredMethods()) {
+                for (final Method method : Mod.class.getDeclaredMethods()) {
                     if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
                         try {
                             return Optional.of((String) method.invoke(annotation));
-                        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                        } catch (final IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
                             return Optional.empty();
                         }
@@ -132,7 +132,7 @@ public class LandOfSignals extends ModCore.Mod {
     }
 
     @Override
-    public void serverEvent(ModEvent event) {
+    public void serverEvent(final ModEvent event) {
         // Do nothing for now
         Stellwand.serverEvent(event);
     }

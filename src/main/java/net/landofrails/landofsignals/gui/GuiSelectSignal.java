@@ -17,40 +17,40 @@ import java.util.List;
 
 public class GuiSelectSignal implements IScreen {
     @Override
-    public void init(IScreenBuilder screen) {
-        List<ItemStack> itemStackList = new ArrayList<>();
-        for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet()) {
+    public void init(final IScreenBuilder screen) {
+        final List<ItemStack> itemStackList = new ArrayList<>();
+        for (final String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet()) {
             if (!id.equals(Static.MISSING)) {
-                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-                TagCompound tag = is.getTagCompound();
+                final ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+                final TagCompound tag = is.getTagCompound();
                 tag.setString("itemId", id);
                 is.setTagCompound(tag);
                 itemStackList.add(is);
             }
         }
-        for (String id : LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().keySet()) {
+        for (final String id : LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().keySet()) {
             if (!id.equals(Static.MISSING)) {
-                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
-                TagCompound tag = is.getTagCompound();
+                final ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
+                final TagCompound tag = is.getTagCompound();
                 tag.setString("itemId", id);
                 is.setTagCompound(tag);
                 itemStackList.add(is);
             }
         }
-        ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
+        final ItemPickerGUI gui = new ItemPickerGUI(itemStackList, itemStack -> {
             if (itemStack != null) {
                 boolean intoInv = false;
-                IInventory inv = MinecraftClient.getPlayer().getInventory();
+                final IInventory inv = MinecraftClient.getPlayer().getInventory();
                 for (int i = 0; i != inv.getSlotCount(); i++) {
                     if (inv.get(i).isEmpty()) {
-                        SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, i, false);
+                        final SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, i, false);
                         packet.sendToServer();
                         intoInv = true;
                         break;
                     }
                 }
                 if (!intoInv) {
-                    SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, 0, true);
+                    final SignalSelectorGuiPacket packet = new SignalSelectorGuiPacket(itemStack, 0, true);
                     packet.sendToServer();
                 }
             }
@@ -60,7 +60,7 @@ public class GuiSelectSignal implements IScreen {
     }
 
     @Override
-    public void onEnterKey(IScreenBuilder builder) {
+    public void onEnterKey(final IScreenBuilder builder) {
         //Not finished
     }
 
@@ -70,7 +70,7 @@ public class GuiSelectSignal implements IScreen {
     }
 
     @Override
-    public void draw(IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder) {
         //Not finished
     }
 }

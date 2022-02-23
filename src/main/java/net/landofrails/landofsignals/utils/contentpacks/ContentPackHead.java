@@ -16,7 +16,7 @@ public class ContentPackHead {
 
     private List<String> signals;
 
-    public ContentPackHead(String name, String packversion, String author, List<String> signals) {
+    public ContentPackHead(final String name, final String packversion, final String author, final List<String> signals) {
         this.name = name;
         this.packversion = packversion;
         this.author = author;
@@ -27,7 +27,7 @@ public class ContentPackHead {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -35,7 +35,7 @@ public class ContentPackHead {
         return packversion;
     }
 
-    public void setPackversion(String packversion) {
+    public void setPackversion(final String packversion) {
         this.packversion = packversion;
     }
 
@@ -43,7 +43,7 @@ public class ContentPackHead {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
@@ -51,7 +51,7 @@ public class ContentPackHead {
         return signals;
     }
 
-    public void setSignals(List<String> signals) {
+    public void setSignals(final List<String> signals) {
         this.signals = signals;
     }
 
@@ -59,21 +59,21 @@ public class ContentPackHead {
         return name + "@" + author;
     }
 
-    public static ContentPackHead fromJson(InputStream landofsignalsJsonStream) {
-        StringBuilder s = new StringBuilder();
-        byte[] buffer = new byte[1024];
+    public static ContentPackHead fromJson(final InputStream landofsignalsJsonStream) {
+        final StringBuilder s = new StringBuilder();
+        final byte[] buffer = new byte[1024];
         int read = 0;
 
         try {
             while ((read = landofsignalsJsonStream.read(buffer, 0, 1024)) >= 0) {
                 s.append(new String(buffer, 0, read));
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ContentPackException("Cant read landofsignals.json: " + e.getMessage());
         }
 
-        String json = s.toString();
-        Gson gson = new GsonBuilder().create();
+        final String json = s.toString();
+        final Gson gson = new GsonBuilder().create();
 
         return gson.fromJson(json, ContentPackHead.class);
     }

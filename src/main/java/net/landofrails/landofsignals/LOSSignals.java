@@ -13,7 +13,7 @@ public class LOSSignals {
 
     public static ArrayList<BlockTypeEntity> blockSignalsList = new ArrayList<>();
 
-    public static void registerSignal(String author, String name, String path, ArrayList<String> states, Vec3d scaling, Vec3d translation) {
+    public static void registerSignal(final String author, final String name, final String path, final ArrayList<String> states, final Vec3d scaling, final Vec3d translation) {
         if (states == null) {
             //Adding stuff for common construct phase
 

@@ -9,7 +9,7 @@ public class Mod {
     static {
         try {
             ModCore.register(new net.landofrails.landofsignals.LandOfSignals());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Could not load mod " + MODID, e);
         }
     }

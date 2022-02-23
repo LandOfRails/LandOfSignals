@@ -21,12 +21,12 @@ public class SignalBoxTileSignalPartPacket extends Packet {
     public SignalBoxTileSignalPartPacket() {
     }
 
-    public SignalBoxTileSignalPartPacket(TileSignalPart tileSignalPart, Vec3i posSignalBox) {
+    public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final Vec3i posSignalBox) {
         this.tileSignalPart = tileSignalPart;
         this.posSignalBox = posSignalBox;
     }
 
-    public SignalBoxTileSignalPartPacket(TileSignalPartAnimated tileSignalPartAnimated, Vec3i posSignalBox) {
+    public SignalBoxTileSignalPartPacket(final TileSignalPartAnimated tileSignalPartAnimated, final Vec3i posSignalBox) {
         this.tileSignalPartAnimated = tileSignalPartAnimated;
         this.posSignalBox = posSignalBox;
     }

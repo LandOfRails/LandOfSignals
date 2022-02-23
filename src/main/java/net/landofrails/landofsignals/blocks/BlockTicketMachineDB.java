@@ -8,7 +8,7 @@ public class BlockTicketMachineDB extends BlockTypeEntity {
 
     private float rot;
 
-    public BlockTicketMachineDB(String modID, String name) {
+    public BlockTicketMachineDB(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -17,7 +17,7 @@ public class BlockTicketMachineDB extends BlockTypeEntity {
         return new TileTicketMachineDB(rot);
     }
 
-    public void setRot(float rot) {
+    public void setRot(final float rot) {
         this.rot = rot;
     }
 }

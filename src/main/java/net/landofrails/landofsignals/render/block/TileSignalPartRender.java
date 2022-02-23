@@ -23,35 +23,35 @@ public class TileSignalPartRender {
 
     private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
 
-    public static StandardModel render(TileSignalPart tsp) {
+    public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
-    private static void renderStuff(TileSignalPart tsp) {
-        String id = tsp.getId();
+    private static void renderStuff(final TileSignalPart tsp) {
+        final String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
-                OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                OBJRender flareRenderer = new OBJRender(flareModel);
+                final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
+                final OBJRender flareRenderer = new OBJRender(flareModel);
                 cache.put("flare", Pair.of(flareModel, flareRenderer));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
-                OBJRender renderer = new OBJRender(model);
+                final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
+                final OBJRender renderer = new OBJRender(model);
                 cache.put(id, Pair.of(model, renderer));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
-        OBJRender renderer = cache.get(id).getRight();
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
+        final OBJRender renderer = cache.get(id).getRight();
+        try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
+            final Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
             GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
+            final Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.draw();

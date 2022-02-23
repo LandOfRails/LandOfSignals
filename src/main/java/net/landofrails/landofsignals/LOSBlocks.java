@@ -27,7 +27,7 @@ public class LOSBlocks {
 
     public static void register() {
         // loads static classes and ctrs
-        ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{
+        final ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{
             add(null);
         }}, new HashMap<String, List<ContentPackAnimation>>() {{
             put(Static.MISSING, new ArrayList<ContentPackAnimation>() {{

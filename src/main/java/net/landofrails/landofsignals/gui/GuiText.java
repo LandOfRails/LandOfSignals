@@ -19,7 +19,7 @@ public enum GuiText {
 
     private final String value;
 
-    GuiText(String value) {
+    GuiText(final String value) {
         this.value = value;
     }
 
@@ -32,7 +32,7 @@ public enum GuiText {
         return TextUtil.translate(getRaw());
     }
 
-    public String toString(Object... objects) {
+    public String toString(final Object... objects) {
         return TextUtil.translate(getRaw(), objects);
     }
 }

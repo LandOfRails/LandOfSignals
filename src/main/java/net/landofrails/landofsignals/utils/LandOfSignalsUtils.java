@@ -11,10 +11,10 @@ public class LandOfSignalsUtils {
     private LandOfSignalsUtils() {
     }
 
-    public static Optional<Vec3i> canPlaceBlock(World world, Vec3i pos, Facing facing, Player player) {
-        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+    public static Optional<Vec3i> canPlaceBlock(final World world, final Vec3i pos, final Facing facing, final Player player) {
+        final Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
 
-        if (LandOfSignalsUtils.isStandingInBlock(player.getBlockPosition().subtract(target)))
+        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
             return Optional.empty();
 
         if (world.isAir(target) || world.isReplaceable(target)) {
@@ -23,7 +23,7 @@ public class LandOfSignalsUtils {
         return Optional.empty();
     }
 
-    private static boolean isStandingInBlock(Vec3i vec3i) {
+    private static boolean isStandingInBlock(final Vec3i vec3i) {
         return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
     }
 

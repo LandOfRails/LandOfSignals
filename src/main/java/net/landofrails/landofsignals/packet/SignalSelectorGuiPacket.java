@@ -1,6 +1,5 @@
 package net.landofrails.landofsignals.packet;
 
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
@@ -18,7 +17,7 @@ public class SignalSelectorGuiPacket extends Packet {
 
     }
 
-    public SignalSelectorGuiPacket(ItemStack item, int slot, boolean drop) {
+    public SignalSelectorGuiPacket(final ItemStack item, final int slot, final boolean drop) {
         this.item = item;
         this.slot = slot;
         this.drop = drop;

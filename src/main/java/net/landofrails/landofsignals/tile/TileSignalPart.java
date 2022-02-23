@@ -16,20 +16,20 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("id")
     private final String id;
     @TagField("texturePath")
-    private String texturePath = null;
+    private String texturePath;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    public TileSignalPart(String id, int rot) {
-        this.blockRotate = rot;
+    public TileSignalPart(final String id, final int rot) {
+        blockRotate = rot;
         this.id = id;
     }
 
     @Override
     public ItemStack onPick() {
-        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = is.getTagCompound();
+        final ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        final TagCompound tag = is.getTagCompound();
         tag.setString("itemId", id);
         is.setTagCompound(tag);
         return is;
@@ -50,7 +50,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     public String getTexturePath() {
-        if (texturePath != null && texturePath.equals("null")) return null;
+        if ("null".equals(texturePath)) return null;
         else return texturePath;
     }
 
@@ -58,18 +58,18 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return id;
     }
 
-    public void setTexturePath(String texturePath) {
+    public void setTexturePath(final String texturePath) {
         if (texturePath == null) this.texturePath = "null";
         else this.texturePath = texturePath;
         markDirty();
     }
 
     @Override
-    public void setOffset(Vec3d vec) {
+    public void setOffset(final Vec3d vec) {
         offset = vec;
         try {
             save(new TagCompound().setVec3d("offset", vec));
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
         }
     }
@@ -80,11 +80,11 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     @Override
-    public void setRotation(int rotation) {
-        this.blockRotate = rotation;
+    public void setRotation(final int rotation) {
+        blockRotate = rotation;
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
         }
     }

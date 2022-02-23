@@ -17,7 +17,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
     public SignalBoxGuiToClientPacket() {
     }
 
-    public SignalBoxGuiToClientPacket(int textureNameRedstone, int textureNameNoRedstone, Vec3i pos) {
+    public SignalBoxGuiToClientPacket(final int textureNameRedstone, final int textureNameNoRedstone, final Vec3i pos) {
         this.textureNameRedstone = textureNameRedstone;
         this.textureNameNoRedstone = textureNameNoRedstone;
         this.pos = pos;
@@ -25,7 +25,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
 
     @Override
     protected void handle() {
-        TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
+        final TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
 		if (box != null) {
 			box.setRedstone(textureNameRedstone);
 			box.setNoRedstone(textureNameNoRedstone);

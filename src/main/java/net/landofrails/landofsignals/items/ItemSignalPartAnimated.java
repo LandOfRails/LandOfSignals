@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class ItemSignalPartAnimated extends CustomItem {
 
-    public ItemSignalPartAnimated(String modID, String name) {
+    public ItemSignalPartAnimated(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -31,12 +31,12 @@ public class ItemSignalPartAnimated extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
+        final Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
         int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
-        TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
+        final TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.setRot(rot);
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
@@ -45,8 +45,8 @@ public class ItemSignalPartAnimated extends CustomItem {
     }
 
     @Override
-    public String getCustomName(ItemStack stack) {
-        TagCompound tag = stack.getTagCompound();
+    public String getCustomName(final ItemStack stack) {
+        final TagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey("itemId"))
             return LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(tag.getString("itemId"));
         else return "Error missing tag \"itemId\" for ItemSignalPartAnimated";

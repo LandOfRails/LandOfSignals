@@ -18,22 +18,22 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     @TagField("id")
     private final String id;
     @TagField("texturePath")
-    private String animationOrTextureName = null;
+    private String animationOrTextureName;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
     @TagField
     private boolean active;
-    private float partRotate = 0;
+    private float partRotate;
 
     AnimationHandler animationHandler;
 
-    public TileSignalPartAnimated(String id, int rot) {
-        this.blockRotate = rot;
+    public TileSignalPartAnimated(final String id, final int rot) {
+        blockRotate = rot;
         this.id = id;
         if (id != null)
-            this.animationHandler = new AnimationHandler(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(id));
+            animationHandler = new AnimationHandler(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(id));
     }
 
     @Override
@@ -47,8 +47,8 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
 
     @Override
     public ItemStack onPick() {
-        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = is.getTagCompound();
+        final ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        final TagCompound tag = is.getTagCompound();
         tag.setString("itemId", id);
         is.setTagCompound(tag);
         return is;
@@ -69,7 +69,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     }
 
     public String getAnimationOrTextureName() {
-        if (animationOrTextureName != null && animationOrTextureName.equals("null")) return null;
+        if ("null".equals(animationOrTextureName)) return null;
         else return animationOrTextureName;
     }
 
@@ -77,18 +77,18 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         return id;
     }
 
-    public void setAnimationOrStateTexture(String name) {
-        if (name == null) this.animationOrTextureName = "null";
-        else this.animationOrTextureName = name;
+    public void setAnimationOrStateTexture(final String name) {
+        if (name == null) animationOrTextureName = "null";
+        else animationOrTextureName = name;
         markDirty();
     }
 
     @Override
-    public void setOffset(Vec3d vec) {
+    public void setOffset(final Vec3d vec) {
         offset = vec;
         try {
             save(new TagCompound().setVec3d("offset", vec));
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
         }
     }
@@ -99,11 +99,11 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     }
 
     @Override
-    public void setRotation(int rotation) {
-        this.blockRotate = rotation;
+    public void setRotation(final int rotation) {
+        blockRotate = rotation;
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
         }
     }
@@ -113,7 +113,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         return blockRotate;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(final boolean active) {
         this.active = active;
         markDirty();
     }

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemSignalSelector extends CustomItem {
-    public ItemSignalSelector(String modID, String name) {
+    public ItemSignalSelector(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -21,7 +21,7 @@ public class ItemSignalSelector extends CustomItem {
     }
 
     @Override
-    public void onClickAir(Player player, World world, Player.Hand hand) {
+    public void onClickAir(final Player player, final World world, final Player.Hand hand) {
         if (world.isClient) LOSGuis.SIGNAL_SELECTOR.open(player);
     }
 }

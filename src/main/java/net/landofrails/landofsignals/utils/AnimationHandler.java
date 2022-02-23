@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class AnimationHandler {
 
-    private Map<String, List<ContentPackAnimation>> animations;
+    private final Map<String, List<ContentPackAnimation>> animations;
 
-    public AnimationHandler(Map<String, List<ContentPackAnimation>> animations) {
+    public AnimationHandler(final Map<String, List<ContentPackAnimation>> animations) {
         this.animations = animations;
     }
 }

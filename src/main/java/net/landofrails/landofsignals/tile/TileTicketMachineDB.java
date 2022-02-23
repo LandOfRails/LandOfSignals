@@ -14,8 +14,8 @@ public class TileTicketMachineDB extends BlockEntity {
     @TagField("Rotation")
     private float blockRotate;
 
-    public TileTicketMachineDB(float rot) {
-        this.blockRotate = rot;
+    public TileTicketMachineDB(final float rot) {
+        blockRotate = rot;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class TileTicketMachineDB extends BlockEntity {
     }
 
     @Override
-    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+    public boolean onClick(final Player player, final Player.Hand hand, final Facing facing, final Vec3d hit) {
         return false;
     }
 
@@ -37,7 +37,7 @@ public class TileTicketMachineDB extends BlockEntity {
         return blockRotate;
     }
 
-    public void setBlockRotate(float blockRotate) {
+    public void setBlockRotate(final float blockRotate) {
         this.blockRotate = blockRotate;
     }
 }

@@ -21,11 +21,11 @@ public class ItemManipulator extends CustomItem {
 
     private BlockEntity block;
     private Vec3d playerMainPos;
-    public static boolean editIngame = false;
-    public static boolean editHeight = false;
-    public static boolean sneak = false;
+    public static boolean editIngame;
+    public static boolean editHeight;
+    public static boolean sneak;
 
-    public ItemManipulator(String modID, String name) {
+    public ItemManipulator(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -35,12 +35,12 @@ public class ItemManipulator extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
         sneak = player.isCrouching();
-        BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
+        final BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
         if (block instanceof IManipulate) {
             this.block = block;
-            this.playerMainPos = MinecraftClient.getPlayer().getPosition();
+            playerMainPos = MinecraftClient.getPlayer().getPosition();
         }
         if (world.isClient) {
             LOSGuis.MANIPULATOR.open(player, block.getPos());
@@ -56,7 +56,7 @@ public class ItemManipulator extends CustomItem {
         return playerMainPos;
     }
 
-    public void setPlayerMainPos(Vec3d playerMainPos) {
+    public void setPlayerMainPos(final Vec3d playerMainPos) {
         this.playerMainPos = playerMainPos;
     }
 

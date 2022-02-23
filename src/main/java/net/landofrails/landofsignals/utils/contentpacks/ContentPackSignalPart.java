@@ -25,11 +25,11 @@ public class ContentPackSignalPart {
 
     private Map<String, List<ContentPackAnimation>> animations;
 
-    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final List<String> states) {
         this(id, name, model, translation, itemTranslation, scaling, scaling, states);
     }
 
-    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final float[] itemScaling, final List<String> states) {
         this.id = id;
         this.name = name;
         this.model = model;
@@ -40,12 +40,12 @@ public class ContentPackSignalPart {
         this.states = states;
     }
 
-    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final List<String> states, final Map<String, List<ContentPackAnimation>> animations) {
         this(id, name, model, translation, itemTranslation, scaling, scaling, states);
         this.animations = animations;
     }
 
-    public ContentPackSignalPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, List<String> states, Map<String, List<ContentPackAnimation>> animations) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final float[] itemScaling, final List<String> states, final Map<String, List<ContentPackAnimation>> animations) {
         this(id, name, model, translation, itemTranslation, scaling, itemScaling, states);
         this.animations = animations;
     }
@@ -54,7 +54,7 @@ public class ContentPackSignalPart {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -62,7 +62,7 @@ public class ContentPackSignalPart {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -70,7 +70,7 @@ public class ContentPackSignalPart {
         return model;
     }
 
-    public void setModel(String model) {
+    public void setModel(final String model) {
         this.model = model;
     }
 
@@ -78,7 +78,7 @@ public class ContentPackSignalPart {
         return translation;
     }
 
-    public void setTranslation(float[] translation) {
+    public void setTranslation(final float[] translation) {
         this.translation = translation;
     }
 
@@ -86,7 +86,7 @@ public class ContentPackSignalPart {
         return itemTranslation;
     }
 
-    public void setItemTranslation(float[] itemTranslation) {
+    public void setItemTranslation(final float[] itemTranslation) {
         this.itemTranslation = itemTranslation;
     }
 
@@ -94,7 +94,7 @@ public class ContentPackSignalPart {
         return scaling;
     }
 
-    public void setScaling(float[] scaling) {
+    public void setScaling(final float[] scaling) {
         this.scaling = scaling;
     }
 
@@ -102,7 +102,7 @@ public class ContentPackSignalPart {
         return states;
     }
 
-    public void setStates(List<String> states) {
+    public void setStates(final List<String> states) {
         this.states = states;
     }
 
@@ -118,7 +118,7 @@ public class ContentPackSignalPart {
         return itemScaling;
     }
 
-    public void setItemScaling(float[] itemScaling) {
+    public void setItemScaling(final float[] itemScaling) {
         this.itemScaling = itemScaling;
     }
 
@@ -126,25 +126,25 @@ public class ContentPackSignalPart {
         return animations;
     }
 
-    public void setAnimations(Map<String, List<ContentPackAnimation>> animations) {
+    public void setAnimations(final Map<String, List<ContentPackAnimation>> animations) {
         this.animations = animations;
     }
 
-    public static ContentPackSignalPart fromJson(InputStream inputStream) {
-        StringBuilder s = new StringBuilder();
-        byte[] buffer = new byte[1024];
+    public static ContentPackSignalPart fromJson(final InputStream inputStream) {
+        final StringBuilder s = new StringBuilder();
+        final byte[] buffer = new byte[1024];
         int read = 0;
 
         try {
             while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
                 s.append(new String(buffer, 0, read));
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ContentPackException("Cant read ContentPackSignalPart: " + e.getMessage());
         }
 
-        String json = s.toString();
-        Gson gson = new GsonBuilder().create();
+        final String json = s.toString();
+        final Gson gson = new GsonBuilder().create();
 
         return gson.fromJson(json, ContentPackSignalPart.class);
     }

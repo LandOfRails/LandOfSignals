@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ItemSignalBox extends CustomItem {
-    public ItemSignalBox(String modID, String name) {
+    public ItemSignalBox(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -27,8 +27,8 @@ public class ItemSignalBox extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
+        final Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_BOX);

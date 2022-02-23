@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 public class ContentPackHandler {
@@ -23,21 +22,21 @@ public class ContentPackHandler {
 
     public static void loadAssets() {
 
-        File assetFolder = new File("./config/landofsignals");
+        final File assetFolder = new File("./config/landofsignals");
         if (assetFolder.exists()) {
             ModCore.Mod.info("Searching for assets..");
 
-            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
+            final File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
 
             if (assets == null || assets.length == 0) {
                 ModCore.Mod.info("No assets found.");
             } else {
-                for (File asset : assets)
+                for (final File asset : assets)
                     loadAsset(asset);
             }
 
         } else {
-            boolean result = assetFolder.mkdirs();
+            final boolean result = assetFolder.mkdirs();
             if (result)
                 ModCore.Mod.info("Asset folder created.");
             else
@@ -46,13 +45,13 @@ public class ContentPackHandler {
         }
     }
 
-    private static void loadAsset(File asset) {
+    private static void loadAsset(final File asset) {
         ModCore.Mod.info("Loading Asset: %s", asset.getAbsolutePath());
 
-        try (ZipFile zip = new ZipFile(asset)) {
+        try (final ZipFile zip = new ZipFile(asset)) {
 
-            List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
-            Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
+            final List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
+            final Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
                     .findFirst();
             if (stellwandJson.isPresent()) {
                 load(zip, stellwandJson.get());
@@ -60,35 +59,32 @@ public class ContentPackHandler {
                 throw new ContentPackException("[" + asset.getName() + "] Missing landofsignals.json");
             }
 
-        } catch (ZipException zipException) {
+        } catch (final IOException zipException) {
             ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
             ModCore.Mod.error("Error: %s", zipException.getMessage());
-        } catch (IOException e) {
-            ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
-            ModCore.Mod.error("Error: %s", e.getMessage());
         }
     }
 
-    private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
+    private static void load(final ZipFile zip, final ZipEntry landofsignalsJson) {
 
         try {
-            ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+            final ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
             // @formatter:off
-            List<ZipEntry> files = zip.stream().
+            final List<ZipEntry> files = zip.stream().
                     filter(not(ZipEntry::isDirectory)).
                     filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
             // @formatter:on
 
             ModCore.info("Content for %s:", contentPack.getId());
-            for (String pathToContentPackSignalSet : contentPack.getSignals()) {
-                for (ZipEntry zipEntry : files) {
+            for (final String pathToContentPackSignalSet : contentPack.getSignals()) {
+                for (final ZipEntry zipEntry : files) {
                     if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
-                        ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
+                        final ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
                         ModCore.info("SignalSet: %s", contentPackSignalSet.getName());
-                        for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
-                            for (ZipEntry zipEntry1 : files) {
+                        for (final String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
+                            for (final ZipEntry zipEntry1 : files) {
                                 if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
-                                    ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
+                                    final ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
                                     ModCore.info("SignalPart: %s", contentPackSignalPart.getName());
                                     List<String> states = contentPackSignalPart.getStates();
                                     if (states == null) {
@@ -108,13 +104,13 @@ public class ContentPackHandler {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             ModCore.Mod.error("Error while loading Contentpack: %s", e.getMessage());
         }
     }
 
     // For method references
-    private static <T> Predicate<T> not(Predicate<T> t) {
+    private static <T> Predicate<T> not(final Predicate<T> t) {
         return t.negate();
     }
 

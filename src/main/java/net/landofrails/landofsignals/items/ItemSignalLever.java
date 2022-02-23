@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ItemSignalLever extends CustomItem {
-    public ItemSignalLever(String modID, String name) {
+    public ItemSignalLever(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -28,11 +28,11 @@ public class ItemSignalLever extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
+        final Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
-        BlockSignalLever block = LOSBlocks.BLOCK_SIGNAL_LEVER;
+        final BlockSignalLever block = LOSBlocks.BLOCK_SIGNAL_LEVER;
         block.setRot(-player.getRotationYawHead() + 180);
         world.setBlock(target.get(), block);
         return ClickResult.ACCEPTED;
