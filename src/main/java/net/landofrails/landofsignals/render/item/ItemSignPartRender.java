@@ -15,6 +15,7 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +57,12 @@ public class ItemSignPartRender {
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
                 GL11.glTranslated(translate.x, translate.y, translate.z);
                 GL11.glScaled(scale.x, scale.y, scale.z);
-                renderer.draw();
+                String[] groups = LOSBlocks.BLOCK_SIGN_PART.getRenderGroups(itemId);
+                if (groups.length > 0) {
+                    renderer.drawGroups(Arrays.asList(groups));
+                } else {
+                    renderer.draw();
+                }
             }
         });
     }
