@@ -19,8 +19,8 @@ import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
-import net.minecraftforge.fml.common.Loader;
 
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
@@ -126,7 +126,14 @@ public class LandOfSignals extends ModCore.Mod {
 
     public Optional<String> getMCVersion() {
         try {
-            return Optional.ofNullable(Loader.instance().getMCVersionString());
+            Class<?> loader = Class.forName("net.minecraftforge.fml.common.Loader");
+            Method instanceMethod = loader.getMethod("instance");
+            Object loaderInstance = instanceMethod.invoke(null);
+            Method getMCVersionString = loader.getMethod("getMCVersionString");
+            String version = (String) getMCVersionString.invoke(loaderInstance);
+
+            return Optional.ofNullable(version);
+
         } catch (Exception e) {
 
             return Optional.empty();
