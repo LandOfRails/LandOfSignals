@@ -25,6 +25,9 @@ public class LOSBlocks {
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
     public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
 
+    // Sign
+    public static final BlockSignPart BLOCK_SIGN_PART = new BlockSignPart(LandOfSignals.MODID, "blocksign");
+
     public static void register() {
         // loads static classes and ctrs
         ContentPackSignalPart MISSING = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {{

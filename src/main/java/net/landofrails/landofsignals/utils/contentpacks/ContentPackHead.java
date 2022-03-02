@@ -6,6 +6,7 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContentPackHead {
@@ -15,12 +16,14 @@ public class ContentPackHead {
     private String author;
 
     private List<String> signals;
+    private List<String> signs;
 
-    public ContentPackHead(String name, String packversion, String author, List<String> signals) {
+    public ContentPackHead(String name, String packversion, String author, List<String> signals, List<String> signs) {
         this.name = name;
         this.packversion = packversion;
         this.author = author;
         this.signals = signals;
+        this.signs = signs;
     }
 
     public String getName() {
@@ -48,11 +51,19 @@ public class ContentPackHead {
     }
 
     public List<String> getSignals() {
+        if (signals == null)
+            signals = new ArrayList<>();
         return signals;
     }
 
     public void setSignals(List<String> signals) {
         this.signals = signals;
+    }
+
+    public List<String> getSigns() {
+        if (signs == null)
+            signs = new ArrayList<>();
+        return signs;
     }
 
     public String getId() {

@@ -12,6 +12,7 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.render.item.ItemSignPartRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
@@ -53,6 +54,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignalBoxGuiToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalBoxTileSignalPartPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
 
@@ -87,14 +89,17 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
 
                 ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/signalchest"));
+                ItemRender.register(LOSItems.ITEM_SIGN_SELECTOR, new Identifier(MODID, "items/signchest"));
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
+                BlockRender.register(LOSBlocks.BLOCK_SIGN_PART, TileSignPartRender::render, TileSignPart.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGN_PART, ItemSignPartRender.getModelFor());
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
@@ -102,7 +107,6 @@ public class LandOfSignals extends ModCore.Mod {
             case RELOAD:
 
                 // Release renderers after reload (rejoining a world for example)
-                System.out.println();
 
                 TileSignalBoxRender.releaseRenderersIntoTheWild();
                 TileSignalLeverRender.releaseRenderersIntoTheWild();
@@ -111,6 +115,7 @@ public class LandOfSignals extends ModCore.Mod {
                 TileSignalSO12Render.releaseRenderersIntoTheWild();
                 TileTicketMachineDBRender.releaseRenderersIntoTheWild();
                 TileTicketMachineSBBRender.releaseRenderersIntoTheWild();
+                TileSignPartRender.releaseRenderersIntoTheWild();
 
                 break;
             case FINALIZE:

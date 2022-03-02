@@ -19,6 +19,7 @@ item.landofsignals:item_signal_box.name=Signal Box
 item.landofsignals:item_connector.name=Connector tool
 item.landofsignals:item_manipulator.name=Manipulator tool
 item.landofsignals:item_signal_selector.name=Signal selector tool
+item.landofsignals:item_sign_selector.name=Sign selector tool
 
 # -- Stellwand --
 

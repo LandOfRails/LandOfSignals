@@ -79,37 +79,65 @@ public class ContentPackHandler {
                     filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
             // @formatter:on
 
+            addSignals(contentPack, files, zip);
+            addSigns(contentPack, files, zip);
+
             ModCore.info("Content for %s:", contentPack.getId());
-            for (String pathToContentPackSignalSet : contentPack.getSignals()) {
-                for (ZipEntry zipEntry : files) {
-                    if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
-                        ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
-                        ModCore.info("SignalSet: %s", contentPackSignalSet.getName());
-                        for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
-                            for (ZipEntry zipEntry1 : files) {
-                                if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
-                                    ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
-                                    ModCore.info("SignalPart: %s", contentPackSignalPart.getName());
-                                    List<String> states = contentPackSignalPart.getStates();
-                                    if (states == null) {
-                                        states = new ArrayList<>();
-                                    }
-                                    states.add(0, null);
-                                    contentPackSignalPart.setStates(states);
-                                    if (contentPackSignalPart.getAnimations() != null)
-                                        LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(contentPackSignalPart);
-                                    else
-                                        LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
+
         } catch (IOException e) {
             ModCore.Mod.error("Error while loading Contentpack: %s", e.getMessage());
+        }
+    }
+
+    private static void addSignals(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip) throws IOException {
+        for (String pathToContentPackSignalSet : contentPack.getSignals()) {
+            for (ZipEntry zipEntry : files) {
+                if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
+                    ContentPackSignalSet contentPackSignalSet = ContentPackSignalSet.fromJson(zip.getInputStream(zipEntry));
+                    ModCore.info("SignalSet: %s", contentPackSignalSet.getName());
+                    for (String pathToContentPackSignalPart : contentPackSignalSet.getSignalparts()) {
+                        for (ZipEntry zipEntry1 : files) {
+                            if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
+                                ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
+                                ModCore.info("SignalPart: %s", contentPackSignalPart.getName());
+                                List<String> states = contentPackSignalPart.getStates();
+                                if (states == null) {
+                                    states = new ArrayList<>();
+                                }
+                                states.add(0, null);
+                                contentPackSignalPart.setStates(states);
+                                if (contentPackSignalPart.getAnimations() != null)
+                                    LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(contentPackSignalPart);
+                                else
+                                    LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignalPart);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void addSigns(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip) throws IOException {
+        for (String pathToContentPackSignSet : contentPack.getSigns()) {
+            for (ZipEntry zipEntry : files) {
+                if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignSet)) {
+                    ContentPackSignSet contentPackSignSet = ContentPackSignSet.fromJson(zip.getInputStream(zipEntry));
+                    ModCore.info("SignSet: %s", contentPackSignSet.getName());
+                    for (String pathToContentPackSignalPart : contentPackSignSet.getSignparts()) {
+                        for (ZipEntry zipEntry1 : files) {
+                            if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
+                                ContentPackSignPart contentPackSignPart = ContentPackSignPart.fromJson(zip.getInputStream(zipEntry1));
+                                ModCore.info("SignPart: %s", contentPackSignPart.getName());
+                                LOSBlocks.BLOCK_SIGN_PART.add(contentPackSignPart);
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
