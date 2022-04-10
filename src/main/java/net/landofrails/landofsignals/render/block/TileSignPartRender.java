@@ -9,13 +9,11 @@ import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignPart;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class TileSignPartRender {
 
@@ -23,39 +21,48 @@ public class TileSignPartRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, Map<Integer, OBJRender>> cache = new HashMap<>();
 
     public static StandardModel render(TileSignPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
     private static void renderStuff(TileSignPart tsp) {
-        String id = tsp.getId();
-        if (!cache.containsKey(id)) {
-            try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGN_PART.getPath(id)), 0);
-                Set<String> groups = model.groups();
-                OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        OBJRender renderer = cache.get(id).getRight();
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGN_PART.getScaling(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGN_PART.getTranslation(id).add(tsp.getOffset());
-            String[] groups = LOSBlocks.BLOCK_SIGN_PART.getRenderGroups(id);
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            if (groups.length > 0) {
-                renderer.drawGroups(Arrays.asList(groups));
-            } else {
-                renderer.draw();
-            }
-        }
+        String itemId = tsp.getId();
+        if (!cache.containsKey(itemId)) {
+            Map<Integer, OBJRender> objRenderers = new HashMap<>();
+            for (Map.Entry<Integer, String> path : LOSBlocks.BLOCK_SIGN_PART.getPath(itemId).entrySet()) {
+                try {
 
+                    OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path.getValue()), 0);
+                    objRenderers.put(path.getKey(), new OBJRender(model));
+                } catch (Exception e) {
+                    throw new RuntimeException("Error loading item model...", e);
+                }
+            }
+            if (objRenderers.isEmpty()) {
+                throw new RuntimeException("Couldnt find any ContentPackSignObjects!");
+            } else {
+                cache.put(itemId, objRenderers);
+            }
+        }
+        for (Map.Entry<Integer, OBJRender> rendererEntry : cache.get(itemId).entrySet()) {
+            Integer id = rendererEntry.getKey();
+            OBJRender renderer = rendererEntry.getValue();
+            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(LOSBlocks.BLOCK_SIGN_PART.getTexture(itemId).get(id))) {
+                Vec3d scale = LOSBlocks.BLOCK_SIGN_PART.getScaling(itemId).get(id);
+                GL11.glScaled(scale.x, scale.y, scale.z);
+                Vec3d trans = LOSBlocks.BLOCK_SIGN_PART.getTranslation(itemId).get(id).add(tsp.getOffset());
+                String[] groups = LOSBlocks.BLOCK_SIGN_PART.getRenderGroups(itemId).get(id);
+                GL11.glTranslated(trans.x, trans.y, trans.z);
+                GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
+                if (groups.length > 0) {
+                    renderer.drawGroups(Arrays.asList(groups));
+                } else {
+                    renderer.draw();
+                }
+            }
+        }
     }
 
     /**
@@ -63,7 +70,9 @@ public class TileSignPartRender {
      */
     public static void releaseRenderersIntoTheWild() {
 
-        cache.values().forEach(pair -> pair.getValue().free());
+        for (Map<Integer, OBJRender> entry : cache.values()) {
+            entry.values().forEach(OBJRender::free);
+        }
         cache.clear();
     }
 

@@ -6,44 +6,32 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ContentPackSignPart {
 
+    private static final Function<Map.Entry<Integer, ?>, Integer> INTKEY = Map.Entry::getKey;
 
     private String id;
     private String name;
-    private String model;
+    private Map<Integer, ContentPackSignObject> signObjects;
 
-    private float[] translation;
-    private float[] itemTranslation;
-    private float[] scaling;
-
-    private float[] itemScaling;
-
-    private String[] renderGroups;
-
-
-    public ContentPackSignPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling) {
-        this(id, name, model, translation, itemTranslation, scaling, scaling, new String[0]);
-    }
-
-    public ContentPackSignPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling) {
-        this(id, name, model, translation, itemTranslation, scaling, itemScaling, new String[0]);
-    }
-
-    public ContentPackSignPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, String[] renderGroups) {
-        this(id, name, model, translation, itemTranslation, scaling, scaling, renderGroups);
-    }
-
-    public ContentPackSignPart(String id, String name, String model, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, String[] renderGroups) {
+    public ContentPackSignPart(String id, String name, ContentPackSignObject... signObjects) {
         this.id = id;
         this.name = name;
-        this.model = model;
-        this.translation = translation;
-        this.itemTranslation = itemTranslation;
-        this.scaling = scaling;
-        this.itemScaling = itemScaling;
-        this.renderGroups = renderGroups;
+        this.signObjects = new HashMap<>();
+        for (int i = 0; i < signObjects.length; i++) {
+            this.signObjects.put(i + 1, signObjects[i]);
+        }
+    }
+
+    public ContentPackSignPart(String id, String name, Map<Integer, ContentPackSignObject> signObjects) {
+        this.id = id;
+        this.name = name;
+        this.signObjects = signObjects;
     }
 
     public String getId() {
@@ -62,60 +50,12 @@ public class ContentPackSignPart {
         this.name = name;
     }
 
-    public String getModel() {
-        return model;
+    public Map<Integer, ContentPackSignObject> getSignObjects() {
+        return signObjects;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public float[] getTranslation() {
-        return translation;
-    }
-
-    public void setTranslation(float[] translation) {
-        this.translation = translation;
-    }
-
-    public float[] getItemTranslation() {
-        return itemTranslation;
-    }
-
-    public void setItemTranslation(float[] itemTranslation) {
-        this.itemTranslation = itemTranslation;
-    }
-
-    public float[] getScaling() {
-        return scaling;
-    }
-
-    public void setScaling(float[] scaling) {
-        this.scaling = scaling;
-    }
-
-    public float[] getItemScaling() {
-        if (itemScaling == null) {
-            if (scaling != null) {
-                itemScaling = scaling;
-            } else {
-                // Emergency value
-                itemScaling = new float[]{1, 1, 1};
-            }
-        }
-        return itemScaling;
-    }
-
-    public void setItemScaling(float[] itemScaling) {
-        this.itemScaling = itemScaling;
-    }
-
-    public String[] getRenderGroups() {
-        return renderGroups;
-    }
-
-    public void setRenderGroups(String[] renderGroups) {
-        this.renderGroups = renderGroups;
+    public void setSignObjects(Map<Integer, ContentPackSignObject> signObjects) {
+        this.signObjects = signObjects;
     }
 
     public static ContentPackSignPart fromJson(InputStream inputStream) {
@@ -135,6 +75,38 @@ public class ContentPackSignPart {
         Gson gson = new GsonBuilder().create();
 
         return gson.fromJson(json, ContentPackSignPart.class);
+    }
+
+    public Map<Integer, String> getModel() {
+        return signObjects.entrySet().stream().collect(Collectors.toMap(INTKEY, v -> v.getValue().getModel()));
+    }
+
+    public Map<Integer, float[]> getTranslation() {
+        return signObjects.entrySet().stream().collect(Collectors.toMap(INTKEY, v -> v.getValue().getTranslation()));
+    }
+
+    public Map<Integer, float[]> getScaling() {
+        return signObjects.entrySet().stream().collect(Collectors.toMap(INTKEY, v -> v.getValue().getScaling()));
+    }
+
+    public Map<Integer, float[]> getItemScaling() {
+        return signObjects.entrySet().stream().collect(Collectors.toMap(INTKEY, v -> v.getValue().getItemScaling()));
+    }
+
+    public Map<Integer, float[]> getItemTranslation() {
+        return signObjects.entrySet().stream().collect(Collectors.toMap(INTKEY, v -> v.getValue().getItemTranslation()));
+    }
+
+    public Map<Integer, String[]> getRenderGroups() {
+        Map<Integer, String[]> renderGroups = new HashMap<>();
+        signObjects.forEach((objId, so) -> renderGroups.put(objId, so.getRenderGroups()));
+        return renderGroups;
+    }
+
+    public Map<Integer, String> getTexture() {
+        Map<Integer, String> textures = new HashMap<>();
+        signObjects.forEach((objId, so) -> textures.put(objId, so.getTexture()));
+        return textures;
     }
 
 }

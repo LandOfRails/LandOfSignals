@@ -92,4 +92,5 @@ public class BlockSignalPart extends BlockTypeEntity {
         if (signalParts.containsKey(id)) return id;
         else return Static.MISSING;
     }
+
 }

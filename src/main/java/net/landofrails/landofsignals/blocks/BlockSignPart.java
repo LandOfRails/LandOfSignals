@@ -6,13 +6,17 @@ import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignObject;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignPart;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class BlockSignPart extends BlockTypeEntity {
 
+    private static final Function<Map.Entry<Integer, ?>, Integer> INTKEY = Map.Entry::getKey;
     private Map<String, ContentPackSignPart> signs = new HashMap<>();
     private String id;
     private int rot;
@@ -34,36 +38,36 @@ public class BlockSignPart extends BlockTypeEntity {
         this.id = id;
     }
 
-    public String getPath(String uncheckedId) {
+    public Map<Integer, String> getPath(String uncheckedId) {
         return signs.get(checkIfMissing(uncheckedId)).getModel();
     }
 
-    public Vec3d getTranslation(String uncheckedId) {
+    public Map<Integer, Vec3d> getTranslation(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
-        float[] translation = signs.get(id).getTranslation();
-        return new Vec3d(translation[0], translation[1], translation[2]);
+        Map<Integer, float[]> translationMap = signs.get(id).getTranslation();
+        return translationMap.entrySet().stream().collect(Collectors.toMap(INTKEY, translation -> new Vec3d(translation.getValue()[0], translation.getValue()[1], translation.getValue()[2])));
     }
 
-    public Vec3d getScaling(String uncheckedId) {
+    public Map<Integer, Vec3d> getScaling(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
-        float[] scaling = signs.get(id).getScaling();
-        return new Vec3d(scaling[0], scaling[1], scaling[2]);
+        Map<Integer, float[]> scalingMap = signs.get(id).getScaling();
+        return scalingMap.entrySet().stream().collect(Collectors.toMap(INTKEY, scaling -> new Vec3d(scaling.getValue()[0], scaling.getValue()[1], scaling.getValue()[2])));
     }
 
-    public Vec3d getItemScaling(String uncheckedId) {
+    public Map<Integer, Vec3d> getItemScaling(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
-        float[] scaling = signs.get(id).getItemScaling();
-        return new Vec3d(scaling[0], scaling[1], scaling[2]);
+        Map<Integer, float[]> itemScalingMap = signs.get(id).getItemScaling();
+        return itemScalingMap.entrySet().stream().collect(Collectors.toMap(INTKEY, itemScaling -> new Vec3d(itemScaling.getValue()[0], itemScaling.getValue()[1], itemScaling.getValue()[2])));
     }
 
     public String getId(String uncheckedId) {
         return signs.get(checkIfMissing(uncheckedId)).getId();
     }
 
-    public Vec3d getItemTranslation(String uncheckedId) {
+    public Map<Integer, Vec3d> getItemTranslation(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
-        float[] translation = signs.get(id).getItemTranslation();
-        return new Vec3d(translation[0], translation[1], translation[2]);
+        Map<Integer, float[]> itemTranslationMap = signs.get(id).getItemTranslation();
+        return itemTranslationMap.entrySet().stream().collect(Collectors.toMap(INTKEY, itemTranslation -> new Vec3d(itemTranslation.getValue()[0], itemTranslation.getValue()[1], itemTranslation.getValue()[2])));
     }
 
     public String getName(String uncheckedId) {
@@ -83,9 +87,19 @@ public class BlockSignPart extends BlockTypeEntity {
         return signs;
     }
 
-    public String[] getRenderGroups(String uncheckedId) {
+    public Map<Integer, String[]> getRenderGroups(String uncheckedId) {
         String id = checkIfMissing(uncheckedId);
         return signs.get(id).getRenderGroups();
+    }
+
+    public Map<Integer, String> getTexture(String uncheckedId) {
+        String id = checkIfMissing(uncheckedId);
+        return signs.get(id).getTexture();
+    }
+
+    public Map<Integer, ContentPackSignObject> getSignObjects(String uncheckedId) {
+        String id = checkIfMissing(uncheckedId);
+        return signs.get(id).getSignObjects();
     }
 
     private String checkIfMissing(String id) {
