@@ -5,6 +5,6 @@ import java.util.Map;
 public class ContentPackSignalGroup {
 
     private String name;
-    private Map<String, ContentPackSignalGroupState> states;
+    private Map<String, ContentPackSignalState> states;
 
 }
