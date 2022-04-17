@@ -3,7 +3,6 @@ package net.landofrails.api.contentpacks;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +60,7 @@ public final class GenericContentPack {
     }
 
     public boolean isValid() {
-        return ObjectUtils.allNotNull(name, packversion, author);
+        return name != null && packversion != null && author != null;
     }
 
     public static GenericContentPack fromJson(InputStream jsonInputStream) {
