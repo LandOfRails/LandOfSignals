@@ -3,7 +3,6 @@ package net.landofrails.api.contentpacks.v2;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.item.ItemStack;
 import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.stellwand.content.items.CustomItems;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.sender.BlockSenderEntry;
 import net.landofrails.stellwand.contentpacks.entries.signal.BlockSignalEntry;
@@ -14,7 +13,7 @@ public enum EntryType {
 
     // @formatter:off
     BLOCKSIGNAL(BlockSignalEntry.class, () -> LOSItems.ITEM_SIGNAL_PART),
-    BLOCKSENDER(BlockSenderEntry.class, () -> CustomItems.ITEMBLOCKSENDER),
+    BLOCKSENDER(BlockSenderEntry.class, () -> LOSItems.ITEM_SIGNAL_BOX),
     // TODO implement
     BLOCKSIGN(null, () -> null),
     BLOCKDECO(null, () -> null);
