@@ -1,6 +1,9 @@
-package net.landofrails.api.contentpacks.v1;
+package net.landofrails.landofsignals.contentpacks;
 
 import cam72cam.mod.ModCore;
+import net.landofrails.api.contentpacks.GenericContentPack;
+import net.landofrails.api.contentpacks.v1.*;
+import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
@@ -12,10 +15,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 public class ContentPackHandler {
+
+    private ContentPackHandler() {
+        
+    }
 
     public static void init() {
         loadAssets();
@@ -52,37 +58,66 @@ public class ContentPackHandler {
         try (ZipFile zip = new ZipFile(asset)) {
 
             List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
-            Optional<ZipEntry> stellwandJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
+            // File.getName() returns full qualified name
+            Optional<ZipEntry> landofsignalsJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
                     .findFirst();
-            if (stellwandJson.isPresent()) {
-                load(zip, stellwandJson.get());
+            if (landofsignalsJson.isPresent()) {
+                load(zip, landofsignalsJson.get());
             } else {
                 throw new ContentPackException("[" + asset.getName() + "] Missing landofsignals.json");
             }
 
-        } catch (ZipException zipException) {
+        } catch (IOException zipException) {
             ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
             ModCore.Mod.error("Error: %s", zipException.getMessage());
-        } catch (IOException e) {
-            ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
-            ModCore.Mod.error("Error: %s", e.getMessage());
         }
     }
 
     private static void load(ZipFile zip, ZipEntry landofsignalsJson) {
 
         try {
-            ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
-            // @formatter:off
-            List<ZipEntry> files = zip.stream().
-                    filter(not(ZipEntry::isDirectory)).
-                    filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
-            // @formatter:on
+            GenericContentPack genericContentPack = GenericContentPack.fromJson(
+                    zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
 
-            addSignals(contentPack, files, zip);
-            addSigns(contentPack, files, zip);
+            if (!genericContentPack.isValid()) {
+                ModCore.error("Failed loading ZIP named %s!\nNot all required fields have been set.", zip.getName());
+                return;
+            }
 
-            ModCore.info("Content for %s:", contentPack.getId());
+            String addonversion = genericContentPack.getAddonversion();
+
+            ModCore.info("Name: %s, Author: %s, Version: %s, Addonversion: %s",
+                    genericContentPack.getName(),
+                    genericContentPack.getAuthor(),
+                    genericContentPack.getPackversion(),
+                    addonversion);
+
+            if ("1".equals(addonversion)) {
+                ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+                // @formatter:off
+                List<ZipEntry> files = zip.stream().
+                        filter(not(ZipEntry::isDirectory)).
+                        filter(f -> f.getName().endsWith(".json") && !f.getName().endsWith("landofsignals.json")).collect(Collectors.toList());
+                // @formatter:on
+
+                ModCore.info("Content for %s:", contentPack.getId());
+                addSignals(contentPack, files, zip);
+                addSigns(contentPack, files, zip);
+
+            } else if ("2".equals(addonversion)) {
+                ContentPack contentPack = ContentPack.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+                ModCore.info("Content for %s:", contentPack.getId());
+
+                // TODO: Impement addonversion 2
+                // TODO: Make addonversion 2 default
+                // TODO: Make Adapter for addonversion 1
+
+            } else {
+                ModCore.error("Failed loading Contentpack named %s!\nUnsupported addonversion: %s." +
+                        " Either your version of LandOfSignals is not up-to-date" +
+                        " or the author used an invalid addonversion.", addonversion);
+            }
+
 
         } catch (IOException e) {
             ModCore.Mod.error("Error while loading Contentpack: %s", e.getMessage());

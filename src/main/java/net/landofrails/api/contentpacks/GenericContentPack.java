@@ -1,24 +1,25 @@
-package net.landofrails.api.contentpacks.v2;
+package net.landofrails.api.contentpacks;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.landofrails.stellwand.utils.exceptions.ContentPackException;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-public class ContentPack {
+public final class GenericContentPack {
 
     private String addonversion;
     private String name;
     private String packversion;
     private String author;
 
-    // "content": "path": "type", "path": "type"
-    private Map<String, EntryType> content = new LinkedHashMap<>();
+    public GenericContentPack() {
 
-    public ContentPack(String addonversion, String name, String packversion, String author) {
+    }
+
+    public GenericContentPack(String addonversion, String name, String packversion, String author) {
         this.addonversion = addonversion;
         this.name = name;
         this.packversion = packversion;
@@ -26,37 +27,50 @@ public class ContentPack {
     }
 
     public String getAddonversion() {
+        if (addonversion == null)
+            return "1";
         return addonversion;
+    }
+
+    public void setAddonversion(String addonversion) {
+        this.addonversion = addonversion;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPackversion() {
         return packversion;
+    }
+
+    public void setPackversion(String packversion) {
+        this.packversion = packversion;
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public Map<String, EntryType> getContent() {
-        return content;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getId() {
-        return name + "@" + author;
+    public boolean isValid() {
+        return ObjectUtils.allNotNull(name, packversion, author);
     }
 
-    public static ContentPack fromJson(InputStream stellwandJsonStream) {
-
+    public static GenericContentPack fromJson(InputStream jsonInputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
         int read;
 
         try {
-            while ((read = stellwandJsonStream.read(buffer, 0, 1024)) >= 0) {
+            while ((read = jsonInputStream.read(buffer, 0, 1024)) >= 0) {
                 s.append(new String(buffer, 0, read));
             }
         } catch (IOException e) {
@@ -66,8 +80,7 @@ public class ContentPack {
         String json = s.toString();
         Gson gson = new GsonBuilder().create();
 
-        return gson.fromJson(json, ContentPack.class);
-
+        return gson.fromJson(json, GenericContentPack.class);
     }
 
 }

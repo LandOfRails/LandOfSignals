@@ -9,7 +9,7 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.api.contentpacks.v1.ContentPackHandler;
+import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
+    @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
     public static final String VERSION = "0.0.4";
 
