@@ -9,10 +9,10 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.api.contentpacks.v1.ContentPackSignObject;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignObject;
 import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;

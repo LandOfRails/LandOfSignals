@@ -1,11 +1,11 @@
 package net.landofrails.landofsignals;
 
+import net.landofrails.api.contentpacks.v1.ContentPackAnimation;
+import net.landofrails.api.contentpacks.v1.ContentPackSignObject;
+import net.landofrails.api.contentpacks.v1.ContentPackSignPart;
+import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignObject;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignPart;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.ArrayList;
 import java.util.HashMap;

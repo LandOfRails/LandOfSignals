@@ -1,6 +1,6 @@
-package net.landofrails.api.contentpacks.v2.signal;
+package net.landofrails.api.contentpacks.v2.parent;
 
-public class ContentPackSignalBlock {
+public class ContentPackItem {
 
     private float[] translation;
     private float[] rotation;

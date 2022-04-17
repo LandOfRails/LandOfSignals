@@ -4,10 +4,10 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
+import net.landofrails.api.contentpacks.v1.ContentPackAnimation;
+import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.HashMap;
 import java.util.List;

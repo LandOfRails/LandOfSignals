@@ -1,4 +1,4 @@
-package net.landofrails.landofsignals.utils.contentpacks;
+package net.landofrails.api.contentpacks.v1;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

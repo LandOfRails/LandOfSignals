@@ -1,6 +1,6 @@
 package net.landofrails.landofsignals.utils;
 
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
+import net.landofrails.api.contentpacks.v1.ContentPackAnimation;
 
 import java.util.List;
 import java.util.Map;

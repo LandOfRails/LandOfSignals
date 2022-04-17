@@ -1,4 +1,4 @@
-package net.landofrails.landofsignals.utils.contentpacks;
+package net.landofrails.api.contentpacks.v1;
 
 public class ContentPackSignObject {
 

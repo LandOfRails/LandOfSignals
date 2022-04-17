@@ -9,6 +9,7 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v1.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
@@ -17,7 +18,6 @@ import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
 import java.lang.reflect.Method;
