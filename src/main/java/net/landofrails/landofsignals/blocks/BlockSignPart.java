@@ -74,6 +74,7 @@ public class BlockSignPart extends BlockTypeEntity {
         return signs.get(checkIfMissing(uncheckedId)).getName();
     }
 
+    @Deprecated
     public void add(ContentPackSignPart contentPackSign) {
         if (!signs.containsKey(contentPackSign.getId())) {
             this.signs.put(contentPackSign.getId(), contentPackSign);

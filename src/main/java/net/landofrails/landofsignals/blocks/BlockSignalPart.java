@@ -5,6 +5,7 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -14,7 +15,9 @@ import java.util.Map;
 
 public class BlockSignalPart extends BlockTypeEntity {
 
+    @Deprecated
     private Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
+    private Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
     private String id;
     private int rot;
 
@@ -75,12 +78,22 @@ public class BlockSignalPart extends BlockTypeEntity {
         return signalParts.get(checkIfMissing(uncheckedId)).getName();
     }
 
+    @Deprecated
     public void add(ContentPackSignalPart contentPackSignalPart) {
         if (!signalParts.containsKey(contentPackSignalPart.getId())) {
             this.signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);
         } else {
             //TODO: Add conflict info for user after he entered a world
             ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignalPart.getId());
+        }
+    }
+
+    public void add(ContentPackSignal contentPackSignal) {
+        if (!contentPackSignals.containsKey(contentPackSignal.getId())) {
+            contentPackSignals.put(contentPackSignal.getId(), contentPackSignal);
+        } else {
+            //TODO: Add conflict info for user after he entered a world
+            ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignal.getId());
         }
     }
 

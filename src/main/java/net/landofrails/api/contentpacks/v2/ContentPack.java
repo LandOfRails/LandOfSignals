@@ -3,46 +3,56 @@ package net.landofrails.api.contentpacks.v2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContentPack {
 
-    private String addonversion;
     private String name;
-    private String packversion;
     private String author;
+    private String packversion;
+    private String addonversion;
 
     // "content": "path": "type", "path": "type"
-    private Map<String, EntryType> content = new LinkedHashMap<>();
+    private Map<String, EntryType> content;
+    private List<String> contentSets;
 
-    public ContentPack(String addonversion, String name, String packversion, String author) {
-        this.addonversion = addonversion;
+    public ContentPack(String name, String author, String packversion, String addonversion, Map<String, EntryType> content, List<String> contentSets) {
         this.name = name;
-        this.packversion = packversion;
         this.author = author;
-    }
-
-    public String getAddonversion() {
-        return addonversion;
+        this.packversion = packversion;
+        this.addonversion = addonversion;
+        this.content = content;
+        this.contentSets = contentSets;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPackversion() {
-        return packversion;
-    }
-
     public String getAuthor() {
         return author;
     }
 
+    public String getPackversion() {
+        return packversion;
+    }
+
+    public String getAddonversion() {
+        return addonversion;
+    }
+
+    @Nullable
     public Map<String, EntryType> getContent() {
         return content;
+    }
+
+    @Nullable
+    public List<String> getContentSets() {
+        return contentSets;
     }
 
     public String getId() {
