@@ -69,7 +69,7 @@ public class TileSignalBox extends BlockEntity {
         if (getWorld().isServer && TileSignalPartPos != null) {
             TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
             if (tempTileSignalPart != null) {
-                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tempTileSignalPart.getId());
+                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempTileSignalPart.getId());
                 if (redstone >= states.size() || noRedstone >= states.size()) {
                     redstone = 0;
                     noRedstone = 0;
@@ -108,7 +108,7 @@ public class TileSignalBox extends BlockEntity {
     public void onBreak() {
         super.onBreak();
         TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
-        entity.setTexturePath(LOSBlocks.BLOCK_SIGNAL_PART.getStates(entity.getId()).get(0));
+        entity.setTexturePath(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
     }
 
     public void setTileSignalPartPos(Vec3i pos) {

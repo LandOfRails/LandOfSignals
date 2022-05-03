@@ -2,6 +2,7 @@ package net.landofrails.landofsignals.contentpacks;
 
 import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v2.ContentPack;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -53,6 +54,9 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSignal contentPackSignal = ContentPackSignal.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSignal.validate(missing -> {
+                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+                });
                 LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
             } else {
                 ModCore.error("Couldn't find ContentPackSignal under path %s!", path);

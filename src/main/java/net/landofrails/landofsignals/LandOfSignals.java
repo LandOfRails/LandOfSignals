@@ -112,7 +112,6 @@ public class LandOfSignals extends ModCore.Mod {
                 TileSignalBoxRender.releaseRenderersIntoTheWild();
                 TileSignalLeverRender.releaseRenderersIntoTheWild();
                 TileSignalPartAnimatedRender.releaseRenderersIntoTheWild();
-                TileSignalPartRender.releaseRenderersIntoTheWild();
                 TileSignalSO12Render.releaseRenderersIntoTheWild();
                 TileTicketMachineDBRender.releaseRenderersIntoTheWild();
                 TileTicketMachineSBBRender.releaseRenderersIntoTheWild();

@@ -38,48 +38,48 @@ public class BlockSignalPart extends BlockTypeEntity {
         this.id = id;
     }
 
-    public String getPath(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getModel();
+    public String getPath_depr(String uncheckedId) {
+        return signalParts.get(checkIfMissing_depr(uncheckedId)).getModel();
     }
 
-    public Vec3d getTranslation(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
+    public Vec3d getTranslation_depr(String uncheckedId) {
+        String id = checkIfMissing_depr(uncheckedId);
         float[] translation = signalParts.get(id).getTranslation();
         return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
-    public Vec3d getScaling(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
+    public Vec3d getScaling_depr(String uncheckedId) {
+        String id = checkIfMissing_depr(uncheckedId);
         float[] scaling = signalParts.get(id).getScaling();
         return new Vec3d(scaling[0], scaling[1], scaling[2]);
     }
 
-    public Vec3d getItemScaling(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
+    public Vec3d getItemScaling_depr(String uncheckedId) {
+        String id = checkIfMissing_depr(uncheckedId);
         float[] scaling = signalParts.get(id).getItemScaling();
         return new Vec3d(scaling[0], scaling[1], scaling[2]);
     }
 
-    public List<String> getStates(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getStates();
+    public List<String> getStates_depr(String uncheckedId) {
+        return signalParts.get(checkIfMissing_depr(uncheckedId)).getStates();
     }
 
-    public String getId(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getId();
+    public String getId_depr(String uncheckedId) {
+        return signalParts.get(checkIfMissing_depr(uncheckedId)).getId();
     }
 
-    public Vec3d getItemTranslation(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
+    public Vec3d getItemTranslation_depr(String uncheckedId) {
+        String id = checkIfMissing_depr(uncheckedId);
         float[] translation = signalParts.get(id).getItemTranslation();
         return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
-    public String getName(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getName();
+    public String getName_depr(String uncheckedId) {
+        return signalParts.get(checkIfMissing_depr(uncheckedId)).getName();
     }
 
     @Deprecated
-    public void add(ContentPackSignalPart contentPackSignalPart) {
+    public void add_depr(ContentPackSignalPart contentPackSignalPart) {
         if (!signalParts.containsKey(contentPackSignalPart.getId())) {
             this.signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);
         } else {
@@ -97,13 +97,24 @@ public class BlockSignalPart extends BlockTypeEntity {
         }
     }
 
-    public Map<String, ContentPackSignalPart> getSignalParts() {
+    public Map<String, ContentPackSignalPart> getSignalParts_depr() {
         return signalParts;
     }
 
-    private String checkIfMissing(String id) {
+    public Map<String, ContentPackSignal> getContentpackSignals() {
+        return contentPackSignals;
+    }
+
+    /**
+     * Replace with checkIfMissing(id)
+     *
+     * @param id
+     * @return
+     */
+    private String checkIfMissing_depr(String id) {
         if (signalParts.containsKey(id)) return id;
         else return Static.MISSING;
     }
+
 
 }

@@ -1,6 +1,8 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 public class ContentPackSignalGroup {
 
@@ -30,5 +32,19 @@ public class ContentPackSignalGroup {
 
     public void setStates(Map<String, ContentPackSignalState> states) {
         this.states = states;
+    }
+
+    public void validate(Consumer<String> invalid) {
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        if (states == null) {
+            joiner.add("states");
+            invalid.accept(joiner.toString());
+        } else {
+            for (Map.Entry<String, ContentPackSignalState> signalStateEntry : states.entrySet()) {
+                ContentPackSignalState signalState = signalStateEntry.getValue();
+                signalState.validate(invalid);
+            }
+        }
+
     }
 }

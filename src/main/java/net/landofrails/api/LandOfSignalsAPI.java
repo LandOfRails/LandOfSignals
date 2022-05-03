@@ -61,7 +61,7 @@ public class LandOfSignalsAPI {
                     TileSignalPart.class);
 
             if (tileSignal != null) {
-                return LOSBlocks.BLOCK_SIGNAL_PART.getStates(tileSignal.getId());
+                return LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tileSignal.getId());
             }
 
             return null;
@@ -231,7 +231,7 @@ public class LandOfSignalsAPI {
             }
             return new DirectionType[0];
         }
-        
+
     }
 
 }

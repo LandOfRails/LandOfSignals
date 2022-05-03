@@ -6,13 +6,17 @@ import net.landofrails.api.contentpacks.v2.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 public class ContentPackSignal {
 
     private String name;
     private String id;
     private Integer rotationSteps;
+    // groupId : group
     private Map<String, ContentPackSignalGroup> signals;
     private Map<String, Object> metadata;
 
@@ -86,4 +90,39 @@ public class ContentPackSignal {
 
         return gson.fromJson(json, ContentPackSignal.class);
     }
+
+    public void validate(Consumer<String> invalid) {
+
+        defaultMissing();
+
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        if (name == null)
+            joiner.add("name");
+        if (id == null)
+            joiner.add("id");
+        if (signals == null || signals.isEmpty())
+            joiner.add("signals");
+        if (joiner.length() > 2) {
+            invalid.accept(joiner.toString());
+        } else if (signals != null) {
+            for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
+                ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
+                signalGroup.validate(invalid);
+            }
+        }
+    }
+
+    private void defaultMissing() {
+        if (rotationSteps == null) {
+            rotationSteps = 10;
+        } else {
+            rotationSteps = Math.min(Math.max(10, rotationSteps), 90);
+        }
+
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
+
+    }
+
 }

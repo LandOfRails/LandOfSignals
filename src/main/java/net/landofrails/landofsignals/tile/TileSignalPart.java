@@ -9,6 +9,9 @@ import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.utils.IManipulate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @TagField("blockRotation")
@@ -69,7 +72,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         offset = vec;
         try {
             save(new TagCompound().setVec3d("offset", vec));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -93,4 +96,17 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     public int getRotation() {
         return blockRotate;
     }
+
+    public Map<String, String> getSignalGroups() {
+        Map<String, String> signals = new HashMap<>();
+        // FIXME return real signals;
+
+        signals.put("group_top_left", "off");
+        signals.put("group_top_right", "white");
+        signals.put("group_bottom_left", "red");
+        signals.put("group_bottom_right", "off");
+
+        return signals;
+    }
+
 }

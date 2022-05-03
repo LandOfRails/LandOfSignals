@@ -1,6 +1,8 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 public class ContentPackSignalState {
 
@@ -30,5 +32,27 @@ public class ContentPackSignalState {
 
     public void setModels(Map<String, ContentPackSignalModel[]> models) {
         this.models = models;
+    }
+
+    public void validate(Consumer<String> invalid) {
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+
+        if (signalName == null || signalName.isEmpty())
+            joiner.add("signalName");
+        if (models == null || models.isEmpty() || models.containsKey(null))
+            joiner.add("models");
+        if (joiner.length() > 2) {
+            invalid.accept(joiner.toString());
+        } else if (models != null) {
+            for (Map.Entry<String, ContentPackSignalModel[]> signalModelEntry : models.entrySet()) {
+                String objPath = signalModelEntry.getKey();
+                ContentPackSignalModel[] modelArray = signalModelEntry.getValue();
+                for (ContentPackSignalModel model : modelArray) {
+                    Consumer<String> modelConsumer = text -> invalid.accept(objPath + ": [" + text + "]");
+                    model.validate(modelConsumer);
+                }
+            }
+        }
+
     }
 }

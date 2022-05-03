@@ -45,11 +45,11 @@ public class ItemConnector extends CustomItem {
                 return ClickResult.REJECTED;
             }
 
-            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates(tempPart.getId()).size() > 1) {
+            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempPart.getId()).size() > 1) {
                 blockEntityAnimatedPart = null;
                 blockEntitySignalPart = tempPart;
                 if (blockEntityBox == null)
-                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
+                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
             }
             if (tempAnimatedPart != null) {
                 blockEntitySignalPart = null;
@@ -66,7 +66,7 @@ public class ItemConnector extends CustomItem {
             if ((blockEntitySignalPart != null || blockEntityAnimatedPart != null) && blockEntityBox != null) {
                 if (blockEntitySignalPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
+                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
                 } else if (blockEntityAnimatedPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntityAnimatedPart.getPos());
                     player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));

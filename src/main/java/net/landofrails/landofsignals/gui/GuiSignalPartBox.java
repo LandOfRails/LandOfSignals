@@ -31,7 +31,7 @@ public class GuiSignalPartBox implements IScreen {
         this.tsb = tsb;
         TileSignalPart tsp = tsb.getTileSignalPart();
 
-        listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates(tsp.getId()).toArray(new String[0]);
+        listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tsp.getId()).toArray(new String[0]);
         stateRight = tsb.getRedstone();
         stateLeft = tsb.getNoRedstone();
         if (stateRight >= listTextureNames.length || stateLeft >= listTextureNames.length) {

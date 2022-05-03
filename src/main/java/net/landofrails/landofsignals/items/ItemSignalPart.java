@@ -47,7 +47,8 @@ public class ItemSignalPart extends CustomItem {
     @Override
     public String getCustomName(ItemStack stack) {
         TagCompound tag = stack.getTagCompound();
-        if (tag != null && tag.hasKey("itemId")) return LOSBlocks.BLOCK_SIGNAL_PART.getName(tag.getString("itemId"));
+        if (tag != null && tag.hasKey("itemId"))
+            return LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(tag.getString("itemId"));
         else return "Error missing tag \"itemId\" for ItemSignalPart";
     }
 }

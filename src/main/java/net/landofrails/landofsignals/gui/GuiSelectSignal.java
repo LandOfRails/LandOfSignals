@@ -19,7 +19,7 @@ public class GuiSelectSignal implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
         List<ItemStack> itemStackList = new ArrayList<>();
-        for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().keySet()) {
+        for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().keySet()) {
             if (!id.equals(Static.MISSING)) {
                 ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
                 TagCompound tag = is.getTagCompound();
