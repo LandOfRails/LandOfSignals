@@ -75,7 +75,13 @@ public class ItemSignalPartRender {
                                 GL11.glRotated(rotation.z, 0, 0, 1);
                                 GL11.glTranslated(translate.x, translate.y, translate.z);
                                 GL11.glScaled(scale.x, scale.y, scale.z);
-                                renderer.draw();
+
+                                if (signalModel.getObj_groups().length == 0) {
+                                    renderer.draw();
+                                } else {
+                                    renderer.drawGroups(Arrays.asList(signalModel.getObj_groups()));
+                                }
+
                             } finally {
                                 closables.forEach(OpenGL.With::close);
                             }
