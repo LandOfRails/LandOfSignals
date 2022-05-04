@@ -33,8 +33,8 @@ public class ContentPackSignalModel {
         if (block == null) {
             block = new ContentPackBlock(null, null, null);
         }
-        item.validate();
-        block.validate();
+        item.validate(modelConsumer);
+        block.validate(modelConsumer);
 
     }
 

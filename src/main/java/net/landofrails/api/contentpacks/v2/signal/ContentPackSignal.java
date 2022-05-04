@@ -107,7 +107,8 @@ public class ContentPackSignal {
         } else if (signals != null) {
             for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
                 ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
-                signalGroup.validate(invalid);
+                Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
+                signalGroup.validate(signalConsumer);
             }
         }
     }

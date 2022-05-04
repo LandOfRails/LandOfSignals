@@ -42,7 +42,8 @@ public class ContentPackSignalGroup {
         } else {
             for (Map.Entry<String, ContentPackSignalState> signalStateEntry : states.entrySet()) {
                 ContentPackSignalState signalState = signalStateEntry.getValue();
-                signalState.validate(invalid);
+                Consumer<String> groupConsumer = text -> invalid.accept(signalStateEntry.getKey() + ": [" + text + "]");
+                signalState.validate(groupConsumer);
             }
         }
 

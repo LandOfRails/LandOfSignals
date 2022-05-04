@@ -20,21 +20,25 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemSignalPartRender {
     public static final boolean IGNOREFNFEXCEPTION = true;
     protected static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, List<String>> cacheDefaultGroups = new HashMap<>();
 
     public static ItemRender.IItemModel getModelFor() {
         return (world, stack) -> new StandardModel().addCustom(() -> {
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
-            if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().containsKey(itemId)) {
+            boolean isOld = LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().containsKey(itemId);
+            boolean isNew = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId);
+            if (itemId == null || (!isOld && !isNew)) {
                 itemId = Static.MISSING;
             }
 
-            if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) {
+            if (isNew) {
 
                 Collection<ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals().values();
 
@@ -49,9 +53,12 @@ public class ItemSignalPartRender {
                         String objId = itemId + "/" + path;
                         if (!cache.containsKey(objId)) {
                             try {
-                                cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
+                                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0);
+                                cache.put(objId, new OBJRender(model));
+                                cacheDefaultGroups.put(objId, model.groups().stream().filter(g -> g.startsWith("general")).collect(Collectors.toList()));
+
                             } catch (Exception e) {
-                                throw new RuntimeException("Error loading item model...", e);
+                                throw new RuntimeException("Error loading item model/renderer...", e);
                             }
                         }
                         OBJRender renderer = cache.get(objId);
@@ -68,6 +75,9 @@ public class ItemSignalPartRender {
                                 for (String texture : signalModel.getTextures()) {
                                     closables.add(renderer.bindTexture(texture));
                                 }
+                                if (closables.size() == 1) {
+                                    closables.add(renderer.bindTexture());
+                                }
 
                                 // Render
                                 GL11.glRotated(rotation.x, 1, 0, 0);
@@ -76,10 +86,13 @@ public class ItemSignalPartRender {
                                 GL11.glTranslated(translate.x, translate.y, translate.z);
                                 GL11.glScaled(scale.x, scale.y, scale.z);
 
-                                if (signalModel.getObj_groups().length == 0) {
+                                // FIXME Dont render base every single time
+                                List<String> groups = new ArrayList<>(Arrays.asList(signalModel.getObj_groups()));
+                                groups.addAll(cacheDefaultGroups.get(objId));
+                                if (groups.isEmpty()) {
                                     renderer.draw();
                                 } else {
-                                    renderer.drawGroups(Arrays.asList(signalModel.getObj_groups()));
+                                    renderer.drawGroups(groups);
                                 }
 
                             } finally {

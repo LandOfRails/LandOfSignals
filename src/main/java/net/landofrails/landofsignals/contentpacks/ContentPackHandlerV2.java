@@ -57,6 +57,7 @@ public class ContentPackHandlerV2 {
                 contentPackSignal.validate(missing -> {
                     throw new ContentPackException(String.format("There are missing attributes: %s", missing));
                 });
+                ModCore.info("Signal: %s", contentPackSignal.getName());
                 LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
             } else {
                 ModCore.error("Couldn't find ContentPackSignal under path %s!", path);
@@ -64,6 +65,10 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSignal in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith("There are missing attributes")) {
+                ModCore.error("Stacktrace:");
+                e.printStackTrace();
+            }
         }
     }
 

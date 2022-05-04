@@ -78,6 +78,10 @@ public class BlockSignalPart extends BlockTypeEntity {
         return signalParts.get(checkIfMissing_depr(uncheckedId)).getName();
     }
 
+    public String getName(String uncheckedId) {
+        return contentPackSignals.get(checkIfMissing(uncheckedId)).getName();
+    }
+
     @Deprecated
     public void add_depr(ContentPackSignalPart contentPackSignalPart) {
         if (!signalParts.containsKey(contentPackSignalPart.getId())) {
@@ -116,5 +120,9 @@ public class BlockSignalPart extends BlockTypeEntity {
         else return Static.MISSING;
     }
 
+    private String checkIfMissing(String id) {
+        if (contentPackSignals.containsKey(id)) return id;
+        else return Static.MISSING;
+    }
 
 }

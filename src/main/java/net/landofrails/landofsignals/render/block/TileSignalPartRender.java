@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals.render.block;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
@@ -52,6 +53,10 @@ public class TileSignalPartRender {
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.draw();
+        } catch (Exception e) {
+            // Removes TileEntity on client-side, prevents crash
+            ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tsp.getPos().x, tsp.getPos().y, tsp.getPos().z, e.getMessage());
+            tsp.getWorld().breakBlock(tsp.getPos());
         }
     }
 
