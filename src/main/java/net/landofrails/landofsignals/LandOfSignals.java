@@ -51,7 +51,7 @@ public class LandOfSignals extends ModCore.Mod {
             ContentPackHandler.init();
 
             LOSTabs.register();
-            
+
             LOSBlocks.register();
             LOSItems.register();
             LOSGuis.register();
@@ -122,7 +122,8 @@ public class LandOfSignals extends ModCore.Mod {
                     if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
                         try {
                             return Optional.of((String) method.invoke(annotation));
-                        } catch (final IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                        } catch (final IllegalArgumentException | IllegalAccessException |
+                                       InvocationTargetException e) {
                             e.printStackTrace();
                             return Optional.empty();
                         }
