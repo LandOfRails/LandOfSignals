@@ -16,6 +16,8 @@ public class ContentPackSignal {
     private String name;
     private String id;
     private Integer rotationSteps;
+    // objPath : objProperties
+    private Map<String, ContentPackSignalModel[]> base;
     // groupId : group
     private Map<String, ContentPackSignalGroup> signals;
     private Map<String, Object> metadata;
@@ -24,10 +26,11 @@ public class ContentPackSignal {
 
     }
 
-    public ContentPackSignal(String name, String id, Integer rotationSteps, Map<String, ContentPackSignalGroup> signals, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Integer rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
+        this.base = base;
         this.signals = signals;
         this.metadata = metadata;
     }
@@ -54,6 +57,14 @@ public class ContentPackSignal {
 
     public void setRotationSteps(Integer rotationSteps) {
         this.rotationSteps = rotationSteps;
+    }
+
+    public Map<String, ContentPackSignalModel[]> getBase() {
+        return base;
+    }
+
+    public void setBase(Map<String, ContentPackSignalModel[]> base) {
+        this.base = base;
     }
 
     public Map<String, ContentPackSignalGroup> getSignals() {
@@ -122,6 +133,10 @@ public class ContentPackSignal {
 
         if (metadata == null) {
             metadata = new HashMap<>();
+        }
+
+        if (base == null) {
+            base = new HashMap<>();
         }
 
     }

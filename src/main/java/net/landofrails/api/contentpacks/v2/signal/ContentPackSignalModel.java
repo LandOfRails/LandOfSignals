@@ -8,10 +8,12 @@ import java.util.function.Consumer;
 public class ContentPackSignalModel {
 
     private String[] textures;
+    @SuppressWarnings("java:S116")
     private String[] obj_groups;
     private ContentPackItem item;
     private ContentPackBlock block;
 
+    @SuppressWarnings("java:S117")
     public ContentPackSignalModel(String[] textures, String[] obj_groups, ContentPackItem item, ContentPackBlock block) {
         this.textures = textures;
         this.obj_groups = obj_groups;
