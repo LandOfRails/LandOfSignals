@@ -17,6 +17,7 @@ import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
 import net.landofrails.landofsignals.render.item.ObjItemRender;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
+import net.landofrails.signalbox.Signalbox;
 import net.landofrails.stellwand.Stellwand;
 
 import java.lang.annotation.Annotation;
@@ -35,6 +36,9 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void commonEvent(final ModEvent event) {
+
+        // Signalbox commonEvent
+        Signalbox.commonEvent(event);
 
         // Stellwand commonEvent
         Stellwand.commonEvent(event);
