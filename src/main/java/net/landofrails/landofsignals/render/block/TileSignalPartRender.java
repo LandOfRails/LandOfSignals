@@ -139,6 +139,7 @@ public class TileSignalPartRender {
 
         for (ContentPackSignalGroup signalGroup : signalGroups) {
 
+            // FIXME get current signal instead of displaying the first one.
             ContentPackSignalState signalState = signalGroup.getStates().values().iterator().next();
 
             for (Map.Entry<String, ContentPackSignalModel[]> signalModels : signalState.getModels().entrySet()) {
