@@ -156,8 +156,8 @@ public class StaticLoader {
         prop = new Properties().setName("Track switch (Left -> Right, Down)");
         prop.setType(EntryType.BLOCKSIGNAL);
         prop.setModel("models/block/blocksignal/trackswitch/lrd/trackswitch.obj");
-        prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite",
-                "Branch white", "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+        prop.setModes(modes("Off", "off", "SocketHandler single white", "main_signalwhite", "SocketHandler double white", "main_doublewhite",
+                "Branch white", "branch_white", "SocketHandler double red", "main_doublered", "Branch red", "branch_red"));
         prop.setFromDir(LEFT).setToDir(RIGHT, BOTTOM);
         prop.setItemMode("branch_white");
         contentPackEntries.add(prop.toEntry());
@@ -166,8 +166,8 @@ public class StaticLoader {
         prop = new Properties().setName("Track switch (Left -> Right, Up)");
         prop.setType(EntryType.BLOCKSIGNAL);
         prop.setModel("models/block/blocksignal/trackswitch/lru/trackswitch.obj");
-        prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
-                "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+        prop.setModes(modes("Off", "off", "SocketHandler single white", "main_signalwhite", "SocketHandler double white", "main_doublewhite", "Branch white",
+                "branch_white", "SocketHandler double red", "main_doublered", "Branch red", "branch_red"));
         prop.setFromDir(LEFT).setToDir(RIGHT, TOP);
         prop.setItemMode("branch_white");
         contentPackEntries.add(prop.toEntry());
@@ -176,8 +176,8 @@ public class StaticLoader {
         prop = new Properties().setName("Track switch (Right -> Left, Down)");
         prop.setType(EntryType.BLOCKSIGNAL);
         prop.setModel("models/block/blocksignal/trackswitch/rld/trackswitch.obj");
-        prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
-                "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+        prop.setModes(modes("Off", "off", "SocketHandler single white", "main_signalwhite", "SocketHandler double white", "main_doublewhite", "Branch white",
+                "branch_white", "SocketHandler double red", "main_doublered", "Branch red", "branch_red"));
         prop.setFromDir(RIGHT).setToDir(LEFT, BOTTOM);
         prop.setItemMode("branch_white");
         contentPackEntries.add(prop.toEntry());
@@ -186,8 +186,8 @@ public class StaticLoader {
         prop = new Properties().setName("Track switch (Right -> Left, Up)");
         prop.setType(EntryType.BLOCKSIGNAL);
         prop.setModel("models/block/blocksignal/trackswitch/rlu/trackswitch.obj");
-        prop.setModes(modes("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
-                "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"));
+        prop.setModes(modes("Off", "off", "SocketHandler single white", "main_signalwhite", "SocketHandler double white", "main_doublewhite", "Branch white",
+                "branch_white", "SocketHandler double red", "main_doublered", "Branch red", "branch_red"));
         prop.setFromDir(RIGHT).setToDir(LEFT, TOP);
         prop.setItemMode("branch_white");
         contentPackEntries.add(prop.toEntry());

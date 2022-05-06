@@ -4,6 +4,7 @@ import cam72cam.mod.ModEvent;
 import com.google.gson.Gson;
 import net.landofrails.signalbox.github.Asset;
 import net.landofrails.signalbox.github.GitHubRelease;
+import net.landofrails.signalbox.socket.SocketHandler;
 
 import java.io.*;
 import java.net.URL;
@@ -52,6 +53,12 @@ public class Signalbox {
             }
         }
 
+        try {
+            new SocketHandler();
+            new ProcessBuilder("./config/signalbox/LandOfSignals-Signalbox.exe"/*, "--config", "./config/signalbox/signalbox.json"*/).start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         switch (event) {
 
