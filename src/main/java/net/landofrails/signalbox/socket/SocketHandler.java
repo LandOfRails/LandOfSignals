@@ -8,22 +8,24 @@ import net.landofrails.signalbox.socket.network.server.ServerListener;
 import java.lang.management.ManagementFactory;
 
 public class SocketHandler {
-    public SocketHandler() {
-        startServer();
-    }
 
-    private void startServer() {
+    private static boolean running;
+
+    public static void startServer() {
+        if (running) return;
+
         Thread thread = new Thread(() -> {
             Server server = new Server(4343, new Logger());
             server.addServerListener(new ServerListener() {
                 @Override
                 public void clientConnected(Server server, Server.ConnectionToClient client) {
+                    System.out.println("Client connected - " + client.getClientId());
                     server.sendToAll(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
                 }
 
                 @Override
                 public void messageReceived(Server server, Server.ConnectionToClient client, Object msg) {
-
+                    server.sendToAll(msg.toString());
                 }
 
                 @Override
@@ -53,5 +55,6 @@ public class SocketHandler {
             }
         });
         thread.start();
+        running = true;
     }
 }
