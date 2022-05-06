@@ -3,7 +3,6 @@ package net.landofrails.signalbox.socket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.management.ManagementFactory;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,7 +14,7 @@ public class SocketHandler {
     private static InputStream is;
     private static OutputStream os;
 
-    public static void startServer() {
+    public SocketHandler() {
         if (running) return;
         running = true;
 
@@ -25,55 +24,19 @@ public class SocketHandler {
                 socket = serverSocket.accept();
                 is = socket.getInputStream();
                 os = socket.getOutputStream();
-                Send(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
 
-                while (true) {
+                while (!socket.isClosed()) {
                     String message = Receive();
                     System.out.println(message);
+                    switch (message) {
+                        default:
+                            break;
+                    }
                     Send(message);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-//            Server server = new Server(4343, new Logger());
-//            server.addServerListener(new ServerListener() {
-//                @Override
-//                public void clientConnected(Server server, Server.ConnectionToClient client) {
-//                    System.out.println("Client connected - " + client.getClientId());
-//                    server.sendToAll(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
-//                }
-//
-//                @Override
-//                public void messageReceived(Server server, Server.ConnectionToClient client, Object msg) {
-//                    server.sendToAll(msg.toString());
-//                }
-//
-//                @Override
-//                public void commandReceived(Server server, Server.ConnectionToClient client, Command cmd) {
-//
-//                }
-//
-//                @Override
-//                public void clientDisconnected(Server server, Server.ConnectionToClient client) {
-//                    System.out.println("Client disconnected - " + client.getClientId());
-//                    //TODO Handle web ui offline
-//                }
-//
-//                @Override
-//                public void messageSent(Server server, Server.ConnectionToClient toClient, Object msg) {
-//
-//                }
-//
-//                @Override
-//                public void commandSent(Server server, Server.ConnectionToClient toClient, Command cmd) {
-//
-//                }
-//            });
-//            if (server.start()) System.out.println("SocketServer online.");
-//            while (server.running()) {
-//
-//            }
         });
         thread.start();
     }

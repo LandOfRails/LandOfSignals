@@ -54,8 +54,7 @@ public class Signalbox {
         }
 
         try {
-            SocketHandler.startServer();
-//            Runtime.getRuntime().exec("");
+            new SocketHandler();
             ProcessBuilder pb = new ProcessBuilder("./config/signalbox/LandOfSignals-Signalbox.exe"/*, "--config", "./config/signalbox/signalbox.json"*/);
             pb.directory(new File("./config/signalbox"));
             pb.start();
