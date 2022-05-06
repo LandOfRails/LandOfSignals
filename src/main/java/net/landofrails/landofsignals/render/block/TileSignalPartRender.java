@@ -45,8 +45,8 @@ public class TileSignalPartRender {
 
         if (isNew) {
 
-            renderBase(id);
-            renderSignals(id);
+            renderBase(id, tsp);
+            renderSignals(id, tsp);
 
             return;
         }
@@ -78,7 +78,7 @@ public class TileSignalPartRender {
         }
     }
 
-    private static void renderBase(String blockId) {
+    private static void renderBase(String blockId, TileSignalPart tile) {
 
         for (Map.Entry<String, ContentPackSignalModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
 
@@ -112,10 +112,10 @@ public class TileSignalPartRender {
                     }
 
                     // Render
-                    GL11.glRotated(rotation.x, 1, 0, 0);
-                    GL11.glRotated(rotation.y, 0, 1, 0);
-                    GL11.glRotated(rotation.z, 0, 0, 1);
                     GL11.glTranslated(translate.x, translate.y, translate.z);
+                    GL11.glRotated(rotation.x, 1, 0, 0);
+                    GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                    GL11.glRotated(rotation.z, 0, 0, 1);
                     GL11.glScaled(scale.x, scale.y, scale.z);
 
                     String[] groups = baseModel.getObj_groups();
@@ -134,7 +134,7 @@ public class TileSignalPartRender {
         }
     }
 
-    private static void renderSignals(String blockId) {
+    private static void renderSignals(String blockId, TileSignalPart tile) {
         Collection<ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals().values();
 
         for (ContentPackSignalGroup signalGroup : signalGroups) {
@@ -172,10 +172,10 @@ public class TileSignalPartRender {
                         }
 
                         // Render
-                        GL11.glRotated(rotation.x, 1, 0, 0);
-                        GL11.glRotated(rotation.y, 0, 1, 0);
-                        GL11.glRotated(rotation.z, 0, 0, 1);
                         GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
                         GL11.glScaled(scale.x, scale.y, scale.z);
 
                         List<String> groups = Arrays.asList(signalModel.getObj_groups());
