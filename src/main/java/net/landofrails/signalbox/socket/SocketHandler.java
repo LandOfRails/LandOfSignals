@@ -5,23 +5,25 @@ import net.landofrails.signalbox.socket.network.common.Logger;
 import net.landofrails.signalbox.socket.network.server.Server;
 import net.landofrails.signalbox.socket.network.server.ServerListener;
 
+import java.lang.management.ManagementFactory;
+
 public class SocketHandler {
     public SocketHandler() {
         startServer();
     }
 
-    private static void startServer() {
+    private void startServer() {
         Thread thread = new Thread(() -> {
             Server server = new Server(4343, new Logger());
             server.addServerListener(new ServerListener() {
                 @Override
                 public void clientConnected(Server server, Server.ConnectionToClient client) {
-
+                    server.sendToAll(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
                 }
 
                 @Override
                 public void messageReceived(Server server, Server.ConnectionToClient client, Object msg) {
-                    server.sendToAll("alive");
+
                 }
 
                 @Override
@@ -31,6 +33,7 @@ public class SocketHandler {
 
                 @Override
                 public void clientDisconnected(Server server, Server.ConnectionToClient client) {
+                    System.out.println("Client disconnected - " + client.getClientId());
                     //TODO Handle web ui offline
                 }
 
