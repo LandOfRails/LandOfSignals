@@ -3,10 +3,7 @@ package net.landofrails.signalbox.socket.network.server;
 import net.landofrails.signalbox.socket.network.client.ClientCommand;
 import net.landofrails.signalbox.socket.network.common.Command;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -311,7 +308,7 @@ public class Server {
         }
 
         try {
-            serverSocket = new ServerSocket(this.port);
+            serverSocket = new ServerSocket(this.port, 10);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -496,13 +493,13 @@ public class Server {
         public void run() {
             while (running() && !serverSocket.isClosed()) {
                 Socket socket = null;
-                ObjectInputStream in = null;
-                ObjectOutputStream out = null;
+                InputStream in = null;
+                OutputStream out = null;
                 try {
                     socket = serverSocket.accept();
-                    out = new ObjectOutputStream(socket.getOutputStream());
-                    in = new ObjectInputStream(socket.getInputStream());
-                    authenticate(socket, in, out);
+                    out = socket.getOutputStream();
+                    in = socket.getInputStream();
+//                    authenticate(socket, in, out);
 
                 } catch (IOException e) {
                     try {
