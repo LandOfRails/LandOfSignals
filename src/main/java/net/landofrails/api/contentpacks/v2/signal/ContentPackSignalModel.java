@@ -2,7 +2,10 @@ package net.landofrails.api.contentpacks.v2.signal;
 
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ContentPackSignalModel {
@@ -10,11 +13,11 @@ public class ContentPackSignalModel {
     private String[] textures;
     @SuppressWarnings("java:S116")
     private String[] obj_groups;
-    private ContentPackItem item;
+    private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
 
     @SuppressWarnings("java:S117")
-    public ContentPackSignalModel(String[] textures, String[] obj_groups, ContentPackItem item, ContentPackBlock block) {
+    public ContentPackSignalModel(String[] textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
         this.textures = textures;
         this.obj_groups = obj_groups;
         this.item = item;
@@ -30,12 +33,21 @@ public class ContentPackSignalModel {
             obj_groups = new String[0];
         }
         if (item == null) {
-            item = new ContentPackItem(null, null, null);
+            item = new HashMap<>();
         }
         if (block == null) {
             block = new ContentPackBlock(null, null, null);
         }
-        item.validate(modelConsumer);
+
+        if (item.size() != ContentPackItemRenderType.values().length) {
+            for (ContentPackItemRenderType cpirt : ContentPackItemRenderType.values()) {
+                item.putIfAbsent(cpirt, new ContentPackItem(null, null, null));
+            }
+        }
+        item.forEach((key, value) -> {
+            Consumer<String> itemConsumer = text -> modelConsumer.accept("[" + key.name() + ": " + text + "]");
+            value.validate(itemConsumer);
+        });
         block.validate(modelConsumer);
 
     }
@@ -56,11 +68,11 @@ public class ContentPackSignalModel {
         this.obj_groups = obj_groups;
     }
 
-    public ContentPackItem getItem() {
+    public Map<ContentPackItemRenderType, ContentPackItem> getItem() {
         return item;
     }
 
-    public void setItem(ContentPackItem item) {
+    public void setItem(Map<ContentPackItemRenderType, ContentPackItem> item) {
         this.item = item;
     }
 

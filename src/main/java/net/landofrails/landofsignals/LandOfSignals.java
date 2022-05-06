@@ -98,7 +98,7 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGN_PART, TileSignPartRender::render, TileSignPart.class);
 
                 //SignalPart : Item
-                ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGNAL_PART, new ItemSignalPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, ItemSignPartRender.getModelFor());
                 break;

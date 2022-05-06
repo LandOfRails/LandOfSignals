@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
@@ -9,7 +10,9 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
+import cam72cam.mod.world.World;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
@@ -21,12 +24,14 @@ import org.lwjgl.opengl.GL11;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class ItemSignalPartRender {
+public class ItemSignalPartRender implements ItemRender.IItemModel {
     public static final boolean IGNOREFNFEXCEPTION = true;
     protected static final Map<String, OBJRender> cache = new HashMap<>();
 
-    public static ItemRender.IItemModel getModelFor() {
-        return (world, stack) -> new StandardModel().addCustom(() -> {
+    @Override
+    public StandardModel getModel(World world, ItemStack stack) {
+        // TODO Put base and signals as separat addCustom() calls together
+        return new StandardModel().addCustom(() -> {
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
@@ -84,6 +89,15 @@ public class ItemSignalPartRender {
         });
     }
 
+
+    @Override
+    public void applyTransform(ItemRender.ItemRenderType type) {
+
+        // TODO Implement ItemRenderType with new UMC rendering
+
+        ItemRender.IItemModel.super.applyTransform(type);
+    }
+
     private static void renderBase(String itemId) {
 
         for (Map.Entry<String, ContentPackSignalModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
@@ -102,7 +116,7 @@ public class ItemSignalPartRender {
             OBJRender renderer = cache.get(objId);
 
             for (ContentPackSignalModel baseModel : baseModels.getValue()) {
-                ContentPackItem item = baseModel.getItem();
+                ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                 Vec3d translate = item.getAsVec3d(item::getTranslation);
                 Vec3d scale = item.getAsVec3d(item::getScaling);
                 Vec3d rotation = item.getAsVec3d(item::getRotation);
@@ -162,7 +176,7 @@ public class ItemSignalPartRender {
                 OBJRender renderer = cache.get(objId);
 
                 for (ContentPackSignalModel signalModel : signalModels.getValue()) {
-                    ContentPackItem item = signalModel.getItem();
+                    ContentPackItem item = signalModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                     Vec3d translate = item.getAsVec3d(item::getTranslation);
                     Vec3d scale = item.getAsVec3d(item::getScaling);
                     Vec3d rotation = item.getAsVec3d(item::getRotation);
