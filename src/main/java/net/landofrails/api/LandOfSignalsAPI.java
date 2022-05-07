@@ -77,7 +77,7 @@ public class LandOfSignalsAPI {
                     TileSignalPart.class);
 
             if (tileSignal != null) {
-                return tileSignal.getTexturePath();
+                return tileSignal.getTexturePath_depr();
             }
 
             return null;
@@ -92,7 +92,7 @@ public class LandOfSignalsAPI {
                     TileSignalPart.class);
 
             if (tileSignal != null) {
-                tileSignal.setTexturePath(state);
+                tileSignal.setTexturePath_depr(state);
             }
         }
 

@@ -64,7 +64,7 @@ public class TileSignalPartRender {
             }
         }
         OBJRender renderer = cache.get(id);
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
+        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath_depr())) {
             Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling_depr(id);
             GL11.glScaled(scale.x, scale.y, scale.z);
             Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation_depr(id).add(tsp.getOffset());
@@ -135,12 +135,17 @@ public class TileSignalPartRender {
     }
 
     private static void renderSignals(String blockId, TileSignalPart tile) {
-        Collection<ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals().values();
+        Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals();
 
-        for (ContentPackSignalGroup signalGroup : signalGroups) {
+        Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
 
-            // FIXME get current signal instead of displaying the first one.
-            ContentPackSignalState signalState = signalGroup.getStates().values().iterator().next();
+        for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signalGroups.entrySet()) {
+
+            String groupId = signalGroupEntry.getKey();
+            ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
+
+            String tileSignalState = tileSignalGroups.get(groupId);
+            ContentPackSignalState signalState = signalGroup.getStates().get(tileSignalState);
 
             for (Map.Entry<String, ContentPackSignalModel[]> signalModels : signalState.getModels().entrySet()) {
 

@@ -19,7 +19,10 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("id")
     private final String id;
     @TagField("texturePath")
+    @Deprecated
     private String texturePath = null;
+    @TagField("signalGroupStates")
+    private Map<String, String> signalGroupStates;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
@@ -52,7 +55,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
-    public String getTexturePath() {
+    @Deprecated
+    public String getTexturePath_depr() {
         if (texturePath != null && texturePath.equals("null")) return null;
         else return texturePath;
     }
@@ -61,7 +65,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return id;
     }
 
-    public void setTexturePath(String texturePath) {
+    @Deprecated
+    public void setTexturePath_depr(String texturePath) {
         if (texturePath == null) this.texturePath = "null";
         else this.texturePath = texturePath;
         markDirty();
@@ -97,16 +102,16 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
-    public Map<String, String> getSignalGroups() {
-        Map<String, String> signals = new HashMap<>();
+    public Map<String, String> getSignalGroupStates() {
+        Map<String, String> signalGroupStates = new HashMap<>();
         // FIXME return real signals;
 
-        signals.put("group_top_left", "off");
-        signals.put("group_top_right", "white");
-        signals.put("group_bottom_left", "red");
-        signals.put("group_bottom_right", "off");
+        signalGroupStates.put("group_top_left", "off");
+        signalGroupStates.put("group_top_right", "white");
+        signalGroupStates.put("group_bottom_left", "red");
+        signalGroupStates.put("group_bottom_right", "off");
 
-        return signals;
+        return signalGroupStates;
     }
 
 }
