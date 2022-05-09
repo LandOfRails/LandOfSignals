@@ -6,9 +6,11 @@ import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,4 +127,10 @@ public class BlockSignalPart extends BlockTypeEntity {
         else return Static.MISSING;
     }
 
+    public Map<String, ContentPackSignalGroup> getAllGroupStates(String id) {
+        if (!contentPackSignals.containsKey(id)) return Collections.emptyMap();
+        Map<String, Map<String, String>> all = new HashMap<>();
+
+        return contentPackSignals.get(id).getSignals();
+    }
 }

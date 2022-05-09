@@ -8,6 +8,7 @@ public enum GuiText {
     //Signalbox
     LABEL_REDSTONE("signalbox.redstone"),
     LABEL_NOREDSTONE("signalbox.noredstone"),
+    LABEL_SIGNALGROUP("signalbox.signalgroup"),
 
     //ManipulatorOverlay
     LABEL_UNATTACH("manipulator.unattach"),

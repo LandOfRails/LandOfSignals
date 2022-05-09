@@ -45,11 +45,22 @@ public class ItemConnector extends CustomItem {
                 return ClickResult.REJECTED;
             }
 
+            /**
+             * To be removed!
+             * @deprecated(1.0.0, remove when new contentpacksystem fully implemented)
+             */
             if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempPart.getId()).size() > 1) {
                 blockEntityAnimatedPart = null;
                 blockEntitySignalPart = tempPart;
                 if (blockEntityBox == null)
-                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
+                    player.sendMessage(PlayerMessage.direct("Pairing started with old " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
+            }
+            /** ^^^^ */
+            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(tempPart.getId())) {
+                blockEntityAnimatedPart = null;
+                blockEntitySignalPart = tempPart;
+                if (blockEntityBox == null)
+                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
             }
             if (tempAnimatedPart != null) {
                 blockEntitySignalPart = null;
@@ -66,7 +77,11 @@ public class ItemConnector extends CustomItem {
             if ((blockEntitySignalPart != null || blockEntityAnimatedPart != null) && blockEntityBox != null) {
                 if (blockEntitySignalPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
+                    if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(tempPart.getId())) {
+                        player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
+                    } else {
+                        player.sendMessage(PlayerMessage.direct("Box paired with old " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
+                    }
                 } else if (blockEntityAnimatedPart != null) {
                     blockEntityBox.setTileSignalPartPos(blockEntityAnimatedPart.getPos());
                     player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));

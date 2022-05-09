@@ -7,6 +7,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.serialization.MapStringStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("texturePath")
     @Deprecated
     private String texturePath = null;
-    @TagField("signalGroupStates")
+    @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
     private Map<String, String> signalGroupStates;
 
     @TagField("offset")

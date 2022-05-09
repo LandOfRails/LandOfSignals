@@ -8,6 +8,7 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
@@ -15,8 +16,20 @@ import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 public class GuiSignalPartBox implements IScreen {
 
+    // List of modes
+    private Map<String, ContentPackSignalGroup> modes;
+    private Set<String> modeGroups;
+
+    // Group
+    private String signalGroup;
+
+    // Old
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
     private final TileSignalBox tsb;
@@ -31,6 +44,11 @@ public class GuiSignalPartBox implements IScreen {
         this.tsb = tsb;
         TileSignalPart tsp = tsb.getTileSignalPart();
 
+        modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
+        modeGroups = modes.keySet();
+        signalGroup = getFirstValue(modeGroups);
+
+        /** Old - Remove */
         listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tsp.getId()).toArray(new String[0]);
         stateRight = tsb.getRedstone();
         stateLeft = tsb.getNoRedstone();
@@ -58,7 +76,14 @@ public class GuiSignalPartBox implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
+        // Use first available group
+        new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
+            @Override
+            public void onClick(Player.Hand hand) {
+
+            }
+        };
+        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 stateLeft++;
@@ -68,7 +93,7 @@ public class GuiSignalPartBox implements IScreen {
                 textureNameLeft = listTextureNames[stateLeft];
             }
         };
-        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE.toString() + " -->") {
+        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
                 stateRight++;
@@ -78,6 +103,7 @@ public class GuiSignalPartBox implements IScreen {
                 textureNameRight = listTextureNames[stateRight];
             }
         };
+
     }
 
     @Override
@@ -117,4 +143,23 @@ public class GuiSignalPartBox implements IScreen {
             GUIHelpers.drawItem(itemStackLeft, 0, 0);
         }
     }
+
+    private String nextMode(String mode) {
+        boolean useNext = false;
+        for (String m : modeGroups) {
+            if (m.equalsIgnoreCase(mode))
+                useNext = true;
+            else if (useNext)
+                return m;
+        }
+        return getFirstValue(modeGroups);
+    }
+
+    @SuppressWarnings("java:S1751")
+    private static <T> T getFirstValue(Collection<T> collection) {
+        for (T object : collection)
+            return object;
+        return null;
+    }
+
 }

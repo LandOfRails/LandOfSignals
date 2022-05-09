@@ -4,6 +4,7 @@ itemGroup.landofsignals.assets=LOS | Assets
 
 gui.landofsignals:signalbox.redstone=Mit redstone
 gui.landofsignals:signalbox.noredstone=Ohne redstone
+gui.landofsignals:signalbox.signalgroup=Signal-Gruppe: %s
 gui.landofsignals:manipulator.unattach=Drücke Shift um zum GUI zurückzukehren
 gui.landofsignals:manipulator.editingame=Bearbeiten ingame
 gui.landofsignals:manipulator.editposition=Bearbeite Position
