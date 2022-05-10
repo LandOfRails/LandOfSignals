@@ -43,8 +43,13 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
             if (isNew) {
 
+                Map<String, String> itemGroupStates = new HashMap<>(LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemGroupStates());
+                if (tag.hasKey("itemGroupState")) {
+                    itemGroupStates.putAll(tag.getMap("itemGroupState", String::new, value -> value.getString("string")));
+                }
+
                 renderBase(itemId);
-                renderSignals(itemId);
+                renderSignals(itemId, itemGroupStates);
 
                 return;
             }
@@ -154,12 +159,11 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         }
     }
 
-    private static void renderSignals(String itemId) {
-        Collection<ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals().values();
+    private static void renderSignals(String itemId, Map<String, String> itemGroupStates) {
+        Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals();
+        for (Map.Entry<String, ContentPackSignalGroup> signalGroup : signalGroups.entrySet()) {
 
-        for (ContentPackSignalGroup signalGroup : signalGroups) {
-
-            ContentPackSignalState signalState = signalGroup.getStates().values().iterator().next();
+            ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
 
             for (Map.Entry<String, ContentPackSignalModel[]> signalModels : signalState.getModels().entrySet()) {
 

@@ -17,10 +17,15 @@ import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 public class GuiSignalPartBox implements IScreen {
+
+    private final ItemStack itemStackRight;
+    private final ItemStack itemStackLeft;
+    private final TileSignalBox tsb;
 
     // List of modes
     private Map<String, ContentPackSignalGroup> modes;
@@ -28,11 +33,11 @@ public class GuiSignalPartBox implements IScreen {
 
     // Group
     private String signalGroup;
+    private Button groupButton;
+    private String rightState;
+    private String leftState;
 
-    // Old
-    private final ItemStack itemStackRight;
-    private final ItemStack itemStackLeft;
-    private final TileSignalBox tsb;
+    // TODO Remove old
     private static String textureNameRight = null;
     private static String textureNameLeft = null;
     private int stateRight;
@@ -47,6 +52,8 @@ public class GuiSignalPartBox implements IScreen {
         modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
         signalGroup = getFirstValue(modeGroups);
+        rightState = modes.get(signalGroup).getStates().keySet().iterator().next();
+        leftState = modes.get(signalGroup).getStates().keySet().iterator().next();
 
         /** Old - Remove */
         listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tsp.getId()).toArray(new String[0]);
@@ -77,15 +84,20 @@ public class GuiSignalPartBox implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
         // Use first available group
-        new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
+        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
             @Override
             public void onClick(Player.Hand hand) {
-
+                signalGroup = nextMode(signalGroup);
+                rightState = modes.get(signalGroup).getStates().keySet().iterator().next();
+                leftState = modes.get(signalGroup).getStates().keySet().iterator().next();
             }
         };
         new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
+                leftState = nextState(leftState);
+
+                // TODO Remove old
                 stateLeft++;
                 if (stateLeft == listTextureNames.length) {
                     stateLeft = 0;
@@ -96,6 +108,9 @@ public class GuiSignalPartBox implements IScreen {
         new Button(screen, -100, 100, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
+                rightState = nextState(rightState);
+
+                // TODO Remove old
                 stateRight++;
                 if (stateRight == listTextureNames.length) {
                     stateRight = 0;
@@ -124,7 +139,10 @@ public class GuiSignalPartBox implements IScreen {
         int scale = 8;
 
         TagCompound rightTag = itemStackRight.getTagCompound();
+        rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), String::new, value -> new TagCompound().setString("string", value));
+        // TODO Remove old
         rightTag.setString("textureName", textureNameRight);
+        //
         itemStackRight.setTagCompound(rightTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {
@@ -134,7 +152,10 @@ public class GuiSignalPartBox implements IScreen {
         }
 
         TagCompound leftTag = itemStackLeft.getTagCompound();
+        leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), String::new, value -> new TagCompound().setString("string", value));
+        // TODO Remove old
         leftTag.setString("textureName", textureNameLeft);
+        //
         itemStackLeft.setTagCompound(leftTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {
@@ -142,6 +163,8 @@ public class GuiSignalPartBox implements IScreen {
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackLeft, 0, 0);
         }
+
+        groupButton.setText(GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName()));
     }
 
     private String nextMode(String mode) {
@@ -153,6 +176,17 @@ public class GuiSignalPartBox implements IScreen {
                 return m;
         }
         return getFirstValue(modeGroups);
+    }
+
+    private String nextState(String state) {
+        boolean useNext = false;
+        for (String m : modes.get(signalGroup).getStates().keySet()) {
+            if (m.equalsIgnoreCase(state))
+                useNext = true;
+            else if (useNext)
+                return m;
+        }
+        return getFirstValue(modes.get(signalGroup).getStates().keySet());
     }
 
     @SuppressWarnings("java:S1751")

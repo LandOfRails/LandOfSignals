@@ -20,18 +20,22 @@ public class ContentPackSignal {
     private Map<String, ContentPackSignalModel[]> base;
     // groupId : group
     private Map<String, ContentPackSignalGroup> signals;
-    private Map<String, Object> metadata;
+    // groupId : state
+    private Map<String, String> itemGroupStates;
+    // metadataId : data
+    private Map<String, ?> metadata;
 
     public ContentPackSignal() {
 
     }
 
-    public ContentPackSignal(String name, String id, Integer rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Integer rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
         this.base = base;
         this.signals = signals;
+        this.itemGroupStates = itemGroupStates;
         this.metadata = metadata;
     }
 
@@ -75,11 +79,19 @@ public class ContentPackSignal {
         this.signals = signals;
     }
 
-    public Map<String, Object> getMetadata() {
+    public Map<String, String> getItemGroupStates() {
+        return itemGroupStates;
+    }
+
+    public void setItemGroupStates(Map<String, String> itemGroupStates) {
+        this.itemGroupStates = itemGroupStates;
+    }
+
+    public Map<String, ?> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, Object> metadata) {
+    public void setMetadata(Map<String, ?> metadata) {
         this.metadata = metadata;
     }
 
@@ -137,6 +149,14 @@ public class ContentPackSignal {
 
         if (base == null) {
             base = new HashMap<>();
+        }
+
+        if (itemGroupStates == null) {
+            itemGroupStates = new HashMap<>();
+        }
+
+        if (itemGroupStates.size() != signals.size()) {
+            signals.forEach((groupId, group) -> itemGroupStates.putIfAbsent(groupId, group.getStates().keySet().iterator().next()));
         }
 
     }

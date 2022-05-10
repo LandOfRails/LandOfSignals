@@ -1,5 +1,6 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
@@ -7,13 +8,14 @@ import java.util.function.Consumer;
 public class ContentPackSignalGroup {
 
     private String groupName;
-    private Map<String, ContentPackSignalState> states;
+    private LinkedHashMap<String, ContentPackSignalState> states;
 
     public ContentPackSignalGroup() {
 
     }
 
-    public ContentPackSignalGroup(String groupName, Map<String, ContentPackSignalState> states) {
+    @SuppressWarnings("java:S1319")
+    public ContentPackSignalGroup(String groupName, LinkedHashMap<String, ContentPackSignalState> states) {
         this.groupName = groupName;
         this.states = states;
     }
@@ -30,7 +32,8 @@ public class ContentPackSignalGroup {
         return states;
     }
 
-    public void setStates(Map<String, ContentPackSignalState> states) {
+    @SuppressWarnings("java:S1319")
+    public void setStates(LinkedHashMap<String, ContentPackSignalState> states) {
         this.states = states;
     }
 
