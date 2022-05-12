@@ -29,7 +29,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     @SuppressWarnings("java:S3010")
     public GuiSignalPartAnimatedBox(TileSignalBox tsb) {
         this.tsb = tsb;
-        TileSignalPartAnimated tsp = tsb.getTileSignalPartAnimated();
+        TileSignalPartAnimated tsp = null; // FIXME tsb.getTileSignalPartAnimated();
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
         TagCompound tag = itemStackLeft.getTagCompound();

@@ -7,14 +7,11 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 public class SignalBoxTileSignalPartPacket extends Packet {
 
     @TagField("tileSignalPart")
     TileSignalPart tileSignalPart;
-    @TagField("tileSignalPartAnimated")
-    TileSignalPartAnimated tileSignalPartAnimated;
     @TagField("posSignalBox")
     Vec3i posSignalBox;
 
@@ -26,19 +23,11 @@ public class SignalBoxTileSignalPartPacket extends Packet {
         this.posSignalBox = posSignalBox;
     }
 
-    public SignalBoxTileSignalPartPacket(TileSignalPartAnimated tileSignalPartAnimated, Vec3i posSignalBox) {
-        this.tileSignalPartAnimated = tileSignalPartAnimated;
-        this.posSignalBox = posSignalBox;
-    }
-
     @Override
     protected void handle() {
         if (tileSignalPart != null) {
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
             LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
-        } else if (tileSignalPartAnimated != null) {
-            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPartAnimated(tileSignalPartAnimated);
-            LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
         } else {
             LandOfSignals.error("Can't open Signalbox, no tile entity given.");
         }

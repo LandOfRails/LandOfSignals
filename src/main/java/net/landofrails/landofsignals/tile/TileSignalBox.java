@@ -19,18 +19,34 @@ import java.util.List;
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
-    private Vec3i TileSignalPartPos;
+    private Vec3i tileSignalPartPos;
 
+    /**
+     * TODO Remove
+     */
+    @Deprecated
     @TagField("redstone")
     private int redstone = 0;
+    @Deprecated
     @TagField("noRedstone")
     private int noRedstone = 0;
+    /**
+     * ^^^
+     */
+
+    @TagField("signalGroupId")
+    private String groupId;
+
+    @TagField("activeGroupState")
+    private String activeGroupState;
+
+    @TagField("inactiveGroupState")
+    private String inactiveGroupState;
 
     @Nullable
     private Integer lastRedstone = null;
 
     private TileSignalPart tileSignalPart;
-    private TileSignalPartAnimated tileSignalPartAnimated;
 
     @Override
     public ItemStack onPick() {
@@ -44,14 +60,10 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && TileSignalPartPos != null) {
-            TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
-            TileSignalPartAnimated tempSignalPartAnimated = player.getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
+        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && tileSignalPartPos != null) {
+            TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (tempSignalPart != null) {
                 new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToPlayer(player);
-                return true;
-            } else if (tempSignalPartAnimated != null) {
-                new SignalBoxTileSignalPartPacket(tempSignalPartAnimated, getPos()).sendToPlayer(player);
                 return true;
             }
         }
@@ -60,15 +72,21 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onNeighborChange(Vec3i neighbor) {
-        if (lastRedstone != null && lastRedstone == getWorld().getRedstone(getPos())) {
+        int currentRedstone = getWorld().getRedstone(getPos());
+        if (lastRedstone != null && lastRedstone == currentRedstone) {
             return;
         } else {
-            lastRedstone = getWorld().getRedstone(getPos());
+            lastRedstone = currentRedstone;
         }
 
-        if (getWorld().isServer && TileSignalPartPos != null) {
-            TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
+        if (getWorld().isServer && tileSignalPartPos != null) {
+            TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (tempTileSignalPart != null) {
+
+                String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
+                tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
+
+                // Old
                 List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempTileSignalPart.getId());
                 if (redstone >= states.size() || noRedstone >= states.size()) {
                     redstone = 0;
@@ -80,26 +98,6 @@ public class TileSignalBox extends BlockEntity {
                 else
                     //No redstone
                     tempTileSignalPart.setTexturePath_depr(states.get(noRedstone));
-            } else if (TileSignalPartPos != null) {
-                TileSignalPartAnimated tempAnimatedPart = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPartAnimated.class);
-                if (tempAnimatedPart != null) {
-                    List<String> states = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tempAnimatedPart.getId());
-                    if (getWorld().getRedstone(getPos()) > 0) {
-                        //Redstone
-                        String temp;
-                        if (redstone < states.size()) temp = states.get(redstone);
-                        else
-                            temp = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tempAnimatedPart.getId()).keySet().toArray(new String[0])[redstone - states.size()];
-                        tempAnimatedPart.setAnimationOrStateTexture(temp);
-                    } else {
-                        //No redstone
-                        String temp;
-                        if (noRedstone < states.size()) temp = states.get(noRedstone);
-                        else
-                            temp = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tempAnimatedPart.getId()).keySet().toArray(new String[0])[noRedstone - states.size()];
-                        tempAnimatedPart.setAnimationOrStateTexture(temp);
-                    }
-                }
             }
         }
     }
@@ -107,12 +105,15 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public void onBreak() {
         super.onBreak();
-        TileSignalPart entity = getWorld().getBlockEntity(TileSignalPartPos, TileSignalPart.class);
+        if (!getWorld().isBlockLoaded(tileSignalPartPos)) {
+            getWorld().keepLoaded(tileSignalPartPos);
+        }
+        TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
         entity.setTexturePath_depr(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
-        TileSignalPartPos = pos;
+        tileSignalPartPos = pos;
         markDirty();
     }
 
@@ -124,27 +125,65 @@ public class TileSignalBox extends BlockEntity {
         return tileSignalPart;
     }
 
-    public TileSignalPartAnimated getTileSignalPartAnimated() {
-        return tileSignalPartAnimated;
-    }
-
-    public void setTileSignalPartAnimated(TileSignalPartAnimated tileSignalPartAnimated) {
-        this.tileSignalPartAnimated = tileSignalPartAnimated;
-    }
-
+    @Deprecated
     public int getRedstone() {
         return redstone;
     }
 
+    @Deprecated
     public void setRedstone(int redstone) {
         this.redstone = redstone;
     }
 
+    @Deprecated
     public int getNoRedstone() {
         return noRedstone;
     }
 
+    @Deprecated
     public void setNoRedstone(int noRedstone) {
         this.noRedstone = noRedstone;
+    }
+
+    /**
+     * @return groupId
+     */
+    public String getGroupId(String... defaultValue) {
+        return groupId != null || defaultValue.length == 0 ? groupId : defaultValue[0];
+    }
+
+    /**
+     * @param groupId GroupId
+     */
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    /**
+     * @return activeGroupState
+     */
+    public String getActiveGroupState(String... defaultValue) {
+        return activeGroupState != null || defaultValue.length == 0 ? activeGroupState : defaultValue[0];
+    }
+
+    /**
+     * @param activeGroupState Active groupstate
+     */
+    public void setActiveGroupState(String activeGroupState) {
+        this.activeGroupState = activeGroupState;
+    }
+
+    /**
+     * @return inactiveGroupState
+     */
+    public String getInactiveGroupState(String... defaultValue) {
+        return inactiveGroupState != null || defaultValue.length == 0 ? inactiveGroupState : defaultValue[0];
+    }
+
+    /**
+     * @param inactiveGroupState Inactive groupstate
+     */
+    public void setInactiveGroupState(String inactiveGroupState) {
+        this.inactiveGroupState = inactiveGroupState;
     }
 }

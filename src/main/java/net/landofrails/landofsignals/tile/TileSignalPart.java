@@ -1,9 +1,11 @@
 package net.landofrails.landofsignals.tile;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.LOSItems;
@@ -103,9 +105,14 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
+    /**
+     * client-only
+     *
+     * @return Map<Group, Groupstate>
+     */
     public Map<String, String> getSignalGroupStates() {
         Map<String, String> signalGroupStates = new HashMap<>();
-        // FIXME return real signals;
+        // TODO return real signalgroupstates;
 
         signalGroupStates.put("group_top_left", "off");
         signalGroupStates.put("group_top_right", "white");
@@ -115,4 +122,25 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return signalGroupStates;
     }
 
+    /**
+     * server-only
+     *
+     * @param pos        Sender position
+     * @param groupId    Selected sender groupId
+     * @param groupState Current sender groupstate
+     */
+    public void updateSignals(Vec3i pos, String groupId, String groupState) {
+        ModCore.info("Pos: %s, GroupId: %s, State: %s", pos.toString(), groupId, groupState);
+        // TODO save signal
+    }
+
+    /**
+     * server-only
+     *
+     * @param pos Sender position
+     */
+    public void removeSignal(Vec3i pos) {
+        ModCore.info("Removing signal from: %s", pos.toString());
+        // TODO remove signal
+    }
 }

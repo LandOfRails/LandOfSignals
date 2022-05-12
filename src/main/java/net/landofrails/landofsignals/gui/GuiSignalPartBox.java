@@ -51,9 +51,9 @@ public class GuiSignalPartBox implements IScreen {
 
         modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
-        signalGroup = getFirstValue(modeGroups);
-        rightState = modes.get(signalGroup).getStates().keySet().iterator().next();
-        leftState = modes.get(signalGroup).getStates().keySet().iterator().next();
+        signalGroup = tsb.getGroupId(getFirstValue(modeGroups));
+        rightState = tsb.getActiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        leftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
 
         /** Old - Remove */
         listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tsp.getId()).toArray(new String[0]);
@@ -130,7 +130,12 @@ public class GuiSignalPartBox implements IScreen {
     public void onClose() {
         tsb.setNoRedstone(stateLeft);
         tsb.setRedstone(stateRight);
-        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
+
+        tsb.setGroupId(signalGroup);
+        tsb.setInactiveGroupState(leftState);
+        tsb.setActiveGroupState(rightState);
+
+        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
         packet.sendToServer();
     }
 
