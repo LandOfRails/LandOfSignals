@@ -49,7 +49,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
     @Override
     protected void handle() {
 
-        if (getWorld().isBlockLoaded(pos)) {
+        if (!getWorld().isBlockLoaded(pos)) {
             getWorld().keepLoaded(pos);
         }
 

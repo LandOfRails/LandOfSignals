@@ -8,10 +8,15 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapStringStringMapper;
+import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +30,10 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @Deprecated
     private String texturePath = null;
     @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
-    private Map<String, String> signalGroupStates;
+    private Map<String, String> signalGroupStates = new HashMap<>();
+    // for server only
+    @TagField(value = "senderSignalGroupStates", mapper = MapVec3iStringStringMapper.class)
+    private Map<Vec3i, Map.Entry<String, String>> senderSignalGroupStates = new HashMap<>();
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
@@ -108,18 +116,28 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     /**
      * client-only
      *
+     * @param signalGroupStates
+     */
+    public void setSignalGroupStates(Map<String, String> signalGroupStates) {
+        this.signalGroupStates = signalGroupStates;
+    }
+
+    /**
+     * client-only
+     *
      * @return Map<Group, Groupstate>
      */
     public Map<String, String> getSignalGroupStates() {
-        Map<String, String> signalGroupStates = new HashMap<>();
-        // TODO return real signalgroupstates;
 
-        signalGroupStates.put("group_top_left", "off");
-        signalGroupStates.put("group_top_right", "white");
-        signalGroupStates.put("group_bottom_left", "red");
-        signalGroupStates.put("group_bottom_right", "off");
+        // FIXME not performance-friendly
+        if (this.signalGroupStates.isEmpty()) {
+            Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals();
+            signals.forEach((signalGroupId, group) ->
+                    this.signalGroupStates.putIfAbsent(signalGroupId, group.getStates().keySet().iterator().next())
+            );
+        }
 
-        return signalGroupStates;
+        return this.signalGroupStates;
     }
 
     /**
@@ -130,8 +148,18 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
      * @param groupState Current sender groupstate
      */
     public void updateSignals(Vec3i pos, String groupId, String groupState) {
-        ModCore.info("Pos: %s, GroupId: %s, State: %s", pos.toString(), groupId, groupState);
-        // TODO save signal
+        ModCore.debug("Pos: %s, GroupId: %s, State: %s", pos.toString(), groupId, groupState);
+
+        senderSignalGroupStates.put(pos, new AbstractMap.SimpleEntry<>(groupId, groupState));
+
+        refreshSignals();
+    }
+
+    /**
+     * server-only
+     */
+    public void updateSignals() {
+        refreshSignals();
     }
 
     /**
@@ -141,6 +169,25 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
      */
     public void removeSignal(Vec3i pos) {
         ModCore.info("Removing signal from: %s", pos.toString());
-        // TODO remove signal
+        senderSignalGroupStates.remove(pos);
+
+        refreshSignals();
     }
+
+    private void refreshSignals() {
+        Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals();
+        signals.forEach((signalGroupId, group) -> {
+            String lastState = null;
+            for (String state : group.getStates().keySet()) {
+                if (lastState == null || senderSignalGroupStates.containsValue(new AbstractMap.SimpleEntry<>(signalGroupId, state))) {
+                    lastState = state;
+                }
+            }
+            signalGroupStates.put(signalGroupId, lastState);
+        });
+
+
+        new SignalUpdatePacket(getPos(), signalGroupStates).sendToAll();
+    }
+
 }

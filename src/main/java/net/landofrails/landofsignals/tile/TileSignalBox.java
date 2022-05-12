@@ -109,6 +109,8 @@ public class TileSignalBox extends BlockEntity {
             getWorld().keepLoaded(tileSignalPartPos);
         }
         TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+        entity.removeSignal(getPos());
+        // TODO Remove old
         entity.setTexturePath_depr(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
     }
 
@@ -185,5 +187,13 @@ public class TileSignalBox extends BlockEntity {
      */
     public void setInactiveGroupState(String inactiveGroupState) {
         this.inactiveGroupState = inactiveGroupState;
+    }
+
+    /**
+     * server-only
+     */
+    public void updateSignals() {
+        TileSignalPart tile = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+        tile.updateSignals();
     }
 }

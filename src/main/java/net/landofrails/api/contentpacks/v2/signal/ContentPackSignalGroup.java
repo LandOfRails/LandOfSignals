@@ -28,7 +28,8 @@ public class ContentPackSignalGroup {
         this.groupName = groupName;
     }
 
-    public Map<String, ContentPackSignalState> getStates() {
+    @SuppressWarnings("java:S1319")
+    public LinkedHashMap<String, ContentPackSignalState> getStates() {
         return states;
     }
 

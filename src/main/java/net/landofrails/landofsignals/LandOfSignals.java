@@ -58,6 +58,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
 
         }
 

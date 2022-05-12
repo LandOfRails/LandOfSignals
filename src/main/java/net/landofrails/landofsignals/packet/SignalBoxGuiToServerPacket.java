@@ -61,5 +61,6 @@ public class SignalBoxGuiToServerPacket extends Packet {
 
         SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(box);
         packet.sendToAll();
+        box.updateSignals();
     }
 }
