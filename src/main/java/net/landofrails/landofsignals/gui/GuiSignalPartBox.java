@@ -38,9 +38,13 @@ public class GuiSignalPartBox implements IScreen {
     private String leftState;
 
     // TODO Remove old
+    @Deprecated
     private static String textureNameRight = null;
+    @Deprecated
     private static String textureNameLeft = null;
+    @Deprecated
     private int stateRight;
+    @Deprecated
     private int stateLeft;
 
     private final String[] listTextureNames;

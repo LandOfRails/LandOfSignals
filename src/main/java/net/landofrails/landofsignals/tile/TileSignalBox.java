@@ -191,9 +191,17 @@ public class TileSignalBox extends BlockEntity {
 
     /**
      * server-only
+     *
+     * @param refreshSignalBoxSignal Refreshes signalbox signal
      */
-    public void updateSignals() {
+    public void updateSignals(boolean refreshSignalBoxSignal) {
+
         TileSignalPart tile = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-        tile.updateSignals();
+        if (refreshSignalBoxSignal) {
+            String groupState = getWorld().getRedstone(getPos()) > 0 ? activeGroupState : inactiveGroupState;
+            tile.updateSignals(getPos(), groupId, groupState);
+        } else {
+            tile.updateSignals();
+        }
     }
 }
