@@ -9,6 +9,7 @@ import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import net.landofrails.landofsignals.utils.Static;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,11 +72,11 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
     }
 
     public List<ContentPackAnimation> getAnimation(String uncheckedId, String animation) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations().get(animation);
+        return Collections.emptyList();
     }
 
     public Map<String, List<ContentPackAnimation>> getAniamtions(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations();
+        return Collections.emptyMap();
     }
 
     public void add(ContentPackSignalPart contentPackSignalPart) {

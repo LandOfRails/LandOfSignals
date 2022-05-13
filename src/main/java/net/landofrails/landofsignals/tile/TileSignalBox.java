@@ -104,7 +104,6 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onBreak() {
-        super.onBreak();
         if (!getWorld().isBlockLoaded(tileSignalPartPos)) {
             getWorld().keepLoaded(tileSignalPartPos);
         }

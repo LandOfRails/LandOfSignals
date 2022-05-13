@@ -12,6 +12,10 @@ public class ContentPackBlock {
     private float[] rotation;
     private float[] scaling;
 
+    public ContentPackBlock() {
+
+    }
+
     public ContentPackBlock(float[] translation, float[] rotation, float[] scaling) {
         this.translation = translation;
         this.rotation = rotation;

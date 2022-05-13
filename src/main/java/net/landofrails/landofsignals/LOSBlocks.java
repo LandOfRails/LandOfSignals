@@ -1,6 +1,5 @@
 package net.landofrails.landofsignals;
 
-import net.landofrails.api.contentpacks.v1.ContentPackAnimation;
 import net.landofrails.api.contentpacks.v1.ContentPackSignObject;
 import net.landofrails.api.contentpacks.v1.ContentPackSignPart;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
@@ -8,8 +7,6 @@ import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class LOSBlocks {
 
@@ -37,24 +34,6 @@ public class LOSBlocks {
 
             {
                 add(null);
-            }
-        }, new HashMap<String, List<ContentPackAnimation>>() {
-            private static final long serialVersionUID = 3648016255201960128L;
-
-            {
-                put(Static.MISSING, new ArrayList<ContentPackAnimation>() {
-                    private static final long serialVersionUID = 4580143425613190101L;
-
-                    {
-                        add(new ContentPackAnimation(new ArrayList<String>() {
-                            private static final long serialVersionUID = 4409378969442279136L;
-
-                            {
-                                add(Static.MISSING);
-                            }
-                        }, new float[]{0f, 0f, 0f}, new float[]{0f, 0f, 0f}, Static.MISSING, 0f, 0f));
-                    }
-                });
             }
         });
 

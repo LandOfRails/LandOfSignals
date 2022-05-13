@@ -16,6 +16,10 @@ public class ContentPackSignalModel {
     private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
 
+    public ContentPackSignalModel() {
+        
+    }
+
     @SuppressWarnings("java:S117")
     public ContentPackSignalModel(String[] textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
         this.textures = textures;
