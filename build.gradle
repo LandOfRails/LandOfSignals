@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url = 'https://teamopenindustry.cc/maven/' }
     }
