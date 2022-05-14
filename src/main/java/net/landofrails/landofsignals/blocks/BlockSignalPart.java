@@ -129,7 +129,6 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     public Map<String, ContentPackSignalGroup> getAllGroupStates(String id) {
         if (!contentPackSignals.containsKey(id)) return Collections.emptyMap();
-        Map<String, Map<String, String>> all = new HashMap<>();
 
         return contentPackSignals.get(id).getSignals();
     }

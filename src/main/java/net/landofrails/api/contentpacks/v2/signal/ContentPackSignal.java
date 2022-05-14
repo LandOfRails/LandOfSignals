@@ -6,10 +6,9 @@ import net.landofrails.api.contentpacks.v2.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ContentPackSignal {
 
@@ -24,6 +23,9 @@ public class ContentPackSignal {
     private Map<String, String> itemGroupStates;
     // metadataId : data
     private Map<String, ?> metadata;
+
+    // Processed data
+    private Map<String, Set<String>> objTextures;
 
     public ContentPackSignal() {
 
@@ -95,6 +97,10 @@ public class ContentPackSignal {
         this.metadata = metadata;
     }
 
+    public Map<String, Set<String>> getObjTextures() {
+        return objTextures;
+    }
+
     public static ContentPackSignal fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
@@ -128,6 +134,7 @@ public class ContentPackSignal {
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else if (signals != null) {
+
             for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
                 ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
                 Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
@@ -156,7 +163,40 @@ public class ContentPackSignal {
         }
 
         if (itemGroupStates.size() != signals.size()) {
-            signals.forEach((groupId, group) -> itemGroupStates.putIfAbsent(groupId, group.getStates().keySet().iterator().next()));
+
+            Function<ContentPackSignalGroup, String> nullDefault = group -> {
+                String stateId = group.getStates().keySet().iterator().next();
+                if (stateId == null) {
+                    if (group.getStates().containsKey("default")) {
+                        throw new ContentPackException("There is a null and a \"default\" state. Sorry, this will not work. :(");
+                    }
+                    stateId = "default";
+                }
+                return stateId;
+            };
+            signals.forEach((groupId, group) -> itemGroupStates.putIfAbsent(groupId, nullDefault.apply(group)));
+        }
+
+        if (objTextures == null) {
+            objTextures = new HashMap<>();
+        }
+        if (objTextures.isEmpty()) {
+            for (ContentPackSignalGroup group : signals.values()) {
+                for (ContentPackSignalState state : group.getStates().values()) {
+                    for (Map.Entry<String, ContentPackSignalModel[]> modelEntry : state.getModels().entrySet()) {
+                        for (ContentPackSignalModel model : modelEntry.getValue()) {
+                            String objPath = modelEntry.getKey();
+                            objTextures.putIfAbsent(objPath, new HashSet<>());
+                            objTextures.computeIfPresent(objPath, (key, value) -> {
+                                value.addAll(Arrays.asList(model.getTextures()));
+                                return value;
+                            });
+                        }
+                    }
+                }
+            }
+
+
         }
 
     }

@@ -44,6 +44,16 @@ public class ContentPackSignalGroup {
             joiner.add("states");
             invalid.accept(joiner.toString());
         } else {
+
+            if (states.containsKey(null)) {
+                if (states.containsKey("default")) {
+                    invalid.accept("Contains state null and \"default\", this will not work, sorry. :(");
+                    return;
+                }
+                states.put("default", states.get(null));
+                states.remove(null);
+            }
+
             for (Map.Entry<String, ContentPackSignalState> signalStateEntry : states.entrySet()) {
                 ContentPackSignalState signalState = signalStateEntry.getValue();
                 Consumer<String> groupConsumer = text -> invalid.accept(signalStateEntry.getKey() + ": [" + text + "]");

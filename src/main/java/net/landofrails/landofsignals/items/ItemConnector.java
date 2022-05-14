@@ -65,8 +65,7 @@ public class ItemConnector extends CustomItem {
 
             if (blockEntitySignalPart != null && blockEntityBox != null) {
                 blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-                // FIXME nullpointer if signal is clicked first
-                if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(tempPart.getId())) {
+                if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(blockEntitySignalPart.getId())) {
                     player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
                 } else {
                     player.sendMessage(PlayerMessage.direct("Box paired with old " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));

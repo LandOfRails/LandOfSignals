@@ -87,7 +87,8 @@ public class TileSignalPartRender {
             String objId = blockId + "/" + path;
             if (!cache.containsKey(objId)) {
                 try {
-                    cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
+                    Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
+                    cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
 
                 } catch (Exception e) {
                     throw new BlockRenderException("Error loading block model/renderer...", e);
@@ -154,7 +155,8 @@ public class TileSignalPartRender {
                 String objId = blockId + "/" + path;
                 if (!cache.containsKey(objId)) {
                     try {
-                        cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
+                        Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
+                        cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
                     } catch (Exception e) {
                         throw new BlockRenderException("Error loading block model/renderer...", e);
                     }

@@ -19,28 +19,9 @@ public class GuiSelectSignal implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
         List<ItemStack> itemStackList = new ArrayList<>();
-        // FIXME Remove this implementation
-        for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().keySet()) {
-            if (!id.equals(Static.MISSING)) {
-                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-                TagCompound tag = is.getTagCompound();
-                tag.setString("itemId", id);
-                is.setTagCompound(tag);
-                itemStackList.add(is);
-            }
-        }
         for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet()) {
             if (!id.equals(Static.MISSING)) {
                 ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-                TagCompound tag = is.getTagCompound();
-                tag.setString("itemId", id);
-                is.setTagCompound(tag);
-                itemStackList.add(is);
-            }
-        }
-        for (String id : LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().keySet()) {
-            if (!id.equals(Static.MISSING)) {
-                ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
                 TagCompound tag = is.getTagCompound();
                 tag.setString("itemId", id);
                 is.setTagCompound(tag);

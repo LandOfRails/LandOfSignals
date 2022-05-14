@@ -172,7 +172,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                 String objId = itemId + "/" + path;
                 if (!cache.containsKey(objId)) {
                     try {
-                        cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
+                        Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
+                        cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
                     } catch (Exception e) {
                         throw new ItemRenderException("Error loading item model/renderer...", e);
                     }

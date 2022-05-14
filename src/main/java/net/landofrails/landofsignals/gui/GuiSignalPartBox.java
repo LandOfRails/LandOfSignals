@@ -16,10 +16,7 @@ import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GuiSignalPartBox implements IScreen {
 
@@ -190,7 +187,7 @@ public class GuiSignalPartBox implements IScreen {
     private String nextState(String state) {
         boolean useNext = false;
         for (String m : modes.get(signalGroup).getStates().keySet()) {
-            if (m.equalsIgnoreCase(state))
+            if (Objects.equals(m, state) || (m != null && m.equalsIgnoreCase(state)))
                 useNext = true;
             else if (useNext)
                 return m;

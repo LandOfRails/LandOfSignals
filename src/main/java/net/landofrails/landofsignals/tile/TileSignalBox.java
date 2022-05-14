@@ -104,13 +104,19 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onBreak() {
+        if (tileSignalPartPos == null) {
+            return;
+        }
+        
         if (!getWorld().isBlockLoaded(tileSignalPartPos)) {
             getWorld().keepLoaded(tileSignalPartPos);
         }
         TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-        entity.removeSignal(getPos());
-        // TODO Remove old
-        entity.setTexturePath_depr(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
+        if (entity != null) {
+            entity.removeSignal(getPos());
+            // TODO Remove old
+            entity.setTexturePath_depr(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
+        }
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
