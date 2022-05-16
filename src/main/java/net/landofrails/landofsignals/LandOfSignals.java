@@ -2,6 +2,7 @@ package net.landofrails.landofsignals;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
+import cam72cam.mod.config.ConfigFile;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.net.PacketDirection;
@@ -9,9 +10,12 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
+import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
+import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.ItemSignPartRender;
 import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
@@ -59,7 +63,12 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
-
+            Packet.register(LegacyModePromptToClientPacket::new, PacketDirection.ServerToClient);
+            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ClientToServer);
+            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
+        } else if (event == ModEvent.INITIALIZE) {
+            // LandOfSignals Config
+            ConfigFile.sync(LandOfSignalsConfig.class);
         }
 
     }

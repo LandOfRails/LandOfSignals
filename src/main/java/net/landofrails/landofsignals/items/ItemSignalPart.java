@@ -12,6 +12,9 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
+import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
+import net.landofrails.landofsignals.configs.LegacyMode;
+import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
@@ -35,13 +38,27 @@ public class ItemSignalPart extends CustomItem {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
+        String itemId = player.getHeldItem(hand).getTagCompound().getString("itemId");
         int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
+
+        if (LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId)) {
+            if (world.isServer && LandOfSignalsConfig.legacyMode == LegacyMode.PROMPT) {
+                new LegacyModePromptToClientPacket(target.get(), itemId, rot).sendToPlayer(player);
+                return ClickResult.ACCEPTED;
+            } else if (!world.isServer && world.isClient) {
+                return ClickResult.ACCEPTED;
+            }
+        }
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(rot);
-        LOSBlocks.BLOCK_SIGNAL_PART.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
+        LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
+        LegacyMode legacyMode = LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId) ? LandOfSignalsConfig.legacyMode : LegacyMode.OFF;
+        LOSBlocks.BLOCK_SIGNAL_PART.setLegacyMode(legacyMode);
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
+
+
     }
 
     @Override

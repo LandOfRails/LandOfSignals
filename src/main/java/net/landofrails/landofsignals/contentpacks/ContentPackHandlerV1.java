@@ -80,7 +80,7 @@ public class ContentPackHandlerV1 {
         ContentPackSignal contentPackSignal = new ContentPackSignal();
         contentPackSignal.setId(contentPackSignalPart.getId());
         contentPackSignal.setName(contentPackSignalPart.getName());
-        contentPackSignal.setMetadata(Collections.singletonMap("addonversion", "1"));
+        contentPackSignal.setMetadata(Collections.singletonMap("addonversion", 1));
 
         // ContentPackSignalGroup
         ContentPackSignalGroup contentPackSignalGroup = new ContentPackSignalGroup();

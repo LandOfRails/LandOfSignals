@@ -11,6 +11,7 @@ import cam72cam.mod.serialization.TagField;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.configs.LegacyMode;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapStringStringMapper;
 import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
@@ -34,13 +35,18 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     // for server only
     @TagField(value = "senderSignalGroupStates", mapper = MapVec3iStringStringMapper.class)
     private Map<Vec3i, Map.Entry<String, String>> senderSignalGroupStates = new HashMap<>();
+    @TagField(value = "lastSenderSignalGroupState")
+    private String lastSenderSignalGroupState;
+    @TagField(value = "legacyMode", typeHint = LegacyMode.class)
+    private LegacyMode legacyMode;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    public TileSignalPart(String id, int rot) {
+    public TileSignalPart(String id, int rot, LegacyMode legacyMode) {
         this.blockRotate = rot;
         this.id = id;
+        this.legacyMode = legacyMode;
     }
 
     @Override

@@ -11,6 +11,10 @@ gui.landofsignals:manipulator.editposition=Bearbeite Position
 gui.landofsignals:manipulator.editrotation=Bearbeite Rotation
 gui.landofsignals:manipulator.edithitbox=Bearbeite Hitbox
 gui.landofsignals:manipulator.rotationslider=Rotation
+gui.landofsignals:legacymode.off.label=Legacymode: Aus
+gui.landofsignals:legacymode.off.description=Nutzt Reihenfolge vom Contentpack
+gui.landofsignals:legacymode.on.label=Legacymode: An
+gui.landofsignals:legacymode.on.description=Nutzt das letzte gesetzte Signal
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signalhebel

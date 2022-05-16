@@ -7,6 +7,7 @@ import cam72cam.mod.math.Vec3d;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.landofsignals.configs.LegacyMode;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -22,6 +23,7 @@ public class BlockSignalPart extends BlockTypeEntity {
     private Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
     private String id;
     private int rot;
+    private LegacyMode legacyMode;
 
     public BlockSignalPart(String modID, String name) {
         super(modID, name);
@@ -29,7 +31,7 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return new TileSignalPart(id, rot);
+        return new TileSignalPart(id, rot, legacyMode);
     }
 
     public void setRot(int rot) {
@@ -38,6 +40,10 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setLegacyMode(LegacyMode legacyMode) {
+        this.legacyMode = legacyMode;
     }
 
     public String getPath_depr(String uncheckedId) {
@@ -125,6 +131,12 @@ public class BlockSignalPart extends BlockTypeEntity {
     private String checkIfMissing(String id) {
         if (contentPackSignals.containsKey(id)) return id;
         else return Static.MISSING;
+    }
+
+    public boolean isOldContentPack(String id) {
+        return contentPackSignals.containsKey(id) &&
+                contentPackSignals.get(id).getMetadata().containsKey("addonversion") &&
+                (Integer) contentPackSignals.get(id).getMetadata().get("addonversion") != 2;
     }
 
     public Map<String, ContentPackSignalGroup> getAllGroupStates(String id) {
