@@ -63,7 +63,7 @@ public class ContentPackHandlerV1 {
                                 states.add(0, null);
                                 contentPackSignalPart.setStates(states);
 
-                                convertToV2(contentPackSignalPart);
+                                convertToV2(contentPackSignalPart, true);
 
                             }
                         }
@@ -74,7 +74,7 @@ public class ContentPackHandlerV1 {
         }
     }
 
-    private static void convertToV2(ContentPackSignalPart contentPackSignalPart) {
+    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation) {
 
         // ContentPackSignal
         ContentPackSignal contentPackSignal = new ContentPackSignal();
@@ -104,7 +104,7 @@ public class ContentPackHandlerV1 {
             // ContentPackItem
             ContentPackItem contentPackItem = new ContentPackItem();
             float[] itemTranslation = Arrays.copyOf(contentPackSignalPart.getItemTranslation(), contentPackSignalPart.getItemTranslation().length);
-            itemTranslation[0] += 1f;
+            if (addToItemTranslation) itemTranslation[0] += 0.5f;
             contentPackItem.setTranslation(itemTranslation);
             contentPackItem.setScaling(contentPackSignalPart.getItemScaling());
             Map<ContentPackItemRenderType, ContentPackItem> contentPackItemRenderTypeContentPackItemMap = new HashMap<>();

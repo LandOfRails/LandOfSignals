@@ -26,7 +26,7 @@ public class LOSTabs {
     private static ItemStack getFirstSignalPart() {
         ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag = itemStack.getTagCompound();
-        String id = LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().keySet().iterator().next();
+        String id = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet().iterator().next();
         tag.setString("itemId", id);
         itemStack.setTagCompound(tag);
         return itemStack;
