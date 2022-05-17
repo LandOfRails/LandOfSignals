@@ -35,8 +35,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     // for server only
     @TagField(value = "senderSignalGroupStates", mapper = MapVec3iStringStringMapper.class)
     private Map<Vec3i, Map.Entry<String, String>> senderSignalGroupStates = new HashMap<>();
-    @TagField(value = "lastSenderSignalGroupState")
-    private String lastSenderSignalGroupState;
     @TagField(value = "legacyMode", typeHint = LegacyMode.class)
     private LegacyMode legacyMode;
 
@@ -156,6 +154,9 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     public void updateSignals(Vec3i pos, String groupId, String groupState) {
         ModCore.debug("Pos: %s, GroupId: %s, State: %s", pos.toString(), groupId, groupState);
 
+        if (legacyMode == LegacyMode.ON) {
+            senderSignalGroupStates.clear();
+        }
         senderSignalGroupStates.put(pos, new AbstractMap.SimpleEntry<>(groupId, groupState));
 
         refreshSignals();
@@ -174,9 +175,9 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
      * @param pos Sender position
      */
     public void removeSignal(Vec3i pos) {
-        ModCore.info("Removing signal from: %s", pos.toString());
-        senderSignalGroupStates.remove(pos);
-
+        if (legacyMode == LegacyMode.OFF) {
+            senderSignalGroupStates.remove(pos);
+        }
         refreshSignals();
     }
 

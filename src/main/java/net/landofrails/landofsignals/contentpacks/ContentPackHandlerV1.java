@@ -103,7 +103,9 @@ public class ContentPackHandlerV1 {
 
             // ContentPackItem
             ContentPackItem contentPackItem = new ContentPackItem();
-            contentPackItem.setTranslation(contentPackSignalPart.getItemTranslation());
+            float[] itemTranslation = Arrays.copyOf(contentPackSignalPart.getItemTranslation(), contentPackSignalPart.getItemTranslation().length);
+            itemTranslation[0] += 1f;
+            contentPackItem.setTranslation(itemTranslation);
             contentPackItem.setScaling(contentPackSignalPart.getItemScaling());
             Map<ContentPackItemRenderType, ContentPackItem> contentPackItemRenderTypeContentPackItemMap = new HashMap<>();
             contentPackItemRenderTypeContentPackItemMap.put(ContentPackItemRenderType.DEFAULT, contentPackItem);

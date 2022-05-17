@@ -31,8 +31,6 @@ public class LegacyModePromptBlockPacket extends Packet {
 
     @Override
     protected void handle() {
-        // FIXME Add LandOfSignalUtils.canPlaceBlock() + Facing for safe block-placement!
-
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(blockRotation);
         LOSBlocks.BLOCK_SIGNAL_PART.setLegacyMode(legacyMode);

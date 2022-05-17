@@ -58,7 +58,6 @@ public class ItemSignalPart extends CustomItem {
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
 
-
     }
 
     @Override

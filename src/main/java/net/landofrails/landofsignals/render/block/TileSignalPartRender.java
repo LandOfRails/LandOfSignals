@@ -113,11 +113,11 @@ public class TileSignalPartRender {
                     }
 
                     // Render
+                    GL11.glScaled(scale.x, scale.y, scale.z);
                     GL11.glTranslated(translate.x, translate.y, translate.z);
                     GL11.glRotated(rotation.x, 1, 0, 0);
                     GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                     GL11.glRotated(rotation.z, 0, 0, 1);
-                    GL11.glScaled(scale.x, scale.y, scale.z);
 
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
@@ -180,11 +180,11 @@ public class TileSignalPartRender {
                         }
 
                         // Render
+                        GL11.glScaled(scale.x, scale.y, scale.z);
                         GL11.glTranslated(translate.x, translate.y, translate.z);
                         GL11.glRotated(rotation.x, 1, 0, 0);
                         GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                         GL11.glRotated(rotation.z, 0, 0, 1);
-                        GL11.glScaled(scale.x, scale.y, scale.z);
 
                         List<String> groups = Arrays.asList(signalModel.getObj_groups());
                         if (groups.isEmpty()) {
