@@ -6,12 +6,14 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.configs.LegacyMode;
+import net.landofrails.landofsignals.contentpacks.migration.TileSignalPartMigratorV1;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapStringStringMapper;
 import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
@@ -23,6 +25,8 @@ import java.util.Map;
 
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
+    @TagField("version")
+    private Integer version = 2;
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
@@ -197,4 +201,16 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         new SignalUpdatePacket(getPos(), signalGroupStates).sendToAll();
     }
 
+    @Override
+    public void load(TagCompound nbt) throws SerializationException {
+
+        if (!nbt.hasKey("version"))
+            nbt.setInteger("version", 1);
+
+        TileSignalPartMigratorV1 tileSignalPartMigratorV1 = TileSignalPartMigratorV1.getInstance();
+        if (tileSignalPartMigratorV1.shouldBeMigrated(nbt)) {
+            tileSignalPartMigratorV1.migrate(nbt);
+        }
+
+    }
 }
