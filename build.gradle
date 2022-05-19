@@ -19,7 +19,7 @@ universalmodcore {
     modName = 'LandOfSignals'
     modId = 'landofsignals'
     modVersion = version
-    umcVersion = '1.1.2'
+    umcVersion = '1.1.4'
 }
 
 task('umcIntegration') {

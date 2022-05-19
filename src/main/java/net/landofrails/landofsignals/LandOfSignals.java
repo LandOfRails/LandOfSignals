@@ -99,9 +99,9 @@ public class LandOfSignals extends ModCore.Mod {
             case INITIALIZE:
                 break;
             case SETUP:
-                GlobalRender.registerOverlay(pt -> {
-                    new ManipualtorOverlay().draw();
-                });
+                GlobalRender.registerOverlay((state, pt) ->
+                        new ManipualtorOverlay().draw()
+                );
             case RELOAD:
             case START:
             case FINALIZE:

@@ -2,14 +2,13 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -20,20 +19,19 @@ public class TileSignalPartAnimatedRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
-    private static final List<String> groupNames = Arrays.asList("wing");
+    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final List<String> groupNames = Collections.singletonList("wing");
 
     public static StandardModel render(TileSignalPartAnimated tsp) {
-        return new StandardModel().addCustom(partialTicks -> renderStuff(tsp, partialTicks));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(TileSignalPartAnimated tsp, float partialTicks) {
+    private static void renderStuff(TileSignalPartAnimated tsp, RenderState state) {
         String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
                 OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                OBJRender flareRenderer = new OBJRender(flareModel);
-                cache.put("flare", Pair.of(flareModel, flareRenderer));
+                cache.put("flare", flareModel);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -41,28 +39,25 @@ public class TileSignalPartAnimatedRender {
         if (!cache.containsKey(id)) {
             try {
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
-                OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
+                cache.put(id, model);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        OBJRender renderer = cache.get(id).getRight();
-        List<String> groupsWithoutWing = new ArrayList<>();
-        for (String s : renderer.model.groups()) groupsWithoutWing.add(s);
+        OBJModel model = cache.get(id);
+        List<String> groupsWithoutWing = new ArrayList<>(model.groups());
         boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
 
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.drawGroups(groupsWithoutWing);
+        state.scale(LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id));
+        state.translate(LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset()));
+        state.rotate(tsp.getBlockRotate(), 0, 1, 0);
+        try (OBJRender.Binding vbo = model.binder().texture(tsp.getAnimationOrTextureName()).bind(state)) {
+
+            vbo.draw(groupsWithoutWing);
 
             if (wingsExist) {
-                Vec3d center = renderer.model.centerOfGroups(groupNames);
+                Vec3d center = model.centerOfGroups(groupNames);
                 center = new Vec3d(-center.x, -center.y, -center.z);
                 Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
 
@@ -70,7 +65,7 @@ public class TileSignalPartAnimatedRender {
                 GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
                 GL11.glTranslated(0, rotateYaw.y, 0);
 
-                renderer.drawGroups(groupNames);
+                vbo.draw(groupNames);
             }
         }
 

@@ -1,10 +1,8 @@
 package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.ModCore;
-import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
@@ -12,7 +10,6 @@ import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
-import org.lwjgl.opengl.GL11;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;
@@ -21,15 +18,16 @@ import java.util.Map;
 
 public class ItemSignalPartRender {
     public static final boolean IGNOREFNFEXCEPTION = true;
-    protected static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, OBJModel> cache = new HashMap<>();
 
     public static ItemRender.IItemModel getModelFor() {
-        return (world, stack) -> new StandardModel().addCustom(() -> {
+        return (world, stack) -> new StandardModel().addCustom((state, partialTicks) -> {
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
             if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().containsKey(itemId)) {
                 itemId = Static.MISSING;
             }
+
             Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART.getStates(itemId);
             if (!cache.containsKey(itemId)) {
                 try {
@@ -39,8 +37,7 @@ public class ItemSignalPartRender {
                     } else {
                         model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
                     }
-                    OBJRender renderer = new OBJRender(model);
-                    cache.put(itemId, renderer);
+                    cache.put(itemId, model);
                 } catch (FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {
                         ModCore.Mod.error("Model not found: " + e.getMessage(), e.getMessage());
@@ -52,17 +49,15 @@ public class ItemSignalPartRender {
                     throw new RuntimeException("Error loading item model...", e);
                 }
             }
-            OBJRender renderer = cache.get(itemId);
+            OBJModel model = cache.get(itemId);
             String textureName = null;
             if (collection != null && tag.hasKey("textureName")) {
                 textureName = tag.getString("textureName");
             }
-            Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART.getItemTranslation(itemId);
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getItemScaling(itemId);
-            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
-                GL11.glTranslated(translate.x, translate.y, translate.z);
-                GL11.glScaled(scale.x, scale.y, scale.z);
-                renderer.draw();
+            state.translate(LOSBlocks.BLOCK_SIGNAL_PART.getItemTranslation(itemId));
+            state.scale(LOSBlocks.BLOCK_SIGNAL_PART.getItemScaling(itemId));
+            try (OBJRender.Binding vbo = model.binder().texture(textureName).bind(state)) {
+                vbo.draw();
             }
         });
     }

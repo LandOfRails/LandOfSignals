@@ -1,16 +1,13 @@
 package net.landofrails.landofsignals.render.block;
 
-import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,19 +18,18 @@ public class TileSignalPartRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
 
     public static StandardModel render(TileSignalPart tsp) {
-        return new StandardModel().addCustom(() -> renderStuff(tsp));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(TileSignalPart tsp) {
+    private static void renderStuff(TileSignalPart tsp, RenderState state) {
         String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
                 OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                OBJRender flareRenderer = new OBJRender(flareModel);
-                cache.put("flare", Pair.of(flareModel, flareRenderer));
+                cache.put("flare", flareModel);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -41,20 +37,17 @@ public class TileSignalPartRender {
         if (!cache.containsKey(id)) {
             try {
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
-                OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
+                cache.put(id, model);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        OBJRender renderer = cache.get(id).getRight();
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
+        OBJModel model = cache.get(id);
+        state.scale(LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id));
+        state.translate(LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset()));
+        state.rotate(tsp.getBlockRotate(), 0, 1, 0);
+        try (OBJRender.Binding vbo = model.binder().texture(tsp.getTexturePath()).bind(state)) {
+            vbo.draw();
         }
 
 //        OBJRender flareRenderer = cache.get("flare").getRight();

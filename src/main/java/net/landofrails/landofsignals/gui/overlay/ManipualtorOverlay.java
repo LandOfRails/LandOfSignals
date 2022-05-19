@@ -30,7 +30,7 @@ public class ManipualtorOverlay {
         ItemStack item = MinecraftClient.getPlayer().getHeldItem(Player.Hand.PRIMARY);
         if (!item.is(LOSItems.ITEM_MANIPULATOR) || !ItemManipulator.editIngame) return;
         BlockEntity block = LOSItems.ITEM_MANIPULATOR.getBlock();
-        if (block != null && block instanceof IManipulate) {
+        if (block instanceof IManipulate) {
             Player player = MinecraftClient.getPlayer();
             if (player.isCrouching()) {
                 LOSGuis.MANIPULATOR.open(player, block.getPos());
