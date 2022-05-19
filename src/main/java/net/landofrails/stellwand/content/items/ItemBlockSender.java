@@ -11,7 +11,6 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
@@ -29,7 +28,6 @@ import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
 import net.landofrails.stellwand.contentpacks.types.EntryType;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -40,7 +38,6 @@ public class ItemBlockSender extends CustomItem {
     private static final String ITEMID = "itemId";
     public static final String MISSING = "missing";
     private static Map<String, OBJModel> models = new HashMap<>();
-    private static Map<String, OBJRender> renderers = new HashMap<>();
     private static Map<String, float[]> rotations = new HashMap<>();
     private static Map<String, float[]> translations = new HashMap<>();
     private static Map<String, Float> scales = new HashMap<>();
@@ -99,7 +96,7 @@ public class ItemBlockSender extends CustomItem {
 
     // Init class
     public static void init() {
-        if (renderers.isEmpty()) {
+        if (models.isEmpty()) {
             try {
                 Identifier id = new Identifier(Stellwand.DOMAIN, "models/block/others/blocknotfound/blocknotfound.obj");
                 OBJModel model = new OBJModel(id, 0);
@@ -203,7 +200,7 @@ public class ItemBlockSender extends CustomItem {
     @SuppressWarnings({"java:S3776", "java:S112"})
     public static ItemRender.IItemModel getModelFor() {
 
-        return (world, stack) -> new StandardModel().addCustom(() -> {
+        return (world, stack) -> new StandardModel().addCustom((state, partialTicks) -> {
 
             ItemBlockSender.init();
 
@@ -213,24 +210,20 @@ public class ItemBlockSender extends CustomItem {
                 itemId = MISSING;
             }
 
-            if (renderers.get(itemId) == null) {
-                OBJModel model = models.get(itemId);
-                renderers.put(itemId, new OBJRender(model));
-            }
-
-            OBJRender renderer = renderers.get(itemId);
+            OBJModel model = models.get(itemId);
 
             float[] translate = translations.get(itemId);
             float[] rotation = rotations.get(itemId);
             float scale = scales.get(itemId);
-            try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
-                GL11.glTranslated(translate[0], translate[1], translate[2]);
-                GL11.glRotatef(rotation[0], 1, 0, 0);
-                GL11.glRotatef(rotation[1], 0, 1, 0);
-                GL11.glRotatef(rotation[2], 0, 0, 1);
-                GL11.glScaled(scale, scale, scale);
 
-                renderer.draw();
+            state.translate(translate[0], translate[1], translate[2]);
+            state.rotate(rotation[0], 1, 0, 0);
+            state.rotate(rotation[1], 0, 1, 0);
+            state.rotate(rotation[2], 0, 0, 1);
+            state.scale(scale, scale, scale);
+            try (OBJRender.Binding vbo = model.binder().bind(state)) {
+
+                vbo.draw();
 
             }
         });

@@ -6,14 +6,13 @@ import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.lwjgl.opengl.GL11;
+import util.Matrix4;
 
 public class GuiSignalPartBox implements IScreen {
 
@@ -101,20 +100,19 @@ public class GuiSignalPartBox implements IScreen {
         rightTag.setString("textureName", textureNameRight);
         itemStackRight.setTagCompound(rightTag);
 
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackRight, 0, 0);
-        }
+        Matrix4 matrix = new Matrix4();
+        matrix.translate((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackRight, 0, 0);
 
         TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setString("textureName", textureNameLeft);
         itemStackLeft.setTagCompound(leftTag);
 
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackLeft, 0, 0);
-        }
+        matrix = new Matrix4();
+        matrix.translate(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackLeft, 0, 0);
+        
     }
 }

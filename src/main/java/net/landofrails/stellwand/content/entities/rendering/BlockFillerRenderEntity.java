@@ -1,110 +1,88 @@
 package net.landofrails.stellwand.content.entities.rendering;
 
-import org.lwjgl.opengl.GL11;
-
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
 public class BlockFillerRenderEntity implements IRotatableBlockEntity {
 
-	// Rendering
-	private OBJModel model;
-	private OBJRender renderer;
-	private float[] defaultRotation;
-	private float[] defaultTranslation;
+    // Rendering
+    private OBJModel model;
+    private float[] defaultRotation;
+    private float[] defaultTranslation;
 
-	private BlockFillerStorageEntity entity;
+    private BlockFillerStorageEntity entity;
 
-	public BlockFillerRenderEntity(BlockFillerStorageEntity entity) {
-		this.entity = entity;
-	}
+    public BlockFillerRenderEntity(BlockFillerStorageEntity entity) {
+        this.entity = entity;
+    }
 
-	@Override
-	public void setRotation(float rotation) {
-		entity.blockRotation = -Math.round(rotation / 90) * 90f;
-	}
+    @Override
+    public void setRotation(float rotation) {
+        entity.blockRotation = -Math.round(rotation / 90) * 90f;
+    }
 
-	// Rendering
+    // Rendering
 
-	public OBJModel getModel() {
+    public OBJModel getModel() {
 
-		if (model == null) {
-			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getModels().containsKey(entity.contentPackBlockId))
-				model = BlockFillerStorageEntity.getModels().get(entity.contentPackBlockId);
-			else
-				model = BlockFillerStorageEntity.getModels().get(BlockFillerStorageEntity.MISSING);
-		}
+        if (model == null) {
+            if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getModels().containsKey(entity.contentPackBlockId))
+                model = BlockFillerStorageEntity.getModels().get(entity.contentPackBlockId);
+            else
+                model = BlockFillerStorageEntity.getModels().get(BlockFillerStorageEntity.MISSING);
+        }
 
-		return model;
-	}
+        return model;
+    }
 
-	public OBJRender getRenderer() {
-		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-				if (!BlockFillerStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-					OBJModel m = BlockFillerStorageEntity.getModels().get(entity.contentPackBlockId);
-					BlockFillerStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
-				}
-				renderer = BlockFillerStorageEntity.getRenderers().get(entity.contentPackBlockId);
-			} else {
-				if (BlockFillerStorageEntity.getRenderers().containsKey(BlockFillerStorageEntity.MISSING)) {
-					OBJModel m = BlockFillerStorageEntity.getModels().get(BlockFillerStorageEntity.MISSING);
-					BlockFillerStorageEntity.getRenderers().put(BlockFillerStorageEntity.MISSING, new OBJRender(m));
-				}
-				renderer = BlockFillerStorageEntity.getRenderers().get(BlockFillerStorageEntity.MISSING);
-			}
-		}
-		return renderer;
-	}
+    public float[] getTranslation() {
+        if (defaultTranslation == null) {
+            if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
+                defaultTranslation = BlockFillerStorageEntity.getTranslations().get(entity.contentPackBlockId);
+            else
+                defaultTranslation = new float[]{0.5f, 0, 0.5f};
+        }
+        return defaultTranslation;
+    }
 
-	public float[] getTranslation() {
-		if (defaultTranslation == null) {
-			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
-				defaultTranslation = BlockFillerStorageEntity.getTranslations().get(entity.contentPackBlockId);
-			else
-				defaultTranslation = new float[]{0.5f, 0, 0.5f};
-		}
-		return defaultTranslation;
-	}
+    public float[] getRotation() {
+        if (defaultRotation == null) {
+            if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getRotations().containsKey(entity.contentPackBlockId))
+                defaultRotation = BlockFillerStorageEntity.getRotations().get(entity.contentPackBlockId);
+            else
+                defaultRotation = new float[]{0, 0, 0};
+        }
+        return defaultRotation;
+    }
 
-	public float[] getRotation() {
-		if (defaultRotation == null) {
-			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getRotations().containsKey(entity.contentPackBlockId))
-				defaultRotation = BlockFillerStorageEntity.getRotations().get(entity.contentPackBlockId);
-			else
-				defaultRotation = new float[]{0, 0, 0};
-		}
-		return defaultRotation;
-	}
+    public static StandardModel render(BlockFillerStorageEntity entity) {
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(entity, state));
+    }
 
-	public static StandardModel render(BlockFillerStorageEntity entity) {
-		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
-	}
+    private static void renderStuff(BlockFillerStorageEntity entity, RenderState state) {
 
-	private static void renderStuff(BlockFillerStorageEntity entity, float partialTicks) {
+        OBJModel model = entity.renderEntity.getModel();
+        float[] translation = entity.renderEntity.getTranslation();
+        float[] rotation = entity.renderEntity.getRotation();
 
-		OBJRender renderer = entity.renderEntity.getRenderer();
-		float[] translation = entity.renderEntity.getTranslation();
-		float[] rotation = entity.renderEntity.getRotation();
+        state.translate(translation[0], translation[1], translation[2]);
 
-		try {
-			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-				GL11.glTranslated(translation[0], translation[1], translation[2]);
+        state.rotate(rotation[0], 1, 0, 0);
+        state.rotate(entity.blockRotation + rotation[1], 0, 1, 0);
+        state.rotate(rotation[2], 0, 0, 1);
 
-				GL11.glRotated(rotation[0], 1, 0, 0);
-				GL11.glRotated(entity.blockRotation + rotation[1], 0, 1, 0);
-				GL11.glRotated(rotation[2], 0, 0, 1);
+        try {
+            try (OBJRender.Binding vbo = model.vbo.bind(state)) {
+                vbo.draw();
 
-				renderer.draw();
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
