@@ -54,7 +54,7 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
     }
 
     public List<String> getStates(String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getStates();
+        return Collections.singletonList(null);
     }
 
     public String getId(String uncheckedId) {

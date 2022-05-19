@@ -17,12 +17,15 @@ public class MapVec3iStringStringMapper implements TagMapper<Map<Vec3i, Map.Entr
     @Override
     public TagAccessor<Map<Vec3i, Map.Entry<String, String>>> apply(Class<Map<Vec3i, Map.Entry<String, String>>> type, String fieldName, TagField tag) throws SerializationException {
         return new TagAccessor<>(
-                (nbt, map) -> {
-                    if (map != null)
-                        nbt.setMap(fieldName, map, MapVec3iStringStringMapper::posToString, value -> new TagCompound().setString(GROUPID, value.getKey()).setString(GROUPSTATE, value.getValue()));
-                },
+                (nbt, map) -> groupIdGroupStateMapToNbt(nbt, fieldName, map),
                 nbt -> nbt.getMap(fieldName, MapVec3iStringStringMapper::stringToPos, valueTag -> new AbstractMap.SimpleEntry<>(valueTag.getString(GROUPID), valueTag.getString(GROUPSTATE)))
         );
+    }
+
+    public static void groupIdGroupStateMapToNbt(TagCompound nbt, String fieldName, Map<Vec3i, Map.Entry<String, String>> map) {
+        if (map != null) {
+            nbt.setMap(fieldName, map, MapVec3iStringStringMapper::posToString, value -> new TagCompound().setString(GROUPID, value.getKey()).setString(GROUPSTATE, value.getValue()));
+        }
     }
 
     private static String posToString(Vec3i pos) {

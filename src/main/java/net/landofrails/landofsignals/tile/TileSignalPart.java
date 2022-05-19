@@ -26,7 +26,7 @@ import java.util.Map;
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @TagField("version")
-    private Integer version = 2;
+    private Integer version;
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
@@ -139,10 +139,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
         // FIXME not performance-friendly
         if (this.signalGroupStates.isEmpty()) {
-            Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals();
-            signals.forEach((signalGroupId, group) ->
-                    this.signalGroupStates.putIfAbsent(signalGroupId, group.getStates().keySet().iterator().next())
-            );
+            refreshSignals(false);
         }
 
         return this.signalGroupStates;
@@ -163,14 +160,14 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         }
         senderSignalGroupStates.put(pos, new AbstractMap.SimpleEntry<>(groupId, groupState));
 
-        refreshSignals();
+        refreshSignals(true);
     }
 
     /**
      * server-only
      */
     public void updateSignals() {
-        refreshSignals();
+        refreshSignals(true);
     }
 
     /**
@@ -182,10 +179,10 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         if (legacyMode == LegacyMode.OFF) {
             senderSignalGroupStates.remove(pos);
         }
-        refreshSignals();
+        refreshSignals(true);
     }
 
-    private void refreshSignals() {
+    private void refreshSignals(boolean updateClients) {
         Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals();
         signals.forEach((signalGroupId, group) -> {
             String lastState = null;
@@ -197,8 +194,9 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
             signalGroupStates.put(signalGroupId, lastState);
         });
 
-
-        new SignalUpdatePacket(getPos(), signalGroupStates).sendToAll();
+        if (updateClients) {
+            new SignalUpdatePacket(getPos(), signalGroupStates).sendToAll();
+        }
     }
 
     @Override
