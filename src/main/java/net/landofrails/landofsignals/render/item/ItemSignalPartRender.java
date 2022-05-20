@@ -12,9 +12,7 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ItemSignalPartRender {
     public static final boolean IGNOREFNFEXCEPTION = true;
@@ -28,12 +26,21 @@ public class ItemSignalPartRender {
                 itemId = Static.MISSING;
             }
 
+
             Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART.getStates(itemId);
+            List<String> states = null;
+            if (collection != null) {
+                states = new ArrayList<>(collection);
+            }
             if (!cache.containsKey(itemId)) {
                 try {
                     OBJModel model;
-                    if (collection != null) {
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0, collection);
+                    if (states != null) {
+                        // TODO Remove if UMC fixes this issue
+                        if (!states.contains(""))
+                            states.add("");
+                        states.remove(null);
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0, states);
                     } else {
                         model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
                     }

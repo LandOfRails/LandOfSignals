@@ -38,7 +38,11 @@ public class TileSignalPartAnimatedRender {
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
+                List<String> states = new ArrayList<>(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
+                // TODO Remove if UMC fixes this issue
+                states.add("");
+                states.remove(null);
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, states);
                 cache.put(id, model);
             } catch (Exception e) {
                 e.printStackTrace();

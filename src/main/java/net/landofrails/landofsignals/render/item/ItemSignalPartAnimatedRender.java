@@ -13,9 +13,7 @@ import net.landofrails.landofsignals.gui.GuiSignalPartAnimatedBox;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ItemSignalPartAnimatedRender {
     public static final boolean IGNOREFNFEXCEPTION = true;
@@ -29,13 +27,22 @@ public class ItemSignalPartAnimatedRender {
                 itemId = Static.MISSING;
             }
             Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(itemId);
+            List<String> states = null;
+            if (collection != null) {
+                states = new ArrayList<>(collection);
+            }
             if (!cache.containsKey(itemId)) {
                 try {
                     OBJModel model;
-                    if (collection != null)
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0, collection);
-                    else
+                    if (states != null) {
+                        // TODO Remove if UMC fixes this issue
+                        if (!states.contains(""))
+                            states.add("");
+                        states.remove(null);
+                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0, states);
+                    } else {
                         model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0);
+                    }
                     cache.put(itemId, model);
                 } catch (FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {

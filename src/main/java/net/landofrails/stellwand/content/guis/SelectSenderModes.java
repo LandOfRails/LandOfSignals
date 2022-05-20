@@ -155,7 +155,7 @@ public class SelectSenderModes implements IScreen {
                         + (double) builder.getWidth() / 4,
                 (double) builder.getHeight() / 4, 0);
         matrix.scale(scale, scale, 1);
-        GUIHelpers.drawItem(itemPowerOn, 0, 0);
+        GUIHelpers.drawItem(itemPowerOn, 0, 0, matrix);
 
         matrix = new Matrix4();
         matrix.translate(
@@ -163,7 +163,7 @@ public class SelectSenderModes implements IScreen {
                         - (double) builder.getWidth() / 4) - 120,
                 (double) builder.getHeight() / 4, 0);
         matrix.scale(scale, scale, 1);
-        GUIHelpers.drawItem(itemPowerOff, 0, 0);
+        GUIHelpers.drawItem(itemPowerOff, 0, 0, matrix);
 
     }
 

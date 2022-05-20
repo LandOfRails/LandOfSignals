@@ -9,7 +9,9 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TileSignalPartRender {
@@ -36,10 +38,14 @@ public class TileSignalPartRender {
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
+                List<String> states = new ArrayList<>(LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
+                // TODO Remove if UMC fixes this issue
+                states.add("");
+                states.remove(null);
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, states);
                 cache.put(id, model);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         OBJModel model = cache.get(id);

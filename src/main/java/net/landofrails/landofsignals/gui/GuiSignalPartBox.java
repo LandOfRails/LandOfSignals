@@ -103,7 +103,7 @@ public class GuiSignalPartBox implements IScreen {
         Matrix4 matrix = new Matrix4();
         matrix.translate((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
         matrix.scale(scale, scale, 1);
-        GUIHelpers.drawItem(itemStackRight, 0, 0);
+        GUIHelpers.drawItem(itemStackRight, 0, 0, matrix);
 
         TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setString("textureName", textureNameLeft);
@@ -112,7 +112,7 @@ public class GuiSignalPartBox implements IScreen {
         matrix = new Matrix4();
         matrix.translate(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
         matrix.scale(scale, scale, 1);
-        GUIHelpers.drawItem(itemStackLeft, 0, 0);
-        
+        GUIHelpers.drawItem(itemStackLeft, 0, 0, matrix);
+
     }
 }
