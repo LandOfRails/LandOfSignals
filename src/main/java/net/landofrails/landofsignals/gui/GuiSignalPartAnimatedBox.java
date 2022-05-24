@@ -101,8 +101,6 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     @Override
     public void onClose() {
         name = null;
-        tsb.setNoRedstone(stateLeft);
-        tsb.setRedstone(stateRight);
         SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
         packet.sendToServer();
     }

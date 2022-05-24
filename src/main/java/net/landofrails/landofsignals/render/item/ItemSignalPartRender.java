@@ -27,6 +27,7 @@ import java.util.*;
 public class ItemSignalPartRender implements ItemRender.IItemModel {
     public static final boolean IGNOREFNFEXCEPTION = true;
     protected static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -113,7 +114,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             if (!cache.containsKey(objId)) {
                 try {
                     cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
-
+                    cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
                 } catch (Exception e) {
                     throw new ItemRenderException("Error loading item model/renderer...", e);
                 }
@@ -137,11 +138,19 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     }
 
                     // Render
-                    GL11.glScaled(scale.x, scale.y, scale.z);
-                    GL11.glTranslated(translate.x, translate.y, translate.z);
-                    GL11.glRotated(rotation.x, 1, 0, 0);
-                    GL11.glRotated(rotation.y, 0, 1, 0);
-                    GL11.glRotated(rotation.z, 0, 0, 1);
+                    if (!cacheInfoOldContentPack.get(itemId)) {
+                        GL11.glScaled(scale.x, scale.y, scale.z);
+                        GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
+                    } else {
+                        GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
+                        GL11.glScaled(scale.x, scale.y, scale.z);
+                    }
 
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
@@ -174,6 +183,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     try {
                         Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
                         cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
+                        cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
                     } catch (Exception e) {
                         throw new ItemRenderException("Error loading item model/renderer...", e);
                     }
@@ -197,11 +207,19 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                         }
 
                         // Render
-                        GL11.glScaled(scale.x, scale.y, scale.z);
-                        GL11.glTranslated(translate.x, translate.y, translate.z);
-                        GL11.glRotated(rotation.x, 1, 0, 0);
-                        GL11.glRotated(rotation.y, 0, 1, 0);
-                        GL11.glRotated(rotation.z, 0, 0, 1);
+                        if (!cacheInfoOldContentPack.get(itemId)) {
+                            GL11.glScaled(scale.x, scale.y, scale.z);
+                            GL11.glTranslated(translate.x, translate.y, translate.z);
+                            GL11.glRotated(rotation.x, 1, 0, 0);
+                            GL11.glRotated(rotation.y, 0, 1, 0);
+                            GL11.glRotated(rotation.z, 0, 0, 1);
+                        } else {
+                            GL11.glTranslated(translate.x, translate.y, translate.z);
+                            GL11.glRotated(rotation.x, 1, 0, 0);
+                            GL11.glRotated(rotation.y, 0, 1, 0);
+                            GL11.glRotated(rotation.z, 0, 0, 1);
+                            GL11.glScaled(scale.x, scale.y, scale.z);
+                        }
 
                         List<String> groups = Arrays.asList(signalModel.getObj_groups());
                         if (groups.isEmpty()) {

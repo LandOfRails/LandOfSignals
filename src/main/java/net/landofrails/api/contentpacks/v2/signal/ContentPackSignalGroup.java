@@ -51,11 +51,14 @@ public class ContentPackSignalGroup {
                     return;
                 }
 
-                // FIXME Not good for memory, is a better solution possible?
                 LinkedHashMap<String, ContentPackSignalState> newStates = new LinkedHashMap<>();
-                newStates.put("default", states.get(null));
-                states.remove(null);
-                newStates.putAll(states);
+                for (String stateId : states.keySet()) {
+                    if (stateId == null) {
+                        newStates.put("default", states.get(stateId));
+                    } else {
+                        newStates.put(stateId, states.get(stateId));
+                    }
+                }
                 states = newStates;
             }
 
