@@ -50,8 +50,13 @@ public class ContentPackSignalGroup {
                     invalid.accept("Contains state null and \"default\", this will not work, sorry. :(");
                     return;
                 }
-                states.put("default", states.get(null));
+
+                // FIXME Not good for memory, is a better solution possible?
+                LinkedHashMap<String, ContentPackSignalState> newStates = new LinkedHashMap<>();
+                newStates.put("default", states.get(null));
                 states.remove(null);
+                newStates.putAll(states);
+                states = newStates;
             }
 
             for (Map.Entry<String, ContentPackSignalState> signalStateEntry : states.entrySet()) {

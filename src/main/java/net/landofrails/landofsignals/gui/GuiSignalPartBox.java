@@ -34,18 +34,6 @@ public class GuiSignalPartBox implements IScreen {
     private String rightState;
     private String leftState;
 
-    // TODO Remove old
-    @Deprecated
-    private static String textureNameRight = null;
-    @Deprecated
-    private static String textureNameLeft = null;
-    @Deprecated
-    private int stateRight;
-    @Deprecated
-    private int stateLeft;
-
-    private final String[] listTextureNames;
-
     public GuiSignalPartBox(TileSignalBox tsb) {
         this.tsb = tsb;
         TileSignalPart tsp = tsb.getTileSignalPart();
@@ -56,27 +44,14 @@ public class GuiSignalPartBox implements IScreen {
         rightState = tsb.getActiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
         leftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
 
-        /** Old - Remove */
-        listTextureNames = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tsp.getId()).toArray(new String[0]);
-        stateRight = tsb.getRedstone();
-        stateLeft = tsb.getNoRedstone();
-        if (stateRight >= listTextureNames.length || stateLeft >= listTextureNames.length) {
-            stateRight = 0;
-            stateLeft = 0;
-        }
-        textureNameLeft = listTextureNames[stateLeft];
-        textureNameRight = listTextureNames[stateRight];
-
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag = itemStackLeft.getTagCompound();
         tag.setString("itemId", tsp.getId());
-        tag.setString("textureName", textureNameLeft);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         TagCompound tag2 = itemStackRight.getTagCompound();
         tag2.setString("itemId", tsp.getId());
-        tag2.setString("textureName", textureNameRight);
         itemStackRight.setTagCompound(tag2);
 
 
@@ -97,26 +72,12 @@ public class GuiSignalPartBox implements IScreen {
             @Override
             public void onClick(Player.Hand hand) {
                 leftState = nextState(leftState);
-
-                // TODO Remove old
-                stateLeft++;
-                if (stateLeft == listTextureNames.length) {
-                    stateLeft = 0;
-                }
-                textureNameLeft = listTextureNames[stateLeft];
             }
         };
         new Button(screen, -100, 100, GuiText.LABEL_REDSTONE.toString() + " -->") {
             @Override
             public void onClick(Player.Hand hand) {
                 rightState = nextState(rightState);
-
-                // TODO Remove old
-                stateRight++;
-                if (stateRight == listTextureNames.length) {
-                    stateRight = 0;
-                }
-                textureNameRight = listTextureNames[stateRight];
             }
         };
 
@@ -129,8 +90,6 @@ public class GuiSignalPartBox implements IScreen {
 
     @Override
     public void onClose() {
-        tsb.setNoRedstone(stateLeft);
-        tsb.setRedstone(stateRight);
 
         tsb.setGroupId(signalGroup);
         tsb.setInactiveGroupState(leftState);
@@ -146,9 +105,6 @@ public class GuiSignalPartBox implements IScreen {
 
         TagCompound rightTag = itemStackRight.getTagCompound();
         rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), String::new, value -> new TagCompound().setString("string", value));
-        // TODO Remove old
-        rightTag.setString("textureName", textureNameRight);
-        //
         itemStackRight.setTagCompound(rightTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {
@@ -159,9 +115,6 @@ public class GuiSignalPartBox implements IScreen {
 
         TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), String::new, value -> new TagCompound().setString("string", value));
-        // TODO Remove old
-        leftTag.setString("textureName", textureNameLeft);
-        //
         itemStackLeft.setTagCompound(leftTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {

@@ -6,8 +6,6 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
-import cam72cam.mod.serialization.SerializationException;
-import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
@@ -141,22 +139,22 @@ public class TileSignalBox extends BlockEntity {
     }
 
     @Deprecated
-    public int getRedstone() {
+    public Integer getRedstone() {
         return redstone;
     }
 
     @Deprecated
-    public void setRedstone(int redstone) {
+    public void setRedstone(Integer redstone) {
         this.redstone = redstone;
     }
 
     @Deprecated
-    public int getNoRedstone() {
+    public Integer getNoRedstone() {
         return noRedstone;
     }
 
     @Deprecated
-    public void setNoRedstone(int noRedstone) {
+    public void setNoRedstone(Integer noRedstone) {
         this.noRedstone = noRedstone;
     }
 
@@ -221,13 +219,4 @@ public class TileSignalBox extends BlockEntity {
         }
     }
 
-    @Override
-    public void load(TagCompound nbt) throws SerializationException {
-
-        // TODO Decide what to do.
-        // redstone and noRedstone is available
-        // Signal can be available, not safe though
-
-        super.load(nbt);
-    }
 }

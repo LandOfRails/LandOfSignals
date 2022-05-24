@@ -17,20 +17,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
     @TagField("inactiveGroupState")
     private String inactiveGroupState;
 
-    // TODO Remove old
-    @TagField("textureNameRedstone")
-    private int textureNameRedstone;
-    @TagField("textureNameNoRedstone")
-    private int textureNameNoRedstone;
-
     public SignalBoxGuiToClientPacket() {
-    }
-
-    @Deprecated
-    public SignalBoxGuiToClientPacket(int textureNameRedstone, int textureNameNoRedstone, Vec3i pos) {
-        this.textureNameRedstone = textureNameRedstone;
-        this.textureNameNoRedstone = textureNameNoRedstone;
-        this.pos = pos;
     }
 
     public SignalBoxGuiToClientPacket(TileSignalBox tsb) {
@@ -38,11 +25,6 @@ public class SignalBoxGuiToClientPacket extends Packet {
         this.groupId = tsb.getGroupId();
         this.activeGroupState = tsb.getActiveGroupState();
         this.inactiveGroupState = tsb.getInactiveGroupState();
-
-        // TODO Remove
-        this.textureNameNoRedstone = tsb.getNoRedstone();
-        this.textureNameRedstone = tsb.getRedstone();
-        // Old
 
     }
 
@@ -62,10 +44,6 @@ public class SignalBoxGuiToClientPacket extends Packet {
         box.setGroupId(groupId);
         box.setActiveGroupState(activeGroupState);
         box.setInactiveGroupState(inactiveGroupState);
-
-        // TODO Remove old
-        box.setRedstone(textureNameRedstone);
-        box.setNoRedstone(textureNameNoRedstone);
-        //
+        
     }
 }

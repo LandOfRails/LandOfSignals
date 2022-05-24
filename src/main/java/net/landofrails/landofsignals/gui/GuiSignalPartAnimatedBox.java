@@ -103,7 +103,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
         name = null;
         tsb.setNoRedstone(stateLeft);
         tsb.setRedstone(stateRight);
-        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
+        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
         packet.sendToServer();
     }
 
