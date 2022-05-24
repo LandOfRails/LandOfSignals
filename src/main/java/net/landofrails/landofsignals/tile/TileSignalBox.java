@@ -6,33 +6,24 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
 
     @TagField("UuidTileTop")
     private Vec3i tileSignalPartPos;
-
-    /**
-     * TODO Remove
-     */
-    @Deprecated
-    @TagField("redstone")
-    private int redstone = 0;
-    @Deprecated
-    @TagField("noRedstone")
-    private int noRedstone = 0;
-    /**
-     * ^^^
-     */
 
     @TagField("signalGroupId")
     private String groupId;
@@ -42,6 +33,17 @@ public class TileSignalBox extends BlockEntity {
 
     @TagField("inactiveGroupState")
     private String inactiveGroupState;
+
+    /**
+     * Needs to stay for backwards compatibility
+     */
+    @TagField("redstone")
+    private Integer redstone = null;
+    @TagField("noRedstone")
+    private Integer noRedstone = null;
+    /**
+     * ^^^
+     */
 
     @Nullable
     private Integer lastRedstone = null;
@@ -83,21 +85,29 @@ public class TileSignalBox extends BlockEntity {
             TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (tempTileSignalPart != null) {
 
+                if (redstone != null && noRedstone != null) {
+                    Map.Entry<String, ContentPackSignalGroup> group = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tempTileSignalPart.getId()).entrySet().iterator().next();
+                    groupId = group.getKey();
+                    Iterator<String> stateIdIterator = group.getValue().getStates().keySet().iterator();
+                    int index = 0;
+                    while (stateIdIterator.hasNext()) {
+                        String stateId = stateIdIterator.next();
+                        if (index == redstone) {
+                            activeGroupState = stateId;
+                        }
+                        if (index == noRedstone) {
+                            inactiveGroupState = stateId;
+                        }
+                        index++;
+                    }
+                    redstone = null;
+                    noRedstone = null;
+                }
+
                 String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
                 tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
 
                 // Old
-                List<String> states = LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempTileSignalPart.getId());
-                if (redstone >= states.size() || noRedstone >= states.size()) {
-                    redstone = 0;
-                    noRedstone = 0;
-                }
-                if (getWorld().getRedstone(getPos()) > 0)
-                    //Redstone
-                    tempTileSignalPart.setTexturePath_depr(states.get(redstone));
-                else
-                    //No redstone
-                    tempTileSignalPart.setTexturePath_depr(states.get(noRedstone));
             }
         }
     }
@@ -107,15 +117,13 @@ public class TileSignalBox extends BlockEntity {
         if (tileSignalPartPos == null) {
             return;
         }
-        
+
         if (!getWorld().isBlockLoaded(tileSignalPartPos)) {
             getWorld().keepLoaded(tileSignalPartPos);
         }
         TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
         if (entity != null) {
             entity.removeSignal(getPos());
-            // TODO Remove old
-            entity.setTexturePath_depr(LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(entity.getId()).get(0));
         }
     }
 
@@ -201,6 +209,9 @@ public class TileSignalBox extends BlockEntity {
      */
     public void updateSignals(boolean refreshSignalBoxSignal) {
 
+        if (!getWorld().isBlockLoaded(tileSignalPartPos))
+            getWorld().keepLoaded(tileSignalPartPos);
+
         TileSignalPart tile = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
         if (refreshSignalBoxSignal) {
             String groupState = getWorld().getRedstone(getPos()) > 0 ? activeGroupState : inactiveGroupState;
@@ -208,5 +219,15 @@ public class TileSignalBox extends BlockEntity {
         } else {
             tile.updateSignals();
         }
+    }
+
+    @Override
+    public void load(TagCompound nbt) throws SerializationException {
+
+        // TODO Decide what to do.
+        // redstone and noRedstone is available
+        // Signal can be available, not safe though
+
+        super.load(nbt);
     }
 }
