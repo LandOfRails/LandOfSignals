@@ -14,7 +14,7 @@ public class ContentPackSignal {
 
     private String name;
     private String id;
-    private Integer rotationSteps;
+    private Float rotationSteps;
     // objPath : objProperties
     private Map<String, ContentPackSignalModel[]> base;
     // groupId : group
@@ -31,7 +31,7 @@ public class ContentPackSignal {
 
     }
 
-    public ContentPackSignal(String name, String id, Integer rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Float rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
@@ -57,11 +57,11 @@ public class ContentPackSignal {
         this.id = id;
     }
 
-    public Integer getRotationSteps() {
+    public Float getRotationSteps() {
         return rotationSteps;
     }
 
-    public void setRotationSteps(Integer rotationSteps) {
+    public void setRotationSteps(Float rotationSteps) {
         this.rotationSteps = rotationSteps;
     }
 
@@ -145,7 +145,7 @@ public class ContentPackSignal {
 
     private void defaultMissing() {
         if (rotationSteps == null) {
-            rotationSteps = 10;
+            rotationSteps = 10f;
         } else {
             rotationSteps = Math.min(Math.max(10, rotationSteps), 90);
         }

@@ -144,4 +144,8 @@ public class BlockSignalPart extends BlockTypeEntity {
 
         return contentPackSignals.get(id).getSignals();
     }
+
+    public float getRotationSteps(String id) {
+        return contentPackSignals.get(id).getRotationSteps();
+    }
 }

@@ -39,19 +39,23 @@ public class ItemSignalPart extends CustomItem {
         if (!target.isPresent()) return ClickResult.REJECTED;
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString("itemId");
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+
+        float rotationSteps = LOSBlocks.BLOCK_SIGNAL_PART.getRotationSteps(itemId);
+
+        int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
+        // int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
         TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-        if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
+        if (tileSignalPart != null && !player.isCrouching()) rotation = tileSignalPart.getBlockRotate();
 
         if (LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId)) {
             if (world.isServer && LandOfSignalsConfig.legacyMode == LegacyMode.PROMPT) {
-                new LegacyModePromptToClientPacket(target.get(), itemId, rot).sendToPlayer(player);
+                new LegacyModePromptToClientPacket(target.get(), itemId, rotation).sendToPlayer(player);
                 return ClickResult.ACCEPTED;
             } else if (!world.isServer && world.isClient) {
                 return ClickResult.ACCEPTED;
             }
         }
-        LOSBlocks.BLOCK_SIGNAL_PART.setRot(rot);
+        LOSBlocks.BLOCK_SIGNAL_PART.setRot(rotation);
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
         LegacyMode legacyMode = LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId) ? LandOfSignalsConfig.legacyMode : LegacyMode.OFF;
         LOSBlocks.BLOCK_SIGNAL_PART.setLegacyMode(legacyMode);
