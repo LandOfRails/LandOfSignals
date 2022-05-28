@@ -4,6 +4,7 @@ import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.EntryType;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 
@@ -36,10 +37,7 @@ public class ContentPackHandlerV2 {
             });
         }
         if (hasContentSets) {
-            contentPack.getContentSets().forEach(path ->
-                            ModCore.warn("ContentSets are not yet supported!\nIgnored path: %s", path)
-                    // TODO Implement ContentSets
-            );
+            contentPack.getContentSets().forEach(path -> loadSet(zip, path));
         }
         if (!hasContent && !hasContentSets) {
             ModCore.warn("ContentPack %s does not contain any blocks");
@@ -65,6 +63,37 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSignal in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith("There are missing attributes")) {
+                ModCore.error("Stacktrace:");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void loadSet(ZipFile zip, String path) {
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackSet contentPackSet = ContentPackSet.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSet.validate(missing -> {
+                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+                });
+                ModCore.info("Set: %s", contentPackSet.getName());
+                contentPackSet.getContent().forEach((entryPath, type) -> {
+                    if (type == EntryType.BLOCKSIGNAL) {
+                        loadSignal(zip, entryPath);
+                    } else {
+                        ModCore.warn("Type %s is currently not implemented in V2!", type.name());
+                    }
+                });
+            } else {
+                ModCore.error("Couldn't find ContentPackSet under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContentPackSet in path %s\nError: %s", path, e.getMessage());
             if (!e.getMessage().startsWith("There are missing attributes")) {
                 ModCore.error("Stacktrace:");
                 e.printStackTrace();
