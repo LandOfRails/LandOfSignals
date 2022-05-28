@@ -1,5 +1,6 @@
 package net.landofrails.stellwand.content.items;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
@@ -34,17 +35,17 @@ public class CustomItems {
         itemList.add(ITEMCONNECTOR2);
         itemList.add(ITEMCONNECTOR3);
         itemList.add(ITEMMAGNIFYINGGLASS);
+    }
 
+    // Clientsided
+    public static void registerRenderers() {
+        ModCore.debug("Loading item renderers..");
         ItemRender.register(ITEMBLOCKFILLER, ItemBlockFiller.getModelFor());
         ItemRender.register(ITEMBLOCKSIGNAL, ItemBlockSignal.getModelFor());
         ItemRender.register(ITEMBLOCKSENDER, ItemBlockSender.getModelFor());
         ItemRender.register(ITEMBLOCKMULTISIGNAL, ItemBlockMultisignal.getModelFor());
         ItemRender.register(ITEMBLOCKRECEIVER, ItemBlockButtonReceiver.getModelFor());
 
-    }
-
-    // Clientsided
-    public static void registerRenderers() {
         for (CustomItem item : itemList) {
             if (item instanceof ICustomTexturePath) {
                 ICustomTexturePath path = (ICustomTexturePath) item;
