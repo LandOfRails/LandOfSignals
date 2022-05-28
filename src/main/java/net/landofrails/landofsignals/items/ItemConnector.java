@@ -42,16 +42,6 @@ public class ItemConnector extends CustomItem {
                 return ClickResult.REJECTED;
             }
 
-            /**
-             * To be removed!
-             * @deprecated(1.0.0, remove when new contentpacksystem fully implemented)
-             */
-            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(tempPart.getId()).size() > 1) {
-                blockEntitySignalPart = tempPart;
-                if (blockEntityBox == null)
-                    player.sendMessage(PlayerMessage.direct("Pairing started with old " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
-            }
-            /** ^^^^ */
             if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(tempPart.getId())) {
                 blockEntitySignalPart = tempPart;
                 if (blockEntityBox == null)
@@ -65,13 +55,8 @@ public class ItemConnector extends CustomItem {
 
             if (blockEntitySignalPart != null && blockEntityBox != null) {
                 blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-                if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(blockEntitySignalPart.getId())) {
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
-                } else {
-                    player.sendMessage(PlayerMessage.direct("Box paired with old " + LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(blockEntitySignalPart.getId())));
-                }
-
-
+                player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
+                
                 blockEntitySignalPart = null;
                 blockEntityBox = null;
                 return ClickResult.ACCEPTED;

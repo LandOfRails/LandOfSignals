@@ -68,11 +68,7 @@ public class ItemSignalPart extends CustomItem {
         TagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey("itemId")) {
             String itemId = tag.getString("itemId");
-            if (LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) {
-                return LOSBlocks.BLOCK_SIGNAL_PART.getName(itemId);
-            }
-            // FIXME Remove this implementation
-            return LOSBlocks.BLOCK_SIGNAL_PART.getName_depr(itemId);
+            return LOSBlocks.BLOCK_SIGNAL_PART.getName(itemId);
         } else return "Error missing tag \"itemId\" for ItemSignalPart";
     }
 }

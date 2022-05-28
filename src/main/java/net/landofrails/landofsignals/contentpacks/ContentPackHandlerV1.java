@@ -36,15 +36,9 @@ public class ContentPackHandlerV1 {
         // @formatter:on
 
         ModCore.info("Content for %s:", contentPack.getId());
-        // TODO: Make Adapter for addonversion 1
-        // TODO Remove old addX Methods
         addSignals(contentPack, files, zip);
     }
-
-    /**
-     * @deprecated (0.1.0, New Contentpacks, Will be replaced with a conversion method to fit V2 ContentPacks)
-     */
-    @Deprecated
+    
     private static void addSignals(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip) throws IOException {
         for (String pathToContentPackSignalSet : contentPack.getSignals()) {
             for (ZipEntry zipEntry : files) {

@@ -35,47 +35,13 @@ public class TileSignalPartRender {
 
         String id = tsp.getId();
 
-        // TODO Implement new system.
-
-        boolean isOld = LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts_depr().containsKey(id);
-        boolean isNew = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(id);
-        if (id == null || (!isOld && !isNew)) {
+        if (id == null) {
             id = Static.MISSING;
         }
 
-        if (isNew) {
+        renderBase(id, tsp);
+        renderSignals(id, tsp);
 
-            renderBase(id, tsp);
-            renderSignals(id, tsp);
-
-            return;
-        }
-
-        // FIXME remove after implementation of contentpackconverter
-        // Old dumb stuff, yk
-
-        if (!cache.containsKey(id)) {
-            try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath_depr(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates_depr(id));
-                OBJRender renderer = new OBJRender(model);
-                cache.put(id, renderer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        OBJRender renderer = cache.get(id);
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath_depr())) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling_depr(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation_depr(id).add(tsp.getOffset());
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
-        } catch (Exception e) {
-            // Removes TileEntity on client-side, prevents crash
-            ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tsp.getPos().x, tsp.getPos().y, tsp.getPos().z, e.getMessage());
-            tsp.getWorld().breakBlock(tsp.getPos());
-        }
     }
 
     private static void renderBase(String blockId, TileSignalPart tile) {
@@ -125,6 +91,11 @@ public class TileSignalPartRender {
                     } else {
                         renderer.drawGroups(Arrays.asList(groups));
                     }
+
+                } catch (Exception e) {
+                    // Removes TileEntity on client-side, prevents crash
+                    ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+                    tile.getWorld().breakBlock(tile.getPos());
 
                 } finally {
                     closables.forEach(OpenGL.With::close);
@@ -192,6 +163,11 @@ public class TileSignalPartRender {
                         } else {
                             renderer.drawGroups(groups);
                         }
+
+                    } catch (Exception e) {
+                        // Removes TileEntity on client-side, prevents crash
+                        ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+                        tile.getWorld().breakBlock(tile.getPos());
 
                     } finally {
                         closables.forEach(OpenGL.With::close);

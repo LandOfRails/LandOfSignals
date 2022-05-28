@@ -54,9 +54,9 @@ public class TileSignalPartAnimatedRender {
         groupsWithoutWing.removeAll(groupNames);
 
         try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
-            Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling_depr(id);
+            Vec3d scale = Vec3d.ZERO;
             GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation_depr(id).add(tsp.getOffset());
+            Vec3d trans = Vec3d.ZERO;
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.drawGroups(groupsWithoutWing);

@@ -39,8 +39,6 @@ public class LOSBlocks {
         });
 
         registerSignalContentPack(MISSING_SIGNAL);
-        // FIXME Remove if possible
-        LOSBlocks.BLOCK_SIGNAL_PART.add_depr(MISSING_SIGNAL);
 
         registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "Sperrsignal Sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
             private static final long serialVersionUID = 4147652253740899871L;
