@@ -13,7 +13,6 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.blocks.BlockTicketMachineSBB;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public class ItemTicketMachineSBB extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.ASSETS_TAB);
+        return LOSTabs.getAsList(LOSTabs.ASSETS_TAB);
     }
 
     @Override

@@ -12,7 +12,6 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class ItemSignalBox extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override

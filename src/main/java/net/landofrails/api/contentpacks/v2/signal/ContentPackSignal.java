@@ -3,24 +3,28 @@ package net.landofrails.api.contentpacks.v2.signal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.landofsignals.LOSTabs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class ContentPackSignal {
 
     private String name;
     private String id;
     private Float rotationSteps;
+    private String creativeTab;
     // objPath : objProperties
     private Map<String, ContentPackSignalModel[]> base;
     // groupId : group
     private Map<String, ContentPackSignalGroup> signals;
     // groupId : state
     private Map<String, String> itemGroupStates;
+    private ContentPackSignalReferences references;
     // metadataId : data
     private Map<String, ?> metadata;
 
@@ -31,13 +35,15 @@ public class ContentPackSignal {
 
     }
 
-    public ContentPackSignal(String name, String id, Float rotationSteps, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, ContentPackSignalReferences references, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
+        this.creativeTab = creativeTab;
         this.base = base;
         this.signals = signals;
         this.itemGroupStates = itemGroupStates;
+        this.references = references;
         this.metadata = metadata;
     }
 
@@ -63,6 +69,14 @@ public class ContentPackSignal {
 
     public void setRotationSteps(Float rotationSteps) {
         this.rotationSteps = rotationSteps;
+    }
+
+    public String getCreativeTab() {
+        return creativeTab;
+    }
+
+    public void setCreativeTab(String creativeTab) {
+        this.creativeTab = creativeTab;
     }
 
     public Map<String, ContentPackSignalModel[]> getBase() {
@@ -122,6 +136,12 @@ public class ContentPackSignal {
 
     public void validate(Consumer<String> invalid) {
 
+        if (references == null) {
+            references = new ContentPackSignalReferences();
+        }
+        Consumer<String> referencesConsumer = text -> invalid.accept("references" + ": [" + text + "]");
+        references.validate(referencesConsumer);
+
         defaultMissing();
 
         StringJoiner joiner = new StringJoiner(",", "[", "]");
@@ -138,16 +158,28 @@ public class ContentPackSignal {
             for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
                 ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
                 Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
-                signalGroup.validate(signalConsumer);
+                signalGroup.validate(signalConsumer, references);
+            }
+        }
+        if (!base.isEmpty()) {
+            for (Map.Entry<String, ContentPackSignalModel[]> signalModelEntry : base.entrySet()) {
+
+                Consumer<String> signalConsumer = text -> invalid.accept(signalModelEntry.getKey() + ": [" + text + "]");
+                Stream.of(signalModelEntry.getValue()).forEach(model -> model.validate(signalConsumer, references));
             }
         }
     }
 
     private void defaultMissing() {
+
         if (rotationSteps == null) {
             rotationSteps = 10f;
         } else {
             rotationSteps = Math.min(Math.max(10, rotationSteps), 90);
+        }
+
+        if (creativeTab == null) {
+            creativeTab = LOSTabs.SIGNALS_TAB;
         }
 
         if (metadata == null) {
@@ -195,8 +227,6 @@ public class ContentPackSignal {
                     }
                 }
             }
-
-
         }
 
     }

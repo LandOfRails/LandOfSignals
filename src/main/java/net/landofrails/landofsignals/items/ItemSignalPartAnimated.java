@@ -15,7 +15,6 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,7 @@ public class ItemSignalPartAnimated extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override

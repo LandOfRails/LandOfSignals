@@ -14,7 +14,6 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.utils.IManipulate;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ItemManipulator extends CustomItem {
@@ -31,7 +30,7 @@ public class ItemManipulator extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override

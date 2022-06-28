@@ -34,7 +34,7 @@ public class ContentPackSignalState {
         this.models = models;
     }
 
-    public void validate(Consumer<String> invalid) {
+    public void validate(Consumer<String> invalid, ContentPackSignalReferences references) {
         StringJoiner joiner = new StringJoiner(",", "[", "]");
 
         if (signalName == null || signalName.isEmpty())
@@ -49,7 +49,7 @@ public class ContentPackSignalState {
                 ContentPackSignalModel[] modelArray = signalModelEntry.getValue();
                 for (ContentPackSignalModel model : modelArray) {
                     Consumer<String> modelConsumer = text -> invalid.accept(objPath + ": [" + text + "]");
-                    model.validate(modelConsumer);
+                    model.validate(modelConsumer, references);
                 }
             }
         }

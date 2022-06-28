@@ -4,6 +4,7 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -16,8 +17,13 @@ public class ContentPackSignalModel {
     private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
 
+    private String texturesRef;
+    private String obj_groupsRef;
+    private Map<ContentPackItemRenderType, String> itemRefs;
+    private String blockRef;
+
     public ContentPackSignalModel() {
-        
+
     }
 
     @SuppressWarnings("java:S117")
@@ -28,31 +34,37 @@ public class ContentPackSignalModel {
         this.block = block;
     }
 
-    public void validate(Consumer<String> modelConsumer) {
+    public void validate(Consumer<String> modelConsumer, ContentPackSignalReferences references) {
 
         if (textures == null) {
-            textures = new String[0];
+            textures = references.getTexturesOrElse(texturesRef, new String[0]);
         }
         if (obj_groups == null) {
-            obj_groups = new String[0];
+            obj_groups = references.getObj_groupsOrElse(obj_groupsRef, new String[0]);
         }
         if (item == null) {
             item = new HashMap<>();
         }
         if (block == null) {
-            block = new ContentPackBlock(null, null, null);
+            block = references.getContentPackBlockOrElse(blockRef, new ContentPackBlock(null, null, null, null, null, null));
+        }
+
+        if (itemRefs == null) {
+            itemRefs = Collections.emptyMap();
         }
 
         if (item.size() != ContentPackItemRenderType.values().length) {
+            if (!itemRefs.isEmpty())
+                System.out.println("ItemRefs > 0");
             for (ContentPackItemRenderType cpirt : ContentPackItemRenderType.values()) {
-                item.putIfAbsent(cpirt, new ContentPackItem(null, null, null));
+                item.putIfAbsent(cpirt, references.getContentPackItemOrElse(itemRefs.get(cpirt), new ContentPackItem(null, null, null, null, null, null)));
             }
         }
         item.forEach((key, value) -> {
             Consumer<String> itemConsumer = text -> modelConsumer.accept("[" + key.name() + ": " + text + "]");
-            value.validate(itemConsumer);
+            value.validate(itemConsumer, references);
         });
-        block.validate(modelConsumer);
+        block.validate(modelConsumer, references);
 
     }
 

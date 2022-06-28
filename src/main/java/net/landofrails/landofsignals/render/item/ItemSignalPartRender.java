@@ -33,7 +33,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
-            if (itemId == null) {
+            if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) {
                 itemId = Static.MISSING;
             }
 

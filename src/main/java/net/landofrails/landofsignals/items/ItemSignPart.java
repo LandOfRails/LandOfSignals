@@ -15,7 +15,6 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,7 @@ public class ItemSignPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ItemSignPart extends CustomItem {
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGN_PART);
         return ClickResult.ACCEPTED;
     }
-    
+
     @Override
     public String getCustomName(ItemStack stack) {
         TagCompound tag = stack.getTagCompound();

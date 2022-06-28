@@ -14,7 +14,6 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ItemConnector extends CustomItem {
@@ -28,7 +27,7 @@ public class ItemConnector extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class ItemConnector extends CustomItem {
             if (blockEntitySignalPart != null && blockEntityBox != null) {
                 blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
                 player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
-                
+
                 blockEntitySignalPart = null;
                 blockEntityBox = null;
                 return ClickResult.ACCEPTED;

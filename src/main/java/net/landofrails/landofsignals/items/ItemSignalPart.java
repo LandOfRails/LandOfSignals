@@ -11,17 +11,20 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.configs.LegacyMode;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
+import net.landofrails.landofsignals.utils.Static;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("java:S1192")
 public class ItemSignalPart extends CustomItem {
 
     public ItemSignalPart(String modID, String name) {
@@ -30,7 +33,7 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override
@@ -61,6 +64,25 @@ public class ItemSignalPart extends CustomItem {
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
 
+    }
+
+    @Override
+    public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+        List<ItemStack> itemStackList = new ArrayList<>();
+
+        if (creativeTab != null && creativeTab.equals(LOSTabs.get(LOSTabs.SIGNALS_TAB))) {
+            for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet()) {
+                if (!id.equals(Static.MISSING)) {
+                    ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+                    TagCompound tag = is.getTagCompound();
+                    tag.setString("itemId", id);
+                    is.setTagCompound(tag);
+                    itemStackList.add(is);
+                }
+            }
+        }
+
+        return itemStackList;
     }
 
     @Override

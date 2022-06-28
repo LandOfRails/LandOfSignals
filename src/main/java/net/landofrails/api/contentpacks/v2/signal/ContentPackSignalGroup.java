@@ -38,7 +38,7 @@ public class ContentPackSignalGroup {
         this.states = states;
     }
 
-    public void validate(Consumer<String> invalid) {
+    public void validate(Consumer<String> invalid, ContentPackSignalReferences references) {
         StringJoiner joiner = new StringJoiner(",", "[", "]");
         if (states == null) {
             joiner.add("states");
@@ -65,7 +65,7 @@ public class ContentPackSignalGroup {
             for (Map.Entry<String, ContentPackSignalState> signalStateEntry : states.entrySet()) {
                 ContentPackSignalState signalState = signalStateEntry.getValue();
                 Consumer<String> groupConsumer = text -> invalid.accept(signalStateEntry.getKey() + ": [" + text + "]");
-                signalState.validate(groupConsumer);
+                signalState.validate(groupConsumer, references);
             }
         }
 
