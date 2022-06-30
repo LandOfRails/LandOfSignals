@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url = 'https://teamopenindustry.cc/maven/' }
     }
@@ -38,6 +39,10 @@ task deployJar(type: Jar)
 
 configurations {
     deployerJars
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.9"
 }
 
 task('showBuildInfo') {
