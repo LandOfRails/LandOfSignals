@@ -32,9 +32,9 @@ public class SignalBoxGuiToClientPacket extends Packet {
             box.setNoRedstone(textureNameNoRedstone);
         } else {
             if (pos != null) {
-                LandOfSignals.debug("TileSignalBox was not loaded: [xyz: %f, %f, %f] not found!", pos.x, pos.y, pos.z);
+                LandOfSignals.debug("TileSignalBox could not be loaded: [xyz: %f, %f, %f] not found!", pos.x, pos.y, pos.z);
             } else {
-                LandOfSignals.warn("TileSignalBox was not loaded: \"pos\" is not set!");
+                LandOfSignals.warn("TileSignalBox could not be loaded: \"pos\" is not set!");
             }
         }
     }
