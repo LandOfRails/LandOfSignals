@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.packet;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
+import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 
 public class SignalBoxGuiToClientPacket extends Packet {
@@ -26,9 +27,15 @@ public class SignalBoxGuiToClientPacket extends Packet {
     @Override
     protected void handle() {
         TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
-		if (box != null) {
-			box.setRedstone(textureNameRedstone);
-			box.setNoRedstone(textureNameNoRedstone);
-		}
+        if (box != null) {
+            box.setRedstone(textureNameRedstone);
+            box.setNoRedstone(textureNameNoRedstone);
+        } else {
+            if (pos != null) {
+                LandOfSignals.debug("TileSignalBox could not be loaded: [xyz: %f, %f, %f] not found!", pos.x, pos.y, pos.z);
+            } else {
+                LandOfSignals.warn("TileSignalBox could not be loaded: \"pos\" is not set!");
+            }
+        }
     }
 }
