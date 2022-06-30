@@ -6,6 +6,7 @@ import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
 import net.landofrails.api.contentpacks.v1.ContentPackSignObject;
 import net.landofrails.api.contentpacks.v1.ContentPackSignPart;
+import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class BlockSignPart extends BlockTypeEntity {
 
     private static final Function<Map.Entry<Integer, ?>, Integer> INTKEY = Map.Entry::getKey;
-    private Map<String, ContentPackSignPart> signs = new HashMap<>();
+    private Map<String, ContentPackSign> signs = new HashMap<>();
     private String id;
     private int rot;
 
@@ -76,6 +77,10 @@ public class BlockSignPart extends BlockTypeEntity {
 
     @Deprecated
     public void add(ContentPackSignPart contentPackSign) {
+        throw new UnsupportedOperationException("To be removed");
+    }
+
+    public void add(ContentPackSign contentPackSign) {
         if (!signs.containsKey(contentPackSign.getId())) {
             this.signs.put(contentPackSign.getId(), contentPackSign);
         } else {

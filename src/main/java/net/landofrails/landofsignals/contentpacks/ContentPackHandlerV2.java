@@ -5,6 +5,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
+import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 
@@ -70,6 +71,32 @@ public class ContentPackHandlerV2 {
         }
     }
 
+    private static void loadSign(ZipFile zip, String path) {
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackSign contentPackSign = ContentPackSign.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSign.validate(missing -> {
+                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+                });
+                ModCore.info("Sign: %s", contentPackSign.getName());
+
+                LOSBlocks.BLOCK_SIGN_PART.add(contentPackSign);
+            } else {
+                ModCore.error("Couldn't find ContentPackSign under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContentPackSign in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith("There are missing attributes")) {
+                ModCore.error("Stacktrace:");
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static void loadSet(ZipFile zip, String path) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
@@ -82,10 +109,16 @@ public class ContentPackHandlerV2 {
                 });
                 ModCore.info("Set: %s", contentPackSet.getName());
                 contentPackSet.getContent().forEach((entryPath, type) -> {
-                    if (type == EntryType.BLOCKSIGNAL) {
-                        loadSignal(zip, entryPath);
-                    } else {
-                        ModCore.warn("Type %s is currently not implemented in V2!", type.name());
+
+                    switch (type) {
+                        case BLOCKSIGNAL:
+                            loadSignal(zip, entryPath);
+                            break;
+                        case BLOCKSIGN:
+                            loadSign(zip, entryPath);
+                            break;
+                        default:
+                            ModCore.warn("Type %s is currently not implemented in V2!", type.name());
                     }
                 });
             } else {
