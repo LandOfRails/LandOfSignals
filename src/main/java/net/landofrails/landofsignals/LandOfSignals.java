@@ -26,7 +26,6 @@ import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
     public static final String MODID = "landofsignals";
-    public static final String VERSION = "0.0.4";
 
     @Override
     public String modID() {
@@ -42,7 +41,7 @@ public class LandOfSignals extends ModCore.Mod {
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
             Optional<String> mcVersion = getMCVersion();
-            ModCore.Mod.info("Detected MC Version: " + (mcVersion.isPresent() ? mcVersion.get() : "Failed to receive"));
+            ModCore.Mod.info("Detected MC Version: " + (mcVersion.orElse("Failed to receive")));
 
             ContentPackHandler.init();
 

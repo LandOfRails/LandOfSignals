@@ -1,4 +1,5 @@
-#### Release 0.0.5
+#### Release 0.0.6
 
-* Upgraded to UMC 1.1.3
-* Fixed crash (in 1.7.10) when SignalBox tile is not loaded on client.
+* LandOfSignals: Fixed crash when destorying a signalbox that wasn't connected to a signal
+* Stellwand: Added warning for stellwand (Blocks will be removed in next major update)
+* Stellwand: Fixed issue when opening gui of sender (NullPointer, kicking player from server)
