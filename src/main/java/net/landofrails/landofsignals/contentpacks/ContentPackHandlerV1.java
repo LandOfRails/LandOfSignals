@@ -8,9 +8,9 @@ import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 
@@ -38,7 +38,7 @@ public class ContentPackHandlerV1 {
         ModCore.info("Content for %s:", contentPack.getId());
         addSignals(contentPack, files, zip);
     }
-    
+
     private static void addSignals(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip) throws IOException {
         for (String pathToContentPackSignalSet : contentPack.getSignals()) {
             for (ZipEntry zipEntry : files) {
@@ -87,8 +87,8 @@ public class ContentPackHandlerV1 {
             ContentPackSignalState contentPackSignalState = new ContentPackSignalState();
             contentPackSignalState.setSignalName("State " + index++);
 
-            ContentPackSignalModel contentPackSignalModel = new ContentPackSignalModel();
-            contentPackSignalModel.setTextures(new String[]{texture});
+            ContentPackModel contentPackModel = new ContentPackModel();
+            contentPackModel.setTextures(new String[]{texture});
 
             // ContentPackBlock
             ContentPackBlock contentPackBlock = new ContentPackBlock();
@@ -103,10 +103,10 @@ public class ContentPackHandlerV1 {
             contentPackItemRenderTypeContentPackItemMap.put(ContentPackItemRenderType.DEFAULT, contentPackItem);
 
             // Nesting
-            contentPackSignalModel.setBlock(contentPackBlock);
-            contentPackSignalModel.setItem(contentPackItemRenderTypeContentPackItemMap);
-            ContentPackSignalModel[] contentPackSignalModels = new ContentPackSignalModel[]{contentPackSignalModel};
-            contentPackSignalState.setModels(Collections.singletonMap(contentPackSignalPart.getModel(), contentPackSignalModels));
+            contentPackModel.setBlock(contentPackBlock);
+            contentPackModel.setItem(contentPackItemRenderTypeContentPackItemMap);
+            ContentPackModel[] contentPackModels = new ContentPackModel[]{contentPackModel};
+            contentPackSignalState.setModels(Collections.singletonMap(contentPackSignalPart.getModel(), contentPackModels));
             contentPackSignalStateMap.put(texture, contentPackSignalState);
         }
 

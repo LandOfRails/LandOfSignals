@@ -1,15 +1,11 @@
-package net.landofrails.api.contentpacks.v2.signal;
-
-import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
+package net.landofrails.api.contentpacks.v2.parent;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ContentPackSignalModel {
+public class ContentPackModel {
 
     private String[] textures;
     @SuppressWarnings("java:S116")
@@ -22,19 +18,36 @@ public class ContentPackSignalModel {
     private Map<ContentPackItemRenderType, String> itemRefs;
     private String blockRef;
 
-    public ContentPackSignalModel() {
+    public ContentPackModel() {
 
     }
 
     @SuppressWarnings("java:S117")
-    public ContentPackSignalModel(String[] textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
+    public ContentPackModel(String[] textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
         this.textures = textures;
         this.obj_groups = obj_groups;
         this.item = item;
         this.block = block;
     }
 
-    public void validate(Consumer<String> modelConsumer, ContentPackSignalReferences references) {
+    public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] scaling) {
+        this.block = new ContentPackBlock(blockTranslation, null, scaling);
+        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
+    }
+
+    public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] scaling, String[] obj_groups) {
+        this.block = new ContentPackBlock(blockTranslation, null, scaling);
+        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
+        this.obj_groups = obj_groups;
+    }
+
+    public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] blockScaling, float[] itemScaling, String[] obj_groups) {
+        this.block = new ContentPackBlock(blockTranslation, null, blockScaling);
+        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, itemScaling));
+        this.obj_groups = obj_groups;
+    }
+
+    public void validate(Consumer<String> modelConsumer, ContentPackReferences references) {
 
         if (textures == null) {
             textures = references.getTexturesOrElse(texturesRef, new String[0]);
@@ -54,8 +67,6 @@ public class ContentPackSignalModel {
         }
 
         if (item.size() != ContentPackItemRenderType.values().length) {
-            if (!itemRefs.isEmpty())
-                System.out.println("ItemRefs > 0");
             for (ContentPackItemRenderType cpirt : ContentPackItemRenderType.values()) {
                 item.putIfAbsent(cpirt, references.getContentPackItemOrElse(itemRefs.get(cpirt), new ContentPackItem(null, null, null, null, null, null)));
             }

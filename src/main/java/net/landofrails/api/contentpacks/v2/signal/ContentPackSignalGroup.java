@@ -1,5 +1,7 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
+import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -38,7 +40,7 @@ public class ContentPackSignalGroup {
         this.states = states;
     }
 
-    public void validate(Consumer<String> invalid, ContentPackSignalReferences references) {
+    public void validate(Consumer<String> invalid, ContentPackReferences references) {
         StringJoiner joiner = new StringJoiner(",", "[", "]");
         if (states == null) {
             joiner.add("states");

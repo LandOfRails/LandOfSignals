@@ -1,7 +1,6 @@
 package net.landofrails.api.contentpacks.v2.parent;
 
 import cam72cam.mod.math.Vec3d;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalReferences;
 
 import java.util.StringJoiner;
 import java.util.function.Consumer;
@@ -21,6 +20,12 @@ public class ContentPackBlock {
 
     }
 
+    public ContentPackBlock(float[] translation, float[] rotation, float[] scaling) {
+        this.translation = translation;
+        this.rotation = rotation;
+        this.scaling = scaling;
+    }
+
     public ContentPackBlock(float[] translation, float[] rotation, float[] scaling, String translationRef, String rotationRef, String scalingRef) {
         this.translation = translation;
         this.rotation = rotation;
@@ -31,7 +36,7 @@ public class ContentPackBlock {
         this.scalingRef = scalingRef;
     }
 
-    public void validate(Consumer<String> invalid, ContentPackSignalReferences references) {
+    public void validate(Consumer<String> invalid, ContentPackReferences references) {
         StringJoiner stringJoiner = new StringJoiner(",", "[", "]");
         if (translation == null) {
             translation = references.getTranslationOrElse(translationRef, new float[]{.5f, .5f, .5f});

@@ -1,8 +1,9 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 import net.landofrails.landofsignals.LOSTabs;
 
 import java.io.IOException;
@@ -14,17 +15,19 @@ import java.util.stream.Stream;
 
 public class ContentPackSignal {
 
+    private static final Gson GSON = new Gson();
+
     private String name;
     private String id;
     private Float rotationSteps;
     private String creativeTab;
     // objPath : objProperties
-    private Map<String, ContentPackSignalModel[]> base;
+    private Map<String, ContentPackModel[]> base;
     // groupId : group
     private Map<String, ContentPackSignalGroup> signals;
     // groupId : state
     private Map<String, String> itemGroupStates;
-    private ContentPackSignalReferences references;
+    private ContentPackReferences references;
     // metadataId : data
     private Map<String, ?> metadata;
 
@@ -35,7 +38,7 @@ public class ContentPackSignal {
 
     }
 
-    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, Map<String, ContentPackSignalModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, ContentPackSignalReferences references, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, Map<String, ContentPackModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, ContentPackReferences references, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
@@ -79,11 +82,11 @@ public class ContentPackSignal {
         this.creativeTab = creativeTab;
     }
 
-    public Map<String, ContentPackSignalModel[]> getBase() {
+    public Map<String, ContentPackModel[]> getBase() {
         return base;
     }
 
-    public void setBase(Map<String, ContentPackSignalModel[]> base) {
+    public void setBase(Map<String, ContentPackModel[]> base) {
         this.base = base;
     }
 
@@ -129,15 +132,13 @@ public class ContentPackSignal {
         }
 
         String json = s.toString();
-        Gson gson = new GsonBuilder().create();
-
-        return gson.fromJson(json, ContentPackSignal.class);
+        return GSON.fromJson(json, ContentPackSignal.class);
     }
 
     public void validate(Consumer<String> invalid) {
 
         if (references == null) {
-            references = new ContentPackSignalReferences();
+            references = new ContentPackReferences();
         }
         Consumer<String> referencesConsumer = text -> invalid.accept("references" + ": [" + text + "]");
         references.validate(referencesConsumer);
@@ -153,21 +154,23 @@ public class ContentPackSignal {
             joiner.add("signals");
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
-        } else if (signals != null) {
+        } else {
+            if (signals != null) {
 
-            for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
-                ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
-                Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
-                signalGroup.validate(signalConsumer, references);
+                for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
+                    ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
+                    Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
+                    signalGroup.validate(signalConsumer, references);
+                }
+            }
+            if (!base.isEmpty()) {
+                for (Map.Entry<String, ContentPackModel[]> signalModelEntry : base.entrySet()) {
+                    Consumer<String> signalConsumer = text -> invalid.accept(signalModelEntry.getKey() + ": [" + text + "]");
+                    Stream.of(signalModelEntry.getValue()).forEach(model -> model.validate(signalConsumer, references));
+                }
             }
         }
-        if (!base.isEmpty()) {
-            for (Map.Entry<String, ContentPackSignalModel[]> signalModelEntry : base.entrySet()) {
 
-                Consumer<String> signalConsumer = text -> invalid.accept(signalModelEntry.getKey() + ": [" + text + "]");
-                Stream.of(signalModelEntry.getValue()).forEach(model -> model.validate(signalConsumer, references));
-            }
-        }
     }
 
     private void defaultMissing() {
@@ -215,8 +218,8 @@ public class ContentPackSignal {
         if (objTextures.isEmpty()) {
             for (ContentPackSignalGroup group : signals.values()) {
                 for (ContentPackSignalState state : group.getStates().values()) {
-                    for (Map.Entry<String, ContentPackSignalModel[]> modelEntry : state.getModels().entrySet()) {
-                        for (ContentPackSignalModel model : modelEntry.getValue()) {
+                    for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
+                        for (ContentPackModel model : modelEntry.getValue()) {
                             String objPath = modelEntry.getKey();
                             objTextures.putIfAbsent(objPath, new HashSet<>());
                             objTextures.computeIfPresent(objPath, (key, value) -> {
@@ -225,6 +228,16 @@ public class ContentPackSignal {
                             });
                         }
                     }
+                }
+            }
+            for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+                for (ContentPackModel model : modelEntry.getValue()) {
+                    String objPath = modelEntry.getKey();
+                    objTextures.putIfAbsent(objPath, new HashSet<>());
+                    objTextures.computeIfPresent(objPath, (key, value) -> {
+                        value.addAll(Arrays.asList(model.getTextures()));
+                        return value;
+                    });
                 }
             }
         }

@@ -1,22 +1,28 @@
 package net.landofrails.api.contentpacks.v2.sign;
 
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalReferences;
+import com.google.gson.Gson;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
+import net.landofrails.landofsignals.LOSTabs;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class ContentPackSign {
+
+    private static final Gson GSON = new Gson();
 
     private String name;
     private String id;
     private Float rotationSteps;
     private String creativeTab;
     // objPath : objProperties
-    private Map<String, ContentPackSignalModel[]> base;
-    private ContentPackSignalReferences references;
+    private Map<String, ContentPackModel[]> base;
+    private ContentPackReferences references;
     // metadataId : data
     private Map<String, ?> metadata;
 
@@ -58,19 +64,19 @@ public class ContentPackSign {
         this.creativeTab = creativeTab;
     }
 
-    public Map<String, ContentPackSignalModel[]> getBase() {
+    public Map<String, ContentPackModel[]> getBase() {
         return base;
     }
 
-    public void setBase(Map<String, ContentPackSignalModel[]> base) {
+    public void setBase(Map<String, ContentPackModel[]> base) {
         this.base = base;
     }
 
-    public ContentPackSignalReferences getReferences() {
+    public ContentPackReferences getReferences() {
         return references;
     }
 
-    public void setReferences(ContentPackSignalReferences references) {
+    public void setReferences(ContentPackReferences references) {
         this.references = references;
     }
 
@@ -90,16 +96,87 @@ public class ContentPackSign {
         this.objTextures = objTextures;
     }
 
-    public void validate(Consumer<String> invalid) {
-        // FIXME
-        throw new UnsupportedOperationException("Not implemented yet!");
-    }
-
     public static ContentPackSign fromJson(InputStream inputStream) {
-        // FIXME
-        throw new UnsupportedOperationException("Not implemented yet!");
+        StringBuilder s = new StringBuilder();
+        byte[] buffer = new byte[1024];
+        int read;
+
+        try {
+            while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
+                s.append(new String(buffer, 0, read));
+            }
+        } catch (IOException e) {
+            throw new ContentPackException("Cant read ContentPackSignal: " + e.getMessage());
+        }
+
+        String json = s.toString();
+        return GSON.fromJson(json, ContentPackSign.class);
     }
 
-    // FIXME fill this
+    public void validate(Consumer<String> invalid) {
+
+        if (references == null) {
+            references = new ContentPackReferences();
+        }
+        Consumer<String> referencesConsumer = text -> invalid.accept("references" + ": [" + text + "]");
+        references.validate(referencesConsumer);
+
+        defaultMissing();
+
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        if (name == null)
+            joiner.add("name");
+        if (id == null)
+            joiner.add("id");
+        if (joiner.length() > 2) {
+            invalid.accept(joiner.toString());
+        } else if (!base.isEmpty()) {
+            for (Map.Entry<String, ContentPackModel[]> signModelEntry : base.entrySet()) {
+
+                Consumer<String> signConsumer = text -> invalid.accept(signModelEntry.getKey() + ": [" + text + "]");
+                Stream.of(signModelEntry.getValue()).forEach(model -> model.validate(signConsumer, references));
+            }
+        }
+    }
+
+    private void defaultMissing() {
+
+        if (rotationSteps == null) {
+            rotationSteps = 10f;
+        } else {
+            rotationSteps = Math.min(Math.max(10, rotationSteps), 90);
+        }
+
+        if (creativeTab == null) {
+            creativeTab = LOSTabs.SIGNALS_TAB;
+        }
+
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
+
+        if (base == null) {
+            base = new HashMap<>();
+        }
+
+
+        if (objTextures == null) {
+            objTextures = new HashMap<>();
+        }
+        if (objTextures.isEmpty()) {
+            for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+                for (ContentPackModel model : modelEntry.getValue()) {
+                    String objPath = modelEntry.getKey();
+                    objTextures.putIfAbsent(objPath, new HashSet<>());
+                    objTextures.computeIfPresent(objPath, (key, value) -> {
+                        // FIXME Why is there a NullPointer being thrown here?
+                        value.addAll(Arrays.asList(model.getTextures()));
+                        return value;
+                    });
+                }
+            }
+        }
+
+    }
 
 }

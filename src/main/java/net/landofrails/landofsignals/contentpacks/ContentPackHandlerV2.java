@@ -118,7 +118,7 @@ public class ContentPackHandlerV2 {
                             loadSign(zip, entryPath);
                             break;
                         default:
-                            ModCore.warn("Type %s is currently not implemented in V2!", type.name());
+                            ModCore.error("Type %s is currently not implemented in V2!", type.name());
                     }
                 });
             } else {

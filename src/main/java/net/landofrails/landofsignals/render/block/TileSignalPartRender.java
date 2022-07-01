@@ -8,8 +8,8 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -46,7 +46,7 @@ public class TileSignalPartRender {
 
     private static void renderBase(String blockId, TileSignalPart tile) {
 
-        for (Map.Entry<String, ContentPackSignalModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
+        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
@@ -62,7 +62,7 @@ public class TileSignalPartRender {
             }
             OBJRender renderer = cache.get(objId);
 
-            for (ContentPackSignalModel baseModel : baseModels.getValue()) {
+            for (ContentPackModel baseModel : baseModels.getValue()) {
                 ContentPackBlock block = baseModel.getBlock();
                 Vec3d translate = block.getAsVec3d(block::getTranslation);
                 Vec3d scale = block.getAsVec3d(block::getScaling);
@@ -119,7 +119,7 @@ public class TileSignalPartRender {
             String tileSignalState = tileSignalGroups.get(groupId);
             ContentPackSignalState signalState = signalGroup.getStates().get(tileSignalState);
 
-            for (Map.Entry<String, ContentPackSignalModel[]> signalModels : signalState.getModels().entrySet()) {
+            for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
 
                 String path = signalModels.getKey();
 
@@ -134,7 +134,7 @@ public class TileSignalPartRender {
                 }
                 OBJRender renderer = cache.get(objId);
 
-                for (ContentPackSignalModel signalModel : signalModels.getValue()) {
+                for (ContentPackModel signalModel : signalModels.getValue()) {
                     ContentPackBlock block = signalModel.getBlock();
                     Vec3d translate = block.getAsVec3d(block::getTranslation);
                     Vec3d scale = block.getAsVec3d(block::getScaling);

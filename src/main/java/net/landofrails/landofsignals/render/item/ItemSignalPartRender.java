@@ -12,8 +12,8 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.world.World;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -59,7 +59,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
     private static void renderBase(String itemId) {
 
-        for (Map.Entry<String, ContentPackSignalModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
+        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
@@ -74,7 +74,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             }
             OBJRender renderer = cache.get(objId);
 
-            for (ContentPackSignalModel baseModel : baseModels.getValue()) {
+            for (ContentPackModel baseModel : baseModels.getValue()) {
                 ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                 Vec3d translate = item.getAsVec3d(item::getTranslation);
                 Vec3d scale = item.getAsVec3d(item::getScaling);
@@ -127,7 +127,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
             ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
 
-            for (Map.Entry<String, ContentPackSignalModel[]> signalModels : signalState.getModels().entrySet()) {
+            for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
 
                 String path = signalModels.getKey();
 
@@ -143,7 +143,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                 }
                 OBJRender renderer = cache.get(objId);
 
-                for (ContentPackSignalModel signalModel : signalModels.getValue()) {
+                for (ContentPackModel signalModel : signalModels.getValue()) {
                     ContentPackItem item = signalModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                     Vec3d translate = item.getAsVec3d(item::getTranslation);
                     Vec3d scale = item.getAsVec3d(item::getScaling);

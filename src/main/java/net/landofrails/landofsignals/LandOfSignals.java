@@ -109,24 +109,12 @@ public class LandOfSignals extends ModCore.Mod {
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, new ItemSignalPartRender());
                 // ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
-                ItemRender.register(LOSItems.ITEM_SIGN_PART, ItemSignPartRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
                 break;
             case RELOAD:
-
-                // Release renderers after reload (rejoining a world for example)
-
-                TileSignalBoxRender.releaseRenderersIntoTheWild();
-                TileSignalLeverRender.releaseRenderersIntoTheWild();
-                TileSignalPartAnimatedRender.releaseRenderersIntoTheWild();
-                TileSignalSO12Render.releaseRenderersIntoTheWild();
-                TileTicketMachineDBRender.releaseRenderersIntoTheWild();
-                TileTicketMachineSBBRender.releaseRenderersIntoTheWild();
-                TileSignPartRender.releaseRenderersIntoTheWild();
-
-                break;
             case FINALIZE:
             default:
                 break;

@@ -1,7 +1,4 @@
-package net.landofrails.api.contentpacks.v2.signal;
-
-import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
+package net.landofrails.api.contentpacks.v2.parent;
 
 import java.util.Collections;
 import java.util.Map;
@@ -10,7 +7,7 @@ import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 @SuppressWarnings({"java:S100", "java:S116", "java:S117"})
-public class ContentPackSignalReferences {
+public class ContentPackReferences {
 
     private Map<String, float[]> translationRefs;
     private Map<String, float[]> rotationRefs;
@@ -22,11 +19,11 @@ public class ContentPackSignalReferences {
     private Map<String, ContentPackItem> contentPackItemRefs;
     private Map<String, ContentPackBlock> contentPackBlockRefs;
 
-    public ContentPackSignalReferences() {
+    public ContentPackReferences() {
 
     }
 
-    public ContentPackSignalReferences(Map<String, float[]> translationRefs, Map<String, float[]> rotationRefs, Map<String, float[]> scalingRefs, Map<String, String[]> textureRefs, Map<String, String[]> obj_groupRefs, Map<String, ContentPackItem> contentPackItemRefs, Map<String, ContentPackBlock> contentPackBlockRefs) {
+    public ContentPackReferences(Map<String, float[]> translationRefs, Map<String, float[]> rotationRefs, Map<String, float[]> scalingRefs, Map<String, String[]> textureRefs, Map<String, String[]> obj_groupRefs, Map<String, ContentPackItem> contentPackItemRefs, Map<String, ContentPackBlock> contentPackBlockRefs) {
         this.translationRefs = translationRefs;
         this.rotationRefs = rotationRefs;
         this.scalingRefs = scalingRefs;

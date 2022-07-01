@@ -1,13 +1,14 @@
 package net.landofrails.landofsignals;
 
-import net.landofrails.api.contentpacks.v1.ContentPackSignObject;
-import net.landofrails.api.contentpacks.v1.ContentPackSignPart;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class LOSBlocks {
 
@@ -146,39 +147,58 @@ public class LOSBlocks {
 
         // Signs
 
-        final ContentPackSignPart MISSING_SIGN = new ContentPackSignPart(Static.MISSING, "Missing! Check your content packs", new ContentPackSignObject("models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}));
-        BLOCK_SIGN_PART.add(MISSING_SIGN);
-        final ContentPackSignObject blockSignPartMetalRod = new ContentPackSignObject("models/block/landofsignals/signs/gsar/metalrod/metalrod.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Metal_Rod01_MR01"});
+        registerSignContentPack(Static.MISSING, "Missing! Check your content packs", models("models/block/others/blocknotfound/blocknotfound.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        final Map.Entry<String, ContentPackModel[]> blockSignPartMetalRod = new AbstractMap.SimpleEntry<>("models/block/landofsignals/signs/gsar/metalrod/metalrod.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Metal_Rod01_MR01"})});
 
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_metal_rod", "GSAR Metal Rod", blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_ne1", "GSAR Trapeztafel NE1", new ContentPackSignObject("models/block/landofsignals/signs/gsar/ne1/signalne1.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})));
+        registerSignContentPack("block_sign_part_gsar_metal_rod", "GSAR Metal Rod", Collections.singletonMap(blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_ne1", "GSAR Trapeztafel NE1", Collections.singletonMap("models/block/landofsignals/signs/gsar/ne1/signalne1.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}));
 
         // Signs: SH2
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_sh2_full_wo_light", "GSAR Schutzsignal SH2 (Full, w/o Light)", new ContentPackSignObject("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02"})));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_sh2_top_wo_light", "GSAR Schutzsignal SH2 (Top, w/o Light)", new ContentPackSignObject("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01"})));
+        registerSignContentPack("block_sign_part_gsar_sh2_full_wo_light", "GSAR Schutzsignal SH2 (Full, w/o Light)", Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02"})}));
+        registerSignContentPack("block_sign_part_gsar_sh2_top_wo_light", "GSAR Schutzsignal SH2 (Top, w/o Light)", Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01"})}));
 
         // Signs: Hecto Signs
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_hecto_sign", "GSAR Hectosignal", new ContentPackSignObject("models/block/landofsignals/signs/gsar/hectosign/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_bu5_sign", "GSAR Laeutetafel BU5", new ContentPackSignObject("models/block/landofsignals/signs/gsar/bu5/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_lf2_sign", "GSAR Anfangsscheibe LF2", new ContentPackSignObject("models/block/landofsignals/signs/gsar/lf2/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_lf3_sign", "GSAR Endscheibe LF3", new ContentPackSignObject("models/block/landofsignals/signs/gsar/lf3/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_ne2_sign", "GSAR Vorsignaltafel NE2", new ContentPackSignObject("models/block/landofsignals/signs/gsar/ne2/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_ne5_sign", "GSAR Haltetafel NE5", new ContentPackSignObject("models/block/landofsignals/signs/gsar/ne5/hectosign.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
+        registerSignContentPack("block_sign_part_gsar_hecto_sign", "GSAR Hectosignal", models("models/block/landofsignals/signs/gsar/hectosign/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_bu5_sign", "GSAR Laeutetafel BU5", models("models/block/landofsignals/signs/gsar/bu5/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_lf2_sign", "GSAR Anfangsscheibe LF2", models("models/block/landofsignals/signs/gsar/lf2/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_lf3_sign", "GSAR Endscheibe LF3", models("models/block/landofsignals/signs/gsar/lf3/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_ne2_sign", "GSAR Vorsignaltafel NE2", models("models/block/landofsignals/signs/gsar/ne2/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_ne5_sign", "GSAR Haltetafel NE5", models("models/block/landofsignals/signs/gsar/ne5/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Signs: BU
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_bu2_sign", "GSAR Rautentafel BU2", new ContentPackSignObject("models/block/landofsignals/signs/gsar/bu2/signalbu2.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_bu3_sign", "GSAR Warntafel BU3", new ContentPackSignObject("models/block/landofsignals/signs/gsar/bu3/signalbu3.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_bu4_sign", "GSAR Pfeiftafel BU4", new ContentPackSignObject("models/block/landofsignals/signs/gsar/bu4/signalbu4.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
+        registerSignContentPack("block_sign_part_gsar_bu2_sign", "GSAR Rautentafel BU2", models("models/block/landofsignals/signs/gsar/bu2/signalbu2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_bu3_sign", "GSAR Warntafel BU3", models("models/block/landofsignals/signs/gsar/bu3/signalbu3.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_bu4_sign", "GSAR Pfeiftafel BU4", models("models/block/landofsignals/signs/gsar/bu4/signalbu4.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Signs: LF
-        BLOCK_SIGN_PART.add(new ContentPackSignPart("block_sign_part_gsar_lf1_sign", "GSAR Langsamfahrscheibe LF1", new ContentPackSignObject("models/block/landofsignals/signs/gsar/lf1/signallf1.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}), blockSignPartMetalRod));
-
+        registerSignContentPack("block_sign_part_gsar_lf1_sign", "GSAR Langsamfahrscheibe LF1", models("models/block/landofsignals/signs/gsar/lf1/signallf1.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
         ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false);
+    }
 
+    private static void registerSignContentPack(String id, String name, Map<String, ContentPackModel[]> models) {
+        ContentPackSign contentPackSign = new ContentPackSign();
+        contentPackSign.setId(id);
+        contentPackSign.setName(name);
+        contentPackSign.setBase(models);
+
+        contentPackSign.validate(missing -> {
+            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+        });
+
+        BLOCK_SIGN_PART.add(contentPackSign);
+    }
+
+    private static Map<String, ContentPackModel[]> models(Object... data) {
+        Map<String, ContentPackModel[]> map = new HashMap<>();
+        String key = null;
+        for (int index = 0; index < data.length; index += 2) {
+            map.put((String) data[index], (ContentPackModel[]) data[index + 1]);
+        }
+        return map;
     }
 
 }

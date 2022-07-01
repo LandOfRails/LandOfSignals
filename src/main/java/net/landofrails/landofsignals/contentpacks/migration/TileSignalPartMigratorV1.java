@@ -2,8 +2,8 @@ package net.landofrails.landofsignals.contentpacks.migration;
 
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.configs.LegacyMode;
@@ -48,7 +48,7 @@ public class TileSignalPartMigratorV1 implements IMigrator {
 
             String texturePath = nbt.getString("texturePath");
             Map.Entry<String, ContentPackSignalGroup> firstGroup = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals().entrySet().iterator().next();
-            Predicate<Map<String, ContentPackSignalModel[]>> containsTexture = map -> map.values().stream().flatMap(Arrays::stream).flatMap(model -> Arrays.stream(model.getTextures())).anyMatch(tex -> Objects.equals(tex, texturePath));
+            Predicate<Map<String, ContentPackModel[]>> containsTexture = map -> map.values().stream().flatMap(Arrays::stream).flatMap(model -> Arrays.stream(model.getTextures())).anyMatch(tex -> Objects.equals(tex, texturePath));
             Optional<String> stateId = firstGroup.getValue().getStates().entrySet().stream().filter(stateEntry -> containsTexture.test(stateEntry.getValue().getModels())).map(Map.Entry::getKey).findFirst();
             if (stateId.isPresent()) {
                 Map.Entry<String, String> groupStateEntry = new AbstractMap.SimpleEntry<>(firstGroup.getKey(), stateId.get());
