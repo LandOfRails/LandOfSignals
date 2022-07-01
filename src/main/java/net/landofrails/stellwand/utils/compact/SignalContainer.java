@@ -1,5 +1,6 @@
 package net.landofrails.stellwand.utils.compact;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.math.Vec3i;
@@ -50,14 +51,25 @@ public class SignalContainer<T extends BlockEntity> {
 
     public static SignalContainer<BlockEntity> of(TagCompound tag) {
         EntryType type = tag.getEnum("type", EntryType.class);
+        boolean isClient = isClient();
         if (type.equals(EntryType.BLOCKSIGNAL)) {
-            BlockSignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
+            BlockSignalStorageEntity entity = tag.getTile(TILEENTITY, isClient);
             return of(entity);
         } else if (type.equals(EntryType.BLOCKMULTISIGNAL)) {
-            BlockMultisignalStorageEntity entity = tag.getTile(TILEENTITY, tag.getBoolean(ISCLIENT));
+            BlockMultisignalStorageEntity entity = tag.getTile(TILEENTITY, isClient);
             return of(entity);
         }
         return null;
+    }
+
+    private static boolean isClient() {
+        boolean isClient = false;
+        try {
+            isClient = MinecraftClient.getPlayer().getWorld().isClient;
+        } catch (Exception e) {
+            // The multiplayer server throws exception due to missing client classes.
+        }
+        return isClient;
     }
 
     public static boolean isSignal(World world, Vec3i signalPos) {

@@ -130,7 +130,7 @@ public class ItemBlockMultisignal extends CustomItem {
         if (world.isServer) {
             return;
         }
-        
+
         int sizeInHand = player.getHeldItem(hand).getCount();
         SelectItem si = new SelectItem();
         si.open(player, EntryType.BLOCKMULTISIGNAL, new ItemStack(CustomItems.ITEMBLOCKMULTISIGNAL, 1), item -> {
@@ -201,6 +201,9 @@ public class ItemBlockMultisignal extends CustomItem {
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+
+        if (world.isClient)
+            Stellwand.warnPlayers();
 
         if (isStandingInBlock(player.getBlockPosition().subtract(target)))
             return ClickResult.REJECTED;
