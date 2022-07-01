@@ -63,12 +63,13 @@ public class SignalContainer<T extends BlockEntity> {
     }
 
     private static boolean isClient() {
+        boolean isClient = false;
         try {
-            return MinecraftClient.getPlayer().getWorld().isClient;
+            isClient = MinecraftClient.getPlayer().getWorld().isClient;
         } catch (Exception e) {
             // The multiplayer server throws exception due to missing client classes.
-            return false;
         }
+        return isClient;
     }
 
     public static boolean isSignal(World world, Vec3i signalPos) {
