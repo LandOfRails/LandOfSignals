@@ -137,6 +137,20 @@ public class ContentPackSign {
                 Stream.of(signModelEntry.getValue()).forEach(model -> model.validate(signConsumer, references));
             }
         }
+
+        if (objTextures.isEmpty()) {
+            for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+                for (ContentPackModel model : modelEntry.getValue()) {
+                    String objPath = modelEntry.getKey();
+                    objTextures.putIfAbsent(objPath, new HashSet<>());
+                    objTextures.computeIfPresent(objPath, (key, value) -> {
+                        value.addAll(Arrays.asList(model.getTextures()));
+                        return value;
+                    });
+                }
+            }
+        }
+
     }
 
     private void defaultMissing() {
@@ -148,7 +162,7 @@ public class ContentPackSign {
         }
 
         if (creativeTab == null) {
-            creativeTab = LOSTabs.SIGNALS_TAB;
+            creativeTab = LOSTabs.SIGNS_TAB;
         }
 
         if (metadata == null) {
@@ -163,20 +177,6 @@ public class ContentPackSign {
         if (objTextures == null) {
             objTextures = new HashMap<>();
         }
-        if (objTextures.isEmpty()) {
-            for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
-                for (ContentPackModel model : modelEntry.getValue()) {
-                    String objPath = modelEntry.getKey();
-                    objTextures.putIfAbsent(objPath, new HashSet<>());
-                    objTextures.computeIfPresent(objPath, (key, value) -> {
-                        // FIXME Why is there a NullPointer being thrown here?
-                        value.addAll(Arrays.asList(model.getTextures()));
-                        return value;
-                    });
-                }
-            }
-        }
-
     }
 
 }

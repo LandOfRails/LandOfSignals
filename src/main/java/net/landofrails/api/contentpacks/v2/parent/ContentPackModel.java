@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@SuppressWarnings({"java:S100", "java:S116", "java:S117"})
 public class ContentPackModel {
 
     private String[] textures;
-    @SuppressWarnings("java:S116")
     private String[] obj_groups;
     private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
@@ -32,18 +32,21 @@ public class ContentPackModel {
 
     public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] scaling) {
         this.block = new ContentPackBlock(blockTranslation, null, scaling);
-        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
+        this.item = new HashMap<>();
+        item.put(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
     }
 
     public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] scaling, String[] obj_groups) {
         this.block = new ContentPackBlock(blockTranslation, null, scaling);
-        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
+        this.item = new HashMap<>();
+        item.put(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, scaling));
         this.obj_groups = obj_groups;
     }
 
     public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] blockScaling, float[] itemScaling, String[] obj_groups) {
         this.block = new ContentPackBlock(blockTranslation, null, blockScaling);
-        this.item = Collections.singletonMap(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, itemScaling));
+        this.item = new HashMap<>();
+        item.put(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, itemScaling));
         this.obj_groups = obj_groups;
     }
 

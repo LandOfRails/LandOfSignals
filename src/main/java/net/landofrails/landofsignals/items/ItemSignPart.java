@@ -11,10 +11,13 @@ import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
+import net.landofrails.landofsignals.utils.Static;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,4 +52,24 @@ public class ItemSignPart extends CustomItem {
         if (tag != null && tag.hasKey("itemId")) return LOSBlocks.BLOCK_SIGN_PART.getName(tag.getString("itemId"));
         else return "Error missing tag \"itemId\" for ItemSignPart";
     }
+
+    @Override
+    public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+        List<ItemStack> itemStackList = new ArrayList<>();
+
+        if (creativeTab != null && creativeTab.equals(LOSTabs.get(LOSTabs.SIGNS_TAB))) {
+            for (String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()) {
+                if (!id.equals(Static.MISSING)) {
+                    ItemStack is = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);
+                    TagCompound tag = is.getTagCompound();
+                    tag.setString("itemId", id);
+                    is.setTagCompound(tag);
+                    itemStackList.add(is);
+                }
+            }
+        }
+
+        return itemStackList;
+    }
+
 }

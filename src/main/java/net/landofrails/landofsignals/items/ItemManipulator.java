@@ -8,15 +8,19 @@ import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSTabs;
+import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.IManipulate;
 
 import java.util.List;
 
 public class ItemManipulator extends CustomItem {
+
+    private static final boolean DISABLED = true;
 
     private BlockEntity block;
     private Vec3d playerMainPos;
@@ -37,14 +41,24 @@ public class ItemManipulator extends CustomItem {
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         sneak = player.isCrouching();
         BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
+
+        // FIXME Check implementation for signals and signs
+        // FIXME Enable tool after check
+        if (DISABLED) {
+            if (world.isClient)
+                player.sendMessage(PlayerMessage.translate("message." + LandOfSignals.MODID + ":item.manipulator.disabled"));
+            block = null;
+        }
+
         if (block instanceof IManipulate) {
             this.block = block;
             this.playerMainPos = MinecraftClient.getPlayer().getPosition();
+            if (world.isClient) {
+                LOSGuis.MANIPULATOR.open(player, block.getPos());
+                return ClickResult.ACCEPTED;
+            }
         }
-        if (world.isClient) {
-            LOSGuis.MANIPULATOR.open(player, block.getPos());
-            return ClickResult.ACCEPTED;
-        } else return ClickResult.REJECTED;
+        return ClickResult.REJECTED;
     }
 
     public BlockEntity getBlock() {

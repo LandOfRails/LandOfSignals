@@ -169,6 +169,32 @@ public class ContentPackSignal {
                     Stream.of(signalModelEntry.getValue()).forEach(model -> model.validate(signalConsumer, references));
                 }
             }
+            if (objTextures.isEmpty()) {
+                for (ContentPackSignalGroup group : signals.values()) {
+                    for (ContentPackSignalState state : group.getStates().values()) {
+                        for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
+                            for (ContentPackModel model : modelEntry.getValue()) {
+                                String objPath = modelEntry.getKey();
+                                objTextures.putIfAbsent(objPath, new HashSet<>());
+                                objTextures.computeIfPresent(objPath, (key, value) -> {
+                                    value.addAll(Arrays.asList(model.getTextures()));
+                                    return value;
+                                });
+                            }
+                        }
+                    }
+                }
+                for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+                    for (ContentPackModel model : modelEntry.getValue()) {
+                        String objPath = modelEntry.getKey();
+                        objTextures.putIfAbsent(objPath, new HashSet<>());
+                        objTextures.computeIfPresent(objPath, (key, value) -> {
+                            value.addAll(Arrays.asList(model.getTextures()));
+                            return value;
+                        });
+                    }
+                }
+            }
         }
 
     }
@@ -215,33 +241,6 @@ public class ContentPackSignal {
         if (objTextures == null) {
             objTextures = new HashMap<>();
         }
-        if (objTextures.isEmpty()) {
-            for (ContentPackSignalGroup group : signals.values()) {
-                for (ContentPackSignalState state : group.getStates().values()) {
-                    for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
-                        for (ContentPackModel model : modelEntry.getValue()) {
-                            String objPath = modelEntry.getKey();
-                            objTextures.putIfAbsent(objPath, new HashSet<>());
-                            objTextures.computeIfPresent(objPath, (key, value) -> {
-                                value.addAll(Arrays.asList(model.getTextures()));
-                                return value;
-                            });
-                        }
-                    }
-                }
-            }
-            for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
-                for (ContentPackModel model : modelEntry.getValue()) {
-                    String objPath = modelEntry.getKey();
-                    objTextures.putIfAbsent(objPath, new HashSet<>());
-                    objTextures.computeIfPresent(objPath, (key, value) -> {
-                        value.addAll(Arrays.asList(model.getTextures()));
-                        return value;
-                    });
-                }
-            }
-        }
-
     }
 
 }

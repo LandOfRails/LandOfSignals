@@ -1,5 +1,6 @@
 itemGroup.landofsignals.stellwand=LOS | Stellwand
 itemGroup.landofsignals.signals=LOS | Signale
+itemGroup.landofsiganls.signs=LOS | Schilder
 itemGroup.landofsignals.assets=LOS | Assets
 
 gui.landofsignals:signalbox.redstone=Mit redstone
@@ -25,6 +26,8 @@ item.landofsignals:item_connector.name=Verbindungstool
 item.landofsignals:item_manipulator.name=Manipulierungstool
 item.landofsignals:item_signal_selector.name=Signal-Auswahl-Tool
 item.landofsignals:item_sign_selector.name=Schild-Auswahl-Tool
+
+message.landofsignals:item.manipulator.disabled=§4Dieses Werkzeug ist derzeit nicht verfügbar. §cEs wird mit dem nächsten Update wieder aktiviert.
 
 # -- Stellwand --
 
