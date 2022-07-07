@@ -2,7 +2,7 @@
 
 newmtl Default
 Kd 1 1 1
-map_Kd signal_lf1_lf6.png
+map_Kd signalra10b.png
 Ks 1 1 1
 Ns 50
 illum 7

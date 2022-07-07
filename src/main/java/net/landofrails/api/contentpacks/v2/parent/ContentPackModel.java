@@ -50,6 +50,12 @@ public class ContentPackModel {
         this.obj_groups = obj_groups;
     }
 
+    public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] blockScaling, float[] itemScaling, float[] rotation) {
+        this.block = new ContentPackBlock(blockTranslation, rotation, blockScaling);
+        this.item = new HashMap<>();
+        item.put(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, rotation, itemScaling));
+    }
+
     public void validate(Consumer<String> modelConsumer, ContentPackReferences references) {
 
         if (textures == null) {
