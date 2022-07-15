@@ -29,6 +29,8 @@ item.landofsignals:item_sign_selector.name=Schild-Auswahl-Tool
 
 message.landofsignals:item.manipulator.disabled=§4Dieses Werkzeug ist derzeit nicht verfügbar. §cEs wird mit dem nächsten Update wieder aktiviert.
 
+label.landofsignals:signtexteditor.savebutton=Speichern
+
 # -- Stellwand --
 
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler

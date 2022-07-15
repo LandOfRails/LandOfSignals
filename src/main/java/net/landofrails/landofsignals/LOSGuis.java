@@ -20,6 +20,7 @@ public class LOSGuis {
     public static final GuiRegistry.GUI SIGN_SELECTOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_SELECTOR"), GuiSelectSign::new);
     public static final GuiRegistry.GUI LEGACYMODE_SELECTOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "LEGACYMODE_SELECTER"), GuiLegacyModeSelection::new);
     public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipualtor::new);
+    public static final GuiRegistry.GUI SIGN_TEXTEDITOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_TEXTEDTIOR"), GuiSignTextEditor::new);
 
     public static void register() {
         // loads static classes and ctrs

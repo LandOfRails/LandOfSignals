@@ -9,6 +9,7 @@ import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignPart;
@@ -43,7 +44,8 @@ public class TileSignPartRender {
 
     private static void renderBase(String blockId, TileSignPart tile) {
 
-        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase().entrySet()) {
+        ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId);
+        for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSign.getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
@@ -87,6 +89,11 @@ public class TileSignPartRender {
                         renderer.draw();
                     } else {
                         renderer.drawGroups(Arrays.asList(groups));
+                    }
+
+                    if (contentPackSign.isWriteable()) {
+                        // TODO Implement
+                        // GlobalRender.drawText()
                     }
 
                 } catch (Exception e) {

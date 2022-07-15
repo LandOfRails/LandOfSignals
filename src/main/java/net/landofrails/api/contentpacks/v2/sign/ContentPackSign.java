@@ -20,6 +20,7 @@ public class ContentPackSign {
     private String id;
     private Float rotationSteps;
     private String creativeTab;
+    private Boolean writeable;
     // objPath : objProperties
     private Map<String, ContentPackModel[]> base;
     private ContentPackReferences references;
@@ -62,6 +63,14 @@ public class ContentPackSign {
 
     public void setCreativeTab(String creativeTab) {
         this.creativeTab = creativeTab;
+    }
+
+    public boolean isWriteable() {
+        return Boolean.TRUE.equals(writeable);
+    }
+
+    public void setWriteable(Boolean writeable) {
+        this.writeable = writeable;
     }
 
     public Map<String, ContentPackModel[]> getBase() {

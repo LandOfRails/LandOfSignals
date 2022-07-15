@@ -54,5 +54,9 @@ public class BlockSignPart extends BlockTypeEntity {
         if (contentPackSigns.containsKey(id)) return id;
         else return Static.MISSING;
     }
-    
+
+    public boolean isWritable(String id) {
+        if (!contentPackSigns.containsKey(id)) return false;
+        else return contentPackSigns.get(id).isWriteable();
+    }
 }

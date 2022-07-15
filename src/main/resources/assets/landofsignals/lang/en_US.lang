@@ -29,6 +29,8 @@ item.landofsignals:item_sign_selector.name=Sign selector tool
 
 message.landofsignals:item.manipulator.disabled=§4This tool is currently not available. §cIt will be reactivated with the next update.
 
+label.landofsignals:signtexteditor.savebutton=Save
+
 # -- Stellwand --
 
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler
