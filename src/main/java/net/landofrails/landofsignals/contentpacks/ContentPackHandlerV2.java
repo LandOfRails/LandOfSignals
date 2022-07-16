@@ -30,10 +30,15 @@ public class ContentPackHandlerV2 {
 
         if (hasContent) {
             contentPack.getContent().forEach((path, type) -> {
-                if (type == EntryType.BLOCKSIGNAL) {
-                    loadSignal(zip, path);
-                } else {
-                    ModCore.warn("Type %s is currently not implemented in V2!", type.name());
+                switch (type) {
+                    case BLOCKSIGNAL:
+                        loadSignal(zip, path);
+                        break;
+                    case BLOCKSIGN:
+                        loadSign(zip, path);
+                        break;
+                    default:
+                        ModCore.error("Type %s is currently not implemented in V2!", type.name());
                 }
             });
         }
