@@ -233,7 +233,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
                 nbt.setString("id", "MISSING");
             }
 
-            ModCore.info("Converting tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
+            ModCore.info("Converting signalpart-tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
 
             save(nbt);
 

@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals.tile;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
@@ -117,21 +118,26 @@ public class TileSignPart extends BlockEntity implements IManipulate {
     @Override
     public void load(TagCompound nbt) throws SerializationException {
 
-        if (nbt.hasKey("id") && !nbt.getString("id").contains(":")) {
+        if (!nbt.hasKey("version"))
+            nbt.setInteger("version", 1);
+
+        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase("MISSING")) {
 
             String signalId = nbt.getString("id");
-            Set<String> keys = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet();
+            Set<String> keys = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet();
 
             String wantedKey = null;
 
             for (String key : keys) {
-                String keyBlockId = key.split(":")[key.split(":").length];
-                if (keyBlockId.equalsIgnoreCase(signalId)) {
-                    if (wantedKey == null) {
-                        wantedKey = key;
-                    } else {
-                        wantedKey = null;
-                        break;
+                if (!key.equalsIgnoreCase("MISSING")) {
+                    String keyBlockId = key.split(":")[1];
+                    if (keyBlockId.equalsIgnoreCase(signalId)) {
+                        if (wantedKey == null) {
+                            wantedKey = key;
+                        } else {
+                            wantedKey = null;
+                            break;
+                        }
                     }
                 }
             }
@@ -142,7 +148,10 @@ public class TileSignPart extends BlockEntity implements IManipulate {
                 nbt.setString("id", "MISSING");
             }
 
-        }
+            ModCore.info("Converting signpart-tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
 
+            save(nbt);
+
+        }
     }
 }
