@@ -72,4 +72,13 @@ public class ItemSignPart extends CustomItem {
         return itemStackList;
     }
 
+    @Override
+    public List<String> getTooltip(ItemStack itemStack) {
+        String itemId = itemStack.getTagCompound().getString("itemId");
+        List<String> tooltips = new ArrayList<>();
+        if (itemId != null) {
+            tooltips.add("ID: " + itemId);
+        }
+        return tooltips;
+    }
 }

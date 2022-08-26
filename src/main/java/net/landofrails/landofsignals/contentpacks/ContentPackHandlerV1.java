@@ -4,6 +4,7 @@ import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v1.ContentPackHead;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalSet;
+import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
@@ -57,7 +58,7 @@ public class ContentPackHandlerV1 {
                                 states.add(0, null);
                                 contentPackSignalPart.setStates(states);
 
-                                convertToV2(contentPackSignalPart, true);
+                                convertToV2(contentPackSignalPart, true, new ContentPack(contentPack));
 
                             }
                         }
@@ -68,10 +69,11 @@ public class ContentPackHandlerV1 {
         }
     }
 
-    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation) {
+    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation, ContentPack contentPack) {
 
         // ContentPackSignal
         ContentPackSignal contentPackSignal = new ContentPackSignal();
+
         contentPackSignal.setId(contentPackSignalPart.getId());
         contentPackSignal.setName(contentPackSignalPart.getName());
         contentPackSignal.setMetadata(Collections.singletonMap("addonversion", 1));
@@ -112,13 +114,13 @@ public class ContentPackHandlerV1 {
 
         // Nesting
         contentPackSignalGroup.setStates(contentPackSignalStateMap);
-        contentPackSignal.setSignals(Collections.singletonMap(contentPackSignal.getId(), contentPackSignalGroup));
+        contentPackSignal.setSignals(Collections.singletonMap(contentPackSignal.getUniqueId(), contentPackSignalGroup));
 
         ModCore.info("Signal (v1->v2): %s", contentPackSignal.getName());
         // Validate
         contentPackSignal.validate(missing -> {
             throw new ContentPackException(String.format("There are missing attributes in converted contentpacksignal: %s", missing));
-        });
+        }, contentPack);
         LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
 
     }

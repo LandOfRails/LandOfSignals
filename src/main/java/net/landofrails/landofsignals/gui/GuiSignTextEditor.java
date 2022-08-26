@@ -1,17 +1,20 @@
 package net.landofrails.landofsignals.gui;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.text.TextUtil;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.packet.SignTextPacket;
 
 public class GuiSignTextEditor implements IScreen {
 
+    private static final String TEXTEDITORNEEDSNEWVERSIONMESSAGEKEY = "message." + LandOfSignals.MODID + ":sign.texteditor.needs.new.umc.version";
     private static final String SAVEBUTTONLABELKEY = "label." + LandOfSignals.MODID + ":signtexteditor.savebutton";
 
     private static String prevText;
@@ -34,6 +37,10 @@ public class GuiSignTextEditor implements IScreen {
         new Button(screen, -100, 55, 200, 20, TextUtil.translate(SAVEBUTTONLABELKEY)) {
             @Override
             public void onClick(Player.Hand hand) {
+
+                // FIXME Remove with new umc version
+                MinecraftClient.getPlayer().sendMessage(PlayerMessage.translate(TEXTEDITORNEEDSNEWVERSIONMESSAGEKEY));
+                //
                 SignTextPacket.sendTextToServer(signPos, textField.getText());
                 screen.close();
             }

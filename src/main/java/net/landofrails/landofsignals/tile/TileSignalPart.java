@@ -22,6 +22,7 @@ import net.landofrails.landofsignals.utils.IManipulate;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
@@ -204,6 +205,39 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
         if (!nbt.hasKey("version"))
             nbt.setInteger("version", 1);
+
+        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase("MISSING")) {
+
+            String signalId = nbt.getString("id");
+            Set<String> keys = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet();
+
+            String wantedKey = null;
+
+            for (String key : keys) {
+                if (!key.equalsIgnoreCase("MISSING")) {
+                    String keyBlockId = key.split(":")[1];
+                    if (keyBlockId.equalsIgnoreCase(signalId)) {
+                        if (wantedKey == null) {
+                            wantedKey = key;
+                        } else {
+                            wantedKey = null;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (wantedKey != null) {
+                nbt.setString("id", wantedKey);
+            } else {
+                nbt.setString("id", "MISSING");
+            }
+
+            ModCore.info("Converting tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
+
+            save(nbt);
+
+        }
 
         TileSignalPartMigratorV1 tileSignalPartMigratorV1 = TileSignalPartMigratorV1.getInstance();
         if (tileSignalPartMigratorV1.shouldBeMigrated(nbt)) {

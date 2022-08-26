@@ -8,6 +8,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -23,6 +24,7 @@ import net.landofrails.landofsignals.utils.Static;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S1192")
 public class ItemSignalPart extends CustomItem {
@@ -67,6 +69,35 @@ public class ItemSignalPart extends CustomItem {
     }
 
     @Override
+    public void onClickAir(Player player, World world, Player.Hand hand) {
+        if (world.isServer) {
+            String itemId = player.getHeldItem(hand).getTagCompound().getString("itemId");
+            if (!itemId.contains(":")) {
+                List<String> foundIds = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals()
+                        .keySet().stream().filter(itemIdIterator -> itemIdIterator.contains(":") && !itemIdIterator.equals("MISSING") && itemIdIterator
+                                .split(":")[1].equalsIgnoreCase(itemId)).collect(Collectors.toList());
+                if (foundIds.isEmpty()) {
+                    player.sendMessage(PlayerMessage.direct("§cThe id \"" + itemId + "\" couldn't be resolved to an existing contentpack!"));
+                    player.setHeldItem(hand, ItemStack.EMPTY);
+                } else if (foundIds.size() == 1) {
+                    ItemStack newSignalPart = new ItemStack(LOSItems.ITEM_SIGNAL_PART, player.getHeldItem(hand).getCount());
+                    String foundId = foundIds.get(0);
+
+                    TagCompound tag = newSignalPart.getTagCompound();
+                    tag.setString("itemId", foundId);
+                    newSignalPart.setTagCompound(tag);
+
+                    player.setHeldItem(hand, newSignalPart);
+                    player.sendMessage(PlayerMessage.direct("§cThe id \"" + itemId + "\" was replaced with \"" + foundId + "\"!"));
+                } else {
+                    player.sendMessage(PlayerMessage.direct("§cThe id \"" + itemId + "\" couldn't be resolved to a single contentpack! (multiple Ids found)"));
+                    player.setHeldItem(hand, ItemStack.EMPTY);
+                }
+            }
+        }
+    }
+
+    @Override
     public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
@@ -91,6 +122,19 @@ public class ItemSignalPart extends CustomItem {
         if (tag != null && tag.hasKey("itemId")) {
             String itemId = tag.getString("itemId");
             return LOSBlocks.BLOCK_SIGNAL_PART.getName(itemId);
-        } else return "Error missing tag \"itemId\" for ItemSignalPart";
+        } else {
+            return "Error missing tag \"itemId\" for ItemSignalPart";
+        }
     }
+
+    @Override
+    public List<String> getTooltip(ItemStack itemStack) {
+        String itemId = itemStack.getTagCompound().getString("itemId");
+        List<String> tooltips = new ArrayList<>();
+        if (itemId != null) {
+            tooltips.add("ID: " + itemId);
+        }
+        return tooltips;
+    }
+
 }

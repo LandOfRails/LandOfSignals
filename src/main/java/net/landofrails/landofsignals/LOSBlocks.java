@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals;
 
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
+import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
@@ -22,6 +23,9 @@ public class LOSBlocks {
     public static final BlockTicketMachineSBB BLOCK_TICKET_MACHINE_SBB = new BlockTicketMachineSBB(LandOfSignals.MODID, "BlockTicketMachineSBB");
     public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
 
+    // Contentpack
+    private static final ContentPack CONTENTPACK = new ContentPack("LandOfSignals", "LandOfSignals", "1.0", "2", null, null);
+
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
     public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = null; // new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
@@ -30,6 +34,8 @@ public class LOSBlocks {
     public static final BlockSignPart BLOCK_SIGN_PART = new BlockSignPart(LandOfSignals.MODID, "blocksign");
 
     public static void register() {
+
+
         // loads static classes and ctrs
         ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
             private static final long serialVersionUID = -1995088635629060337L;
@@ -185,7 +191,7 @@ public class LOSBlocks {
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
-        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false);
+        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false, CONTENTPACK);
     }
 
     private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models) {
@@ -197,7 +203,7 @@ public class LOSBlocks {
 
         contentPackSign.validate(missing -> {
             throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-        });
+        }, CONTENTPACK);
 
         BLOCK_SIGN_PART.add(contentPackSign);
     }

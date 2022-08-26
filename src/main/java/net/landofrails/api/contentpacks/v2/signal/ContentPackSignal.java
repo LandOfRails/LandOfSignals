@@ -1,6 +1,7 @@
 package net.landofrails.api.contentpacks.v2.signal;
 
 import com.google.gson.Gson;
+import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
@@ -33,6 +34,8 @@ public class ContentPackSignal {
 
     // Processed data
     private Map<String, Set<String>> objTextures;
+    private String uniqueId;
+
 
     public ContentPackSignal() {
 
@@ -58,7 +61,7 @@ public class ContentPackSignal {
         this.name = name;
     }
 
-    public String getId() {
+    private String getId() {
         return id;
     }
 
@@ -118,6 +121,10 @@ public class ContentPackSignal {
         return objTextures;
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
     public static ContentPackSignal fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
@@ -135,7 +142,7 @@ public class ContentPackSignal {
         return GSON.fromJson(json, ContentPackSignal.class);
     }
 
-    public void validate(Consumer<String> invalid) {
+    public void validate(Consumer<String> invalid, ContentPack contentPack) {
 
         if (references == null) {
             references = new ContentPackReferences();
@@ -155,6 +162,13 @@ public class ContentPackSignal {
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else {
+
+            if (!"MISSING".equalsIgnoreCase(id)) {
+                uniqueId = contentPack.getId() + ":" + id;
+            } else {
+                uniqueId = id;
+            }
+
             if (signals != null) {
 
                 for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {

@@ -42,15 +42,18 @@ public class BlockSignalPart extends BlockTypeEntity {
     }
 
     public String getName(String uncheckedId) {
+        if (!uncheckedId.contains(":")) {
+            return "ID: " + uncheckedId + "; Click into air to refresh item!";
+        }
         return contentPackSignals.get(checkIfMissing(uncheckedId)).getName();
     }
 
     public void add(ContentPackSignal contentPackSignal) {
-        if (!contentPackSignals.containsKey(contentPackSignal.getId())) {
-            contentPackSignals.put(contentPackSignal.getId(), contentPackSignal);
+        if (!contentPackSignals.containsKey(contentPackSignal.getUniqueId())) {
+            contentPackSignals.put(contentPackSignal.getUniqueId(), contentPackSignal);
         } else {
             //TODO: Add conflict info for user after he entered a world
-            ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignal.getId());
+            ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignal.getUniqueId());
         }
     }
 

@@ -97,7 +97,7 @@ public class ContentPackHandler {
             } else {
                 ModCore.error("Failed loading Contentpack named %s!\nUnsupported addonversion: %s." +
                         " Either your version of LandOfSignals is not up-to-date" +
-                        " or the author used an invalid addonversion.", addonversion);
+                        " or the author used an invalid addonversion.", genericContentPack.getName(), addonversion);
             }
 
 

@@ -2,6 +2,7 @@ package net.landofrails.api.contentpacks.v2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.landofrails.api.contentpacks.v1.ContentPackHead;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -27,6 +28,12 @@ public class ContentPack {
         this.addonversion = addonversion;
         this.content = content;
         this.contentSets = contentSets;
+    }
+
+    public ContentPack(ContentPackHead contentPack) {
+        this.name = contentPack.getName();
+        this.author = contentPack.getAuthor();
+        this.addonversion = "1";
     }
 
     public String getName() {

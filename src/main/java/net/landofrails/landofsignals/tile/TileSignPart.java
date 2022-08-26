@@ -5,6 +5,7 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
@@ -12,6 +13,8 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignTextPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
+
+import java.util.Set;
 
 public class TileSignPart extends BlockEntity implements IManipulate {
 
@@ -111,4 +114,35 @@ public class TileSignPart extends BlockEntity implements IManipulate {
         return signText;
     }
 
+    @Override
+    public void load(TagCompound nbt) throws SerializationException {
+
+        if (nbt.hasKey("id") && !nbt.getString("id").contains(":")) {
+
+            String signalId = nbt.getString("id");
+            Set<String> keys = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet();
+
+            String wantedKey = null;
+
+            for (String key : keys) {
+                String keyBlockId = key.split(":")[key.split(":").length];
+                if (keyBlockId.equalsIgnoreCase(signalId)) {
+                    if (wantedKey == null) {
+                        wantedKey = key;
+                    } else {
+                        wantedKey = null;
+                        break;
+                    }
+                }
+            }
+
+            if (wantedKey != null) {
+                nbt.setString("id", wantedKey);
+            } else {
+                nbt.setString("id", "MISSING");
+            }
+
+        }
+
+    }
 }

@@ -3,7 +3,6 @@ package net.landofrails.landofsignals.contentpacks;
 import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
-import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -32,10 +31,10 @@ public class ContentPackHandlerV2 {
             contentPack.getContent().forEach((path, type) -> {
                 switch (type) {
                     case BLOCKSIGNAL:
-                        loadSignal(zip, path);
+                        loadSignal(zip, path, contentPack);
                         break;
                     case BLOCKSIGN:
-                        loadSign(zip, path);
+                        loadSign(zip, path, contentPack);
                         break;
                     default:
                         ModCore.error("Type %s is currently not implemented in V2!", type.name());
@@ -43,14 +42,14 @@ public class ContentPackHandlerV2 {
             });
         }
         if (hasContentSets) {
-            contentPack.getContentSets().forEach(path -> loadSet(zip, path));
+            contentPack.getContentSets().forEach(path -> loadSet(zip, path, contentPack));
         }
         if (!hasContent && !hasContentSets) {
             ModCore.warn("ContentPack %s does not contain any blocks");
         }
     }
 
-    private static void loadSignal(ZipFile zip, String path) {
+    private static void loadSignal(ZipFile zip, String path, ContentPack contentPack) {
 
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
@@ -60,7 +59,7 @@ public class ContentPackHandlerV2 {
                 ContentPackSignal contentPackSignal = ContentPackSignal.fromJson(zip.getInputStream(zipEntry.get()));
                 contentPackSignal.validate(missing -> {
                     throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                });
+                }, contentPack);
                 ModCore.info("Signal: %s", contentPackSignal.getName());
                 LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
             } else {
@@ -76,7 +75,7 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadSign(ZipFile zip, String path) {
+    private static void loadSign(ZipFile zip, String path, ContentPack contentPack) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
@@ -85,7 +84,7 @@ public class ContentPackHandlerV2 {
                 ContentPackSign contentPackSign = ContentPackSign.fromJson(zip.getInputStream(zipEntry.get()));
                 contentPackSign.validate(missing -> {
                     throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                });
+                }, contentPack);
                 ModCore.info("Sign: %s", contentPackSign.getName());
 
                 LOSBlocks.BLOCK_SIGN_PART.add(contentPackSign);
@@ -102,7 +101,7 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadSet(ZipFile zip, String path) {
+    private static void loadSet(ZipFile zip, String path, ContentPack contentPack) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
@@ -114,13 +113,12 @@ public class ContentPackHandlerV2 {
                 });
                 ModCore.info("Set: %s", contentPackSet.getName());
                 contentPackSet.getContent().forEach((entryPath, type) -> {
-
                     switch (type) {
                         case BLOCKSIGNAL:
-                            loadSignal(zip, entryPath);
+                            loadSignal(zip, entryPath, contentPack);
                             break;
                         case BLOCKSIGN:
-                            loadSign(zip, entryPath);
+                            loadSign(zip, entryPath, contentPack);
                             break;
                         default:
                             ModCore.error("Type %s is currently not implemented in V2!", type.name());

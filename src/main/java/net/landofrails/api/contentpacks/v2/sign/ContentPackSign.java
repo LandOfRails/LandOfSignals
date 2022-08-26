@@ -1,6 +1,7 @@
 package net.landofrails.api.contentpacks.v2.sign;
 
 import com.google.gson.Gson;
+import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
@@ -29,6 +30,7 @@ public class ContentPackSign {
 
     // Processed data
     private Map<String, Set<String>> objTextures;
+    private String uniqueId;
 
     // TODO Constructors
 
@@ -105,6 +107,10 @@ public class ContentPackSign {
         this.objTextures = objTextures;
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
     public static ContentPackSign fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
@@ -122,7 +128,7 @@ public class ContentPackSign {
         return GSON.fromJson(json, ContentPackSign.class);
     }
 
-    public void validate(Consumer<String> invalid) {
+    public void validate(Consumer<String> invalid, ContentPack contentPack) {
 
         if (references == null) {
             references = new ContentPackReferences();
@@ -140,6 +146,12 @@ public class ContentPackSign {
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else if (!base.isEmpty()) {
+            if (!"MISSING".equalsIgnoreCase(id)) {
+                uniqueId = contentPack.getId() + ":" + id;
+            } else {
+                uniqueId = id;
+            }
+
             for (Map.Entry<String, ContentPackModel[]> signModelEntry : base.entrySet()) {
 
                 Consumer<String> signConsumer = text -> invalid.accept(signModelEntry.getKey() + ": [" + text + "]");
