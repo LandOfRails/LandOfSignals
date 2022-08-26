@@ -12,6 +12,7 @@ import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
+import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
@@ -104,7 +105,7 @@ public class GuiSignalPartBox implements IScreen {
         int scale = 8;
 
         TagCompound rightTag = itemStackRight.getTagCompound();
-        rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), String::new, value -> new TagCompound().setString("string", value));
+        rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackRight.setTagCompound(rightTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {
@@ -114,7 +115,7 @@ public class GuiSignalPartBox implements IScreen {
         }
 
         TagCompound leftTag = itemStackLeft.getTagCompound();
-        leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), String::new, value -> new TagCompound().setString("string", value));
+        leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackLeft.setTagCompound(leftTag);
 
         try (OpenGL.With ignored = OpenGL.matrix()) {
@@ -129,7 +130,7 @@ public class GuiSignalPartBox implements IScreen {
     private String nextMode(String mode) {
         boolean useNext = false;
         for (String m : modeGroups) {
-            if (m.equalsIgnoreCase(mode))
+            if (Objects.equals(m, mode))
                 useNext = true;
             else if (useNext)
                 return m;

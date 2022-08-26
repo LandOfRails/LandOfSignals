@@ -17,6 +17,7 @@ import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +40,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
             Map<String, String> itemGroupStates = new HashMap<>(LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemGroupStates());
             if (tag.hasKey("itemGroupState")) {
-                itemGroupStates.putAll(tag.getMap("itemGroupState", String::new, value -> value.getString("string")));
+                itemGroupStates.putAll(tag.getMap("itemGroupState", EmptyStringMapper::fromNullString, value -> value.getString("string")));
             }
 
             renderBase(itemId);
