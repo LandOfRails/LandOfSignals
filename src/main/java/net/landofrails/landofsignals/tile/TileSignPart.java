@@ -6,6 +6,7 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
@@ -18,6 +19,8 @@ import net.landofrails.landofsignals.utils.IManipulate;
 import java.util.Set;
 
 public class TileSignPart extends BlockEntity implements IManipulate {
+
+    private static final String MISSING = "MISSING";
 
     @TagField("blockRotation")
     private int blockRotate;
@@ -121,7 +124,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
         if (!nbt.hasKey("version"))
             nbt.setInteger("version", 1);
 
-        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase("MISSING")) {
+        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase(MISSING)) {
 
             String signalId = nbt.getString("id");
             Set<String> keys = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet();
@@ -129,7 +132,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
             String wantedKey = null;
 
             for (String key : keys) {
-                if (!key.equalsIgnoreCase("MISSING")) {
+                if (!key.equalsIgnoreCase(MISSING)) {
                     String keyBlockId = key.split(":")[1];
                     if (keyBlockId.equalsIgnoreCase(signalId)) {
                         if (wantedKey == null) {
@@ -145,10 +148,11 @@ public class TileSignPart extends BlockEntity implements IManipulate {
             if (wantedKey != null) {
                 nbt.setString("id", wantedKey);
             } else {
-                nbt.setString("id", "MISSING");
+                nbt.setString("id", MISSING);
             }
 
-            ModCore.info("Converting signpart-tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
+            Vec3i pos = this.getPos();
+            ModCore.info("Converting signpart-tile %s from id \"%s\" to \"%s\".", pos.toString(), signalId, nbt.getString("id"));
 
             save(nbt);
 

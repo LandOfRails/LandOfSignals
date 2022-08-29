@@ -26,6 +26,8 @@ import java.util.Set;
 
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
+    private static final String MISSING = "MISSING";
+
     @TagField("version")
     private Integer version;
     @TagField("blockRotation")
@@ -206,7 +208,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         if (!nbt.hasKey("version"))
             nbt.setInteger("version", 1);
 
-        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase("MISSING")) {
+        if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase(MISSING)) {
 
             String signalId = nbt.getString("id");
             Set<String> keys = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet();
@@ -214,7 +216,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
             String wantedKey = null;
 
             for (String key : keys) {
-                if (!key.equalsIgnoreCase("MISSING")) {
+                if (!key.equalsIgnoreCase(MISSING)) {
                     String keyBlockId = key.split(":")[1];
                     if (keyBlockId.equalsIgnoreCase(signalId)) {
                         if (wantedKey == null) {
@@ -230,10 +232,11 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
             if (wantedKey != null) {
                 nbt.setString("id", wantedKey);
             } else {
-                nbt.setString("id", "MISSING");
+                nbt.setString("id", MISSING);
             }
 
-            ModCore.info("Converting signalpart-tile from id \"%s\" to \"%s\".", signalId, nbt.getString("id"));
+            Vec3i pos = this.getPos();
+            ModCore.info("Converting signalpart-tile %s from id \"%s\" to \"%s\".", pos.toString(), signalId, nbt.getString("id"));
 
             save(nbt);
 
