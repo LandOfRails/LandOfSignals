@@ -5,11 +5,15 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class LOSBlocks {
 
@@ -25,6 +29,7 @@ public class LOSBlocks {
 
     // Contentpack
     private static final ContentPack CONTENTPACK = new ContentPack("LandOfSignals", "LandOfSignals", "1.0", "2", null, null);
+    private static final ContentPack CONTENTPACK_STELLWAND = new ContentPack("Stellwand", "Stellwand", "1.0", "2", null, null);
 
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
@@ -187,6 +192,15 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_ra11a_sign", "GSAR Wartezeichen RA11 (a)", false, models("models/block/landofsignals/signs/gsar/ra11a/signalra11a.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
         registerSignContentPack("block_sign_part_gsar_ra11b_sign", "GSAR Wartezeichen RA11 (b)", false, models("models/block/landofsignals/signs/gsar/ra11b/signalra11b.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
+        // Stellwand
+
+        registerSingleGroupStellwandContent(
+                "block_signal_straight_track",
+                "Signal Straight Track",
+                "models/block/stellwand/blocksignal/blocktrackstraight/blocksignal.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white"
+        );
 
     }
 
@@ -208,10 +222,67 @@ public class LOSBlocks {
         BLOCK_SIGN_PART.add(contentPackSign);
     }
 
+    private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {
+        if (!objPath.startsWith("models/block/stellwand"))
+            throw new RuntimeException("! Missing \"stellwand\" in objPath");
+
+
+        Function<String, Map<String, ContentPackModel[]>> signalModels = objGroup -> models(
+                objPath,
+                new ContentPackModel[]{
+                        new ContentPackModel(
+                                new float[]{0.5f, 0.5f, 0.5f},
+                                new float[]{0.5f, 0.5f, 0.5f},
+                                new float[]{1f, 1f, 1f},
+                                new float[]{1f, 1f, 1f},
+                                new float[]{0f, 180f, 0f},
+                                new String[]{objGroup}
+                        )
+                }
+        );
+
+        String groupIdName = "default";
+
+        LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+        signalNameAndId.forEach((signalName, signalId) ->
+                states.put(signalId, new ContentPackSignalState(signalName, signalModels.apply(signalId)))
+        );
+        Map<String, ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new ContentPackSignalGroup("default", states));
+
+        registerStellwandContent(
+                new ContentPackSignal(
+                        name,
+                        id,
+                        90f,
+                        LOSTabs.SIGNALS_TAB,
+                        signalModels.apply("generalCube"),
+                        group,
+                        Collections.singletonMap(groupIdName, itemGroup),
+                        null,
+                        null
+                )
+        );
+    }
+
+    private static void registerStellwandContent(ContentPackSignal contentPackSignal) {
+        contentPackSignal.validate(missing -> {
+            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+        }, CONTENTPACK_STELLWAND);
+        BLOCK_SIGNAL_PART.add(contentPackSignal);
+    }
+
     private static Map<String, ContentPackModel[]> models(Object... data) {
         Map<String, ContentPackModel[]> map = new HashMap<>();
         for (int index = 0; index < data.length; index += 2) {
             map.put((String) data[index], (ContentPackModel[]) data[index + 1]);
+        }
+        return map;
+    }
+
+    private static Map<String, String> keyValueLinkedMap(String... data) {
+        Map<String, String> map = new LinkedHashMap<>();
+        for (int index = 0; index < data.length; index += 2) {
+            map.put(data[index], data[index + 1]);
         }
         return map;
     }
