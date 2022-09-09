@@ -202,6 +202,46 @@ public class LOSBlocks {
                 "white"
         );
 
+        registerSingleGroupStellwandContent(
+                "block_signal_straight_unisolated",
+                "Signal Straight Unisolated",
+                "models/block/stellwand/blocksignal/blocktrackunisolated/unisolated.obj",
+                keyValueLinkedMap("Off", "off", "White", "white"),
+                "white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_diagonal_track_dl",
+                "Signal Diagonal Track DL",
+                "models/block/stellwand/blocksignal/trackdiag/downleft/trackdiagdownleft.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_diagonal_track_dr",
+                "Signal Diagonal Track DR",
+                "models/block/stellwand/blocksignal/trackdiag/downright/trackdiagdownright.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_diagonal_track_ul",
+                "Signal Diagonal Track UL",
+                "models/block/stellwand/blocksignal/trackdiag/upleft/trackdiagupleft.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_diagonal_track_ur",
+                "Signal Diagonal Track UR",
+                "models/block/stellwand/blocksignal/trackdiag/upright/trackdiagupright.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white"
+        );
+
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
@@ -255,7 +295,7 @@ public class LOSBlocks {
                         id,
                         90f,
                         LOSTabs.SIGNALS_TAB,
-                        signalModels.apply("generalCube"),
+                        signalModels.apply("general"),
                         group,
                         Collections.singletonMap(groupIdName, itemGroup),
                         null,

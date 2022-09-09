@@ -22,6 +22,8 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
@@ -110,7 +112,11 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     if (groups.length == 0) {
                         renderer.draw();
                     } else {
-                        renderer.drawGroups(Arrays.asList(groups));
+                        // FIXME This is nasty - Maybe cache this?
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        renderer.drawGroups(modes);
                     }
 
                 } finally {
@@ -175,11 +181,15 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                             GL11.glScaled(scale.x, scale.y, scale.z);
                         }
 
-                        List<String> groups = Arrays.asList(signalModel.getObj_groups());
-                        if (groups.isEmpty()) {
+                        String[] groups = signalModel.getObj_groups();
+                        if (groups.length == 0) {
                             renderer.draw();
                         } else {
-                            renderer.drawGroups(groups);
+                            // FIXME This is nasty - Maybe cache this?
+                            Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                            ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                    .collect(Collectors.toCollection(ArrayList::new));
+                            renderer.drawGroups(modes);
                         }
 
                     } finally {

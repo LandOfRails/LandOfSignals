@@ -18,6 +18,8 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
@@ -55,7 +57,6 @@ public class TileSignalPartRender {
                 try {
                     Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
                     cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
-
                 } catch (Exception e) {
                     throw new BlockRenderException("Error loading block model/renderer...", e);
                 }
@@ -89,7 +90,11 @@ public class TileSignalPartRender {
                     if (groups.length == 0) {
                         renderer.draw();
                     } else {
-                        renderer.drawGroups(Arrays.asList(groups));
+                        // FIXME This is nasty - Maybe cache this?
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        renderer.drawGroups(modes);
                     }
 
                 } catch (Exception e) {
@@ -157,11 +162,15 @@ public class TileSignalPartRender {
                         GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                         GL11.glRotated(rotation.z, 0, 0, 1);
 
-                        List<String> groups = Arrays.asList(signalModel.getObj_groups());
-                        if (groups.isEmpty()) {
+                        String[] groups = signalModel.getObj_groups();
+                        if (groups.length == 0) {
                             renderer.draw();
                         } else {
-                            renderer.drawGroups(groups);
+                            // FIXME This is nasty - Maybe cache this?
+                            Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                            ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                    .collect(Collectors.toCollection(ArrayList::new));
+                            renderer.drawGroups(modes);
                         }
 
                     } catch (Exception e) {
