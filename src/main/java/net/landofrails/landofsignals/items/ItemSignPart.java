@@ -18,10 +18,13 @@ import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 public class ItemSignPart extends CustomItem {
+
+    private static final String ITEMIDKEY = "itemId";
 
     public ItemSignPart(String modID, String name) {
         super(modID, name);
@@ -41,7 +44,7 @@ public class ItemSignPart extends CustomItem {
         TileSignPart tileSignPartPart = world.getBlockEntity(pos, TileSignPart.class);
         if (tileSignPartPart != null && !player.isCrouching()) rot = tileSignPartPart.getBlockRotate();
         LOSBlocks.BLOCK_SIGN_PART.setRot(rot);
-        LOSBlocks.BLOCK_SIGN_PART.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
+        LOSBlocks.BLOCK_SIGN_PART.setId(player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY));
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGN_PART);
         return ClickResult.ACCEPTED;
     }
@@ -49,7 +52,7 @@ public class ItemSignPart extends CustomItem {
     @Override
     public String getCustomName(ItemStack stack) {
         TagCompound tag = stack.getTagCompound();
-        if (tag != null && tag.hasKey("itemId")) return LOSBlocks.BLOCK_SIGN_PART.getName(tag.getString("itemId"));
+        if (tag != null && tag.hasKey(ITEMIDKEY)) return LOSBlocks.BLOCK_SIGN_PART.getName(tag.getString(ITEMIDKEY));
         else return "Error missing tag \"itemId\" for ItemSignPart";
     }
 
@@ -62,19 +65,21 @@ public class ItemSignPart extends CustomItem {
                 if (!id.equals(Static.MISSING)) {
                     ItemStack is = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);
                     TagCompound tag = is.getTagCompound();
-                    tag.setString("itemId", id);
+                    tag.setString(ITEMIDKEY, id);
                     is.setTagCompound(tag);
                     itemStackList.add(is);
                 }
             }
         }
 
+        itemStackList.sort(Comparator.comparing(LandOfSignalsUtils::getUniqueIdOfItemStack));
+
         return itemStackList;
     }
 
     @Override
     public List<String> getTooltip(ItemStack itemStack) {
-        String itemId = itemStack.getTagCompound().getString("itemId");
+        String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
         List<String> tooltips = new ArrayList<>();
         if (itemId != null) {
             tooltips.add("ID: " + itemId);
