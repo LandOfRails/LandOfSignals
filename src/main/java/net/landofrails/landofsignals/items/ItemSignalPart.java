@@ -34,6 +34,8 @@ public class ItemSignalPart extends CustomItem {
         super(modID, name);
     }
 
+    private static final String ITEMIDKEY = "itemId";
+
     @Override
     public List<CreativeTab> getCreativeTabs() {
         return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
@@ -44,7 +46,7 @@ public class ItemSignalPart extends CustomItem {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
-        String itemId = player.getHeldItem(hand).getTagCompound().getString("itemId");
+        String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
 
         float rotationSteps = LOSBlocks.BLOCK_SIGNAL_PART.getRotationSteps(itemId);
 
@@ -72,7 +74,7 @@ public class ItemSignalPart extends CustomItem {
     @Override
     public void onClickAir(Player player, World world, Player.Hand hand) {
         if (world.isServer) {
-            String itemId = player.getHeldItem(hand).getTagCompound().getString("itemId");
+            String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
             if (!itemId.contains(":")) {
                 List<String> foundIds = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals()
                         .keySet().stream().filter(itemIdIterator -> itemIdIterator.contains(":") && !itemIdIterator.equals("MISSING") && itemIdIterator
@@ -85,7 +87,7 @@ public class ItemSignalPart extends CustomItem {
                     String foundId = foundIds.get(0);
 
                     TagCompound tag = newSignalPart.getTagCompound();
-                    tag.setString("itemId", foundId);
+                    tag.setString(ITEMIDKEY, foundId);
                     newSignalPart.setTagCompound(tag);
 
                     player.setHeldItem(hand, newSignalPart);
@@ -107,7 +109,7 @@ public class ItemSignalPart extends CustomItem {
                 if (!id.equals(Static.MISSING)) {
                     ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
                     TagCompound tag = is.getTagCompound();
-                    tag.setString("itemId", id);
+                    tag.setString(ITEMIDKEY, id);
                     is.setTagCompound(tag);
                     itemStackList.add(is);
                 }
@@ -122,8 +124,8 @@ public class ItemSignalPart extends CustomItem {
     @Override
     public String getCustomName(ItemStack stack) {
         TagCompound tag = stack.getTagCompound();
-        if (tag != null && tag.hasKey("itemId")) {
-            String itemId = tag.getString("itemId");
+        if (tag != null && tag.hasKey(ITEMIDKEY)) {
+            String itemId = tag.getString(ITEMIDKEY);
             return LOSBlocks.BLOCK_SIGNAL_PART.getName(itemId);
         } else {
             return "Error missing tag \"itemId\" for ItemSignalPart";
@@ -132,10 +134,16 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public List<String> getTooltip(ItemStack itemStack) {
-        String itemId = itemStack.getTagCompound().getString("itemId");
+        String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
         List<String> tooltips = new ArrayList<>();
         if (itemId != null) {
-            tooltips.add("ID: " + itemId);
+            String delimiter = ":";
+            if (itemId.split(delimiter).length == 2) {
+                tooltips.add("Pack: " + itemId.split(delimiter)[0]);
+                tooltips.add("ID: " + itemId.split(delimiter)[1]);
+            } else {
+                tooltips.add("ID: " + itemId);
+            }
         }
         return tooltips;
     }

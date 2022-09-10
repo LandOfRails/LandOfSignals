@@ -82,7 +82,13 @@ public class ItemSignPart extends CustomItem {
         String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
         List<String> tooltips = new ArrayList<>();
         if (itemId != null) {
-            tooltips.add("ID: " + itemId);
+            String delimiter = ":";
+            if (itemId.split(delimiter).length == 2) {
+                tooltips.add("Pack: " + itemId.split(delimiter)[0]);
+                tooltips.add("ID: " + itemId.split(delimiter)[1]);
+            } else {
+                tooltips.add("ID: " + itemId);
+            }
         }
         return tooltips;
     }
