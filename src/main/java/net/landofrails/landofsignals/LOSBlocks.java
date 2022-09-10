@@ -242,6 +242,74 @@ public class LOSBlocks {
                 "white"
         );
 
+        registerSingleGroupStellwandContent(
+                "block_signal_hsig_left",
+                "Signal HSig Left",
+                "models/block/stellwand/blocksignal/trackmainsignal/left/hsigleft.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
+                "green"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_hsig_right",
+                "Signal HSig Right",
+                "models/block/stellwand/blocksignal/trackmainsignal/right/hsigright.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
+                "green"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_dwarf_bottom",
+                "Dwarfsignal bottom",
+                "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignalbottom.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green"),
+                "green"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_dwarf_top",
+                "Dwarfsignal top",
+                "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignaltop.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green"),
+                "green"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_lrd",
+                "Track switch (Left -> Right, Down)",
+                "models/block/stellwand/blocksignal/trackswitch/lrd/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite",
+                        "Branch white", "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_lru",
+                "Track switch (Left -> Right, Up)",
+                "models/block/stellwand/blocksignal/trackswitch/lru/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_rld",
+                "Track switch (Right -> Left, Down)",
+                "models/block/stellwand/blocksignal/trackswitch/rld/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white"
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_rlu",
+                "Track switch (Right -> Left, Up)",
+                "models/block/stellwand/blocksignal/trackswitch/rlu/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white"
+        );
+
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
