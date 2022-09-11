@@ -38,8 +38,8 @@ public class BlockSignPart extends BlockTypeEntity {
     }
 
     public void add(ContentPackSign contentPackSign) {
-        if (!contentPackSigns.containsKey(contentPackSign.getId())) {
-            this.contentPackSigns.put(contentPackSign.getId(), contentPackSign);
+        if (!contentPackSigns.containsKey(contentPackSign.getUniqueId())) {
+            this.contentPackSigns.put(contentPackSign.getUniqueId(), contentPackSign);
         } else {
             //TODO: Add conflict info for user after he entered a world
             ModCore.error("There is already a SignPart registered with this ID! ID: " + contentPackSign.getId());
