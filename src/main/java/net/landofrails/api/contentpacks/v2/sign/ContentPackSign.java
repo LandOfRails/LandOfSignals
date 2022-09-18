@@ -121,7 +121,7 @@ public class ContentPackSign {
                 s.append(new String(buffer, 0, read));
             }
         } catch (IOException e) {
-            throw new ContentPackException("Cant read ContentPackSignal: " + e.getMessage());
+            throw new ContentPackException("Cant read ContentPackSign: " + e.getMessage());
         }
 
         String json = s.toString();
