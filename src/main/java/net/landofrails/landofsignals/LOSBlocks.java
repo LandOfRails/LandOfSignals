@@ -8,6 +8,7 @@ import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
+import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
 import net.landofrails.landofsignals.utils.Static;
@@ -310,6 +311,13 @@ public class LOSBlocks {
                 "branch_white"
         );
 
+        // TODO Multimode Stellwandblock is missing
+
+        // Signalboxes
+
+        registerSignalboxContentPack(Static.MISSING, "Missing! Check your content packs", models("models/block/others/blocknotfound/blocknotfound.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        registerSignalboxContentPack("signalbox_default", "Signalbox", models("models/block/landofsignals/signalbox/untitled.obj", new ContentPackModel[]{new ContentPackModel(new float[]{1.5f, 0f, 1.5f}, new float[]{1.5f, 0f, 1.5f}, new float[]{.3f, .3f, .3f})}));
+
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
@@ -377,6 +385,21 @@ public class LOSBlocks {
             throw new ContentPackException(String.format("There are missing attributes: %s", missing));
         }, CONTENTPACK_STELLWAND);
         BLOCK_SIGNAL_PART.add(contentPackSignal);
+    }
+
+    private static void registerSignalboxContentPack(String id, String name, Map<String, ContentPackModel[]> models) {
+
+        ContentPackSignalbox contentPackSignalbox = new ContentPackSignalbox();
+        contentPackSignalbox.setId(id);
+        contentPackSignalbox.setName(name);
+        contentPackSignalbox.setBase(models);
+
+        contentPackSignalbox.validate(missing -> {
+            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+        }, CONTENTPACK);
+
+        BLOCK_SIGNAL_BOX.add(contentPackSignalbox);
+
     }
 
     private static Map<String, ContentPackModel[]> models(Object... data) {

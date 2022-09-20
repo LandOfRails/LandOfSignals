@@ -6,6 +6,7 @@ import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
+import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.LOSBlocks;
 
 import java.io.IOException;
@@ -35,6 +36,9 @@ public class ContentPackHandlerV2 {
                         break;
                     case BLOCKSIGN:
                         loadSign(zip, path, contentPack);
+                        break;
+                    case BLOCKSIGNALBOX:
+                        loadSignalbox(zip, path, contentPack);
                         break;
                     default:
                         ModCore.error("Type %s is currently not implemented in V2!", type.name());
@@ -94,6 +98,32 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSign in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith("There are missing attributes")) {
+                ModCore.error("Stacktrace:");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void loadSignalbox(ZipFile zip, String path, ContentPack contentPack) {
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackSignalbox contentPackSignalbox = ContentPackSignalbox.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSignalbox.validate(missing -> {
+                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+                }, contentPack);
+                ModCore.info("Signalbox: %s", contentPackSignalbox.getName());
+
+                LOSBlocks.BLOCK_SIGNAL_BOX.add(contentPackSignalbox);
+            } else {
+                ModCore.error("Couldn't find ContentPackSignalbox under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContentPackSignalbox in path %s\nError: %s", path, e.getMessage());
             if (!e.getMessage().startsWith("There are missing attributes")) {
                 ModCore.error("Stacktrace:");
                 e.printStackTrace();
