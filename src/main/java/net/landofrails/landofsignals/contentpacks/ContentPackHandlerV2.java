@@ -150,6 +150,9 @@ public class ContentPackHandlerV2 {
                         case BLOCKSIGN:
                             loadSign(zip, entryPath, contentPack);
                             break;
+                        case BLOCKSIGNALBOX:
+                            loadSignalbox(zip, path, contentPack);
+                            break;
                         default:
                             ModCore.error("Type %s is currently not implemented in V2!", type.name());
                     }
