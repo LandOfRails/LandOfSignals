@@ -13,6 +13,8 @@ import java.util.Map;
 public class BlockSignalBox extends BlockTypeEntity {
 
     private Map<String, ContentPackSignalbox> contentPackSignalboxes = new HashMap<>();
+    private String id;
+    private int rot;
 
     public BlockSignalBox(String modID, String name) {
         super(modID, name);
@@ -20,7 +22,7 @@ public class BlockSignalBox extends BlockTypeEntity {
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return new TileSignalBox();
+        return new TileSignalBox(id, rot);
     }
 
     public void add(ContentPackSignalbox contentPackSignalbox) {
@@ -46,5 +48,13 @@ public class BlockSignalBox extends BlockTypeEntity {
 
     public Map<String, ContentPackSignalbox> getContentpackSignalboxes() {
         return contentPackSignalboxes;
+    }
+
+    public void setRot(int rot) {
+        this.rot = rot;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

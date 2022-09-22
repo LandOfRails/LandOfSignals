@@ -316,7 +316,8 @@ public class LOSBlocks {
         // Signalboxes
 
         registerSignalboxContentPack(Static.MISSING, "Missing! Check your content packs", models("models/block/others/blocknotfound/blocknotfound.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
-        registerSignalboxContentPack("signalbox_default", "Signalbox", models("models/block/landofsignals/signalbox/untitled.obj", new ContentPackModel[]{new ContentPackModel(new float[]{1.5f, 0f, 1.5f}, new float[]{1.5f, 0f, 1.5f}, new float[]{.3f, .3f, .3f})}));
+        registerSignalboxContentPack(Static.SIGNALBOX_DEFAULT, "Signalbox", models("models/block/landofsignals/signalbox/untitled.obj", new ContentPackModel[]{new ContentPackModel(new float[]{1.6f, 0f, 1.6f}, new float[]{1.6f, 0f, 1.6f}, new float[]{.3f, .3f, .3f})}));
+        registerSignalboxContentPack("signalbox_stellwand", "Signalbox (Stellwand)", models("models/block/stellwand/blocksender/blocksender/blocksender.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
 
     }
 
@@ -393,6 +394,7 @@ public class LOSBlocks {
         contentPackSignalbox.setId(id);
         contentPackSignalbox.setName(name);
         contentPackSignalbox.setBase(models);
+        contentPackSignalbox.setRotationSteps(45f);
 
         contentPackSignalbox.validate(missing -> {
             throw new ContentPackException(String.format("There are missing attributes: %s", missing));

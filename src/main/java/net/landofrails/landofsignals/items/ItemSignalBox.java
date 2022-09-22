@@ -13,6 +13,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.LOSTabs;
+import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -38,23 +39,14 @@ public class ItemSignalBox extends CustomItem {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
+        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        TileSignalBox tileSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
+        if (tileSignalBox != null && !player.isCrouching()) rot = tileSignalBox.getBlockRotate();
+        LOSBlocks.BLOCK_SIGNAL_BOX.setRot(rot);
+        LOSBlocks.BLOCK_SIGNAL_BOX.setId(player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY));
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_BOX);
         return ClickResult.ACCEPTED;
     }
-
-    /*@Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
-        if (!target.isPresent()) return ClickResult.REJECTED;
-
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
-        TileSignPart tileSignPartPart = world.getBlockEntity(pos, TileSignPart.class);
-        if (tileSignPartPart != null && !player.isCrouching()) rot = tileSignPartPart.getBlockRotate();
-        LOSBlocks.BLOCK_SIGN_PART.setRot(rot);
-        LOSBlocks.BLOCK_SIGN_PART.setId(player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY));
-        world.setBlock(target.get(), LOSBlocks.BLOCK_SIGN_PART);
-        return ClickResult.ACCEPTED;
-    }*/
 
     @Override
     public String getCustomName(ItemStack stack) {

@@ -6,19 +6,30 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.SerializationException;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
+import net.landofrails.landofsignals.utils.Static;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S116")
 public class TileSignalBox extends BlockEntity {
+
+    @TagField("id")
+    private String id;
+
+    @TagField("blockRotation")
+    private int blockRotate;
 
     @TagField("UuidTileTop")
     private Vec3i tileSignalPartPos;
@@ -34,6 +45,8 @@ public class TileSignalBox extends BlockEntity {
 
     /**
      * Needs to stay for backwards compatibility
+     * <p>
+     * FIXME Can I read this in the NBT on TileSignalBox#load()?
      */
     @TagField("redstone")
     private Integer redstone = null;
@@ -47,6 +60,11 @@ public class TileSignalBox extends BlockEntity {
     private Integer lastRedstone = null;
 
     private TileSignalPart tileSignalPart;
+
+    public TileSignalBox(String id, int rot) {
+        this.id = id;
+        this.blockRotate = rot;
+    }
 
     @Override
     public ItemStack onPick() {
@@ -123,6 +141,10 @@ public class TileSignalBox extends BlockEntity {
         if (entity != null) {
             entity.removeSignal(getPos());
         }
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public void setTileSignalPartPos(Vec3i pos) {
@@ -219,4 +241,25 @@ public class TileSignalBox extends BlockEntity {
         }
     }
 
+    public int getBlockRotate() {
+        return blockRotate;
+    }
+
+    @Override
+    public void load(TagCompound nbt) throws SerializationException {
+
+        final String KEYWORD_ID = "id";
+
+        if (!nbt.hasKey(KEYWORD_ID)) {
+            nbt.setString(KEYWORD_ID, Static.SIGNALBOX_DEFAULT_FQ);
+        } else if (!nbt.getString(KEYWORD_ID).contains(":")) {
+            String oldId = nbt.getString(KEYWORD_ID);
+            List<String> possibleIds = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet().stream().filter(iterationId -> iterationId.endsWith(oldId)).collect(Collectors.toList());
+            String newId = Static.MISSING;
+            if (possibleIds.size() == 1) {
+                newId = possibleIds.get(0);
+            }
+            nbt.setString(KEYWORD_ID, newId);
+        }
+    }
 }

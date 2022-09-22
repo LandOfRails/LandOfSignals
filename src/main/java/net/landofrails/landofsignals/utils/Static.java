@@ -20,5 +20,9 @@ public class Static {
     //    public static Map<String, BlockSignalPart> blockSignalPartList = new HashMap<>();
 //    public static List<ItemSignalPart> itemSignalPartList = new ArrayList<>();
     public static final String MISSING = "missing";
+    // Default SignalBox ID (without packId)
+    public static final String SIGNALBOX_DEFAULT = "signalbox_default";
+    // Default fully qualified SignalBox ID (including packId)
+    public static final String SIGNALBOX_DEFAULT_FQ = "LandOfSignals@LandOfSignals:signalbox_default";
 
 }
