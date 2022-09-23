@@ -133,9 +133,9 @@ public class ContentPackSignalbox {
                 uniqueId = id;
             }
 
-            for (Map.Entry<String, ContentPackModel[]> signModelEntry : base.entrySet()) {
-                Consumer<String> signConsumer = text -> invalid.accept(signModelEntry.getKey() + ": [" + text + "]");
-                Stream.of(signModelEntry.getValue()).forEach(model -> model.validate(signConsumer, references));
+            for (Map.Entry<String, ContentPackModel[]> signalboxModelEntry : base.entrySet()) {
+                Consumer<String> signalboxConsumer = text -> invalid.accept(signalboxModelEntry.getKey() + ": [" + text + "]");
+                Stream.of(signalboxModelEntry.getValue()).forEach(model -> model.validate(signalboxConsumer, references));
             }
         }
 
