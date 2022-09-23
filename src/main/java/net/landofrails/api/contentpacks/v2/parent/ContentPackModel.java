@@ -43,6 +43,12 @@ public class ContentPackModel {
         this.obj_groups = obj_groups;
     }
 
+    public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] blockScaling, float[] itemScaling) {
+        this.block = new ContentPackBlock(blockTranslation, null, blockScaling);
+        this.item = new HashMap<>();
+        item.put(ContentPackItemRenderType.DEFAULT, new ContentPackItem(itemTranslation, null, itemScaling));
+    }
+
     public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] blockScaling, float[] itemScaling, String[] obj_groups) {
         this.block = new ContentPackBlock(blockTranslation, null, blockScaling);
         this.item = new HashMap<>();

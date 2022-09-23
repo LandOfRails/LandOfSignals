@@ -7,30 +7,30 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
-import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.tile.TileDeco;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
-public class TileSignalBoxRender {
+public class TileDecoRender {
 
-    private TileSignalBoxRender() {
+    private TileDecoRender() {
 
     }
 
     private static final Map<String, OBJRender> cache = new HashMap<>();
 
-    public static StandardModel render(TileSignalBox tsp) {
+    public static StandardModel render(TileDeco tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
-    private static void renderStuff(TileSignalBox tsp) {
+    private static void renderStuff(TileDeco tsp) {
 
         String id = tsp.getId();
 
@@ -42,17 +42,17 @@ public class TileSignalBoxRender {
 
     }
 
-    private static void renderBase(String blockId, TileSignalBox tile) {
+    private static void renderBase(String blockId, TileDeco tile) {
 
-        ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
-        for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSignalboxes.getBase().entrySet()) {
+        ContentPackDeco contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(blockId);
+        for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackDeco.getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
             String objId = blockId + "/" + path;
             if (!cache.containsKey(objId)) {
                 try {
-                    Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId).getObjTextures().get(path);
+                    Set<String> objTextures = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(blockId).getObjTextures().get(path);
                     cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
 
                 } catch (Exception e) {
@@ -93,13 +93,12 @@ public class TileSignalBoxRender {
 
                 } catch (Exception e) {
                     // Removes TileEntity on client-side, prevents crash
-                    ModCore.error("Removing local Signalbox- (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+                    ModCore.error("Removing local TileDeco (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
                     tile.getWorld().breakBlock(tile.getPos());
 
                 } finally {
                     closables.forEach(OpenGL.With::close);
                 }
-
 
             }
         }

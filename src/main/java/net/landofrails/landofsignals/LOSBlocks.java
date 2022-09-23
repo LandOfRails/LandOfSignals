@@ -3,6 +3,7 @@ package net.landofrails.landofsignals;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -26,6 +27,7 @@ public class LOSBlocks {
     public static final BlockTicketMachineDB BLOCK_TICKET_MACHINE_DB = new BlockTicketMachineDB(LandOfSignals.MODID, "BlockTicketMachineDB");
     public static final BlockTicketMachineSBB BLOCK_TICKET_MACHINE_SBB = new BlockTicketMachineSBB(LandOfSignals.MODID, "BlockTicketMachineSBB");
     public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
+    public static final BlockDeco BLOCK_DECO = new BlockDeco(LandOfSignals.MODID, "BlockDeco");
 
     // Contentpack
     private static final ContentPack CONTENTPACK = new ContentPack("LandOfSignals", "LandOfSignals", "1.0", "2", null, null);
@@ -320,6 +322,13 @@ public class LOSBlocks {
         registerSignalboxContentPack("signalbox_stellwand", "Signalbox (Stellwand)", models("models/block/stellwand/blocksender/blocksender/blocksender.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
         registerSignalboxContentPack("signalbox_microchip", "Signalbox Microchip (Stellwand)", models("models/block/stellwand/blocksender/microchip/microchip.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
 
+        // Deco
+
+        registerDecoContentPack(Static.MISSING, Static.MISSING_NAME, models(Static.MISSING_OBJ, new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        registerDecoContentPack("deco_fahrkartenautomat_db", "Ticket Machine (Deutsche Bahn)", models("models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f})}));
+        registerDecoContentPack("deco_fahrkartenautomat_sbb", "Ticket Machine (SBB)", models("models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.75f, 0f, 0.75f}, new float[]{1.6f, 0f, 0.5f}, new float[]{0.65f, 0.65f, 0.65f}, new float[]{0.3f, 0.3f, 0.3f})}));
+        registerDecoContentPack("deco_signal_so12", "Signal SO12", models("models/block/landofsignals/so12/signalso12.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.25f, 0f, 0.25f}, new float[]{1f, 1f, 1f}, new float[]{2f, 2f, 2f})}));
+        // new Vec3d(0.5, 0, 0.5), 2
     }
 
     private static void registerStreckenblock() {
@@ -381,6 +390,19 @@ public class LOSBlocks {
         }, CONTENTPACK);
 
         BLOCK_SIGN_PART.add(contentPackSign);
+    }
+
+    private static void registerDecoContentPack(String id, String name, Map<String, ContentPackModel[]> models) {
+        ContentPackDeco contentPackDeco = new ContentPackDeco();
+        contentPackDeco.setId(id);
+        contentPackDeco.setName(name);
+        contentPackDeco.setBase(models);
+
+        contentPackDeco.validate(missing -> {
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
+        }, CONTENTPACK);
+
+        BLOCK_DECO.add(contentPackDeco);
     }
 
     private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {

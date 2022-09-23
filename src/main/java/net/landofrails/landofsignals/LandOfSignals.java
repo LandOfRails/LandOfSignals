@@ -17,10 +17,7 @@ import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.render.block.*;
-import net.landofrails.landofsignals.render.item.ItemSignPartRender;
-import net.landofrails.landofsignals.render.item.ItemSignalBoxRender;
-import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
-import net.landofrails.landofsignals.render.item.ObjItemRender;
+import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.stellwand.Stellwand;
 
@@ -91,6 +88,7 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileTicketMachineDBRender::render, TileTicketMachineDB.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileTicketMachineSBBRender::render, TileTicketMachineSBB.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
+                BlockRender.register(LOSBlocks.BLOCK_DECO, TileDecoRender::render, TileDeco.class);
 
                 // Items
                 ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
@@ -113,6 +111,7 @@ public class LandOfSignals extends ModCore.Mod {
                 // ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
+                ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
