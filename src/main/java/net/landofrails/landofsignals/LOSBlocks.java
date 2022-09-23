@@ -14,7 +14,6 @@ import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class LOSBlocks {
 
@@ -34,16 +33,17 @@ public class LOSBlocks {
 
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
-    public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = null; // new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
+    public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = null; // FIXME new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
 
     // Sign
     public static final BlockSignPart BLOCK_SIGN_PART = new BlockSignPart(LandOfSignals.MODID, "blocksign");
 
+    @SuppressWarnings({"java:S117", "java:S1192", "java:S1171"})
     public static void register() {
 
 
         // loads static classes and ctrs
-        ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, "Missing! Check your content packs", "models/block/others/blocknotfound/blocknotfound.obj", new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
+        ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, Static.MISSING_NAME, Static.MISSING_OBJ, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
             private static final long serialVersionUID = -1995088635629060337L;
 
             {
@@ -159,7 +159,7 @@ public class LOSBlocks {
 
         // Signs
 
-        registerSignContentPack(Static.MISSING, "Missing! Check your content packs", false, models("models/block/others/blocknotfound/blocknotfound.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        registerSignContentPack(Static.MISSING, Static.MISSING_NAME, false, models(Static.MISSING_OBJ, new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
         final Map.Entry<String, ContentPackModel[]> blockSignPartMetalRod = new AbstractMap.SimpleEntry<>("models/block/landofsignals/signs/gsar/metalrod/metalrod.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Metal_Rod01_MR01"})});
 
         registerSignContentPack("block_sign_part_gsar_metal_rod", "GSAR Metal Rod", false, Collections.singletonMap(blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
@@ -311,14 +311,58 @@ public class LOSBlocks {
                 "branch_white"
         );
 
-        // TODO Multimode Stellwandblock is missing
+        registerStreckenblock();
 
         // Signalboxes
 
-        registerSignalboxContentPack(Static.MISSING, "Missing! Check your content packs", models("models/block/others/blocknotfound/blocknotfound.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        registerSignalboxContentPack(Static.MISSING, Static.MISSING_NAME, models(Static.MISSING_OBJ, new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
         registerSignalboxContentPack(Static.SIGNALBOX_DEFAULT, "Signalbox", models("models/block/landofsignals/signalbox/untitled.obj", new ContentPackModel[]{new ContentPackModel(new float[]{1.6f, 0f, 1.6f}, new float[]{1.6f, 0f, 1.6f}, new float[]{.3f, .3f, .3f})}));
         registerSignalboxContentPack("signalbox_stellwand", "Signalbox (Stellwand)", models("models/block/stellwand/blocksender/blocksender/blocksender.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
+        registerSignalboxContentPack("signalbox_microchip", "Signalbox Microchip (Stellwand)", models("models/block/stellwand/blocksender/microchip/microchip.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}));
 
+    }
+
+    private static void registerStreckenblock() {
+        String objPath = "models/block/stellwand/blockstreckenblock/streckenblock.obj";
+        Map<String, ContentPackSignalGroup> groups = new HashMap<>();
+
+        String[][] preparedGroups = new String[][]{
+                {"topLeft", "Top left"},
+                {"topRight", "Top right"},
+                {"bottomLeft", "Bottom left"},
+                {"bottomRight", "Bottom right"}
+        };
+        String[][] preparedStates = new String[][]{
+                {"Black", "black"},
+                {"White", "white"},
+                {"Red", "red"}
+        };
+
+        for (String[] group : preparedGroups) {
+            String groupId = group[0];
+            String groupName = group[1];
+            LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+            for (String[] state : preparedStates) {
+                String stateId = groupId + state[0];
+                String stateName = groupName + " " + state[1];
+                states.put(stateId, new ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
+            }
+            groups.put(groupName, new ContentPackSignalGroup(groupName, states));
+        }
+
+
+        ContentPackSignal stellwandMultisignal = new ContentPackSignal(
+                "Streckenblock",
+                "block_signal_streckenblock",
+                90f,
+                LOSTabs.SIGNALS_TAB,
+                signalModels(objPath, "general", new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f}),
+                groups,
+                keyValueLinkedMap("Top left", "topLeftWhite", "Bottom right", "bottomRightRed"),
+                null,
+                null
+        );
+        registerStellwandContent(stellwandMultisignal);
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
@@ -333,36 +377,18 @@ public class LOSBlocks {
         contentPackSign.setBase(models);
 
         contentPackSign.validate(missing -> {
-            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK);
 
         BLOCK_SIGN_PART.add(contentPackSign);
     }
 
     private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {
-        if (!objPath.startsWith("models/block/stellwand"))
-            throw new RuntimeException("! Missing \"stellwand\" in objPath");
-
-
-        Function<String, Map<String, ContentPackModel[]>> signalModels = objGroup -> models(
-                objPath,
-                new ContentPackModel[]{
-                        new ContentPackModel(
-                                new float[]{0.5f, 0.5f, 0.5f},
-                                new float[]{0.5f, 0.5f, 0.5f},
-                                new float[]{1f, 1f, 1f},
-                                new float[]{1f, 1f, 1f},
-                                new float[]{0f, 180f, 0f},
-                                new String[]{objGroup}
-                        )
-                }
-        );
-
         String groupIdName = "default";
 
         LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
         signalNameAndId.forEach((signalName, signalId) ->
-                states.put(signalId, new ContentPackSignalState(signalName, signalModels.apply(signalId)))
+                states.put(signalId, new ContentPackSignalState(signalName, signalModels(objPath, signalId)))
         );
         Map<String, ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new ContentPackSignalGroup("default", states));
 
@@ -372,7 +398,7 @@ public class LOSBlocks {
                         id,
                         90f,
                         LOSTabs.SIGNALS_TAB,
-                        signalModels.apply("general"),
+                        signalModels(objPath, "general"),
                         group,
                         Collections.singletonMap(groupIdName, itemGroup),
                         null,
@@ -383,7 +409,7 @@ public class LOSBlocks {
 
     private static void registerStellwandContent(ContentPackSignal contentPackSignal) {
         contentPackSignal.validate(missing -> {
-            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK_STELLWAND);
         BLOCK_SIGNAL_PART.add(contentPackSignal);
     }
@@ -397,7 +423,7 @@ public class LOSBlocks {
         contentPackSignalbox.setRotationSteps(45f);
 
         contentPackSignalbox.validate(missing -> {
-            throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK);
 
         BLOCK_SIGNAL_BOX.add(contentPackSignalbox);
@@ -418,6 +444,38 @@ public class LOSBlocks {
             map.put(data[index], data[index + 1]);
         }
         return map;
+    }
+
+    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup) {
+        return models(
+                objPath,
+                new ContentPackModel[]{
+                        new ContentPackModel(
+                                new float[]{0.5f, 0.5f, 0.5f},
+                                new float[]{0.5f, 0.5f, 0.5f},
+                                new float[]{1f, 1f, 1f},
+                                new float[]{1f, 1f, 1f},
+                                new float[]{0f, 180f, 0f},
+                                new String[]{objGroup}
+                        )
+                }
+        );
+    }
+
+    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, float[] blockTranslation, float[] itemTranslation) {
+        return models(
+                objPath,
+                new ContentPackModel[]{
+                        new ContentPackModel(
+                                blockTranslation,
+                                itemTranslation,
+                                new float[]{1f, 1f, 1f},
+                                new float[]{1f, 1f, 1f},
+                                new float[]{0f, 180f, 0f},
+                                new String[]{objGroup}
+                        )
+                }
+        );
     }
 
 }

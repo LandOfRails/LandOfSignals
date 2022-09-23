@@ -17,9 +17,14 @@ public class Static {
         return bd.doubleValue();
     }
 
-    //    public static Map<String, BlockSignalPart> blockSignalPartList = new HashMap<>();
-//    public static List<ItemSignalPart> itemSignalPartList = new ArrayList<>();
+    // Missing ID
     public static final String MISSING = "missing";
+    // Missing ID Name
+    public static final String MISSING_NAME = "Missing! Check your content packs";
+    // Missing OBJ
+    public static final String MISSING_OBJ = "models/block/others/blocknotfound/blocknotfound.obj";
+    // Missing attributes text
+    public static final String MISSING_ATTRIBUTES = "There are missing attributes: %s";
     // Default SignalBox ID (without packId)
     public static final String SIGNALBOX_DEFAULT = "signalbox_default";
     // Default fully qualified SignalBox ID (including packId)
