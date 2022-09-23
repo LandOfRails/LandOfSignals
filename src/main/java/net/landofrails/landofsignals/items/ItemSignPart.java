@@ -40,7 +40,9 @@ public class ItemSignPart extends CustomItem {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
+        float rotationSteps = LOSBlocks.BLOCK_SIGN_PART.getRotationSteps(itemId);
+        int rot = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
         TileSignPart tileSignPartPart = world.getBlockEntity(pos, TileSignPart.class);
         if (tileSignPartPart != null && !player.isCrouching()) rot = tileSignPartPart.getBlockRotate();
         LOSBlocks.BLOCK_SIGN_PART.setRot(rot);

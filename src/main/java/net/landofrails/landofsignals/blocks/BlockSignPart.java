@@ -59,4 +59,8 @@ public class BlockSignPart extends BlockTypeEntity {
         if (!contentPackSigns.containsKey(id)) return false;
         else return contentPackSigns.get(id).isWriteable();
     }
+
+    public float getRotationSteps(String itemId) {
+        return contentPackSigns.get(checkIfMissing(itemId)).getRotationSteps();
+    }
 }

@@ -328,7 +328,15 @@ public class LOSBlocks {
         registerDecoContentPack("deco_fahrkartenautomat_db", "Ticket Machine (Deutsche Bahn)", models("models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f})}));
         registerDecoContentPack("deco_fahrkartenautomat_sbb", "Ticket Machine (SBB)", models("models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.75f, 0f, 0.75f}, new float[]{1.6f, 0f, 0.5f}, new float[]{0.65f, 0.65f, 0.65f}, new float[]{0.3f, 0.3f, 0.3f})}));
         registerDecoContentPack("deco_signal_so12", "Signal SO12", models("models/block/landofsignals/so12/signalso12.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.25f, 0f, 0.25f}, new float[]{1f, 1f, 1f}, new float[]{2f, 2f, 2f})}));
-        // new Vec3d(0.5, 0, 0.5), 2
+
+        registerDecoContentPackStellwand("deco_filler", "Block Filler", models("models/block/stellwand/blockfiller/blockfiller/blockfiller.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f})}));
+        registerDecoContentPackStellwand("deco_straight_track", "Straight track", models("models/block/stellwand/blockfiller/trackstraight/trackstraight.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        registerDecoContentPackStellwand("deco_trackdiag_down_left", "Diagonal track (down - left)", models("models/block/stellwand/blockfiller/trackdiag/dl/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        registerDecoContentPackStellwand("deco_trackdiag_down_right", "Diagonal track (down - right)", models("models/block/stellwand/blockfiller/trackdiag/dr/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        registerDecoContentPackStellwand("deco_trackdiag_up_left", "Diagonal track (up - left)", models("models/block/stellwand/blockfiller/trackdiag/ul/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        registerDecoContentPackStellwand("deco_trackdiag_up_right", "Diagonal track (up - right)", models("models/block/stellwand/blockfiller/trackdiag/ur/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        
+
     }
 
     private static void registerStreckenblock() {
@@ -401,6 +409,20 @@ public class LOSBlocks {
         contentPackDeco.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK);
+
+        BLOCK_DECO.add(contentPackDeco);
+    }
+
+    private static void registerDecoContentPackStellwand(String id, String name, Map<String, ContentPackModel[]> models) {
+        ContentPackDeco contentPackDeco = new ContentPackDeco();
+        contentPackDeco.setId(id);
+        contentPackDeco.setName(name);
+        contentPackDeco.setBase(models);
+        contentPackDeco.setRotationSteps(90f);
+
+        contentPackDeco.validate(missing -> {
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
+        }, CONTENTPACK_STELLWAND);
 
         BLOCK_DECO.add(contentPackDeco);
     }

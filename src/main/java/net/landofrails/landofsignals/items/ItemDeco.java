@@ -39,7 +39,10 @@ public class ItemDeco extends CustomItem {
         Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
         if (!target.isPresent()) return ClickResult.REJECTED;
 
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
+        String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
+        float rotationSteps = LOSBlocks.BLOCK_DECO.getRotationSteps(itemId);
+        int rot = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
+
         TileDeco tileDeco = world.getBlockEntity(pos, TileDeco.class);
         if (tileDeco != null && !player.isCrouching()) rot = tileDeco.getBlockRotate();
         LOSBlocks.BLOCK_DECO.setRot(rot);

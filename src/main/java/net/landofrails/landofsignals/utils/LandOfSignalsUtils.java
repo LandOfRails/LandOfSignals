@@ -32,4 +32,38 @@ public class LandOfSignalsUtils {
         return itemStack.getTagCompound().getString("itemId");
     }
 
+    public static boolean isVersionSupported(String lastVersion, String lastSupportedVersion) {
+
+        String lastVersionClean = lastVersion.split("-")[0];
+        String[] lastVersionMaMiPa = lastVersionClean.split("\\.");
+        String lastVersionSuffix = lastVersion.split("-").length > 1 ? lastVersion.split("-", 2)[1] : null;
+
+        String lastSupportedVersionClean = lastSupportedVersion.split("-")[0];
+        String[] lastSupportedVersionMaMiPa = lastSupportedVersion.split("\\.");
+        String lastSupportedVersionSuffix = lastSupportedVersion.split("-").length > 1 ? lastSupportedVersion.split("-", 2)[1] : null;
+
+        if (lastSupportedVersionMaMiPa.length != 3 || lastVersionMaMiPa.length != 3) {
+            throw new RuntimeException(String.format("LastVersion (%s) or LastSupportedVersion (%s) should contain Major.Minor.Patch!", lastVersionClean, lastSupportedVersionClean));
+        }
+
+        // Check Major.Minor.Patch
+        for (int index = 0; index < 3; index++) {
+            if (!lastSupportedVersionMaMiPa[index].equalsIgnoreCase("*")) {
+                int lastMaMiPa = Integer.parseInt(lastVersionMaMiPa[index]);
+                int lastSupportedMaMiPa = Integer.parseInt(lastSupportedVersionMaMiPa[index]);
+
+                if (lastMaMiPa < lastSupportedMaMiPa) {
+                    return false;
+                }
+            }
+        }
+
+        // Check Suffix
+        if (lastSupportedVersionSuffix != null) {
+            return lastSupportedVersionSuffix.equalsIgnoreCase(lastVersionSuffix);
+        }
+
+        return true;
+    }
+
 }

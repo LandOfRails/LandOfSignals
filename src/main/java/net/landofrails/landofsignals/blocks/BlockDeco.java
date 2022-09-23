@@ -57,4 +57,8 @@ public class BlockDeco extends BlockTypeEntity {
     public void setId(String id) {
         this.id = id;
     }
+
+    public float getRotationSteps(String itemId) {
+        return contentPackDeco.get(checkIfMissing(itemId)).getRotationSteps();
+    }
 }

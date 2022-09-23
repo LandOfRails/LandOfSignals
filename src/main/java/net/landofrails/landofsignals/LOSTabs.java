@@ -26,7 +26,7 @@ public class LOSTabs {
     public static void register() {
         CREATIVE_TABS.put(SIGNALS_TAB, new CreativeTab(LandOfSignals.MODID + ".signals", LOSTabs::getFirstSignalPart));
         CREATIVE_TABS.put(SIGNS_TAB, new CreativeTab(LandOfSignals.MODID + ".signs", LOSTabs::getFirstSignPart));
-        CREATIVE_TABS.put(ASSETS_TAB, new CreativeTab(LandOfSignals.MODID + ".assets", () -> new ItemStack(LOSItems.ITEM_TICKET_MACHINE_DB, 1)));
+        CREATIVE_TABS.put(ASSETS_TAB, new CreativeTab(LandOfSignals.MODID + ".assets", LOSTabs::getFirstDeco));
         CREATIVE_TABS.put(HIDDEN_TAB, new CreativeTab(null));
     }
 
@@ -61,6 +61,15 @@ public class LOSTabs {
         ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);
         TagCompound tag = itemStack.getTagCompound();
         String id = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet().iterator().next();
+        tag.setString("itemId", id);
+        itemStack.setTagCompound(tag);
+        return itemStack;
+    }
+
+    private static ItemStack getFirstDeco() {
+        ItemStack itemStack = new ItemStack(LOSItems.ITEM_DECO, 1);
+        TagCompound tag = itemStack.getTagCompound();
+        String id = LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet().iterator().next();
         tag.setString("itemId", id);
         itemStack.setTagCompound(tag);
         return itemStack;

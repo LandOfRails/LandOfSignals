@@ -19,6 +19,7 @@ import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientP
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
+import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.stellwand.Stellwand;
 
 import java.lang.reflect.Method;
@@ -28,6 +29,7 @@ public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
     public static final String VERSION = "0.0.4";
+    public static final String LASTSUPPORTEDVERSION = "0.0.4";
 
     @Override
     public String modID() {
@@ -68,6 +70,12 @@ public class LandOfSignals extends ModCore.Mod {
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
+
+            if (!LandOfSignalsUtils.isVersionSupported(LandOfSignalsConfig.currentVersion, LASTSUPPORTEDVERSION)) {
+                String message = String.format("This version of LandOfSignals is not compatible with the old version %s! Last supported version: %s", LandOfSignalsConfig.currentVersion, LASTSUPPORTEDVERSION);
+                throw new RuntimeException(message);
+            }
+
         }
 
     }
@@ -83,18 +91,12 @@ public class LandOfSignals extends ModCore.Mod {
                 ModCore.Mod.info("Starting client construct...");
 
                 // Block
-                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_LEVER, TileSignalLeverRender::render, TileSignalLever.class);
-                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileTicketMachineDBRender::render, TileTicketMachineDB.class);
-                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileTicketMachineSBBRender::render, TileTicketMachineSBB.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
                 BlockRender.register(LOSBlocks.BLOCK_DECO, TileDecoRender::render, TileDeco.class);
 
                 // Items
-                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
                 ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
                 ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
 
@@ -112,6 +114,12 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
                 ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
+
+                // Deprecated: Only for compatability - Removes warnings
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);
+                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileMissingRender::render, TileTicketMachineDB.class);
+                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileMissingRender::render, TileTicketMachineSBB.class);
+
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
