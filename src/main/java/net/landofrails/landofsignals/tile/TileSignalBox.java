@@ -68,7 +68,11 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public ItemStack onPick() {
-        return new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1);
+        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1);
+        TagCompound tag = is.getTagCompound();
+        tag.setString("itemId", id);
+        is.setTagCompound(tag);
+        return is;
     }
 
     @Override
@@ -262,4 +266,5 @@ public class TileSignalBox extends BlockEntity {
             nbt.setString(KEYWORD_ID, newId);
         }
     }
+
 }
