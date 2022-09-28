@@ -18,9 +18,6 @@ public class LOSItems {
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemDeco ITEM_DECO = new ItemDeco(LandOfSignals.MODID, "item_deco");
 
-    public static final ItemSignalSelector ITEM_SIGNAL_SELECTOR = new ItemSignalSelector(LandOfSignals.MODID, "item_signal_selector");
-    public static final ItemSignSelector ITEM_SIGN_SELECTOR = new ItemSignSelector(LandOfSignals.MODID, "item_sign_selector");
-
     public static void register() {
         // loads static classes and ctrs
     }
