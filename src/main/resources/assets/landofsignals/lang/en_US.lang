@@ -29,6 +29,7 @@ item.landofsignals:item_sign_selector.name=Sign selector tool
 
 message.landofsignals:item.manipulator.disabled=§4This tool is currently not available. §cIt will be reactivated with the next update.
 message.landofsignals:sign.texteditor.needs.new.umc.version=§6Warning: §eTextrendering will be implemented with new umc version, until then, this will not be displayed.
+message.landofsignals:item.signalanimated=§4This item is currently not available. §cIt will be implemented in a future version.
 
 label.landofsignals:signtexteditor.savebutton=Save
 

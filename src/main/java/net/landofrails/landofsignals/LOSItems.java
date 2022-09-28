@@ -13,7 +13,7 @@ public class LOSItems {
     public static final ItemManipulator ITEM_MANIPULATOR = new ItemManipulator(LandOfSignals.MODID, "item_manipulator");
 
     public static final ItemSignalPart ITEM_SIGNAL_PART = new ItemSignalPart(LandOfSignals.MODID, "item_signal_part");
-    public static final ItemSignPart ITEM_SIGNAL_PART_ANIMATED = null; // new ItemSignPart(LandOfSignals.MODID, "item_signal_part_animated");
+    public static final ItemSignalPartAnimated ITEM_SIGNAL_PART_ANIMATED = new ItemSignalPartAnimated(LandOfSignals.MODID, "item_signal_part_animated");
     public static final ItemSignPart ITEM_SIGN_PART = new ItemSignPart(LandOfSignals.MODID, "item_sign");
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemDeco ITEM_DECO = new ItemDeco(LandOfSignals.MODID, "item_deco");
