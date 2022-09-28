@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.contentpacks;
 import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -11,11 +12,17 @@ import net.landofrails.landofsignals.LOSBlocks;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ContentPackHandlerV2 {
+
+    private static final Consumer<String> MISSINGATTRIBUTESEXCEPTION = missing -> {
+        throw new ContentPackException(String.format("There are missing attributes: %s", missing));
+    };
+    private static final String THEREAREMISSINGATTRIBUTESSNIPPET = "There are missing attributes";
 
     private ContentPackHandlerV2() {
 
@@ -40,6 +47,9 @@ public class ContentPackHandlerV2 {
                     case BLOCKSIGNALBOX:
                         loadSignalbox(zip, path, contentPack);
                         break;
+                    case BLOCKDECO:
+                        loadDeco(zip, path, contentPack);
+                        break;
                     default:
                         ModCore.error("Type %s is currently not implemented in V2!", type.name());
                 }
@@ -61,9 +71,7 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSignal contentPackSignal = ContentPackSignal.fromJson(zip.getInputStream(zipEntry.get()));
-                contentPackSignal.validate(missing -> {
-                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                }, contentPack);
+                contentPackSignal.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Signal: %s", contentPackSignal.getName());
                 LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
             } else {
@@ -72,8 +80,8 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSignal in path %s\nError: %s", path, e.getMessage());
-            if (!e.getMessage().startsWith("There are missing attributes")) {
-                ModCore.error("Stacktrace:");
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
                 e.printStackTrace();
             }
         }
@@ -86,9 +94,7 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSign contentPackSign = ContentPackSign.fromJson(zip.getInputStream(zipEntry.get()));
-                contentPackSign.validate(missing -> {
-                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                }, contentPack);
+                contentPackSign.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Sign: %s", contentPackSign.getName());
 
                 LOSBlocks.BLOCK_SIGN_PART.add(contentPackSign);
@@ -98,8 +104,8 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSign in path %s\nError: %s", path, e.getMessage());
-            if (!e.getMessage().startsWith("There are missing attributes")) {
-                ModCore.error("Stacktrace:");
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
                 e.printStackTrace();
             }
         }
@@ -112,9 +118,7 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSignalbox contentPackSignalbox = ContentPackSignalbox.fromJson(zip.getInputStream(zipEntry.get()));
-                contentPackSignalbox.validate(missing -> {
-                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                }, contentPack);
+                contentPackSignalbox.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Signalbox: %s", contentPackSignalbox.getName());
 
                 LOSBlocks.BLOCK_SIGNAL_BOX.add(contentPackSignalbox);
@@ -124,8 +128,32 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSignalbox in path %s\nError: %s", path, e.getMessage());
-            if (!e.getMessage().startsWith("There are missing attributes")) {
-                ModCore.error("Stacktrace:");
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void loadDeco(ZipFile zip, String path, ContentPack contentPack) {
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackDeco contentPackDeco = ContentPackDeco.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackDeco.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
+                ModCore.info("Signalbox: %s", contentPackDeco.getName());
+
+                LOSBlocks.BLOCK_DECO.add(contentPackDeco);
+            } else {
+                ModCore.error("Couldn't find ContentPackDeco under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContentPackDeco in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
                 e.printStackTrace();
             }
         }
@@ -138,9 +166,7 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSet contentPackSet = ContentPackSet.fromJson(zip.getInputStream(zipEntry.get()));
-                contentPackSet.validate(missing -> {
-                    throw new ContentPackException(String.format("There are missing attributes: %s", missing));
-                });
+                contentPackSet.validate(MISSINGATTRIBUTESEXCEPTION);
                 ModCore.info("Set: %s", contentPackSet.getName());
                 contentPackSet.getContent().forEach((entryPath, type) -> {
                     switch (type) {
@@ -151,7 +177,10 @@ public class ContentPackHandlerV2 {
                             loadSign(zip, entryPath, contentPack);
                             break;
                         case BLOCKSIGNALBOX:
-                            loadSignalbox(zip, path, contentPack);
+                            loadSignalbox(zip, entryPath, contentPack);
+                            break;
+                        case BLOCKDECO:
+                            loadDeco(zip, entryPath, contentPack);
                             break;
                         default:
                             ModCore.error("Type %s is currently not implemented in V2!", type.name());
@@ -163,11 +192,15 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSet in path %s\nError: %s", path, e.getMessage());
-            if (!e.getMessage().startsWith("There are missing attributes")) {
-                ModCore.error("Stacktrace:");
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void writeStacktraceHead() {
+        ModCore.error("Stacktrace:");
     }
 
 }
