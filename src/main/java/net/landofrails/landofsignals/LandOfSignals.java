@@ -19,7 +19,6 @@ import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientP
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
-import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.stellwand.Stellwand;
 
 import java.lang.reflect.Method;
@@ -28,8 +27,7 @@ import java.util.Optional;
 public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
-    public static final String VERSION = "0.0.4";
-    public static final String LASTSUPPORTEDVERSION = "0.0.4";
+    public static final String VERSION = "0.0.5";
 
     @Override
     public String modID() {
@@ -70,12 +68,6 @@ public class LandOfSignals extends ModCore.Mod {
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
-
-            if (!LandOfSignalsUtils.isVersionSupported(LandOfSignalsConfig.currentVersion, LASTSUPPORTEDVERSION)) {
-                String message = String.format("This version of LandOfSignals is not compatible with the old version %s! Last supported version: %s", LandOfSignalsConfig.currentVersion, LASTSUPPORTEDVERSION);
-                throw new RuntimeException(message);
-            }
-
         }
 
     }

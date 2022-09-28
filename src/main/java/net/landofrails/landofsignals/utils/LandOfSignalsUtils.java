@@ -43,7 +43,7 @@ public class LandOfSignalsUtils {
         String lastSupportedVersionSuffix = lastSupportedVersion.split("-").length > 1 ? lastSupportedVersion.split("-", 2)[1] : null;
 
         if (lastSupportedVersionMaMiPa.length != 3 || lastVersionMaMiPa.length != 3) {
-            throw new RuntimeException(String.format("LastVersion (%s) or LastSupportedVersion (%s) should contain Major.Minor.Patch!", lastVersionClean, lastSupportedVersionClean));
+            throw new LandOfSignalsUtilsException(String.format("LastVersion (%s) or LastSupportedVersion (%s) should contain Major.Minor.Patch!", lastVersionClean, lastSupportedVersionClean));
         }
 
         // Check Major.Minor.Patch
@@ -64,6 +64,16 @@ public class LandOfSignalsUtils {
         }
 
         return true;
+    }
+
+    private static final class LandOfSignalsUtilsException extends RuntimeException {
+
+        private static final long serialVersionUID = 3833210873552862773L;
+
+        public LandOfSignalsUtilsException(String msg) {
+            super(msg);
+        }
+
     }
 
 }

@@ -336,7 +336,6 @@ public class LOSBlocks {
         registerDecoContentPackStellwand("deco_trackdiag_up_left", "Diagonal track (up - left)", models("models/block/stellwand/blockfiller/trackdiag/ul/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
         registerDecoContentPackStellwand("deco_trackdiag_up_right", "Diagonal track (up - right)", models("models/block/stellwand/blockfiller/trackdiag/ur/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
         
-
     }
 
     private static void registerStreckenblock() {
@@ -366,7 +365,6 @@ public class LOSBlocks {
             }
             groups.put(groupName, new ContentPackSignalGroup(groupName, states));
         }
-
 
         ContentPackSignal stellwandMultisignal = new ContentPackSignal(
                 "Streckenblock",
