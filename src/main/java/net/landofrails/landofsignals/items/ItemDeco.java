@@ -62,7 +62,7 @@ public class ItemDeco extends CustomItem {
     public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        if (creativeTab != null && creativeTab.equals(LOSTabs.get(LOSTabs.ASSETS_TAB))) {
+        if (creativeTab == null || creativeTab.equals(LOSTabs.get(LOSTabs.ASSETS_TAB))) {
             for (String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()) {
                 if (!id.equals(Static.MISSING)) {
                     ItemStack is = new ItemStack(LOSItems.ITEM_DECO, 1);

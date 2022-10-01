@@ -62,7 +62,7 @@ public class ItemSignPart extends CustomItem {
     public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        if (creativeTab != null && creativeTab.equals(LOSTabs.get(LOSTabs.SIGNS_TAB))) {
+        if (creativeTab == null || creativeTab.equals(LOSTabs.get(LOSTabs.SIGNS_TAB))) {
             for (String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()) {
                 if (!id.equals(Static.MISSING)) {
                     ItemStack is = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);

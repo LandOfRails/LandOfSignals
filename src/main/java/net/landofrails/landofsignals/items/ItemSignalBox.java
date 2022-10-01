@@ -59,7 +59,7 @@ public class ItemSignalBox extends CustomItem {
     public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
         List<ItemStack> itemStackList = new ArrayList<>();
 
-        if (creativeTab != null && creativeTab.equals(LOSTabs.get(LOSTabs.SIGNALS_TAB))) {
+        if (creativeTab == null || creativeTab.equals(LOSTabs.get(LOSTabs.SIGNALS_TAB))) {
             for (String id : LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet()) {
                 if (!id.equals(Static.MISSING)) {
                     ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_BOX, 1);
