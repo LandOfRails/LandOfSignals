@@ -20,7 +20,6 @@ import net.landofrails.stellwand.utils.ICustomTexturePath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemConnector extends CustomItem implements ICustomTexturePath {
 
@@ -65,40 +64,11 @@ public class ItemConnector extends CustomItem implements ICustomTexturePath {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos,
-                                    Hand hand, Facing facing, Vec3d inBlockPos) {
-
+    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
         if (world.isServer) {
-            ItemStack itemStack = player.getHeldItem(hand);
-            if (!AItemConnector.hasConnectorData(itemStack)) {
-                if (AItemConnector.suitableConnectorExists(world, pos)) {
-                    AItemConnector connector = Objects.requireNonNull(AItemConnector.getConnector(world, pos));
-                    boolean result = connector.connect(world, pos, player, hand);
-                    return result ? ClickResult.ACCEPTED : ClickResult.REJECTED;
-                } else {
-                    ServerMessagePacket.send(player, EMessage.MESSAGE_BLOCK_NOT_CONNECTABLE);
-                    return ClickResult.REJECTED;
-                }
-            } else {
-                AItemConnector connector = AItemConnector.getConnector(itemStack);
-                if (connector != null && connector.canConnect(world, pos)) {
-                    boolean result = connector.connect(world, pos, player, hand);
-                    return result ? ClickResult.ACCEPTED : ClickResult.REJECTED;
-                } else if (connector != null && connector.shouldOverrideConnector(world, pos)) {
-                    // Override with new Connector
-                    connector = Objects.requireNonNull(AItemConnector.getConnector(world, pos));
-                    boolean result = connector.connect(world, pos, player, hand);
-                    return result ? ClickResult.ACCEPTED : ClickResult.REJECTED;
-                } else {
-                    ServerMessagePacket.send(player, EMessage.MESSAGE_BLOCK_NOT_CONNECTABLE);
-                    return ClickResult.REJECTED;
-                }
-            }
-
-
-        } else {
-            return ClickResult.REJECTED;
+            ServerMessagePacket.send(player, EMessage.MESSAGE_DEPRECATED);
         }
+        return ClickResult.ACCEPTED;
     }
 
 }

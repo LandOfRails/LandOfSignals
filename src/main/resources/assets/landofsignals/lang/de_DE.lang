@@ -1,4 +1,4 @@
-itemGroup.landofsignals.stellwand=LOS | Stellwand
+itemGroup.landofsignals.stellwand=LOS | Stellwand (veraltet)
 itemGroup.landofsignals.signals=LOS | Signale
 itemGroup.landofsignals.signs=LOS | Schilder
 itemGroup.landofsignals.assets=LOS | Assets
@@ -35,14 +35,14 @@ label.landofsignals:signtexteditor.savebutton=Speichern
 
 # -- Stellwand --
 
-item.landofsignals:stellwand.itemblockfiller.name=Block Filler
-item.landofsignals:stellwand.itemblocksender.name=Block Sender
-item.landofsignals:stellwand.itemblocksignal.name=Block Signal
-item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal
-item.landofsignals:stellwand.itemconnector1.name=Connector
-item.landofsignals:stellwand.itemconnector2.name=Connector
-item.landofsignals:stellwand.itemconnector3.name=Connector
-item.landofsignals:stellwand.magnifyingglass.name=Lupe
+item.landofsignals:stellwand.itemblockfiller.name=Block Filler (veraltet)
+item.landofsignals:stellwand.itemblocksender.name=Block Sender (veraltet)
+item.landofsignals:stellwand.itemblocksignal.name=Block Signal (veraltet)
+item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal (veraltet)
+item.landofsignals:stellwand.itemconnector1.name=Connector (veraltet)
+item.landofsignals:stellwand.itemconnector2.name=Connector (veraltet)
+item.landofsignals:stellwand.itemconnector3.name=Connector (veraltet)
+item.landofsignals:stellwand.magnifyingglass.name=Lupe (veraltet)
 
 message.stellwand:sender.nosignalsconnected=Es ist noch kein Signal verbunden!
 message.stellwand:sender.modesset=Modes gesetzt!
@@ -56,5 +56,7 @@ message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! (%s, %s,
 message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=Dieser Block lässt sich nicht verbinden!
 message.stellwand:connector.notthesameworld=Blöcke aus unterschiedlichen Welten lassen sich nicht verbinden!
+
+message.stellwand:deprecated=Dieser Block/Dieses Item wird zukünftig entfernt. Du kannst Ersatz finden unter "LOS | Signale" und "LOS | Assets".
 
 gui.stellwand:selectsendermodes.group=Gruppe: %s

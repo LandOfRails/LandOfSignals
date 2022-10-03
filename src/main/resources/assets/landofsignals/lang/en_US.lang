@@ -1,4 +1,4 @@
-itemGroup.landofsignals.stellwand=LOS | Signalbox
+itemGroup.landofsignals.stellwand=LOS | Signalbox (deprecated)
 itemGroup.landofsignals.signals=LOS | Signals
 itemGroup.landofsignals.signs=LOS | Signs
 itemGroup.landofsignals.assets=LOS | Assets
@@ -35,14 +35,14 @@ label.landofsignals:signtexteditor.savebutton=Save
 
 # -- Stellwand --
 
-item.landofsignals:stellwand.itemblockfiller.name=Block Filler
-item.landofsignals:stellwand.itemblocksender.name=Block Sender
-item.landofsignals:stellwand.itemblocksignal.name=Block Signal
-item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal
-item.landofsignals:stellwand.itemconnector1.name=Connector
-item.landofsignals:stellwand.itemconnector2.name=Connector
-item.landofsignals:stellwand.itemconnector3.name=Connector
-item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass
+item.landofsignals:stellwand.itemblockfiller.name=Block Filler (deprecated)
+item.landofsignals:stellwand.itemblocksender.name=Block Sender (deprecated)
+item.landofsignals:stellwand.itemblocksignal.name=Block Signal (deprecated)
+item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal (deprecated)
+item.landofsignals:stellwand.itemconnector1.name=Connector (deprecated)
+item.landofsignals:stellwand.itemconnector2.name=Connector (deprecated)
+item.landofsignals:stellwand.itemconnector3.name=Connector (deprecated)
+item.landofsignals:stellwand.magnifyingglass.name=Magnifying glass (deprecated)
 
 message.stellwand:sender.nosignalsconnected=No signals connected yet!
 message.stellwand:sender.modesset=Modes set!
@@ -56,5 +56,7 @@ message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=This block is not connectable!
 message.stellwand:connector.notthesameworld=Can't connect blocks between different worlds!
+
+message.stellwand:deprecated=This block/item will be removed in the future. You can find replacements under "LOS | Signals" and "LOS | Assets".
 
 gui.stellwand:selectsendermodes.group=Group: %s
