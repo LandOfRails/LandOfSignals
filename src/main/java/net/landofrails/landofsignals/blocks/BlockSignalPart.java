@@ -13,14 +13,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"java:S2387", "java:S1135"})
 public class BlockSignalPart extends BlockTypeEntity {
 
-    private Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
+    private final Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
     private String id;
     private int rot;
     private LegacyMode legacyMode;
 
-    public BlockSignalPart(String modID, String name) {
+    public BlockSignalPart(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -29,26 +30,26 @@ public class BlockSignalPart extends BlockTypeEntity {
         return new TileSignalPart(id, rot, legacyMode);
     }
 
-    public void setRot(int rot) {
+    public void setRot(final int rot) {
         this.rot = rot;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public void setLegacyMode(LegacyMode legacyMode) {
+    public void setLegacyMode(final LegacyMode legacyMode) {
         this.legacyMode = legacyMode;
     }
 
-    public String getName(String uncheckedId) {
+    public String getName(final String uncheckedId) {
         if (!uncheckedId.contains(":")) {
             return "ID: " + uncheckedId + "; Click into air to refresh item!";
         }
         return contentPackSignals.get(checkIfMissing(uncheckedId)).getName();
     }
 
-    public void add(ContentPackSignal contentPackSignal) {
+    public void add(final ContentPackSignal contentPackSignal) {
         if (!contentPackSignals.containsKey(contentPackSignal.getUniqueId())) {
             contentPackSignals.put(contentPackSignal.getUniqueId(), contentPackSignal);
         } else {
@@ -61,7 +62,7 @@ public class BlockSignalPart extends BlockTypeEntity {
         return contentPackSignals;
     }
 
-    private String checkIfMissing(String id) {
+    private String checkIfMissing(final String id) {
         if (contentPackSignals.containsKey(id)) return id;
         else return Static.MISSING;
     }

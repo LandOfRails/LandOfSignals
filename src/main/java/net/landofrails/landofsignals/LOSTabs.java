@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class LOSTabs {
 
+    private static final String ITEMID_KEY = "itemId";
+
     private LOSTabs() {
 
     }
@@ -46,10 +48,10 @@ public class LOSTabs {
      * @return the first signalpart found
      */
     private static ItemStack getFirstSignalPart() {
-        ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = itemStack.getTagCompound();
-        String id = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet().iterator().next();
-        tag.setString("itemId", id);
+        final ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        final TagCompound tag = itemStack.getTagCompound();
+        final String id = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet().iterator().next();
+        tag.setString(ITEMID_KEY, id);
         itemStack.setTagCompound(tag);
         return itemStack;
     }
@@ -58,19 +60,19 @@ public class LOSTabs {
      * @return the first signpart found
      */
     private static ItemStack getFirstSignPart() {
-        ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);
-        TagCompound tag = itemStack.getTagCompound();
-        String id = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet().iterator().next();
-        tag.setString("itemId", id);
+        final ItemStack itemStack = new ItemStack(LOSItems.ITEM_SIGN_PART, 1);
+        final TagCompound tag = itemStack.getTagCompound();
+        final String id = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet().iterator().next();
+        tag.setString(ITEMID_KEY, id);
         itemStack.setTagCompound(tag);
         return itemStack;
     }
 
     private static ItemStack getFirstDeco() {
-        ItemStack itemStack = new ItemStack(LOSItems.ITEM_DECO, 1);
-        TagCompound tag = itemStack.getTagCompound();
-        String id = LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet().iterator().next();
-        tag.setString("itemId", id);
+        final ItemStack itemStack = new ItemStack(LOSItems.ITEM_DECO, 1);
+        final TagCompound tag = itemStack.getTagCompound();
+        final String id = LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet().iterator().next();
+        tag.setString(ITEMID_KEY, id);
         itemStack.setTagCompound(tag);
         return itemStack;
     }

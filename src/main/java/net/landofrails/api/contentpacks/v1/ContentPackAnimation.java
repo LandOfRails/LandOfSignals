@@ -11,7 +11,7 @@ public class ContentPackAnimation {
     private float duration;
     private float startAfter;
 
-    public ContentPackAnimation(List<String> groups, float[] move, float[] rotate, String state, float duration, float startAfter) {
+    public ContentPackAnimation(final List<String> groups, final float[] move, final float[] rotate, final String state, final float duration, final float startAfter) {
         this.groups = groups;
         this.move = move;
         this.rotate = rotate;
@@ -24,7 +24,7 @@ public class ContentPackAnimation {
         return groups;
     }
 
-    public void setGroups(List<String> groups) {
+    public void setGroups(final List<String> groups) {
         this.groups = groups;
     }
 
@@ -32,7 +32,7 @@ public class ContentPackAnimation {
         return move;
     }
 
-    public void setMove(float[] move) {
+    public void setMove(final float[] move) {
         this.move = move;
     }
 
@@ -40,7 +40,7 @@ public class ContentPackAnimation {
         return rotate;
     }
 
-    public void setRotate(float[] rotate) {
+    public void setRotate(final float[] rotate) {
         this.rotate = rotate;
     }
 
@@ -48,7 +48,7 @@ public class ContentPackAnimation {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(final String state) {
         this.state = state;
     }
 
@@ -56,7 +56,7 @@ public class ContentPackAnimation {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(final float duration) {
         this.duration = duration;
     }
 
@@ -64,7 +64,7 @@ public class ContentPackAnimation {
         return startAfter;
     }
 
-    public void setStartAfter(float startAfter) {
+    public void setStartAfter(final float startAfter) {
         this.startAfter = startAfter;
     }
 }

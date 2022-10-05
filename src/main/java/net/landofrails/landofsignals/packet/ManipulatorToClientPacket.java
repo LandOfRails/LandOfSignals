@@ -1,7 +1,6 @@
 package net.landofrails.landofsignals.packet;
 
 import cam72cam.mod.block.BlockEntity;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
@@ -16,8 +15,6 @@ public class ManipulatorToClientPacket extends Packet {
     private Vec3d movement;
     @TagField("mainPos")
     private Vec3d mainPos;
-    @TagField("player")
-    private Player player;
     @TagField("blockPos")
     private Vec3i blockPos;
     @TagField("gui")
@@ -31,17 +28,16 @@ public class ManipulatorToClientPacket extends Packet {
 
     }
 
-    public ManipulatorToClientPacket(Vec3d mainPos, Vec3d movement, Player player, Vec3i blockPos, boolean sneak) {
+    public ManipulatorToClientPacket(final Vec3d mainPos, final Vec3d movement, final Vec3i blockPos, final boolean sneak) {
         this.mainPos = mainPos;
         this.movement = movement;
-        this.player = player;
         this.blockPos = blockPos;
         gui = false;
         this.sneak = sneak;
     }
 
-    public ManipulatorToClientPacket(Vec3d offset, int rotation, Vec3i blockPos, boolean sneak) {
-        this.movement = offset;
+    public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final boolean sneak) {
+        movement = offset;
         this.blockPos = blockPos;
         this.rotation = rotation;
         gui = true;
@@ -51,7 +47,7 @@ public class ManipulatorToClientPacket extends Packet {
     @Override
     protected void handle() {
 
-        ArrayList<Vec3i> blockPosList = new ArrayList<>();
+        final ArrayList<Vec3i> blockPosList = new ArrayList<>();
         if (!sneak) {
             //UP
             int i = 0;
@@ -68,19 +64,19 @@ public class ManipulatorToClientPacket extends Packet {
         } else blockPosList.add(blockPos);
 
         if (!gui) {
-            player.setPosition(mainPos);
-            for (Vec3i bp : blockPosList) {
-                BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
+            getPlayer().setPosition(mainPos);
+            for (final Vec3i bp : blockPosList) {
+                final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {
-                    IManipulate manipulate = (IManipulate) block;
+                    final IManipulate manipulate = (IManipulate) block;
                     manipulate.setOffset(manipulate.getOffset().add(movement));
                 }
             }
         } else {
-            for (Vec3i bp : blockPosList) {
-                BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
+            for (final Vec3i bp : blockPosList) {
+                final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {
-                    IManipulate manipulate = (IManipulate) block;
+                    final IManipulate manipulate = (IManipulate) block;
                     manipulate.setOffset(movement);
                     manipulate.setRotation(rotation);
                 }

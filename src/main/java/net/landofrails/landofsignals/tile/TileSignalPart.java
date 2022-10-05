@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("java:S1133")
 public class TileSignalPart extends BlockEntity implements IManipulate {
 
     private static final String MISSING = "MISSING";
@@ -36,7 +37,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     private final String id;
     @TagField("texturePath")
     @Deprecated
-    private String texturePath = null;
+    @SuppressWarnings("java:S1123")
+    private String texturePath;
     @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
     private Map<String, String> signalGroupStates = new HashMap<>();
     // for server only
@@ -48,16 +50,16 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    public TileSignalPart(String id, int rot, LegacyMode legacyMode) {
-        this.blockRotate = rot;
+    public TileSignalPart(final String id, final int rot, LegacyMode legacyMode) {
+        blockRotate = rot;
         this.id = id;
         this.legacyMode = legacyMode;
     }
 
     @Override
     public ItemStack onPick() {
-        ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = is.getTagCompound();
+        final ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+        final TagCompound tag = is.getTagCompound();
         tag.setString("itemId", id);
         is.setTagCompound(tag);
         return is;
@@ -77,9 +79,13 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
+    /**
+     * @return
+     * @deprecated (1.0.0, Only needed for backwards compatability)
+     */
     @Deprecated
     public String getTexturePath_depr() {
-        if (texturePath != null && texturePath.equals("null")) return null;
+        if ("null".equals(texturePath)) return null;
         else return texturePath;
     }
 
@@ -87,20 +93,24 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return id;
     }
 
+    /**
+     * @param texturePath
+     * @deprecated (1.0.0, Only needed for backwards compatability)
+     */
     @Deprecated
-    public void setTexturePath_depr(String texturePath) {
+    public void setTexturePath_depr(final String texturePath) {
         if (texturePath == null) this.texturePath = "null";
         else this.texturePath = texturePath;
         markDirty();
     }
 
     @Override
-    public void setOffset(Vec3d vec) {
+    public void setOffset(final Vec3d vec) {
         offset = vec;
         try {
             save(new TagCompound().setVec3d("offset", vec));
-        } catch (Exception ignored) {
-
+        } catch (final Exception ignored) {
+            // Nothing you can do now
         }
     }
 
@@ -110,18 +120,18 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     @Override
-    public void setRotation(int rotation) {
-        this.blockRotate = rotation;
+    public void setRotation(final int rotation) {
+        blockRotate = rotation;
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
-        } catch (Exception e) {
-
+        } catch (final Exception e) {
+            // Nothing you can do now
         }
     }
 
     @Override
     public int getRotation() {
-        return blockRotate;
+        return getBlockRotate();
     }
 
     /**
@@ -138,6 +148,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
      *
      * @return Map<Group, Groupstate>
      */
+    @SuppressWarnings("java:S1134")
     public Map<String, String> getSignalGroupStates() {
 
         // FIXME not performance-friendly

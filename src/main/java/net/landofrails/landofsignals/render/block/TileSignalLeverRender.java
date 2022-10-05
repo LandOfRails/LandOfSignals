@@ -24,12 +24,12 @@ public class TileSignalLeverRender {
     private static OBJModel model;
     private static final List<String> groupNames = Arrays.asList("Base01_B01", "Hebelwerk01_H01", "Hebelwerk02_H02");
 
-    public static StandardModel render(TileSignalLever ts) {
+    public static StandardModel render(final TileSignalLever ts) {
         return new StandardModel().addCustom(partialTicks -> renderStuff(ts, partialTicks));
     }
 
     @SuppressWarnings("java:S1172")
-    private static void renderStuff(TileSignalLever ts, float partialTicks) {
+    private static void renderStuff(final TileSignalLever ts, final float partialTicks) {
         try {
             if (renderer == null || model == null) {
                 model = new OBJModel(
@@ -37,7 +37,7 @@ public class TileSignalLeverRender {
                         0);
                 renderer = new OBJRender(model);
             }
-            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+            try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture()) {
                 GL11.glTranslated(0.5, 0.6, 0.5);
                 GL11.glRotated(ts.getBlockRotate(), 0, 1, 0);
 
@@ -47,7 +47,7 @@ public class TileSignalLeverRender {
                 GL11.glRotated((ts.getLeverRotate() * 2), 1, 0, 0);
                 renderer.drawGroups(groupNames.subList(1, groupNames.size() - 1));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

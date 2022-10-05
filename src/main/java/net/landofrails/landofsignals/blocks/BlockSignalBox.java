@@ -10,13 +10,14 @@ import net.landofrails.landofsignals.utils.Static;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"java:S2387", "java:S1135"})
 public class BlockSignalBox extends BlockTypeEntity {
 
-    private Map<String, ContentPackSignalbox> contentPackSignalboxes = new HashMap<>();
+    private final Map<String, ContentPackSignalbox> contentPackSignalboxes = new HashMap<>();
     private String id;
     private int rot;
 
-    public BlockSignalBox(String modID, String name) {
+    public BlockSignalBox(final String modID, final String name) {
         super(modID, name);
     }
 

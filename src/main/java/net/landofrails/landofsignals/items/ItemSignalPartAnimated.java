@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ItemSignalPartAnimated extends CustomItem {
 
-    public ItemSignalPartAnimated(String modID, String name) {
+    public ItemSignalPartAnimated(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -41,8 +41,8 @@ public class ItemSignalPartAnimated extends CustomItem {
     }
 
     @Override
-    public String getCustomName(ItemStack stack) {
-        TagCompound tag = stack.getTagCompound();
+    public String getCustomName(final ItemStack stack) {
+        final TagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey("itemId"))
             return LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(tag.getString("itemId"));
         else return "Error missing tag \"itemId\" for ItemSignalPartAnimated";

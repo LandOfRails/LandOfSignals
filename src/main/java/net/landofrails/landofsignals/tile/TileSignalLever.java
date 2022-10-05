@@ -13,15 +13,15 @@ import net.landofrails.landofsignals.LOSItems;
 
 public class TileSignalLever extends BlockEntityTickable implements IRedstoneProvider {
 
-    private int leverRotate = 0;
+    private int leverRotate;
     @TagField("Rotation")
     private float blockRotate;
 
     @TagField("Activated")
-    private boolean activated = false;
+    private boolean activated;
 
-    public TileSignalLever(float rot) {
-        this.blockRotate = rot;
+    public TileSignalLever(final float rot) {
+        blockRotate = rot;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     }
 
     @Override
-    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+    public boolean onClick(final Player player, final Player.Hand hand, final Facing facing, final Vec3d hit) {
         activated = !activated;
         // Updates the own coordinate
         getWorld().notifyNeighborsOfStateChange(getPos(), LOSBlocks.BLOCK_SIGNAL_LEVER, true);
@@ -55,28 +55,28 @@ public class TileSignalLever extends BlockEntityTickable implements IRedstonePro
     }
 
     public long getLeverRotate() {
-        return this.leverRotate;
+        return leverRotate;
     }
 
     public float getBlockRotate() {
         return blockRotate;
     }
 
-    public void setBlockRotate(float blockRotate) {
+    public void setBlockRotate(final float blockRotate) {
         this.blockRotate = blockRotate;
     }
 
-    public void setActivated(boolean activated) {
+    public void setActivated(final boolean activated) {
         this.activated = activated;
     }
 
     @Override
-    public int getStrongPower(Facing from) {
+    public int getStrongPower(final Facing from) {
         return activated ? 15 : 0;
     }
 
     @Override
-    public int getWeakPower(Facing from) {
+    public int getWeakPower(final Facing from) {
         return activated ? 15 : 0;
     }
 }

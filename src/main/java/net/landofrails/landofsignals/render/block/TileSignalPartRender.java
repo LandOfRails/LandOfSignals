@@ -29,11 +29,11 @@ public class TileSignalPartRender {
 
     private static final Map<String, OBJRender> cache = new HashMap<>();
 
-    public static StandardModel render(TileSignalPart tsp) {
+    public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
-    private static void renderStuff(TileSignalPart tsp) {
+    private static void renderStuff(final TileSignalPart tsp) {
 
         String id = tsp.getId();
 
@@ -46,13 +46,14 @@ public class TileSignalPartRender {
 
     }
 
+    @SuppressWarnings("java:S1134")
     private static void renderBase(String blockId, TileSignalPart tile) {
 
         for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
 
-            String path = baseModels.getKey();
+            final String path = baseModels.getKey();
 
-            String objId = blockId + "/" + path;
+            final String objId = blockId + "/" + path;
             if (!cache.containsKey(objId)) {
                 try {
                     Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
@@ -61,14 +62,14 @@ public class TileSignalPartRender {
                     throw new BlockRenderException("Error loading block model/renderer...", e);
                 }
             }
-            OBJRender renderer = cache.get(objId);
+            final OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
-                ContentPackBlock block = baseModel.getBlock();
-                Vec3d translate = block.getAsVec3d(block::getTranslation);
-                Vec3d scale = block.getAsVec3d(block::getScaling);
-                Vec3d rotation = block.getAsVec3d(block::getRotation);
-                List<OpenGL.With> closables = new ArrayList<>();
+                final ContentPackBlock block = baseModel.getBlock();
+                final Vec3d translate = block.getAsVec3d(block::getTranslation);
+                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d rotation = block.getAsVec3d(block::getRotation);
+                final List<OpenGL.With> closables = new ArrayList<>();
                 try {
                     // Load
                     closables.add(OpenGL.matrix());
@@ -111,24 +112,25 @@ public class TileSignalPartRender {
         }
     }
 
-    private static void renderSignals(String blockId, TileSignalPart tile) {
-        Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals();
+    @SuppressWarnings("java:S1134")
+    private static void renderSignals(final String blockId, final TileSignalPart tile) {
+        final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals();
 
-        Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
+        final Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
 
         for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signalGroups.entrySet()) {
 
-            String groupId = signalGroupEntry.getKey();
-            ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
+            final String groupId = signalGroupEntry.getKey();
+            final ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
 
-            String tileSignalState = tileSignalGroups.get(groupId);
-            ContentPackSignalState signalState = signalGroup.getStates().get(tileSignalState);
+            final String tileSignalState = tileSignalGroups.get(groupId);
+            final ContentPackSignalState signalState = signalGroup.getStates().get(tileSignalState);
 
             for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
 
-                String path = signalModels.getKey();
+                final String path = signalModels.getKey();
 
-                String objId = blockId + "/" + path;
+                final String objId = blockId + "/" + path;
                 if (!cache.containsKey(objId)) {
                     try {
                         Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
@@ -137,14 +139,14 @@ public class TileSignalPartRender {
                         throw new BlockRenderException("Error loading block model/renderer...", e);
                     }
                 }
-                OBJRender renderer = cache.get(objId);
+                final OBJRender renderer = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
                     ContentPackBlock block = signalModel.getBlock();
-                    Vec3d translate = block.getAsVec3d(block::getTranslation);
-                    Vec3d scale = block.getAsVec3d(block::getScaling);
-                    Vec3d rotation = block.getAsVec3d(block::getRotation);
-                    List<OpenGL.With> closables = new ArrayList<>();
+                    final Vec3d translate = block.getAsVec3d(block::getTranslation);
+                    final Vec3d scale = block.getAsVec3d(block::getScaling);
+                    final Vec3d rotation = block.getAsVec3d(block::getRotation);
+                    final List<OpenGL.With> closables = new ArrayList<>();
                     try {
                         // Load
                         closables.add(OpenGL.matrix());

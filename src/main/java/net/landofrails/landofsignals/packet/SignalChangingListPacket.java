@@ -6,6 +6,7 @@ import cam72cam.mod.serialization.TagField;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused") // Is this class needed?
 public class SignalChangingListPacket extends Packet {
 
     @TagField("uuid")
@@ -18,7 +19,7 @@ public class SignalChangingListPacket extends Packet {
     public SignalChangingListPacket() {
     }
 
-    public SignalChangingListPacket(UUID uuid, Vec3i pos, boolean remove) {
+    public SignalChangingListPacket(final UUID uuid, final Vec3i pos, final boolean remove) {
         this.uuid = uuid;
         this.pos = pos;
         this.remove = remove;
@@ -26,5 +27,6 @@ public class SignalChangingListPacket extends Packet {
 
     @Override
     protected void handle() {
+        // Unsure if needed, see comment above
     }
 }

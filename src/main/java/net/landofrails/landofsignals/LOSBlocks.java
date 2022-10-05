@@ -45,7 +45,7 @@ public class LOSBlocks {
 
 
         // loads static classes and ctrs
-        ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, Static.MISSING_NAME, Static.MISSING_OBJ, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
+        final ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, Static.MISSING_NAME, Static.MISSING_OBJ, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
             private static final long serialVersionUID = -1995088635629060337L;
 
             {

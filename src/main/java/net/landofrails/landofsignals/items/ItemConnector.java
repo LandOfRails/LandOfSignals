@@ -21,7 +21,7 @@ public class ItemConnector extends CustomItem {
     TileSignalPart blockEntitySignalPart;
     TileSignalBox blockEntityBox;
 
-    public ItemConnector(String modID, String name) {
+    public ItemConnector(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -31,11 +31,11 @@ public class ItemConnector extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
         if (world.isServer) {
 
-            TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
-            TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
+            final TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
+            final TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
 
             if (tempPart == null && tempSignalBox == null) {
                 return ClickResult.REJECTED;
@@ -65,7 +65,7 @@ public class ItemConnector extends CustomItem {
     }
 
     @Override
-    public void onClickAir(Player player, World world, Player.Hand hand) {
+    public void onClickAir(final Player player, final World world, final Player.Hand hand) {
         if (world.isServer && player.isCrouching()) {
             blockEntityBox = null;
             blockEntitySignalPart = null;

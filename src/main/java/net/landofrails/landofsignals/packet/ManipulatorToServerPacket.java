@@ -20,7 +20,7 @@ public class ManipulatorToServerPacket extends Packet {
 
     }
 
-    public ManipulatorToServerPacket(Vec3d offset, int rotation, Vec3i blockPos) {
+    public ManipulatorToServerPacket(final Vec3d offset, final int rotation, final Vec3i blockPos) {
         this.offset = offset;
         this.rotation = rotation;
         this.blockPos = blockPos;
@@ -28,9 +28,9 @@ public class ManipulatorToServerPacket extends Packet {
 
     @Override
     protected void handle() {
-        BlockEntity block = getWorld().getBlockEntity(blockPos, BlockEntity.class);
+        final BlockEntity block = getWorld().getBlockEntity(blockPos, BlockEntity.class);
         if (block instanceof IManipulate) {
-            IManipulate manipulate = (IManipulate) block;
+            final IManipulate manipulate = (IManipulate) block;
             manipulate.setOffset(manipulate.getOffset().add(offset));
             manipulate.setRotation(rotation);
         }

@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+@SuppressWarnings({"java:S100", "java:S1182", "java:S3008", "java:S2975", "java:S1149"})
 public class ColorRGBA implements Cloneable {
     /**
      * Default black color.
@@ -50,7 +51,7 @@ public class ColorRGBA implements Cloneable {
     /**
      * A {@link java.util.Stack Stack} to keep track of which colour multipliers have been applied to {@link ColorRGBA}.
      */
-    private static final Stack<ColorRGBA> multiplierStack = new Stack<ColorRGBA>();
+    private static final Stack<ColorRGBA> multiplierStack = new Stack<>();
 
     /**
      * Red color component, ranging from {@code 0.0F} to {@code 1.0F}.
@@ -80,14 +81,14 @@ public class ColorRGBA implements Cloneable {
     /**
      * Instantiate a color with the given hexadecimal value.
      */
-    public ColorRGBA(int hex) {
+    public ColorRGBA(final int hex) {
         this(encodeHEXtoRGBA_R(hex), encodeHEXtoRGBA_G(hex), encodeHEXtoRGBA_B(hex), encodeHEXtoRGBA_A(hex));
     }
 
     /**
      * Instantiate a color with the given hexadecimal String.
      */
-    public ColorRGBA(String hex) {
+    public ColorRGBA(final String hex) {
         this();
         set(hex);
     }
@@ -95,14 +96,14 @@ public class ColorRGBA implements Cloneable {
     /**
      * Instantiate a color of given RGB components with default alpha channel value.
      */
-    public ColorRGBA(float r, float g, float b) {
+    public ColorRGBA(final float r, final float g, final float b) {
         this(r, g, b, 1.0F);
     }
 
     /**
      * Instantiate a color of given RGBA components.
      */
-    public ColorRGBA(float r, float g, float b, float a) {
+    public ColorRGBA(final float r, final float g, final float b, final float a) {
         this.r = r;
         this.g = g;
         this.b = b;
@@ -119,6 +120,7 @@ public class ColorRGBA implements Cloneable {
 
     @Override
     public ColorRGBA clone() {
+
         return new ColorRGBA(r, g, b, a);
     }
 
@@ -130,7 +132,7 @@ public class ColorRGBA implements Cloneable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -171,7 +173,7 @@ public class ColorRGBA implements Cloneable {
      * Returns a new color containing this color's RGB channels multiplied by the given value.<br>
      * Preserves alpha channel value.
      */
-    public ColorRGBA multiply(float val) {
+    public ColorRGBA multiply(final float val) {
         return new ColorRGBA(r * val, g * val, b * val, a);
     }
 
@@ -179,7 +181,7 @@ public class ColorRGBA implements Cloneable {
      * Returns a new color containing this color's RGB channels offset by the given value, wrapping around {@code 1.0F}.<br>
      * Preserves alpha channel value.
      */
-    public ColorRGBA offset(float val) {
+    public ColorRGBA offset(final float val) {
         //@formatter:off
         return new ColorRGBA((r + val) % 1.0F,
                 (g + val) % 1.0F,
@@ -205,7 +207,7 @@ public class ColorRGBA implements Cloneable {
      *
      * @param hex - The new color value, as hexadecimal number.
      */
-    public void set(int hex) {
+    public void set(final int hex) {
         r = encodeHEXtoRGBA_R(hex);
         g = encodeHEXtoRGBA_G(hex);
         b = encodeHEXtoRGBA_B(hex);
@@ -234,7 +236,7 @@ public class ColorRGBA implements Cloneable {
                 } else {
                     set((Integer.parseInt(s, 16) << 8) | 0xFF);
                 }
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 /* Silent catch. */
             }
         }
@@ -245,7 +247,7 @@ public class ColorRGBA implements Cloneable {
      *
      * @return This ColorRGB instance.
      */
-    public ColorRGBA setAlpha(float a) {
+    public ColorRGBA setAlpha(final float a) {
         this.a = a;
         return this;
     }
@@ -253,7 +255,7 @@ public class ColorRGBA implements Cloneable {
     /**
      * Set the given RGB values as new color, not affecting the alpha channel.
      */
-    public void setColor(float r, float g, float b) {
+    public void setColor(final float r, final float g, final float b) {
         this.r = r;
         this.g = g;
         this.b = b;
@@ -262,7 +264,7 @@ public class ColorRGBA implements Cloneable {
     /**
      * Set given RGBA values as new color.
      */
-    public void setColor(float r, float g, float b, float a) {
+    public void setColor(final float r, final float g, final float b, final float a) {
         this.r = r;
         this.g = g;
         this.b = b;
@@ -273,6 +275,7 @@ public class ColorRGBA implements Cloneable {
      * Encode this color into 32-Bit HEX color space, with the alpha channel in front.<br>
      * This method can be used to convert this color into Minecraft's ARGB color scheme.
      */
+    @SuppressWarnings("java:S2234")
     public int toAHEX() {
         return encodeRGBtoHEX(a, r, g, b);
     }
@@ -296,36 +299,36 @@ public class ColorRGBA implements Cloneable {
     /**
      * Encodes the given HEX color space into alpha RGBA color component.
      */
-    public static float encodeHEXtoRGBA_A(int hex) {
+    public static float encodeHEXtoRGBA_A(final int hex) {
         return (hex & 0xFF) / 255.0F;
     }
 
     /**
      * Encodes the given HEX color space into blue RGBA color component.
      */
-    public static float encodeHEXtoRGBA_B(int hex) {
+    public static float encodeHEXtoRGBA_B(final int hex) {
         return (hex >> 8 & 0xFF) / 255.0F;
     }
 
     /**
      * Encodes the given HEX color space into green RGBA color component.
      */
-    public static float encodeHEXtoRGBA_G(int hex) {
+    public static float encodeHEXtoRGBA_G(final int hex) {
         return (hex >> 16 & 0xFF) / 255.0F;
     }
 
     /**
      * Encodes the given HEX color space into red RGBA color component.
      */
-    public static float encodeHEXtoRGBA_R(int hex) {
+    public static float encodeHEXtoRGBA_R(final int hex) {
         return (hex >> 24 & 0xFF) / 255.0F;
     }
 
     /**
      * Encodes the given red, green and blue color components into HEX color space.
      */
-    public static int encodeRGBtoHEX(float r, float g, float b, float a) {
-        return (((int) (r * 255F + 0.5F) & 0xFF) << 24) | (((int) (g * 255F + 0.5F) & 0xFF) << 16) | (((int) (b * 255F + 0.5F) & 0xFF) << 8) | (((int) (a * 255F + 0.5F) & 0xFF));
+    public static int encodeRGBtoHEX(final float r, final float g, final float b, final float a) {
+        return (((int) (r * 255F + 0.5F) & 0xFF) << 24) | (((int) (g * 255F + 0.5F) & 0xFF) << 16) | (((int) (b * 255F + 0.5F) & 0xFF) << 8) | ((int) (a * 255F + 0.5F) & 0xFF);
     }
 
     /**
@@ -335,7 +338,7 @@ public class ColorRGBA implements Cloneable {
      * @throws EmptyStackException If the popped stack was empty.
      */
     public static void multiplierPop() {
-        ColorRGBA mult = multiplierStack.pop();
+        final ColorRGBA mult = multiplierStack.pop();
         mult_r = mult.r;
         mult_g = mult.g;
         mult_b = mult.b;
@@ -352,7 +355,7 @@ public class ColorRGBA implements Cloneable {
      * @param b - Color multiplier for blue colors.
      * @param a - Color multiplier for alpha channel values.
      */
-    public static void multiplierPush(float r, float g, float b, float a) {
+    public static void multiplierPush(final float r, final float g, final float b, final float a) {
         multiplierStack.push(new ColorRGBA(mult_r, mult_g, mult_b, mult_a));
         mult_r = r;
         mult_g = g;

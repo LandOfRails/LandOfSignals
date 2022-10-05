@@ -34,13 +34,13 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
     public StandardModel getModel(World world, ItemStack stack) {
         return new StandardModel().addCustom(() -> {
 
-            TagCompound tag = stack.getTagCompound();
+            final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
             if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) {
                 itemId = Static.MISSING;
             }
 
-            Map<String, String> itemGroupStates = new HashMap<>(LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemGroupStates());
+            final Map<String, String> itemGroupStates = new HashMap<>(LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemGroupStates());
             if (tag.hasKey("itemGroupState")) {
                 itemGroupStates.putAll(tag.getMap("itemGroupState", EmptyStringMapper::fromNullString, value -> value.getString("string")));
             }
@@ -52,6 +52,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
     }
 
 
+    @SuppressWarnings("java:S1135")
     @Override
     public void applyTransform(ItemRender.ItemRenderType type) {
 
@@ -60,13 +61,14 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         ItemRender.IItemModel.super.applyTransform(type);
     }
 
+    @SuppressWarnings("java:S1134")
     private static void renderBase(String itemId) {
 
         for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
 
-            String path = baseModels.getKey();
+            final String path = baseModels.getKey();
 
-            String objId = itemId + "/" + path;
+            final String objId = itemId + "/" + path;
             if (!cache.containsKey(objId)) {
                 try {
                     cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
@@ -75,14 +77,14 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     throw new ItemRenderException("Error loading item model/renderer...", e);
                 }
             }
-            OBJRender renderer = cache.get(objId);
+            final OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
-                ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
-                Vec3d translate = item.getAsVec3d(item::getTranslation);
-                Vec3d scale = item.getAsVec3d(item::getScaling);
-                Vec3d rotation = item.getAsVec3d(item::getRotation);
-                List<OpenGL.With> closables = new ArrayList<>();
+                final ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
+                final Vec3d translate = item.getAsVec3d(item::getTranslation);
+                final Vec3d scale = item.getAsVec3d(item::getScaling);
+                final Vec3d rotation = item.getAsVec3d(item::getRotation);
+                final List<OpenGL.With> closables = new ArrayList<>();
                 try {
                     // Load
                     closables.add(OpenGL.matrix());
@@ -128,34 +130,35 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         }
     }
 
+    @SuppressWarnings("java:S1134")
     private static void renderSignals(String itemId, Map<String, String> itemGroupStates) {
-        Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals();
+        final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals();
         for (Map.Entry<String, ContentPackSignalGroup> signalGroup : signalGroups.entrySet()) {
 
-            ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
+            final ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
 
             for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
 
-                String path = signalModels.getKey();
+                final String path = signalModels.getKey();
 
-                String objId = itemId + "/" + path;
+                final String objId = itemId + "/" + path;
                 if (!cache.containsKey(objId)) {
                     try {
-                        Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
+                        final Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
                         cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
                         cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         throw new ItemRenderException("Error loading item model/renderer...", e);
                     }
                 }
-                OBJRender renderer = cache.get(objId);
+                final OBJRender renderer = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
-                    ContentPackItem item = signalModel.getItem().get(ContentPackItemRenderType.DEFAULT);
-                    Vec3d translate = item.getAsVec3d(item::getTranslation);
-                    Vec3d scale = item.getAsVec3d(item::getScaling);
-                    Vec3d rotation = item.getAsVec3d(item::getRotation);
-                    List<OpenGL.With> closables = new ArrayList<>();
+                    final ContentPackItem item = signalModel.getItem().get(ContentPackItemRenderType.DEFAULT);
+                    final Vec3d translate = item.getAsVec3d(item::getTranslation);
+                    final Vec3d scale = item.getAsVec3d(item::getScaling);
+                    final Vec3d rotation = item.getAsVec3d(item::getRotation);
+                    final List<OpenGL.With> closables = new ArrayList<>();
                     try {
                         // Load
                         closables.add(OpenGL.matrix());

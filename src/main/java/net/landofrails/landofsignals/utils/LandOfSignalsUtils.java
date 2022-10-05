@@ -12,10 +12,10 @@ public class LandOfSignalsUtils {
     private LandOfSignalsUtils() {
     }
 
-    public static Optional<Vec3i> canPlaceBlock(World world, Vec3i pos, Facing facing, Player player) {
-        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
+    public static Optional<Vec3i> canPlaceBlock(final World world, final Vec3i pos, final Facing facing, final Player player) {
+        final Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
 
-        if (LandOfSignalsUtils.isStandingInBlock(player.getBlockPosition().subtract(target)))
+        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
             return Optional.empty();
 
         if (world.isAir(target) || world.isReplaceable(target)) {
@@ -24,23 +24,23 @@ public class LandOfSignalsUtils {
         return Optional.empty();
     }
 
-    private static boolean isStandingInBlock(Vec3i vec3i) {
+    private static boolean isStandingInBlock(final Vec3i vec3i) {
         return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
     }
 
-    public static String getUniqueIdOfItemStack(ItemStack itemStack) {
+    public static String getUniqueIdOfItemStack(final ItemStack itemStack) {
         return itemStack.getTagCompound().getString("itemId");
     }
 
-    public static boolean isVersionSupported(String lastVersion, String lastSupportedVersion) {
+    public static boolean isVersionSupported(final String lastVersion, final String lastSupportedVersion) {
 
-        String lastVersionClean = lastVersion.split("-")[0];
-        String[] lastVersionMaMiPa = lastVersionClean.split("\\.");
-        String lastVersionSuffix = lastVersion.split("-").length > 1 ? lastVersion.split("-", 2)[1] : null;
+        final String lastVersionClean = lastVersion.split("-")[0];
+        final String[] lastVersionMaMiPa = lastVersionClean.split("\\.");
+        final String lastVersionSuffix = lastVersion.split("-").length > 1 ? lastVersion.split("-", 2)[1] : null;
 
-        String lastSupportedVersionClean = lastSupportedVersion.split("-")[0];
-        String[] lastSupportedVersionMaMiPa = lastSupportedVersion.split("\\.");
-        String lastSupportedVersionSuffix = lastSupportedVersion.split("-").length > 1 ? lastSupportedVersion.split("-", 2)[1] : null;
+        final String lastSupportedVersionClean = lastSupportedVersion.split("-")[0];
+        final String[] lastSupportedVersionMaMiPa = lastSupportedVersion.split("\\.");
+        final String lastSupportedVersionSuffix = lastSupportedVersion.split("-").length > 1 ? lastSupportedVersion.split("-", 2)[1] : null;
 
         if (lastSupportedVersionMaMiPa.length != 3 || lastVersionMaMiPa.length != 3) {
             throw new LandOfSignalsUtilsException(String.format("LastVersion (%s) or LastSupportedVersion (%s) should contain Major.Minor.Patch!", lastVersionClean, lastSupportedVersionClean));

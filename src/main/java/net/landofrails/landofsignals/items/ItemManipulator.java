@@ -18,17 +18,21 @@ import net.landofrails.landofsignals.utils.IManipulate;
 
 import java.util.List;
 
+@SuppressWarnings("java:S1117")
 public class ItemManipulator extends CustomItem {
 
     private static final boolean DISABLED = true;
 
     private BlockEntity block;
     private Vec3d playerMainPos;
-    public static boolean editIngame = false;
-    public static boolean editHeight = false;
-    public static boolean sneak = false;
+    @SuppressWarnings({"java:S1444", "java:S1104"})
+    public static boolean editIngame;
+    @SuppressWarnings({"java:S1444", "java:S1104"})
+    public static boolean editHeight;
+    @SuppressWarnings({"java:S1444", "java:S1104"})
+    public static boolean sneak;
 
-    public ItemManipulator(String modID, String name) {
+    public ItemManipulator(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -38,7 +42,8 @@ public class ItemManipulator extends CustomItem {
     }
 
     @Override
-    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+    @SuppressWarnings({"java:S2696", "java:S1134"})
+    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
         sneak = player.isCrouching();
         BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
 
@@ -49,10 +54,9 @@ public class ItemManipulator extends CustomItem {
                 player.sendMessage(PlayerMessage.translate("message." + LandOfSignals.MODID + ":item.manipulator.disabled"));
             block = null;
         }
-
         if (block instanceof IManipulate) {
             this.block = block;
-            this.playerMainPos = MinecraftClient.getPlayer().getPosition();
+            playerMainPos = MinecraftClient.getPlayer().getPosition();
             if (world.isClient) {
                 LOSGuis.MANIPULATOR.open(player, block.getPos());
                 return ClickResult.ACCEPTED;
@@ -69,7 +73,7 @@ public class ItemManipulator extends CustomItem {
         return playerMainPos;
     }
 
-    public void setPlayerMainPos(Vec3d playerMainPos) {
+    public void setPlayerMainPos(final Vec3d playerMainPos) {
         this.playerMainPos = playerMainPos;
     }
 

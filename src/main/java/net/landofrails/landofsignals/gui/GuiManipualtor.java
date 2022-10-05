@@ -49,18 +49,18 @@ public class GuiManipualtor implements IScreen {
         return true;
     };
 
-    public GuiManipualtor(BlockEntity be) {
-        IManipulate manipulate = (IManipulate) be;
+    public GuiManipualtor(final BlockEntity be) {
+        final IManipulate manipulate = (IManipulate) be;
         offset = manipulate.getOffset();
         rotation = manipulate.getRotation();
         blockPos = be.getPos();
     }
 
     @Override
-    public void init(IScreenBuilder screen) {
-        positionBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 90, GuiText.LABEL_EDITPOSITION.toString() + " (X, Z)", true) {
+    public void init(final IScreenBuilder screen) {
+        positionBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 90, GuiText.LABEL_EDITPOSITION + " (X, Z)", true) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
                 positionXField.setVisible(true);
@@ -69,9 +69,9 @@ public class GuiManipualtor implements IScreen {
                 ItemManipulator.editHeight = false;
             }
         };
-        heightBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 110, GuiText.LABEL_EDITPOSITION.toString() + " (Y)", false) {
+        heightBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 110, GuiText.LABEL_EDITPOSITION + " (Y)", false) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
                 ingameButton.setVisible(true);
@@ -81,7 +81,7 @@ public class GuiManipualtor implements IScreen {
         };
         rotationBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 130, GuiText.LABEL_EDITROTATION.toString(), false) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
                 rotationSlider.setVisible(true);
@@ -89,7 +89,7 @@ public class GuiManipualtor implements IScreen {
         };
         hitboxBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 150, GuiText.LABEL_EDITHITBOX.toString(), false) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
             }
@@ -97,18 +97,18 @@ public class GuiManipualtor implements IScreen {
 
         ingameButton = new Button(screen, screen.getWidth() / 2 - 120, 90, 100, 20, GuiText.LABEL_EDITINGAME.toString()) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 ItemManipulator.editIngame = true;
                 LOSItems.ITEM_MANIPULATOR.setPlayerMainPos(MinecraftClient.getPlayer().getPosition());
                 screen.close();
             }
         };
 
-        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 170, 90, GuiText.LABEL_ROTATIONSLIDER.toString() + " : " + rotation, 0, 360, rotation, false) {
+        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 170, 90, GuiText.LABEL_ROTATIONSLIDER + " : " + rotation, 0, 360, rotation, false) {
             @Override
             public void onSlider() {
                 rotation = rotationSlider.getValueInt();
-                rotationSlider.setText(GuiText.LABEL_ROTATIONSLIDER.toString() + " : " + rotation);
+                rotationSlider.setText(GuiText.LABEL_ROTATIONSLIDER + " : " + rotation);
                 send();
             }
         };
@@ -135,11 +135,12 @@ public class GuiManipualtor implements IScreen {
     }
 
     @Override
-    public void onEnterKey(IScreenBuilder builder) {
+    public void onEnterKey(final IScreenBuilder builder) {
         LOSItems.ITEM_MANIPULATOR.clearBlock();
         builder.close();
     }
 
+    @SuppressWarnings("java:S125")
     @Override
     public void onClose() {
         send();
@@ -149,11 +150,11 @@ public class GuiManipualtor implements IScreen {
     }
 
     @Override
-    public void draw(IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder) {
 
-        String tempX = positionXField.getText();
-        String tempY = heightYField.getText();
-        String tempZ = positionZField.getText();
+        final String tempX = positionXField.getText();
+        final String tempY = heightYField.getText();
+        final String tempZ = positionZField.getText();
         if (!positionXField.getText().isEmpty() && !tempX.equals(textXBefore)) {
             positionXField.setText(String.valueOf(Static.round(Double.parseDouble(tempX), 3)));
             textXBefore = tempX;
@@ -176,7 +177,7 @@ public class GuiManipualtor implements IScreen {
 
     private void send() {
         //Client
-        ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos, ItemManipulator.sneak);
+        final ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos, ItemManipulator.sneak);
         clientPacket.sendToAll();
     }
 
@@ -188,7 +189,7 @@ public class GuiManipualtor implements IScreen {
         rotationSlider.setVisible(false);
     }
 
-    private void uncheckOtherBoxes(CheckBox box) {
+    private void uncheckOtherBoxes(final CheckBox box) {
         positionBox.setChecked(false);
         heightBox.setChecked(false);
         rotationBox.setChecked(false);

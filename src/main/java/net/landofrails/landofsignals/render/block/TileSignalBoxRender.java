@@ -26,11 +26,11 @@ public class TileSignalBoxRender {
 
     private static final Map<String, OBJRender> cache = new HashMap<>();
 
-    public static StandardModel render(TileSignalBox tsp) {
+    public static StandardModel render(final TileSignalBox tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
-    private static void renderStuff(TileSignalBox tsp) {
+    private static void renderStuff(final TileSignalBox tsp) {
 
         String id = tsp.getId();
 
@@ -42,14 +42,14 @@ public class TileSignalBoxRender {
 
     }
 
-    private static void renderBase(String blockId, TileSignalBox tile) {
+    private static void renderBase(final String blockId, final TileSignalBox tile) {
 
-        ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
+        final ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSignalboxes.getBase().entrySet()) {
 
-            String path = baseModels.getKey();
+            final String path = baseModels.getKey();
 
-            String objId = blockId + "/" + path;
+            final String objId = blockId + "/" + path;
             if (!cache.containsKey(objId)) {
                 try {
                     Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId).getObjTextures().get(path);
@@ -59,14 +59,14 @@ public class TileSignalBoxRender {
                     throw new BlockRenderException("Error loading block model/renderer...", e);
                 }
             }
-            OBJRender renderer = cache.get(objId);
+            final OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
-                ContentPackBlock block = baseModel.getBlock();
-                Vec3d translate = block.getAsVec3d(block::getTranslation);
-                Vec3d scale = block.getAsVec3d(block::getScaling);
-                Vec3d rotation = block.getAsVec3d(block::getRotation);
-                List<OpenGL.With> closables = new ArrayList<>();
+                final ContentPackBlock block = baseModel.getBlock();
+                final Vec3d translate = block.getAsVec3d(block::getTranslation);
+                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d rotation = block.getAsVec3d(block::getRotation);
+                final List<OpenGL.With> closables = new ArrayList<>();
                 try {
                     // Load
                     closables.add(OpenGL.matrix());

@@ -19,12 +19,9 @@ public class DebugCommand extends Command {
     }
 
     @Override
-    public boolean execute(Consumer<PlayerMessage> sender, Optional<Player> player, String[] args) {
+    public boolean execute(final Consumer<PlayerMessage> sender, final Optional<Player> player, final String[] args) {
         if (args.length != 1) return false;
-        if (args[0].equalsIgnoreCase("changing")) {
-            return true;
-        }
-        return false;
+        return args[0].equalsIgnoreCase("changing");
     }
     
     @Override

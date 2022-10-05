@@ -5,10 +5,15 @@ import org.lwjgl.opengl.ARBMultitexture;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+@SuppressWarnings({"java:S1444", "java:S1104", "java:S1149"})
 public class RenderUtil {
 
-    public static float lastBrightnessX = 0.0F;
-    public static float lastBrightnessY = 0.0F;
+    public static float lastBrightnessX;
+    public static float lastBrightnessY;
+
+    private RenderUtil() {
+
+    }
 
     /**
      * Lightmap stack used to remember existing lightmap settings when doing lightmap hacks.
@@ -21,8 +26,8 @@ public class RenderUtil {
      * {@code GL11.glDisable(GL11.GL_LIGHTING)} does not produce a sufficiently 'bright' result.
      */
     public static void lightmapBright() {
-        int maxBright = (15 << 20) | (15 << 4);
-        lightmapBright(maxBright % 65536, maxBright / 65536);
+        final int maxBright = (15 << 20) | (15 << 4);
+        lightmapBright(maxBright % 65536, maxBright / 65536f);
     }
 
     /**
@@ -31,7 +36,7 @@ public class RenderUtil {
      *
      * @see #lightmapBright()
      */
-    public static void lightmapBright(float u, float v) {
+    public static void lightmapBright(final float u, final float v) {
         ARBMultitexture.glMultiTexCoord2fARB(33985, u, v);
     }
 
@@ -49,7 +54,7 @@ public class RenderUtil {
      * @throws EmptyStackException If the lightmap stack is empty.
      */
     public static void lightmapPop() {
-        LightmapState top = lightmapStack.pop();
+        final LightmapState top = lightmapStack.pop();
         ARBMultitexture.glMultiTexCoord2fARB(33985, top.x, top.y);
     }
 
@@ -59,10 +64,10 @@ public class RenderUtil {
      * @author Jaffa
      */
     private static class LightmapState {
-        public float x, y;
+        public float x;
+        public float y;
 
-
-        public LightmapState(float x, float y) {
+        public LightmapState(final float x, final float y) {
             this.x = x;
             this.y = y;
         }

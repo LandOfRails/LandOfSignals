@@ -35,9 +35,9 @@ public class GuiSignalPartBox implements IScreen {
     private String rightState;
     private String leftState;
 
-    public GuiSignalPartBox(TileSignalBox tsb) {
+    public GuiSignalPartBox(final TileSignalBox tsb) {
         this.tsb = tsb;
-        TileSignalPart tsp = tsb.getTileSignalPart();
+        final TileSignalPart tsp = tsb.getTileSignalPart();
 
         modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
@@ -46,12 +46,12 @@ public class GuiSignalPartBox implements IScreen {
         leftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = itemStackLeft.getTagCompound();
+        final TagCompound tag = itemStackLeft.getTagCompound();
         tag.setString("itemId", tsp.getId());
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag2 = itemStackRight.getTagCompound();
+        final TagCompound tag2 = itemStackRight.getTagCompound();
         tag2.setString("itemId", tsp.getId());
         itemStackRight.setTagCompound(tag2);
 
@@ -59,7 +59,7 @@ public class GuiSignalPartBox implements IScreen {
     }
 
     @Override
-    public void init(IScreenBuilder screen) {
+    public void init(final IScreenBuilder screen) {
         // Use first available group
         groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
             @Override
@@ -69,15 +69,15 @@ public class GuiSignalPartBox implements IScreen {
                 leftState = modes.get(signalGroup).getStates().keySet().iterator().next();
             }
         };
-        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE.toString()) {
+        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 leftState = nextState(leftState);
             }
         };
-        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE.toString() + " -->") {
+        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->") {
             @Override
-            public void onClick(Player.Hand hand) {
+            public void onClick(final Player.Hand hand) {
                 rightState = nextState(rightState);
             }
         };
@@ -85,7 +85,7 @@ public class GuiSignalPartBox implements IScreen {
     }
 
     @Override
-    public void onEnterKey(IScreenBuilder builder) {
+    public void onEnterKey(final IScreenBuilder builder) {
         builder.close();
     }
 
@@ -96,29 +96,29 @@ public class GuiSignalPartBox implements IScreen {
         tsb.setInactiveGroupState(leftState);
         tsb.setActiveGroupState(rightState);
 
-        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
+        final SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
         packet.sendToServer();
     }
 
     @Override
-    public void draw(IScreenBuilder builder) {
-        int scale = 8;
+    public void draw(final IScreenBuilder builder) {
+        final int scale = 8;
 
-        TagCompound rightTag = itemStackRight.getTagCompound();
+        final TagCompound rightTag = itemStackRight.getTagCompound();
         rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackRight.setTagCompound(rightTag);
 
-        try (OpenGL.With ignored = OpenGL.matrix()) {
+        try (final OpenGL.With ignored = OpenGL.matrix()) {
             GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackRight, 0, 0);
         }
 
-        TagCompound leftTag = itemStackLeft.getTagCompound();
+        final TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackLeft.setTagCompound(leftTag);
 
-        try (OpenGL.With ignored = OpenGL.matrix()) {
+        try (final OpenGL.With ignored = OpenGL.matrix()) {
             GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
             GUIHelpers.drawItem(itemStackLeft, 0, 0);

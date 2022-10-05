@@ -20,7 +20,7 @@ public class SignalBoxGuiToServerPacket extends Packet {
     public SignalBoxGuiToServerPacket() {
     }
 
-    public SignalBoxGuiToServerPacket(TileSignalBox tsb) {
+    public SignalBoxGuiToServerPacket(final TileSignalBox tsb) {
         this.pos = tsb.getPos();
         this.groupId = tsb.getGroupId();
         this.activeGroupState = tsb.getActiveGroupState();
@@ -30,13 +30,13 @@ public class SignalBoxGuiToServerPacket extends Packet {
 
     @Override
     protected void handle() {
-        TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
+        final TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
 
         box.setGroupId(groupId);
         box.setActiveGroupState(activeGroupState);
         box.setInactiveGroupState(inactiveGroupState);
 
-        SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(box);
+        final SignalBoxGuiToClientPacket packet = new SignalBoxGuiToClientPacket(box);
         packet.sendToAll();
         box.updateSignals(true);
     }

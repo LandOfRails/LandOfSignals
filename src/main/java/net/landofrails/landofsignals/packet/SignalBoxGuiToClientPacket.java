@@ -20,7 +20,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
     public SignalBoxGuiToClientPacket() {
     }
 
-    public SignalBoxGuiToClientPacket(TileSignalBox tsb) {
+    public SignalBoxGuiToClientPacket(final TileSignalBox tsb) {
         this.pos = tsb.getPos();
         this.groupId = tsb.getGroupId();
         this.activeGroupState = tsb.getActiveGroupState();
@@ -35,7 +35,7 @@ public class SignalBoxGuiToClientPacket extends Packet {
             getWorld().keepLoaded(pos);
         }
 
-        TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
+        final TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
 
         if (box == null) {
             return;

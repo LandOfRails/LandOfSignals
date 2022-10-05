@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
+@SuppressWarnings({"java:S125", "java:S1172"})
 public class TileSignalPartAnimatedRender {
 
     private TileSignalPartAnimatedRender() {
@@ -23,40 +24,40 @@ public class TileSignalPartAnimatedRender {
     private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
     private static final List<String> groupNames = Arrays.asList("wing");
 
-    public static StandardModel render(TileSignalPartAnimated tsp) {
+    public static StandardModel render(final TileSignalPartAnimated tsp) {
         return new StandardModel().addCustom(partialTicks -> renderStuff(tsp, partialTicks));
     }
 
-    private static void renderStuff(TileSignalPartAnimated tsp, float partialTicks) {
-        String id = tsp.getId();
+    private static void renderStuff(final TileSignalPartAnimated tsp, final float partialTicks) {
+        final String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
-                OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                OBJRender flareRenderer = new OBJRender(flareModel);
+                final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
+                final OBJRender flareRenderer = new OBJRender(flareModel);
                 cache.put("flare", Pair.of(flareModel, flareRenderer));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
         if (!cache.containsKey(id)) {
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
-                OBJRender renderer = new OBJRender(model);
+                final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
+                final OBJRender renderer = new OBJRender(model);
                 cache.put(id, Pair.of(model, renderer));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
-        OBJRender renderer = cache.get(id).getRight();
-        List<String> groupsWithoutWing = new ArrayList<>();
-        for (String s : renderer.model.groups()) groupsWithoutWing.add(s);
-        boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
+        final OBJRender renderer = cache.get(id).getRight();
+        final List<String> groupsWithoutWing = new ArrayList<>();
+        for (final String s : renderer.model.groups()) groupsWithoutWing.add(s);
+        final boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
 
         try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
-            Vec3d scale = Vec3d.ZERO;
+            final Vec3d scale = Vec3d.ZERO;
             GL11.glScaled(scale.x, scale.y, scale.z);
-            Vec3d trans = Vec3d.ZERO;
+            final Vec3d trans = Vec3d.ZERO;
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.drawGroups(groupsWithoutWing);
@@ -64,7 +65,7 @@ public class TileSignalPartAnimatedRender {
             if (wingsExist) {
                 Vec3d center = renderer.model.centerOfGroups(groupNames);
                 center = new Vec3d(-center.x, -center.y, -center.z);
-                Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
+                final Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
 
                 GL11.glTranslated(0, -center.y, 0);
                 GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
@@ -121,5 +122,5 @@ public class TileSignalPartAnimatedRender {
 //
 //        return new Vec3d(cosPitch * cosYaw, cosPitch * sinYaw, -sinPitch);
 //    }
-    
+
 }

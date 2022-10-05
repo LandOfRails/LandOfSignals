@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("java:S116")
+@SuppressWarnings({"java:S116", "java:S1134", "java:S1133"})
 public class TileSignalBox extends BlockEntity {
 
     @TagField("id")
@@ -32,7 +32,7 @@ public class TileSignalBox extends BlockEntity {
     private int blockRotate;
 
     @TagField("UuidTileTop")
-    private Vec3i tileSignalPartPos;
+    private Vec3i tileSignalPartPos = Vec3i.ZERO;
 
     @TagField("signalGroupId")
     private String groupId;
@@ -57,7 +57,7 @@ public class TileSignalBox extends BlockEntity {
      */
 
     @Nullable
-    private Integer lastRedstone = null;
+    private Integer lastRedstone;
 
     private TileSignalPart tileSignalPart;
 
@@ -93,7 +93,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     @Override
-    public void onNeighborChange(Vec3i neighbor) {
+    public void onNeighborChange(final Vec3i neighbor) {
         int currentRedstone = getWorld().getRedstone(getPos());
         if (lastRedstone != null && lastRedstone == currentRedstone) {
             return;
@@ -102,7 +102,7 @@ public class TileSignalBox extends BlockEntity {
         }
 
         if (getWorld().isServer && tileSignalPartPos != null) {
-            TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+            final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (tempTileSignalPart != null) {
 
                 if (redstone != null && noRedstone != null) {
@@ -151,12 +151,12 @@ public class TileSignalBox extends BlockEntity {
         return this.id;
     }
 
-    public void setTileSignalPartPos(Vec3i pos) {
+    public void setTileSignalPartPos(final Vec3i pos) {
         tileSignalPartPos = pos;
         markDirty();
     }
 
-    public void setTileSignalPart(TileSignalPart tileSignalPart) {
+    public void setTileSignalPart(final TileSignalPart tileSignalPart) {
         this.tileSignalPart = tileSignalPart;
     }
 
@@ -164,23 +164,39 @@ public class TileSignalBox extends BlockEntity {
         return tileSignalPart;
     }
 
+    /**
+     * @return
+     * @deprecated (1.0.0, Only here for backwards compatability)
+     */
     @Deprecated
     public Integer getRedstone() {
         return redstone;
     }
 
+    /**
+     * @param redstone
+     * @deprecated (1.0.0, Only here for backwards compatability)
+     */
     @Deprecated
-    public void setRedstone(Integer redstone) {
+    public void setRedstone(final Integer redstone) {
         this.redstone = redstone;
     }
 
+    /**
+     * @return
+     * @deprecated (1.0.0, Only here for backwards compatability)
+     */
     @Deprecated
     public Integer getNoRedstone() {
         return noRedstone;
     }
 
+    /**
+     * @param noRedstone
+     * @deprecated (1.0.0, Only here for backwards compatability)
+     */
     @Deprecated
-    public void setNoRedstone(Integer noRedstone) {
+    public void setNoRedstone(final Integer noRedstone) {
         this.noRedstone = noRedstone;
     }
 

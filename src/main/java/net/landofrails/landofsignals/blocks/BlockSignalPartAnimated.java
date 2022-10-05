@@ -14,13 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"java:S2387", "java:S1135", "java:S1172", "java:S1117"})
 public class BlockSignalPartAnimated extends BlockTypeEntity {
 
-    private Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
+    private final Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
     private String id;
     private int rot;
 
-    public BlockSignalPartAnimated(String modID, String name) {
+    public BlockSignalPartAnimated(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -29,59 +30,59 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
         return new TileSignalPartAnimated(id, rot);
     }
 
-    public void setRot(int rot) {
+    public void setRot(final int rot) {
         this.rot = rot;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public String getPath(String uncheckedId) {
+    public String getPath(final String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getModel();
     }
 
-    public Vec3d getTranslation(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
-        float[] translation = signalParts.get(id).getTranslation();
+    public Vec3d getTranslation(final String uncheckedId) {
+        final String id = checkIfMissing(uncheckedId);
+        final float[] translation = signalParts.get(id).getTranslation();
         return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
-    public Vec3d getScaling(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
-        float[] scaling = signalParts.get(id).getScaling();
+    public Vec3d getScaling(final String uncheckedId) {
+        final String id = checkIfMissing(uncheckedId);
+        final float[] scaling = signalParts.get(id).getScaling();
         return new Vec3d(scaling[0], scaling[1], scaling[2]);
     }
 
-    public List<String> getStates(String uncheckedId) {
+    public List<String> getStates(final String uncheckedId) {
         return Collections.singletonList(null);
     }
 
-    public String getId(String uncheckedId) {
+    public String getId(final String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getId();
     }
 
-    public Vec3d getItemTranslation(String uncheckedId) {
-        String id = checkIfMissing(uncheckedId);
-        float[] translation = signalParts.get(id).getItemTranslation();
+    public Vec3d getItemTranslation(final String uncheckedId) {
+        final String id = checkIfMissing(uncheckedId);
+        final float[] translation = signalParts.get(id).getItemTranslation();
         return new Vec3d(translation[0], translation[1], translation[2]);
     }
 
-    public String getName(String uncheckedId) {
+    public String getName(final String uncheckedId) {
         return signalParts.get(checkIfMissing(uncheckedId)).getName();
     }
 
-    public List<ContentPackAnimation> getAnimation(String uncheckedId, String animation) {
+    public List<ContentPackAnimation> getAnimation(final String uncheckedId, final String animation) {
         return Collections.emptyList();
     }
 
-    public Map<String, List<ContentPackAnimation>> getAniamtions(String uncheckedId) {
+    public Map<String, List<ContentPackAnimation>> getAniamtions(final String uncheckedId) {
         return Collections.emptyMap();
     }
 
-    public void add(ContentPackSignalPart contentPackSignalPart) {
+    public void add(final ContentPackSignalPart contentPackSignalPart) {
         if (!signalParts.containsKey(contentPackSignalPart.getId())) {
-            this.signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);
+            signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);
         } else {
             //TODO: Add conflict info for user after he entered a world
             ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignalPart.getId());
@@ -92,7 +93,7 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
         return signalParts;
     }
 
-    private String checkIfMissing(String id) {
+    private String checkIfMissing(final String id) {
         if (signalParts.containsKey(id)) return id;
         else return Static.MISSING;
     }
