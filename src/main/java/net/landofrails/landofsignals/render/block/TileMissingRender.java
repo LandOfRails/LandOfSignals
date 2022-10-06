@@ -33,7 +33,7 @@ public class TileMissingRender {
                 renderer = new OBJRender(model);
             }
             try (OpenGL.With ignored = OpenGL.matrix(); OpenGL.With ignored1 = renderer.bindTexture()) {
-                GL11.glTranslated(0.5, 0, 0.5);
+                GL11.glTranslated(0.5, 0.5, 0.5);
 
                 renderer.draw();
             }
