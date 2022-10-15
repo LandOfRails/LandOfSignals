@@ -31,9 +31,12 @@ public class GuiSignalPartBox implements IScreen {
 
     // Group
     private String signalGroup;
+    private String originalSignalGroup;
     private Button groupButton;
     private String rightState;
     private String leftState;
+    private String originalRightState;
+    private String originalLeftState;
 
     public GuiSignalPartBox(final TileSignalBox tsb) {
         this.tsb = tsb;
@@ -41,9 +44,13 @@ public class GuiSignalPartBox implements IScreen {
 
         modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
-        signalGroup = tsb.getGroupId(getFirstValue(modeGroups));
-        rightState = tsb.getActiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
-        leftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        originalSignalGroup = tsb.getGroupId(getFirstValue(modeGroups));
+        signalGroup = originalSignalGroup;
+        originalRightState = tsb.getActiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        rightState = originalRightState;
+        originalLeftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        leftState = originalLeftState;
+
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         final TagCompound tag = itemStackLeft.getTagCompound();
@@ -64,9 +71,12 @@ public class GuiSignalPartBox implements IScreen {
         groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
             @Override
             public void onClick(Player.Hand hand) {
-                signalGroup = nextMode(signalGroup);
-                rightState = modes.get(signalGroup).getStates().keySet().iterator().next();
-                leftState = modes.get(signalGroup).getStates().keySet().iterator().next();
+                originalSignalGroup = nextMode(signalGroup);
+                signalGroup = originalSignalGroup;
+                originalRightState = modes.get(signalGroup).getStates().keySet().iterator().next();
+                rightState = originalRightState;
+                originalLeftState = modes.get(signalGroup).getStates().keySet().iterator().next();
+                leftState = originalLeftState;
             }
         };
         new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
@@ -92,12 +102,15 @@ public class GuiSignalPartBox implements IScreen {
     @Override
     public void onClose() {
 
-        tsb.setGroupId(signalGroup);
-        tsb.setInactiveGroupState(leftState);
-        tsb.setActiveGroupState(rightState);
+        if (!Objects.equals(originalSignalGroup, signalGroup) || !Objects.equals(originalLeftState, leftState) || !Objects.equals(originalRightState, rightState)) {
+            tsb.setGroupId(signalGroup);
+            tsb.setInactiveGroupState(leftState);
+            tsb.setActiveGroupState(rightState);
 
-        final SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
-        packet.sendToServer();
+            final SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
+            packet.sendToServer();
+        }
+
     }
 
     @Override

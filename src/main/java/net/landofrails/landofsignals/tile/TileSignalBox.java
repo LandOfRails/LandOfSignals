@@ -85,7 +85,8 @@ public class TileSignalBox extends BlockEntity {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && tileSignalPartPos != null) {
             TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (tempSignalPart != null) {
-                new SignalBoxTileSignalPartPacket(tempSignalPart, getPos()).sendToPlayer(player);
+                refreshOldRedstoneVariables();
+                new SignalBoxTileSignalPartPacket(tempSignalPart, this, getPos()).sendToPlayer(player);
                 return true;
             }
         }
@@ -101,34 +102,12 @@ public class TileSignalBox extends BlockEntity {
             lastRedstone = currentRedstone;
         }
 
+        refreshOldRedstoneVariables();
+
         if (getWorld().isServer && tileSignalPartPos != null) {
             final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-            if (tempTileSignalPart != null) {
-
-                if (redstone != null && noRedstone != null) {
-                    Map.Entry<String, ContentPackSignalGroup> group = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tempTileSignalPart.getId()).entrySet().iterator().next();
-                    groupId = group.getKey();
-                    Iterator<String> stateIdIterator = group.getValue().getStates().keySet().iterator();
-                    int index = 0;
-                    while (stateIdIterator.hasNext()) {
-                        String stateId = stateIdIterator.next();
-                        if (index == redstone) {
-                            activeGroupState = stateId;
-                        }
-                        if (index == noRedstone) {
-                            inactiveGroupState = stateId;
-                        }
-                        index++;
-                    }
-                    redstone = null;
-                    noRedstone = null;
-                }
-
-                String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
-                tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
-
-                // Old
-            }
+            String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
+            tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
         }
     }
 
@@ -280,6 +259,29 @@ public class TileSignalBox extends BlockEntity {
                 newId = possibleIds.get(0);
             }
             nbt.setString(KEYWORD_ID, newId);
+        }
+
+    }
+
+    private void refreshOldRedstoneVariables() {
+        if (redstone != null && noRedstone != null) {
+            final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+            Map.Entry<String, ContentPackSignalGroup> group = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tempTileSignalPart.getId()).entrySet().iterator().next();
+            groupId = group.getKey();
+            Iterator<String> stateIdIterator = group.getValue().getStates().keySet().iterator();
+            int index = 0;
+            while (stateIdIterator.hasNext()) {
+                String stateId = stateIdIterator.next();
+                if (index == redstone) {
+                    activeGroupState = stateId;
+                }
+                if (index == noRedstone) {
+                    inactiveGroupState = stateId;
+                }
+                index++;
+            }
+            redstone = null;
+            noRedstone = null;
         }
     }
 
