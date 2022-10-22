@@ -49,6 +49,8 @@ public class TileSignalPartRender {
     @SuppressWarnings("java:S1134")
     private static void renderBase(String blockId, TileSignalPart tile) {
 
+        final Vec3d offset = tile.getOffset();
+
         for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
 
             final String path = baseModels.getKey();
@@ -66,7 +68,7 @@ public class TileSignalPartRender {
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
                 final ContentPackBlock block = baseModel.getBlock();
-                final Vec3d translate = block.getAsVec3d(block::getTranslation);
+                final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                 final Vec3d scale = block.getAsVec3d(block::getScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
                 final List<OpenGL.With> closables = new ArrayList<>();
@@ -114,6 +116,9 @@ public class TileSignalPartRender {
 
     @SuppressWarnings("java:S1134")
     private static void renderSignals(final String blockId, final TileSignalPart tile) {
+
+        final Vec3d offset = tile.getOffset();
+
         final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals();
 
         final Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
@@ -143,7 +148,7 @@ public class TileSignalPartRender {
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
                     ContentPackBlock block = signalModel.getBlock();
-                    final Vec3d translate = block.getAsVec3d(block::getTranslation);
+                    final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                     final Vec3d scale = block.getAsVec3d(block::getScaling);
                     final Vec3d rotation = block.getAsVec3d(block::getRotation);
                     final List<OpenGL.With> closables = new ArrayList<>();

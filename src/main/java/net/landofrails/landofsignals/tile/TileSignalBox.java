@@ -102,12 +102,14 @@ public class TileSignalBox extends BlockEntity {
             lastRedstone = currentRedstone;
         }
 
-        refreshOldRedstoneVariables();
+        if (tileSignalPartPos != null) {
+            refreshOldRedstoneVariables();
 
-        if (getWorld().isServer && tileSignalPartPos != null) {
-            final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-            String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
-            tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
+            if (getWorld().isServer) {
+                final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+                String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
+                tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
+            }
         }
     }
 
@@ -144,7 +146,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     /**
-     * @return
+     * @return old textureIndex for active redstone signal
      * @deprecated (1.0.0, Only here for backwards compatability)
      */
     @Deprecated
@@ -153,7 +155,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     /**
-     * @param redstone
+     * @param redstone old texture-index
      * @deprecated (1.0.0, Only here for backwards compatability)
      */
     @Deprecated
@@ -162,7 +164,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     /**
-     * @return
+     * @return old textureIndex for inactive redstone signal
      * @deprecated (1.0.0, Only here for backwards compatability)
      */
     @Deprecated
@@ -171,7 +173,7 @@ public class TileSignalBox extends BlockEntity {
     }
 
     /**
-     * @param noRedstone
+     * @param noRedstone old texture-index
      * @deprecated (1.0.0, Only here for backwards compatability)
      */
     @Deprecated
