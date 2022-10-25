@@ -28,6 +28,6 @@ public class Static {
     // Default SignalBox ID (without packId)
     public static final String SIGNALBOX_DEFAULT = "signalbox_default";
     // Default fully qualified SignalBox ID (including packId)
-    public static final String SIGNALBOX_DEFAULT_FQ = "LandOfSignals@LandOfSignals:signalbox_default";
+    public static final String SIGNALBOX_DEFAULT_FQ = "LandOfSignals:signalbox_default";
 
 }

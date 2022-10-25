@@ -13,7 +13,7 @@ import net.landofrails.landofsignals.LandOfSignals;
 
 public class TileSignalSO12 extends BlockEntity {
 
-    private static final String REPLACEMENT = "LandOfSignals@LandOfSignals:deco_signal_so12";
+    private static final String REPLACEMENT = "LandOfSignals:deco_signal_so12";
 
     @Override
     public ItemStack onPick() {

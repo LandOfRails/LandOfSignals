@@ -63,7 +63,7 @@ public class ContentPack {
     }
 
     public String getId() {
-        return name + "@" + author;
+        return name;
     }
 
     public static ContentPack fromJson(InputStream stellwandJsonStream) {

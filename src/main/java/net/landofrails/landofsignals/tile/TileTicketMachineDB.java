@@ -14,7 +14,7 @@ import net.landofrails.landofsignals.LandOfSignals;
 
 public class TileTicketMachineDB extends BlockEntity {
 
-    private static final String REPLACEMENT = "LandOfSignals@LandOfSignals:deco_fahrkartenautomat_db";
+    private static final String REPLACEMENT = "LandOfSignals:deco_fahrkartenautomat_db";
 
     @TagField("Rotation")
     private Float blockRotate;
