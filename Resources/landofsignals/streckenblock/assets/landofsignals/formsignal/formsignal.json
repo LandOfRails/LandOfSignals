@@ -1,0 +1,132 @@
+{
+    "id": "test_formsignal",
+    "name": "Test Formsignal",
+    "rotationSteps": 15,
+    "references": {
+      "contentPackItemRefs": {
+        "defaultItem": {
+          "translation": [
+            0.625,
+            0.125,
+            0
+          ],
+          "rotation": [
+            0,
+            180,
+            0
+          ],
+          "scaling": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        }
+      },
+      "contentPackBlockRefs": {
+        "defaultBlock": {
+          "translation": [
+            0.5,
+            0,
+            0.5
+          ],
+          "rotation": [
+            0,
+            180,
+            0
+          ],
+          "scaling": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "base": {
+      "formsignal/formsignal.obj": [
+        {
+          "textures": [],
+          "obj_groups": [
+            "base"
+          ],
+          "itemRefs": {
+            "DEFAULT": "defaultItem"
+          },
+          "blockRef": "defaultBlock"
+        }
+      ]
+    },
+    "signals": {
+      "main_signal": {
+        "groupName": "Main Signal",
+        "states": {
+          "off": {
+            "signalName": "Off",
+            "models": {
+              "formsignal/formsignal.obj": [
+                {
+                  "textures": [],
+                  "obj_groups": [
+                    "signal"
+                  ],
+                  "itemRefs": {
+                    "DEFAULT": "defaultItem"
+                  },
+                  "block": {
+                    "translation": [
+                        0.5,
+                        0,
+                        0.5
+                      ],
+                      "rotation": [
+                        0,
+                        180,
+                        0
+                      ],
+                      "scaling": [
+                        1,
+                        1,
+                        1
+                      ]
+                  }
+                }
+              ]
+            }
+          },
+          "on": {
+            "signalName": "on",
+            "models": {
+              "formsignal/formsignal.obj": [
+                {
+                  "textures": [],
+                  "obj_groups": [
+                    "signal"
+                  ],
+                  "itemRefs": {
+                    "DEFAULT": "defaultItem"
+                  },
+                  "block": {
+                    "translation": [
+                        0.5,
+                        0.55,
+                        1.85
+                      ],
+                      "rotation": [
+                        0,
+                        180,
+                        -45
+                      ],
+                      "scaling": [
+                        1,
+                        1,
+                        1
+                      ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
