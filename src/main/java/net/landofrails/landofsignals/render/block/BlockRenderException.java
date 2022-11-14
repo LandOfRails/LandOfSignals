@@ -6,4 +6,8 @@ public class BlockRenderException extends RuntimeException {
     public BlockRenderException(String message, Throwable throwable) {
         super(message, throwable);
     }
+
+    public BlockRenderException(String message, String... args) {
+        super(String.format(message, args));
+    }
 }
