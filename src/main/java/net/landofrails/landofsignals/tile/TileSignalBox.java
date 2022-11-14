@@ -107,8 +107,10 @@ public class TileSignalBox extends BlockEntity {
 
             if (getWorld().isServer) {
                 final TileSignalPart tempTileSignalPart = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-                String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
-                tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
+                if (tempTileSignalPart != null) {
+                    String groupState = currentRedstone > 0 ? activeGroupState : inactiveGroupState;
+                    tempTileSignalPart.updateSignals(getPos(), groupId, groupState);
+                }
             }
         }
     }
