@@ -84,12 +84,12 @@ public class TileSignPartRender {
     private static void renderBase(String blockId, TileSignPart tile) {
 
         ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId);
+        checkCache(blockId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase());
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSign.getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
             String objId = blockId + "/" + path;
-            checkCache(blockId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase());
             OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
