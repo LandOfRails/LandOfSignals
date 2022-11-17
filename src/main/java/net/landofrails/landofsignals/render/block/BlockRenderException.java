@@ -8,6 +8,6 @@ public class BlockRenderException extends RuntimeException {
     }
 
     public BlockRenderException(String message, String... args) {
-        super(String.format(message, args));
+        super(String.format(message, (Object[]) args));
     }
 }
