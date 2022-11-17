@@ -19,10 +19,49 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ItemSignPartRender implements ItemRender.IItemModel {
 
     protected static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, List<String>> groupCache = new HashMap<>();
+
+    private static void checkCache(String itemId, Map<String, ContentPackModel[]> models) {
+        Optional<String> firstPath = models.keySet().stream().findFirst();
+        if (!firstPath.isPresent())
+            return;
+        final String firstObjId = itemId + "/" + firstPath.get();
+        if (cache.containsKey(firstObjId)) {
+            return;
+        }
+
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : models.entrySet()) {
+            try {
+                final String path = modelEntry.getKey();
+                final String objId = itemId + "/" + path;
+
+                Set<String> objTextures = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getObjTextures().get(path);
+                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
+                cache.putIfAbsent(objId, renderer);
+
+                for (ContentPackModel signModel : modelEntry.getValue()) {
+                    String[] groups = signModel.getObj_groups();
+                    if (groups.length > 0) {
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        groupCache.put(groupCacheId, modes);
+                    }
+                }
+            } catch (Exception e) {
+                String message = String.format("Couldn't cache the following: blockId: %s", itemId);
+                throw new ItemRenderException(message, e);
+            }
+        }
+
+    }
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -42,24 +81,19 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
     @Override
     public void applyTransform(ItemRender.ItemRenderType type) {
 
-        // TODO Implement ItemRenderType with new UMC rendering
+        // Implement ItemRenderType with new UMC rendering
         ItemRender.IItemModel.super.applyTransform(type);
     }
 
     private static void renderBase(String itemId) {
+
+        checkCache(itemId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getBase());
 
         for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getBase().entrySet()) {
 
             String path = baseModels.getKey();
 
             String objId = itemId + "/" + path;
-            if (!cache.containsKey(objId)) {
-                try {
-                    cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
-                } catch (Exception e) {
-                    throw new ItemRenderException("Error loading item model/renderer...", e);
-                }
-            }
             OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
@@ -89,7 +123,8 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
                     if (groups.length == 0) {
                         renderer.draw();
                     } else {
-                        renderer.drawGroups(Arrays.asList(groups));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        renderer.drawGroups(groupCache.get(groupCacheId));
                     }
 
                 } finally {

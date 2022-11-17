@@ -17,6 +17,8 @@ import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TileSignPartRender {
 
@@ -25,6 +27,43 @@ public class TileSignPartRender {
     }
 
     private static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, List<String>> groupCache = new HashMap<>();
+
+    private static void checkCache(String blockId, Map<String, ContentPackModel[]> models) {
+        Optional<String> firstPath = models.keySet().stream().findFirst();
+        if (!firstPath.isPresent())
+            return;
+        final String firstObjId = blockId + "/" + firstPath.get();
+        if (cache.containsKey(firstObjId)) {
+            return;
+        }
+
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : models.entrySet()) {
+            try {
+                final String path = modelEntry.getKey();
+                final String objId = blockId + "/" + path;
+
+                Set<String> objTextures = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getObjTextures().get(path);
+                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
+                cache.putIfAbsent(objId, renderer);
+
+                for (ContentPackModel signModel : modelEntry.getValue()) {
+                    String[] groups = signModel.getObj_groups();
+                    if (groups.length > 0) {
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        groupCache.put(groupCacheId, modes);
+                    }
+                }
+            } catch (Exception e) {
+                String message = String.format("Couldn't cache the following: blockId: %s", blockId);
+                throw new BlockRenderException(message, e);
+            }
+        }
+
+    }
 
     public static StandardModel render(TileSignPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
@@ -50,15 +89,7 @@ public class TileSignPartRender {
             String path = baseModels.getKey();
 
             String objId = blockId + "/" + path;
-            if (!cache.containsKey(objId)) {
-                try {
-                    Set<String> objTextures = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getObjTextures().get(path);
-                    cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
-
-                } catch (Exception e) {
-                    throw new BlockRenderException("Error loading block model/renderer...", e);
-                }
-            }
+            checkCache(blockId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase());
             OBJRender renderer = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
@@ -88,13 +119,16 @@ public class TileSignPartRender {
                     if (groups.length == 0) {
                         renderer.draw();
                     } else {
-                        renderer.drawGroups(Arrays.asList(groups));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        renderer.drawGroups(groupCache.get(groupCacheId));
                     }
 
-                    if (contentPackSign.isWriteable()) {
-                        // TODO Implement
-                        // GlobalRender.drawText()
-                    }
+                    /*
+                    when
+                        contentPackSign->isWriteable
+                    then
+                        GlobalRender->drawText
+                    */
 
                 } catch (Exception e) {
                     // Removes TileEntity on client-side, prevents crash
