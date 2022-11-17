@@ -56,7 +56,7 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
                     }
                 }
             } catch (Exception e) {
-                String message = String.format("Couldn't cache the following: blockId: %s", itemId);
+                String message = String.format("Couldn't cache the following: itemId: %s", itemId);
                 throw new ItemRenderException(message, e);
             }
         }

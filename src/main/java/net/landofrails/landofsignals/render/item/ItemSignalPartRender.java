@@ -83,7 +83,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     }
                 }
             } catch (Exception e) {
-                String message = String.format("Couldn't cache the following: blockId: %s; identifier: %s", itemId, identifier);
+                String message = String.format("Couldn't cache the following: itemId: %s; identifier: %s", itemId, identifier);
                 throw new ItemRenderException(message, e);
             }
         }
