@@ -13,9 +13,9 @@ public class LOSGuis {
     }
 
     public static final GuiRegistry.GUI TICKET_MACHINE_DB = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "TICKET_MACHINE_DB"), GuiTicketMachine::new);
-    // TODO: Replace GuiRegistry.BlockGUI with GuiRegistry.GUI to be able to open both on the same block.
+    // INFO: Replace GuiRegistry.BlockGUI with GuiRegistry.GUI to be able to open both on the same block.
     public static final GuiRegistry.BlockGUI SIGNAL_BOX = GuiRegistry.registerBlock(TileSignalBox.class, GuiSignalPartBox::new);
-    public static final GuiRegistry.BlockGUI SIGNAL_ANIMATED_BOX = null; // GuiRegistry.registerBlock(TileSignalBox.class, GuiSignalPartAnimatedBox::new);
+    public static final GuiRegistry.BlockGUI SIGNAL_ANIMATED_BOX = null;
     public static final GuiRegistry.GUI LEGACYMODE_SELECTOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "LEGACYMODE_SELECTER"), GuiLegacyModeSelection::new);
     public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipualtor::new);
     public static final GuiRegistry.GUI SIGN_TEXTEDITOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_TEXTEDTIOR"), GuiSignTextEditor::new);

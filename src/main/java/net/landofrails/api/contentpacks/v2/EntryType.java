@@ -11,10 +11,9 @@ public enum EntryType {
     BLOCKSIGNAL(() -> LOSItems.ITEM_SIGNAL_PART),
     BLOCKSIGN(() -> LOSItems.ITEM_SIGN_PART),
     BLOCKSIGNALBOX(() -> LOSItems.ITEM_SIGNAL_BOX),
-    // TODO implement
-    BLOCKDECO(() -> null);
+    BLOCKDECO(() -> LOSItems.ITEM_DECO);
     // @formatter:on
-    
+
     private final Supplier<CustomItem> itemSupplier;
 
     EntryType(Supplier<CustomItem> itemSupplier) {

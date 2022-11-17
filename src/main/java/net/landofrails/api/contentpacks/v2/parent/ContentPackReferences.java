@@ -134,7 +134,7 @@ public class ContentPackReferences {
         }
 
         if (stringJoiner.length() > 2) {
-            invalid.accept("item: " + stringJoiner.toString());
+            invalid.accept("item: " + stringJoiner);
         }
 
     }
@@ -163,13 +163,6 @@ public class ContentPackReferences {
         return txt.toString();
     }
 
-    /**
-     * TODO Does this work?
-     *
-     * @param floatMap
-     * @param min
-     * @param max
-     */
     private void clampArray(Set<Map.Entry<String, float[]>> floatMap, float min, float max) {
         for (Map.Entry<String, float[]> entry : floatMap) {
             if (entry.getValue() != null && entry.getValue().length == 0) {

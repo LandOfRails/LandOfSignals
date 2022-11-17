@@ -26,14 +26,11 @@ public class ContentPackSign {
     private Map<String, ContentPackModel[]> base;
     private ContentPackReferences references;
     // metadataId : data
-    private Map<String, ?> metadata;
+    private Map<String, Object> metadata;
 
     // Processed data
     private Map<String, Set<String>> objTextures;
     private String uniqueId;
-
-    // TODO Constructors
-
 
     public String getName() {
         return name;
@@ -91,11 +88,11 @@ public class ContentPackSign {
         this.references = references;
     }
 
-    public Map<String, ?> getMetadata() {
+    public Map<String, Object> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, ?> metadata) {
+    public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
     }
 
