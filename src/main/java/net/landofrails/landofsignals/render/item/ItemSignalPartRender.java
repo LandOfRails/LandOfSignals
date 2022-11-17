@@ -29,6 +29,66 @@ import java.util.stream.Collectors;
 public class ItemSignalPartRender implements ItemRender.IItemModel {
     protected static final Map<String, OBJRender> cache = new HashMap<>();
     protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
+    protected static final Map<String, List<String>> groupCache = new HashMap<>();
+
+    private static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups, String identifier) {
+
+        // Get first group, get first state, get first model
+        Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
+
+        if (!firstPath.isPresent())
+            return;
+        final String firstObjId = itemId + identifier + firstPath.get();
+        if (cache.containsKey(firstObjId)) {
+            return;
+        }
+
+        for (ContentPackSignalGroup group : groups) {
+            for (ContentPackSignalState state : group.getStates().values()) {
+                checkCache(itemId, state.getModels(), identifier, false);
+            }
+        }
+
+    }
+
+    private static void checkCache(String itemId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+        if (checkIfAlreadyExisting) {
+            Optional<String> firstPath = models.keySet().stream().findFirst();
+            if (!firstPath.isPresent())
+                return;
+            final String firstObjId = itemId + identifier + firstPath.get();
+            if (cache.containsKey(firstObjId)) {
+                return;
+            }
+        }
+
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : models.entrySet()) {
+            try {
+                final String path = modelEntry.getKey();
+                // identifiers: /signals / and /base/
+                final String objId = itemId + identifier + path;
+
+                Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
+                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
+                cache.putIfAbsent(objId, renderer);
+
+                for (ContentPackModel signalModel : modelEntry.getValue()) {
+                    String[] groups = signalModel.getObj_groups();
+                    if (groups.length > 0) {
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        groupCache.put(groupCacheId, modes);
+                    }
+                }
+            } catch (Exception e) {
+                String message = String.format("Couldn't cache the following: blockId: %s; identifier: %s", itemId, identifier);
+                throw new ItemRenderException(message, e);
+            }
+        }
+
+    }
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -56,7 +116,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
     @Override
     public void applyTransform(ItemRender.ItemRenderType type) {
 
-        // TODO Implement ItemRenderType with new UMC rendering
+        // Implement ItemRenderType with new UMC rendering
 
         ItemRender.IItemModel.super.applyTransform(type);
     }
@@ -64,11 +124,13 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
     @SuppressWarnings("java:S1134")
     private static void renderBase(String itemId) {
 
+        checkCache(itemId, LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase(), "/base/", true);
+
         for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
 
             final String path = baseModels.getKey();
 
-            final String objId = itemId + "/" + path;
+            final String objId = itemId + "/base/" + path;
             if (!cache.containsKey(objId)) {
                 try {
                     cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
@@ -114,11 +176,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     if (groups.length == 0) {
                         renderer.draw();
                     } else {
-                        // FIXME This is nasty - Maybe cache this?
-                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
-                        ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
-                                .collect(Collectors.toCollection(ArrayList::new));
-                        renderer.drawGroups(modes);
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        renderer.drawGroups(groupCache.get(groupCacheId));
                     }
 
                 } finally {
@@ -133,6 +192,9 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
     @SuppressWarnings("java:S1134")
     private static void renderSignals(String itemId, Map<String, String> itemGroupStates) {
         final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals();
+
+        checkCache(itemId, signalGroups.values(), "/signals/");
+
         for (Map.Entry<String, ContentPackSignalGroup> signalGroup : signalGroups.entrySet()) {
 
             final ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
@@ -141,7 +203,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
                 final String path = signalModels.getKey();
 
-                final String objId = itemId + "/" + path;
+                final String objId = itemId + "/signals/" + path;
                 if (!cache.containsKey(objId)) {
                     try {
                         final Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
@@ -188,11 +250,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                         if (groups.length == 0) {
                             renderer.draw();
                         } else {
-                            // FIXME This is nasty - Maybe cache this?
-                            Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
-                            ArrayList<String> modes = renderer.model.groups().stream().filter(targetGroup)
-                                    .collect(Collectors.toCollection(ArrayList::new));
-                            renderer.drawGroups(modes);
+                            String groupCacheId = objId + "@" + String.join("+", groups);
+                            renderer.drawGroups(groupCache.get(groupCacheId));
                         }
 
                     } finally {
