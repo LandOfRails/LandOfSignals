@@ -43,18 +43,11 @@ public class TileSignalBox extends BlockEntity {
     @TagField("inactiveGroupState")
     private String inactiveGroupState;
 
-    /**
-     * Needs to stay for backwards compatibility
-     * <p>
-     * FIXME Can I read this in the NBT on TileSignalBox#load()?
-     */
+
     @TagField("redstone")
-    private Integer redstone = null;
+    private Integer redstone = null; // stays for backwards compatability
     @TagField("noRedstone")
-    private Integer noRedstone = null;
-    /**
-     * ^^^
-     */
+    private Integer noRedstone = null; // stays for backwards compatability
 
     @Nullable
     private Integer lastRedstone;

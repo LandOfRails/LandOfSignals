@@ -30,7 +30,7 @@ public class ContentPackSignal {
     private Map<String, String> itemGroupStates;
     private ContentPackReferences references;
     // metadataId : data
-    private Map<String, ?> metadata;
+    private Map<String, Object> metadata;
 
     // Processed data
     private Map<String, Set<String>> objTextures;
@@ -109,11 +109,11 @@ public class ContentPackSignal {
         this.itemGroupStates = itemGroupStates;
     }
 
-    public Map<String, ?> getMetadata() {
+    public Map<String, Object> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, ?> metadata) {
+    public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
     }
 
@@ -184,21 +184,16 @@ public class ContentPackSignal {
                 }
             }
             if (objTextures.isEmpty()) {
-                for (ContentPackSignalGroup group : signals.values()) {
-                    for (ContentPackSignalState state : group.getStates().values()) {
-                        for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
-                            for (ContentPackModel model : modelEntry.getValue()) {
-                                String objPath = modelEntry.getKey();
-                                objTextures.putIfAbsent(objPath, new HashSet<>());
-                                objTextures.computeIfPresent(objPath, (key, value) -> {
-                                    value.addAll(Arrays.asList(model.getTextures()));
-                                    return value;
-                                });
-                            }
-                        }
-                    }
-                }
-                for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+                initObjTextures();
+            }
+        }
+
+    }
+
+    private void initObjTextures() {
+        for (ContentPackSignalGroup group : signals.values()) {
+            for (ContentPackSignalState state : group.getStates().values()) {
+                for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
                     for (ContentPackModel model : modelEntry.getValue()) {
                         String objPath = modelEntry.getKey();
                         objTextures.putIfAbsent(objPath, new HashSet<>());
@@ -210,7 +205,16 @@ public class ContentPackSignal {
                 }
             }
         }
-
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
+            for (ContentPackModel model : modelEntry.getValue()) {
+                String objPath = modelEntry.getKey();
+                objTextures.putIfAbsent(objPath, new HashSet<>());
+                objTextures.computeIfPresent(objPath, (key, value) -> {
+                    value.addAll(Arrays.asList(model.getTextures()));
+                    return value;
+                });
+            }
+        }
     }
 
     private void defaultMissing() {

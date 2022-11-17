@@ -1,8 +1,8 @@
 package net.landofrails.landofsignals.blocks;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.utils.Static;
@@ -41,8 +41,7 @@ public class BlockSignPart extends BlockTypeEntity {
         if (!contentPackSigns.containsKey(contentPackSign.getUniqueId())) {
             this.contentPackSigns.put(contentPackSign.getUniqueId(), contentPackSign);
         } else {
-            //TODO: Add conflict info for user after he entered a world
-            ModCore.error("There is already a SignPart registered with this ID! ID: " + contentPackSign.getId());
+            throw new ContentPackException("There is already a SignPart registered with this ID! ID: " + contentPackSign.getId());
         }
     }
 

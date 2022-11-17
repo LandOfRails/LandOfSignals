@@ -38,7 +38,7 @@ public class GuiSignTextEditor implements IScreen {
             @Override
             public void onClick(Player.Hand hand) {
 
-                // FIXME Remove with new umc version
+                // CHECK: Remove with new umc version
                 MinecraftClient.getPlayer().sendMessage(PlayerMessage.translate(TEXTEDITORNEEDSNEWVERSIONMESSAGEKEY));
                 //
                 SignTextPacket.sendTextToServer(signPos, textField.getText());

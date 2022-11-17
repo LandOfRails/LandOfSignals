@@ -1,8 +1,8 @@
 package net.landofrails.landofsignals.blocks;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.landofsignals.tile.TileDeco;
 import net.landofrails.landofsignals.utils.Static;
@@ -29,8 +29,7 @@ public class BlockDeco extends BlockTypeEntity {
         if (!this.contentPackDeco.containsKey(contentPackDeco.getUniqueId())) {
             this.contentPackDeco.put(contentPackDeco.getUniqueId(), contentPackDeco);
         } else {
-            //TODO: Add conflict info for user after he entered a world
-            ModCore.error("There is already a Decoblock registered with this ID! ID: " + contentPackDeco.getUniqueId());
+            throw new ContentPackException("There is already a Decoblock registered with this ID! ID: " + contentPackDeco.getUniqueId());
         }
     }
 

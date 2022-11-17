@@ -47,8 +47,8 @@ public class ItemManipulator extends CustomItem {
         sneak = player.isCrouching();
         BlockEntity block = world.getBlockEntity(pos, BlockEntity.class);
 
-        // FIXME Check implementation for signals and signs
-        // FIXME Enable tool after check
+        // CHECK: Implementation for signals and signs
+        // AFTERWARDS: Enable tool after check
         if (DISABLED) {
             if (world.isClient)
                 player.sendMessage(PlayerMessage.translate("message." + LandOfSignals.MODID + ":item.manipulator.disabled"));

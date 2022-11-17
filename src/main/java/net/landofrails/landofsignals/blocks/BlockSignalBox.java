@@ -1,8 +1,8 @@
 package net.landofrails.landofsignals.blocks;
 
-import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
+import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.utils.Static;
@@ -30,8 +30,7 @@ public class BlockSignalBox extends BlockTypeEntity {
         if (!contentPackSignalboxes.containsKey(contentPackSignalbox.getUniqueId())) {
             contentPackSignalboxes.put(contentPackSignalbox.getUniqueId(), contentPackSignalbox);
         } else {
-            //TODO: Add conflict info for user after he entered a world
-            ModCore.error("There is already a Signalbox registered with this ID! ID: " + contentPackSignalbox.getUniqueId());
+            throw new ContentPackException("There is already a Signalbox registered with this ID! ID: " + contentPackSignalbox.getUniqueId());
         }
     }
 

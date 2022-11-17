@@ -80,7 +80,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     /**
-     * @return
+     * @return the old texturepath
      * @deprecated (1.0.0, Only needed for backwards compatability)
      */
     @Deprecated
@@ -94,7 +94,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     /**
-     * @param texturePath
+     * @param texturePath The texturepath provided by the contentpack
      * @deprecated (1.0.0, Only needed for backwards compatability)
      */
     @Deprecated
@@ -137,7 +137,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     /**
      * client-only
      *
-     * @param signalGroupStates
+     * @param signalGroupStates Map of Groups and each State
      */
     public void setSignalGroupStates(Map<String, String> signalGroupStates) {
         this.signalGroupStates = signalGroupStates;
@@ -151,7 +151,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @SuppressWarnings("java:S1134")
     public Map<String, String> getSignalGroupStates() {
 
-        // FIXME not performance-friendly
+        // CHECK: Is there a more performance-friendly way of doing this?
         if (this.signalGroupStates.isEmpty()) {
             refreshSignals(false);
         }
