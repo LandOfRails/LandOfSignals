@@ -98,7 +98,7 @@ public class ItemSignPart extends CustomItem {
 
             boolean writeable = LOSBlocks.BLOCK_SIGN_PART.isWritable(itemId);
             String writeableRawText = TextUtil.translate(writeable ? MSG_LOS_TRUE : MSG_LOS_FALSE);
-            tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, writeableRawText));
+            tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, new Object[]{writeableRawText}));
         }
         return tooltips;
     }
