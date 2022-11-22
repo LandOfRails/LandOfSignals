@@ -1,15 +1,21 @@
-itemGroup.landofsignals.stellwand=LOS | Stellwand
+itemGroup.landofsignals.stellwand=LOS | Stellwand (veraltet)
 itemGroup.landofsignals.signals=LOS | Signale
+itemGroup.landofsignals.signs=LOS | Schilder
 itemGroup.landofsignals.assets=LOS | Assets
 
 gui.landofsignals:signalbox.redstone=Mit redstone
 gui.landofsignals:signalbox.noredstone=Ohne redstone
+gui.landofsignals:signalbox.signalgroup=Signal-Gruppe: %s
 gui.landofsignals:manipulator.unattach=Drücke Shift um zum GUI zurückzukehren
 gui.landofsignals:manipulator.editingame=Bearbeiten ingame
 gui.landofsignals:manipulator.editposition=Bearbeite Position
 gui.landofsignals:manipulator.editrotation=Bearbeite Rotation
 gui.landofsignals:manipulator.edithitbox=Bearbeite Hitbox
 gui.landofsignals:manipulator.rotationslider=Rotation
+gui.landofsignals:legacymode.off.label=Legacymode: Aus
+gui.landofsignals:legacymode.off.description=Nutzt Reihenfolge vom Contentpack
+gui.landofsignals:legacymode.on.label=Legacymode: An
+gui.landofsignals:legacymode.on.description=Nutzt das letzte gesetzte Signal
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signalhebel
@@ -19,17 +25,27 @@ item.landofsignals:item_signal_box.name=Signalsteuerungsbox
 item.landofsignals:item_connector.name=Verbindungstool
 item.landofsignals:item_manipulator.name=Manipulierungstool
 item.landofsignals:item_signal_selector.name=Signal-Auswahl-Tool
+item.landofsignals:item_sign_selector.name=Schild-Auswahl-Tool
+
+message.landofsignals:item.manipulator.disabled=§4Dieses Werkzeug ist derzeit nicht verfügbar. §cEs wird mit dem nächsten Update wieder aktiviert.
+message.landofsignals:sign.texteditor.needs.new.umc.version=§6Warnung: §eTextrendering kommt erst mit der nächsten UMC Version, bis dahin wird er nicht gerendert.
+message.landofsignals:item.signalanimated=§4Dieses Item ist derzeit nicht verfügbar. §cEs wird in einem zukünftigen Update aktiviert.
+message.landogsignals:signs.writeable=Beschriftbar: %s
+message.landofsignals:true=§aJa
+message.landofsignals:false=§cNein
+
+label.landofsignals:signtexteditor.savebutton=Speichern
 
 # -- Stellwand --
 
-item.landofsignals:stellwand.itemblockfiller.name=Block Filler
-item.landofsignals:stellwand.itemblocksender.name=Block Sender
-item.landofsignals:stellwand.itemblocksignal.name=Block Signal
-item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal
-item.landofsignals:stellwand.itemconnector1.name=Connector
-item.landofsignals:stellwand.itemconnector2.name=Connector
-item.landofsignals:stellwand.itemconnector3.name=Connector
-item.landofsignals:stellwand.magnifyingglass.name=Lupe
+item.landofsignals:stellwand.itemblockfiller.name=Block Filler (veraltet)
+item.landofsignals:stellwand.itemblocksender.name=Block Sender (veraltet)
+item.landofsignals:stellwand.itemblocksignal.name=Block Signal (veraltet)
+item.landofsignals:stellwand.itemblockmultisignal.name=Block Multisignal (veraltet)
+item.landofsignals:stellwand.itemconnector1.name=Connector (veraltet)
+item.landofsignals:stellwand.itemconnector2.name=Connector (veraltet)
+item.landofsignals:stellwand.itemconnector3.name=Connector (veraltet)
+item.landofsignals:stellwand.magnifyingglass.name=Lupe (veraltet)
 
 message.stellwand:sender.nosignalsconnected=Es ist noch kein Signal verbunden!
 message.stellwand:sender.modesset=Modes gesetzt!
@@ -43,5 +59,7 @@ message.stellwand:connector.newsignalselected=Neues Signal ausgewählt! (%s, %s,
 message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=Dieser Block lässt sich nicht verbinden!
 message.stellwand:connector.notthesameworld=Blöcke aus unterschiedlichen Welten lassen sich nicht verbinden!
+
+message.stellwand:deprecated=Dieser Block/Dieses Item wird zukünftig entfernt. Du kannst Ersatz finden unter "LOS | Signale" und "LOS | Assets".
 
 gui.stellwand:selectsendermodes.group=Gruppe: %s

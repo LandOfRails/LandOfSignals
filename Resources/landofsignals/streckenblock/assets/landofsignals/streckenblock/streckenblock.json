@@ -1,0 +1,285 @@
+{
+  "id": "streckenblock",
+  "name": "Streckenblock (Off, White, Red)",
+  "rotationSteps": 45,
+  "references": {
+    "contentPackItemRefs": {
+      "defaultItem": {
+        "translation": [
+          0.625,
+          0.125,
+          0
+        ],
+        "rotation": [
+          0,
+          180,
+          0
+        ],
+        "scaling": [
+          0.8,
+          0.8,
+          0.8
+        ]
+      }
+    },
+    "contentPackBlockRefs": {
+      "defaultBlock": {
+        "translation": [
+          0.5,
+          0,
+          0.5
+        ],
+        "rotation": [
+          0,
+          180,
+          0
+        ],
+        "scaling": [
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "base": {
+    "streckenblock/streckenblock.obj": [
+      {
+        "textures": [],
+        "obj_groups": [
+          "generalCube"
+        ],
+        "itemRefs": {
+          "DEFAULT": "defaultItem"
+        },
+        "blockRef": "defaultBlock"
+      }
+    ]
+  },
+  "signals": {
+    "group_top_left": {
+      "groupName": "Top left lamp",
+      "states": {
+        "off": {
+          "signalName": "Off",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topLeftBlack"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "white": {
+          "signalName": "White",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topLeftWhite"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "red": {
+          "signalName": "Red",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topLeftRed"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "group_top_right": {
+      "groupName": "Top right lamp",
+      "states": {
+        "off": {
+          "signalName": "Off",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topRightBlack"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "white": {
+          "signalName": "White",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topRightWhite"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "red": {
+          "signalName": "Red",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "topRightRed"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "group_bottom_left": {
+      "groupName": "Bottom left lamp",
+      "states": {
+        "off": {
+          "signalName": "Off",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomLeftBlack"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "white": {
+          "signalName": "White",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomLeftWhite"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "red": {
+          "signalName": "Red",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomLeftRed"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "group_bottom_right": {
+      "groupName": "Bottom right lamp",
+      "states": {
+        "off": {
+          "signalName": "Off",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomRightBlack"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "white": {
+          "signalName": "White",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomRightWhite"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        },
+        "red": {
+          "signalName": "Red",
+          "models": {
+            "streckenblock/streckenblock.obj": [
+              {
+                "textures": [],
+                "obj_groups": [
+                  "bottomRightRed"
+                ],
+                "itemRefs": {
+                  "DEFAULT": "defaultItem"
+                },
+                "blockRef": "defaultBlock"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

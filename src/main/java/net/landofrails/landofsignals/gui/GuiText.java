@@ -8,6 +8,7 @@ public enum GuiText {
     //Signalbox
     LABEL_REDSTONE("signalbox.redstone"),
     LABEL_NOREDSTONE("signalbox.noredstone"),
+    LABEL_SIGNALGROUP("signalbox.signalgroup"),
 
     //ManipulatorOverlay
     LABEL_UNATTACH("manipulator.unattach"),
@@ -15,7 +16,13 @@ public enum GuiText {
     LABEL_EDITROTATION("manipulator.editrotation"),
     LABEL_EDITHITBOX("manipulator.edithitbox"),
     LABEL_ROTATIONSLIDER("manipulator.rotationslider"),
-    LABEL_EDITPOSITION("manipulator.editposition");
+    LABEL_EDITPOSITION("manipulator.editposition"),
+
+    // LegacyModeGui
+    LABEL_LEGACYMODE_OFF("legacymode.off.label"),
+    LABEL_LEGACYMODE_OFF_DESCRIPTION("legacymode.off.description"),
+    LABEL_LEGACYMODE_ON("legacymode.on.label"),
+    LABEL_LEGACYMODE_ON_DESCRIPTION("legacymode.on.description");
 
     private final String value;
 

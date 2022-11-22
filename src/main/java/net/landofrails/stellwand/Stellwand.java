@@ -12,7 +12,6 @@ import net.landofrails.stellwand.content.items.connector.AItemConnector;
 import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
-import net.landofrails.stellwand.contentpacks.loader.Loader;
 
 public class Stellwand {
 
@@ -36,7 +35,7 @@ public class Stellwand {
                 ConfigFile.sync(StellwandConfig.class);
 
                 if (!StellwandConfig.disableStellwand) {
-                    Loader.init();
+                    net.landofrails.stellwand.contentpacks.loader.Loader.init();
 
                     AItemConnector.registerConnectors();
 
@@ -87,11 +86,15 @@ public class Stellwand {
                 CustomBlocks.registerBlockRenderers();
 
                 break;
-            case INITIALIZE:
-            case SETUP:
             case RELOAD:
-            case START:
-            case FINALIZE:
+                // Release renderers after reload (rejoining a world for example)
+                BlockButtonReceiverStorageEntity.releaseRenderersIntoTheWild();
+                BlockFillerStorageEntity.releaseRenderersIntoTheWild();
+                BlockMultisignalStorageEntity.releaseRenderersIntoTheWild();
+                BlockSenderStorageEntity.releaseRenderersIntoTheWild();
+                BlockSignalStorageEntity.releaseRenderersIntoTheWild();
+
+                break;
             default:
                 break;
         }

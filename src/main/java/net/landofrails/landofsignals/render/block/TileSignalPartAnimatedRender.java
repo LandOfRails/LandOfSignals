@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
+@SuppressWarnings({"java:S125", "java:S1172"})
 public class TileSignalPartAnimatedRender {
 
     private TileSignalPartAnimatedRender() {
@@ -53,10 +54,10 @@ public class TileSignalPartAnimatedRender {
         final boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
 
-        try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
-            final Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
+        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
+            final Vec3d scale = Vec3d.ZERO;
             GL11.glScaled(scale.x, scale.y, scale.z);
-            final Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
+            final Vec3d trans = Vec3d.ZERO;
             GL11.glTranslated(trans.x, trans.y, trans.z);
             GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
             renderer.drawGroups(groupsWithoutWing);
@@ -121,4 +122,5 @@ public class TileSignalPartAnimatedRender {
 //
 //        return new Vec3d(cosPitch * cosYaw, cosPitch * sinYaw, -sinPitch);
 //    }
+
 }

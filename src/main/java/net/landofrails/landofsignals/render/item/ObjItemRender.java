@@ -29,6 +29,7 @@ public class ObjItemRender {
         return getModelFor(id, translate, Vec3d.ZERO, null, scale);
     }
 
+    @SuppressWarnings("java:S112")
     public static ItemRender.IItemModel getModelFor(final Identifier id, final Vec3d translate, final Vec3d rotation,
                                                     final Collection<String> collection, final float scale) {
         return (world, stack) -> new StandardModel().addCustom(() -> {

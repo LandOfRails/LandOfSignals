@@ -8,16 +8,15 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
+import net.landofrails.landofsignals.LandOfSignals;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class ItemSignalPartAnimated extends CustomItem {
 
@@ -27,21 +26,18 @@ public class ItemSignalPartAnimated extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
     }
 
     @Override
-    public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
-        final Optional<Vec3i> target = LandOfSignalsUtils.canPlaceBlock(world, pos, facing, player);
-        if (!target.isPresent()) return ClickResult.REJECTED;
+    public List<ItemStack> getItemVariants(CreativeTab creativeTab) {
+        return Collections.emptyList();
+    }
 
-        int rot = -(Math.round(player.getRotationYawHead() / 10) * 10) + 180;
-        final TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-        if (tileSignalPart != null && !player.isCrouching()) rot = tileSignalPart.getBlockRotate();
-        LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.setRot(rot);
-        LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.setId(player.getHeldItem(hand).getTagCompound().getString("itemId"));
-        world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED);
-        return ClickResult.ACCEPTED;
+    @Override
+    public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
+        player.sendMessage(PlayerMessage.translate("message." + LandOfSignals.MODID + ":item.signalanimated"));
+        return ClickResult.REJECTED;
     }
 
     @Override

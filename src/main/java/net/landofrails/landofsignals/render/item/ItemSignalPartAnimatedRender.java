@@ -21,9 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ItemSignalPartAnimatedRender {
+
+    private ItemSignalPartAnimatedRender() {
+
+    }
+
     public static final boolean IGNOREFNFEXCEPTION = true;
     protected static final Map<String, OBJRender> cache = new HashMap<>();
 
+    @SuppressWarnings("java:S112")
     public static ItemRender.IItemModel getModelFor() {
         return (world, stack) -> new StandardModel().addCustom(() -> {
             final TagCompound tag = stack.getTagCompound();

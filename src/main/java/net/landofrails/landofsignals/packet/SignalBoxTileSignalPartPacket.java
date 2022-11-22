@@ -7,38 +7,31 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 public class SignalBoxTileSignalPartPacket extends Packet {
 
     @TagField("tileSignalPart")
     TileSignalPart tileSignalPart;
-    @TagField("tileSignalPartAnimated")
-    TileSignalPartAnimated tileSignalPartAnimated;
+    @TagField("tileSignalBox")
+    TileSignalBox tileSignalBox;
     @TagField("posSignalBox")
     Vec3i posSignalBox;
 
     public SignalBoxTileSignalPartPacket() {
     }
 
-    public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final Vec3i posSignalBox) {
+    public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final TileSignalBox tileSignalBox, final Vec3i posSignalBox) {
         this.tileSignalPart = tileSignalPart;
-        this.posSignalBox = posSignalBox;
-    }
-
-    public SignalBoxTileSignalPartPacket(final TileSignalPartAnimated tileSignalPartAnimated, final Vec3i posSignalBox) {
-        this.tileSignalPartAnimated = tileSignalPartAnimated;
+        this.tileSignalBox = tileSignalBox;
         this.posSignalBox = posSignalBox;
     }
 
     @Override
     protected void handle() {
         if (tileSignalPart != null) {
+            getWorld().setBlockEntity(posSignalBox, tileSignalBox);
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
             LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
-        } else if (tileSignalPartAnimated != null) {
-            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPartAnimated(tileSignalPartAnimated);
-            LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
         } else {
             LandOfSignals.error("Can't open Signalbox, no tile entity given.");
         }

@@ -1,0 +1,11 @@
+{
+    "name": "Stellwand: Streckenblock",
+    "packversion": "1.1",
+    "author" : "SeltixSub aka Danielxs01",
+    "addonversion": "2",
+    "content": {
+        "assets/landofsignals/streckenblock/streckenblock.json": "BLOCKSIGNAL",
+        "assets/landofsignals/formsignal/formsignal.json": "BLOCKSIGNAL"
+    }
+
+}

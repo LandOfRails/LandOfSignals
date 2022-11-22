@@ -6,7 +6,10 @@ import net.landofrails.stellwand.Stellwand;
 public enum EMessage {
 
     // @formatter:off
-	
+
+    // All
+    MESSAGE_DEPRECATED("deprecated"),
+
 	// Sender
 	MESSAGE_NO_SIGNALS_CONNECTED("sender.nosignalsconnected"),
 	MESSAGE_MODES_SET("sender.modesset"), 

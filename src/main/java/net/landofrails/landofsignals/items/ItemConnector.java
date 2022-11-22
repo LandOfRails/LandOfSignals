@@ -13,15 +13,12 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ItemConnector extends CustomItem {
 
     TileSignalPart blockEntitySignalPart;
-    TileSignalPartAnimated blockEntityAnimatedPart;
     TileSignalBox blockEntityBox;
 
     public ItemConnector(final String modID, final String name) {
@@ -30,7 +27,7 @@ public class ItemConnector extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return Collections.singletonList(LOSTabs.SIGNALS_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override
@@ -38,43 +35,28 @@ public class ItemConnector extends CustomItem {
         if (world.isServer) {
 
             final TileSignalPart tempPart = world.getBlockEntity(pos, TileSignalPart.class);
-            final TileSignalPartAnimated tempAnimatedPart = world.getBlockEntity(pos, TileSignalPartAnimated.class);
             final TileSignalBox tempSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
 
-            if (tempPart == null && tempAnimatedPart == null && tempSignalBox == null) {
+            if (tempPart == null && tempSignalBox == null) {
                 return ClickResult.REJECTED;
             }
 
-            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getStates(tempPart.getId()).size() > 1) {
-                blockEntityAnimatedPart = null;
+            if (tempPart != null && LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(tempPart.getId())) {
                 blockEntitySignalPart = tempPart;
                 if (blockEntityBox == null)
                     player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
             }
-            if (tempAnimatedPart != null) {
-                blockEntitySignalPart = null;
-                blockEntityAnimatedPart = tempAnimatedPart;
-                if (blockEntityBox == null)
-                    player.sendMessage(PlayerMessage.direct("Pairing started with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));
-            }
             if (tempSignalBox != null) {
                 blockEntityBox = tempSignalBox;
-                if (blockEntitySignalPart == null && blockEntityAnimatedPart == null)
+                if (blockEntitySignalPart == null)
                     player.sendMessage(PlayerMessage.direct("Pairing started with signal box."));
             }
 
-            if ((blockEntitySignalPart != null || blockEntityAnimatedPart != null) && blockEntityBox != null) {
-                if (blockEntitySignalPart != null) {
-                    blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
-                } else if (blockEntityAnimatedPart != null) {
-                    blockEntityBox.setTileSignalPartPos(blockEntityAnimatedPart.getPos());
-                    player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getName(blockEntityAnimatedPart.getId())));
-                }
-
+            if (blockEntitySignalPart != null && blockEntityBox != null) {
+                blockEntityBox.setTileSignalPartPos(blockEntitySignalPart.getPos());
+                player.sendMessage(PlayerMessage.direct("Box paired with " + LOSBlocks.BLOCK_SIGNAL_PART.getName(blockEntitySignalPart.getId())));
 
                 blockEntitySignalPart = null;
-                blockEntityAnimatedPart = null;
                 blockEntityBox = null;
                 return ClickResult.ACCEPTED;
             }
@@ -87,7 +69,6 @@ public class ItemConnector extends CustomItem {
         if (world.isServer && player.isCrouching()) {
             blockEntityBox = null;
             blockEntitySignalPart = null;
-            blockEntityAnimatedPart = null;
             player.sendMessage(PlayerMessage.direct("Pairing canceled."));
         }
     }

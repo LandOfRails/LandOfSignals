@@ -1,19 +1,25 @@
 package net.landofrails.landofsignals.render.block;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.apache.commons.lang3.tuple.Pair;
+import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
@@ -21,73 +27,218 @@ public class TileSignalPartRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, List<String>> groupCache = new HashMap<>();
+
+    private static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
+
+        // Get first group, get first state, get first model
+        Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
+
+        if (!firstPath.isPresent())
+            return;
+        final String firstObjId = blockId + identifier + firstPath.get();
+        if (cache.containsKey(firstObjId)) {
+            return;
+        }
+
+        for (ContentPackSignalGroup group : groups) {
+            for (ContentPackSignalState state : group.getStates().values()) {
+                checkCache(blockId, state.getModels(), identifier, false);
+            }
+        }
+
+    }
+
+    private static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+        if (checkIfAlreadyExisting) {
+            Optional<String> firstPath = models.keySet().stream().findFirst();
+            if (!firstPath.isPresent())
+                return;
+            final String firstObjId = blockId + identifier + firstPath.get();
+            if (cache.containsKey(firstObjId)) {
+                return;
+            }
+        }
+
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : models.entrySet()) {
+            try {
+                final String path = modelEntry.getKey();
+                // identifiers: /signals / and /base/
+                final String objId = blockId + identifier + path;
+
+                Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getObjTextures().get(path);
+                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
+                cache.putIfAbsent(objId, renderer);
+
+                for (ContentPackModel signalModel : modelEntry.getValue()) {
+                    String[] groups = signalModel.getObj_groups();
+                    if (groups.length > 0) {
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        groupCache.put(groupCacheId, modes);
+                    }
+                }
+            } catch (Exception e) {
+                String message = String.format("Couldn't cache the following: blockId: %s; identifier: %s", blockId, identifier);
+                throw new BlockRenderException(message, e);
+            }
+        }
+
+    }
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
     private static void renderStuff(final TileSignalPart tsp) {
-        final String id = tsp.getId();
-        if (!cache.containsKey("flare")) {
-            try {
-                final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                final OBJRender flareRenderer = new OBJRender(flareModel);
-                cache.put("flare", Pair.of(flareModel, flareRenderer));
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (!cache.containsKey(id)) {
-            try {
-                final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
-                final OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        final OBJRender renderer = cache.get(id).getRight();
-        try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
-            final Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            final Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
+
+        String id = tsp.getId();
+
+        if (id == null) {
+            id = Static.MISSING;
         }
 
-//        OBJRender flareRenderer = cache.get("flare").getRight();
-//
-//        GL11.glPushMatrix();
-//        {
-//            GL11.glPushAttrib(GL11.GL_ALPHA_TEST_FUNC);
-//            GL11.glPushAttrib(GL11.GL_ALPHA_TEST_REF);
-//            GL11.glPushAttrib(GL11.GL_LIGHTING);
-//            GL11.glPushAttrib(GL11.GL_BLEND);
-//
-//            RenderUtil.lightmapPush();
-//            {
-//                RenderUtil.lightmapBright();
-//
-//                // Disable lighting & enable alpha blending.
-//                GL11.glAlphaFunc(GL11.GL_GREATER, 0.01F);
-//                GL11.glDisable(GL11.GL_LIGHTING);
-//                GL11.glEnable(GL11.GL_BLEND);
-//
-//                OpenGL.With color = OpenGL.color(0.5F, 1.0F, 0.0F, 0.0F);
-//
-//                GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-//
-//                flareRenderer.draw();
-//            }
-//            RenderUtil.lightmapPop();
-//
-//            GL11.glPopAttrib(); /* GL11.GL_BLEND */
-//            GL11.glPopAttrib(); /* GL11.GL_LIGHTING */
-//            GL11.glPopAttrib(); /* GL11.GL_ALPHA_TEST_REF */
-//            GL11.glPopAttrib(); /* GL11.GL_ALPHA_TEST_FUNC */
-//        }
-//        GL11.glPopMatrix();
+        renderBase(id, tsp);
+        renderSignals(id, tsp);
+
     }
+
+    @SuppressWarnings("java:S1134")
+    private static void renderBase(String blockId, TileSignalPart tile) {
+
+        final Vec3d offset = tile.getOffset();
+
+        checkCache(blockId, LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase(), "/base/", true);
+
+        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getBase().entrySet()) {
+
+            final String path = baseModels.getKey();
+
+            // Needs to be split from signal
+            final String objId = blockId + "/base/" + path;
+            final OBJRender renderer = cache.get(objId);
+
+            for (ContentPackModel baseModel : baseModels.getValue()) {
+                final ContentPackBlock block = baseModel.getBlock();
+                final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d rotation = block.getAsVec3d(block::getRotation);
+                final List<OpenGL.With> closables = new ArrayList<>();
+                try {
+                    // Load
+                    closables.add(OpenGL.matrix());
+                    for (String texture : baseModel.getTextures()) {
+                        closables.add(renderer.bindTexture(texture));
+                    }
+                    if (closables.size() == 1) {
+                        closables.add(renderer.bindTexture());
+                    }
+
+                    // Render
+                    GL11.glScaled(scale.x, scale.y, scale.z);
+                    GL11.glTranslated(translate.x, translate.y, translate.z);
+                    GL11.glRotated(rotation.x, 1, 0, 0);
+                    GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                    GL11.glRotated(rotation.z, 0, 0, 1);
+
+                    String[] groups = baseModel.getObj_groups();
+                    if (groups.length == 0) {
+                        renderer.draw();
+                    } else {
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        renderer.drawGroups(groupCache.get(groupCacheId));
+                    }
+
+                } catch (Exception e) {
+                    // Removes TileEntity on client-side, prevents crash
+                    ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+                    tile.getWorld().breakBlock(tile.getPos());
+
+                } finally {
+                    closables.forEach(OpenGL.With::close);
+                }
+
+            }
+        }
+    }
+
+    @SuppressWarnings("java:S1134")
+    private static void renderSignals(final String blockId, final TileSignalPart tile) {
+
+        final Vec3d offset = tile.getOffset();
+
+        final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(blockId).getSignals();
+
+        final Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
+
+        checkCache(blockId, signalGroups.values(), "/signals/");
+
+        for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signalGroups.entrySet()) {
+
+            final String groupId = signalGroupEntry.getKey();
+            final ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
+
+            final String tileSignalState = tileSignalGroups.get(groupId);
+            final ContentPackSignalState signalState = signalGroup.getStates().get(tileSignalState);
+
+            for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
+
+                final String path = signalModels.getKey();
+
+                // Needs to be split from base
+                final String objId = blockId + "/signals/" + path;
+                final OBJRender renderer = cache.get(objId);
+
+                for (ContentPackModel signalModel : signalModels.getValue()) {
+                    ContentPackBlock block = signalModel.getBlock();
+                    final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                    final Vec3d scale = block.getAsVec3d(block::getScaling);
+                    final Vec3d rotation = block.getAsVec3d(block::getRotation);
+                    final List<OpenGL.With> closables = new ArrayList<>();
+                    try {
+                        // Load
+                        closables.add(OpenGL.matrix());
+                        for (String texture : signalModel.getTextures()) {
+                            closables.add(renderer.bindTexture(texture));
+                        }
+                        if (closables.size() == 1) {
+                            closables.add(renderer.bindTexture());
+                        }
+
+                        // Render
+                        GL11.glScaled(scale.x, scale.y, scale.z);
+                        GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
+
+                        String[] groups = signalModel.getObj_groups();
+
+                        if (groups.length == 0) {
+                            renderer.draw();
+                        } else {
+
+                            String groupCacheId = objId + "@" + String.join("+", groups);
+                            renderer.drawGroups(groupCache.get(groupCacheId));
+                        }
+
+                    } catch (Exception e) {
+                        // Removes TileEntity on client-side, prevents crash
+                        ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+                        tile.getWorld().breakBlock(tile.getPos());
+
+                    } finally {
+                        closables.forEach(OpenGL.With::close);
+                    }
+                }
+
+            }
+
+
+        }
+    }
+
 }

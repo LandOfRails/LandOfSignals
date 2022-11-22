@@ -1,6 +1,6 @@
 package net.landofrails.landofsignals.render.item;
 
-import cam72cam.mod.ModCore;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
@@ -9,61 +9,260 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
+import cam72cam.mod.world.World;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
-import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class ItemSignalPartRender {
-    public static final boolean IGNOREFNFEXCEPTION = true;
+@SuppressWarnings("java:S3252")
+public class ItemSignalPartRender implements ItemRender.IItemModel {
     protected static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
+    protected static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    public static ItemRender.IItemModel getModelFor() {
-        return (world, stack) -> new StandardModel().addCustom(() -> {
+    private static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups, String identifier) {
+
+        // Get first group, get first state, get first model
+        Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
+
+        if (!firstPath.isPresent())
+            return;
+        final String firstObjId = itemId + identifier + firstPath.get();
+        if (cache.containsKey(firstObjId)) {
+            return;
+        }
+
+        for (ContentPackSignalGroup group : groups) {
+            for (ContentPackSignalState state : group.getStates().values()) {
+                checkCache(itemId, state.getModels(), identifier, false);
+            }
+        }
+
+    }
+
+    private static void checkCache(String itemId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+        if (checkIfAlreadyExisting) {
+            Optional<String> firstPath = models.keySet().stream().findFirst();
+            if (!firstPath.isPresent())
+                return;
+            final String firstObjId = itemId + identifier + firstPath.get();
+            if (cache.containsKey(firstObjId)) {
+                return;
+            }
+        }
+
+        for (Map.Entry<String, ContentPackModel[]> modelEntry : models.entrySet()) {
+            try {
+                final String path = modelEntry.getKey();
+                // identifiers: /signals / and /base/
+                final String objId = itemId + identifier + path;
+
+                Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
+                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
+                cache.putIfAbsent(objId, renderer);
+
+                for (ContentPackModel signalModel : modelEntry.getValue()) {
+                    String[] groups = signalModel.getObj_groups();
+                    if (groups.length > 0) {
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        groupCache.put(groupCacheId, modes);
+                    }
+                }
+            } catch (Exception e) {
+                String message = String.format("Couldn't cache the following: itemId: %s; identifier: %s", itemId, identifier);
+                throw new ItemRenderException(message, e);
+            }
+        }
+
+    }
+
+    @Override
+    public StandardModel getModel(World world, ItemStack stack) {
+        return new StandardModel().addCustom(() -> {
+
             final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
-            if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getSignalParts().containsKey(itemId)) {
+            if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) {
                 itemId = Static.MISSING;
             }
-            final Collection<String> collection = LOSBlocks.BLOCK_SIGNAL_PART.getStates(itemId);
-            if (!cache.containsKey(itemId)) {
-                try {
-                    final OBJModel model;
-                    if (collection != null) {
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0, collection);
-                    } else {
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(itemId)), 0);
-                    }
-                    final OBJRender renderer = new OBJRender(model);
-                    cache.put(itemId, renderer);
-                } catch (final FileNotFoundException e) {
-                    if (IGNOREFNFEXCEPTION) {
-                        ModCore.Mod.error("Model not found: " + e.getMessage(), e.getMessage());
-                        return;
-                    } else {
-                        throw new RuntimeException("Error loading item model...", e);
-                    }
-                } catch (final Exception e) {
-                    throw new RuntimeException("Error loading item model...", e);
-                }
+
+            final Map<String, String> itemGroupStates = new HashMap<>(LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemGroupStates());
+            if (tag.hasKey("itemGroupState")) {
+                itemGroupStates.putAll(tag.getMap("itemGroupState", EmptyStringMapper::fromNullString, value -> value.getString("string")));
             }
-            final OBJRender renderer = cache.get(itemId);
-            String textureName = null;
-            if (collection != null && tag.hasKey("textureName")) {
-                textureName = tag.getString("textureName");
-            }
-            final Vec3d translate = LOSBlocks.BLOCK_SIGNAL_PART.getItemTranslation(itemId);
-            final Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getItemScaling(itemId);
-            try (final OpenGL.With ignored = OpenGL.matrix(); final OpenGL.With ignored1 = renderer.bindTexture(textureName)) {
-                GL11.glTranslated(translate.x, translate.y, translate.z);
-                GL11.glScaled(scale.x, scale.y, scale.z);
-                renderer.draw();
-            }
+
+            renderBase(itemId);
+            renderSignals(itemId, itemGroupStates);
+
         });
     }
+
+
+    @SuppressWarnings("java:S1135")
+    @Override
+    public void applyTransform(ItemRender.ItemRenderType type) {
+
+        // Implement ItemRenderType with new UMC rendering
+
+        ItemRender.IItemModel.super.applyTransform(type);
+    }
+
+    @SuppressWarnings("java:S1134")
+    private static void renderBase(String itemId) {
+
+        checkCache(itemId, LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase(), "/base/", true);
+
+        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getBase().entrySet()) {
+
+            final String path = baseModels.getKey();
+
+            final String objId = itemId + "/base/" + path;
+            if (!cache.containsKey(objId)) {
+                try {
+                    cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0)));
+                    cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
+                } catch (Exception e) {
+                    throw new ItemRenderException("Error loading item model/renderer...", e);
+                }
+            }
+            final OBJRender renderer = cache.get(objId);
+
+            for (ContentPackModel baseModel : baseModels.getValue()) {
+                final ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
+                final Vec3d translate = item.getAsVec3d(item::getTranslation);
+                final Vec3d scale = item.getAsVec3d(item::getScaling);
+                final Vec3d rotation = item.getAsVec3d(item::getRotation);
+                final List<OpenGL.With> closables = new ArrayList<>();
+                try {
+                    // Load
+                    closables.add(OpenGL.matrix());
+                    for (String texture : baseModel.getTextures()) {
+                        closables.add(renderer.bindTexture(texture));
+                    }
+                    if (closables.size() == 1) {
+                        closables.add(renderer.bindTexture());
+                    }
+
+                    // Render
+                    if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
+                        GL11.glScaled(scale.x, scale.y, scale.z);
+                        GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
+                    } else {
+                        GL11.glTranslated(translate.x, translate.y, translate.z);
+                        GL11.glRotated(rotation.x, 1, 0, 0);
+                        GL11.glRotated(rotation.y, 0, 1, 0);
+                        GL11.glRotated(rotation.z, 0, 0, 1);
+                        GL11.glScaled(scale.x, scale.y, scale.z);
+                    }
+
+                    String[] groups = baseModel.getObj_groups();
+                    if (groups.length == 0) {
+                        renderer.draw();
+                    } else {
+                        String groupCacheId = objId + "@" + String.join("+", groups);
+                        renderer.drawGroups(groupCache.get(groupCacheId));
+                    }
+
+                } finally {
+                    closables.forEach(OpenGL.With::close);
+                }
+
+
+            }
+        }
+    }
+
+    @SuppressWarnings("java:S1134")
+    private static void renderSignals(String itemId, Map<String, String> itemGroupStates) {
+        final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getSignals();
+
+        checkCache(itemId, signalGroups.values(), "/signals/");
+
+        for (Map.Entry<String, ContentPackSignalGroup> signalGroup : signalGroups.entrySet()) {
+
+            final ContentPackSignalState signalState = signalGroup.getValue().getStates().get(itemGroupStates.get(signalGroup.getKey()));
+
+            for (Map.Entry<String, ContentPackModel[]> signalModels : signalState.getModels().entrySet()) {
+
+                final String path = signalModels.getKey();
+
+                final String objId = itemId + "/signals/" + path;
+                if (!cache.containsKey(objId)) {
+                    try {
+                        final Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getObjTextures().get(path);
+                        cache.put(objId, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures)));
+                        cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
+                    } catch (final Exception e) {
+                        throw new ItemRenderException("Error loading item model/renderer...", e);
+                    }
+                }
+                final OBJRender renderer = cache.get(objId);
+
+                for (ContentPackModel signalModel : signalModels.getValue()) {
+                    final ContentPackItem item = signalModel.getItem().get(ContentPackItemRenderType.DEFAULT);
+                    final Vec3d translate = item.getAsVec3d(item::getTranslation);
+                    final Vec3d scale = item.getAsVec3d(item::getScaling);
+                    final Vec3d rotation = item.getAsVec3d(item::getRotation);
+                    final List<OpenGL.With> closables = new ArrayList<>();
+                    try {
+                        // Load
+                        closables.add(OpenGL.matrix());
+                        for (String texture : signalModel.getTextures()) {
+                            closables.add(renderer.bindTexture(texture));
+                        }
+                        if (closables.size() == 1) {
+                            closables.add(renderer.bindTexture());
+                        }
+
+                        // Render
+                        if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
+                            GL11.glScaled(scale.x, scale.y, scale.z);
+                            GL11.glTranslated(translate.x, translate.y, translate.z);
+                            GL11.glRotated(rotation.x, 1, 0, 0);
+                            GL11.glRotated(rotation.y, 0, 1, 0);
+                            GL11.glRotated(rotation.z, 0, 0, 1);
+                        } else {
+                            GL11.glTranslated(translate.x, translate.y, translate.z);
+                            GL11.glRotated(rotation.x, 1, 0, 0);
+                            GL11.glRotated(rotation.y, 0, 1, 0);
+                            GL11.glRotated(rotation.z, 0, 0, 1);
+                            GL11.glScaled(scale.x, scale.y, scale.z);
+                        }
+
+                        String[] groups = signalModel.getObj_groups();
+                        if (groups.length == 0) {
+                            renderer.draw();
+                        } else {
+                            String groupCacheId = objId + "@" + String.join("+", groups);
+                            renderer.drawGroups(groupCache.get(groupCacheId));
+                        }
+
+                    } finally {
+                        closables.forEach(OpenGL.With::close);
+                    }
+                }
+
+            }
+
+
+        }
+    }
+
 }
