@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - 'src/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -32,6 +33,10 @@ jobs:
       env:
         BRANCH: ${{ matrix.branch }}
       run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true
+    - name: Hack Forge Gradle Part Two
+      env:
+        BRANCH: ${{ matrix.branch }}
+      run: git apply ${BRANCH}.patch || true
     - name: Gradle compile
       run: ./gradlew classes
     - name: Process images
