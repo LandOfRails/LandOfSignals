@@ -139,7 +139,7 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void serverEvent(final ModEvent event) {
-        // Do nothing for now
+        // Do nothing for now 
         Stellwand.serverEvent(event);
     }
 }
