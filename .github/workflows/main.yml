@@ -29,14 +29,14 @@ jobs:
       run: sudo apt install -y pngquant findutils xvfb
     - name: Hack Forge Gradle
       run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
-    - name: Hack Forge Gradle Part Two
-      run: git apply ${BRANCH}.patch || true
-      env:
-        BRANCH: ${{ matrix.branch }}
     - name: Setup Universal Mod Core (and helpers)
       env:
         BRANCH: ${{ matrix.branch }}
       run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true
+    - name: Hack Forge Gradle Part Two
+      env:
+        BRANCH: ${{ matrix.branch }}
+      run: git apply ${BRANCH}.patch || true
     - name: Gradle compile
       run: ./gradlew classes
     - name: Process images
