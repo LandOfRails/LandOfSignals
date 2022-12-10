@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - 'src/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -30,6 +31,8 @@ jobs:
       run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
     - name: Hack Forge Gradle Part Two
       run: git apply ${BRANCH}.patch || true
+      env:
+        BRANCH: ${{ matrix.branch }}
     - name: Setup Universal Mod Core (and helpers)
       env:
         BRANCH: ${{ matrix.branch }}
