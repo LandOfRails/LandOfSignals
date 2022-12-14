@@ -28,7 +28,7 @@ public class ContentPackHandlerV2 {
 
     }
 
-    public static void load(ZipFile zip, String name) throws IOException {
+    public static void load(ZipFile zip, String name, boolean isUTF8) throws IOException {
         ContentPack contentPack = ContentPack.fromJson(zip.getInputStream(zip.getEntry(name)));
         ModCore.info("Content for %s:", contentPack.getId());
 
@@ -39,16 +39,16 @@ public class ContentPackHandlerV2 {
             contentPack.getContent().forEach((path, type) -> {
                 switch (type) {
                     case BLOCKSIGNAL:
-                        loadSignal(zip, path, contentPack);
+                        loadSignal(zip, path, contentPack, isUTF8);
                         break;
                     case BLOCKSIGN:
-                        loadSign(zip, path, contentPack);
+                        loadSign(zip, path, contentPack, isUTF8);
                         break;
                     case BLOCKSIGNALBOX:
-                        loadSignalbox(zip, path, contentPack);
+                        loadSignalbox(zip, path, contentPack, isUTF8);
                         break;
                     case BLOCKDECO:
-                        loadDeco(zip, path, contentPack);
+                        loadDeco(zip, path, contentPack, isUTF8);
                         break;
                     default:
                         ModCore.error("Type %s is currently not implemented in V2!", type.name());
@@ -56,14 +56,14 @@ public class ContentPackHandlerV2 {
             });
         }
         if (hasContentSets) {
-            contentPack.getContentSets().forEach(path -> loadSet(zip, path, contentPack));
+            contentPack.getContentSets().forEach(path -> loadSet(zip, path, contentPack, isUTF8));
         }
         if (!hasContent && !hasContentSets) {
             ModCore.warn("ContentPack %s does not contain any blocks");
         }
     }
 
-    private static void loadSignal(ZipFile zip, String path, ContentPack contentPack) {
+    private static void loadSignal(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
 
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
@@ -71,6 +71,7 @@ public class ContentPackHandlerV2 {
 
             if (zipEntry.isPresent()) {
                 ContentPackSignal contentPackSignal = ContentPackSignal.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSignal.setUTF8(isUTF8);
                 contentPackSignal.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Signal: %s", contentPackSignal.getName());
                 LOSBlocks.BLOCK_SIGNAL_PART.add(contentPackSignal);
@@ -87,13 +88,14 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadSign(ZipFile zip, String path, ContentPack contentPack) {
+    private static void loadSign(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
 
             if (zipEntry.isPresent()) {
                 ContentPackSign contentPackSign = ContentPackSign.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSign.setUTF8(isUTF8);
                 contentPackSign.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Sign: %s", contentPackSign.getName());
 
@@ -111,13 +113,14 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadSignalbox(ZipFile zip, String path, ContentPack contentPack) {
+    private static void loadSignalbox(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
 
             if (zipEntry.isPresent()) {
                 ContentPackSignalbox contentPackSignalbox = ContentPackSignalbox.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackSignalbox.setUTF8(isUTF8);
                 contentPackSignalbox.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Signalbox: %s", contentPackSignalbox.getName());
 
@@ -135,13 +138,14 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadDeco(ZipFile zip, String path, ContentPack contentPack) {
+    private static void loadDeco(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
 
             if (zipEntry.isPresent()) {
                 ContentPackDeco contentPackDeco = ContentPackDeco.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackDeco.setUTF8(isUTF8);
                 contentPackDeco.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
                 ModCore.info("Signalbox: %s", contentPackDeco.getName());
 
@@ -159,7 +163,7 @@ public class ContentPackHandlerV2 {
         }
     }
 
-    private static void loadSet(ZipFile zip, String path, ContentPack contentPack) {
+    private static void loadSet(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
         try {
             Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
             Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
@@ -171,16 +175,16 @@ public class ContentPackHandlerV2 {
                 contentPackSet.getContent().forEach((entryPath, type) -> {
                     switch (type) {
                         case BLOCKSIGNAL:
-                            loadSignal(zip, entryPath, contentPack);
+                            loadSignal(zip, entryPath, contentPack, isUTF8);
                             break;
                         case BLOCKSIGN:
-                            loadSign(zip, entryPath, contentPack);
+                            loadSign(zip, entryPath, contentPack, isUTF8);
                             break;
                         case BLOCKSIGNALBOX:
-                            loadSignalbox(zip, entryPath, contentPack);
+                            loadSignalbox(zip, entryPath, contentPack, isUTF8);
                             break;
                         case BLOCKDECO:
-                            loadDeco(zip, entryPath, contentPack);
+                            loadDeco(zip, entryPath, contentPack, isUTF8);
                             break;
                         default:
                             ModCore.error("Type %s is currently not implemented in V2!", type.name());

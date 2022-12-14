@@ -33,6 +33,7 @@ message.landofsignals:item.signalanimated=§4Dieses Item ist derzeit nicht verf�
 message.landogsignals:signs.writeable=Beschriftbar: %s
 message.landofsignals:true=§aJa
 message.landofsignals:false=§cNein
+message.landofsignals:non.utf.eight.items=§6WARNUNG: §eDieses Item wurde mit ISO_8859_1 dekodiert anstatt mit UTF-8 aufgrund illegaler Zeichen. Dieses Item funktioniert eventuell nicht wie angedacht.
 
 label.landofsignals:signtexteditor.savebutton=Speichern
 

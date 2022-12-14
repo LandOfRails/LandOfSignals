@@ -28,7 +28,7 @@ public class ContentPackHandlerV1 {
 
     }
 
-    public static void load(ZipFile zip, String name) throws IOException {
+    public static void load(ZipFile zip, String name, boolean isUTF8) throws IOException {
         ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(name)));
         // @formatter:off
         List<ZipEntry> files = zip.stream().
@@ -37,10 +37,10 @@ public class ContentPackHandlerV1 {
         // @formatter:on
 
         ModCore.info("Content for %s:", contentPack.getId());
-        addSignals(contentPack, files, zip);
+        addSignals(contentPack, files, zip, isUTF8);
     }
 
-    private static void addSignals(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip) throws IOException {
+    private static void addSignals(ContentPackHead contentPack, List<ZipEntry> files, ZipFile zip, boolean isUTF8) throws IOException {
         for (String pathToContentPackSignalSet : contentPack.getSignals()) {
             for (ZipEntry zipEntry : files) {
                 if (zipEntry.getName().equalsIgnoreCase(pathToContentPackSignalSet)) {
@@ -58,7 +58,7 @@ public class ContentPackHandlerV1 {
                                 states.add(0, null);
                                 contentPackSignalPart.setStates(states);
 
-                                convertToV2(contentPackSignalPart, true, new ContentPack(contentPack));
+                                convertToV2(contentPackSignalPart, true, new ContentPack(contentPack), isUTF8);
 
                             }
                         }
@@ -69,7 +69,7 @@ public class ContentPackHandlerV1 {
         }
     }
 
-    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation, ContentPack contentPack) {
+    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation, ContentPack contentPack, boolean isUTF8) {
 
         // ContentPackSignal
         ContentPackSignal contentPackSignal = new ContentPackSignal();
@@ -77,6 +77,7 @@ public class ContentPackHandlerV1 {
         contentPackSignal.setId(contentPackSignalPart.getId());
         contentPackSignal.setName(contentPackSignalPart.getName());
         contentPackSignal.setMetadata(Collections.singletonMap("addonversion", 1));
+        contentPackSignal.setUTF8(isUTF8);
 
         // ContentPackSignalGroup
         ContentPackSignalGroup contentPackSignalGroup = new ContentPackSignalGroup();

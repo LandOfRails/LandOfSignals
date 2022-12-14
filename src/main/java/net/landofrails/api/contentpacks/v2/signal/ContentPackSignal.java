@@ -35,6 +35,7 @@ public class ContentPackSignal {
     // Processed data
     private Map<String, Set<String>> objTextures;
     private String uniqueId;
+    private Boolean isUTF8;
 
 
     public ContentPackSignal() {
@@ -51,6 +52,7 @@ public class ContentPackSignal {
         this.itemGroupStates = itemGroupStates;
         this.references = references;
         this.metadata = metadata;
+        this.isUTF8 = true;
     }
 
     public String getName() {
@@ -159,6 +161,8 @@ public class ContentPackSignal {
             joiner.add("id");
         if (signals == null || signals.isEmpty())
             joiner.add("signals");
+        if (isUTF8 == null)
+            joiner.add("isUTF8");
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else {
@@ -261,4 +265,11 @@ public class ContentPackSignal {
         }
     }
 
+    public boolean isUTF8() {
+        return isUTF8;
+    }
+
+    public void setUTF8(boolean isUTF8) {
+        this.isUTF8 = isUTF8;
+    }
 }

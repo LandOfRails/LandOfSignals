@@ -9,6 +9,7 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.text.PlayerMessage;
+import cam72cam.mod.text.TextUtil;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -35,6 +36,7 @@ public class ItemSignalPart extends CustomItem {
     }
 
     private static final String ITEMIDKEY = "itemId";
+    private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
@@ -144,6 +146,13 @@ public class ItemSignalPart extends CustomItem {
             } else {
                 tooltips.add("ID: " + itemId);
             }
+
+            boolean isUTF8 = LOSBlocks.BLOCK_SIGNAL_PART.isUTF8(itemId);
+            if (!isUTF8) {
+                tooltips.add("");
+                tooltips.add(TextUtil.translate(MSG_NOT_UTF8));
+            }
+
         }
         return tooltips;
     }

@@ -57,4 +57,8 @@ public class BlockSignalBox extends BlockTypeEntity {
     public void setId(String id) {
         this.id = id;
     }
+
+    public boolean isUTF8(String itemId) {
+        return contentPackSignalboxes.get(checkIfMissing(itemId)).isUTF8();
+    }
 }

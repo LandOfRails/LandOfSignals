@@ -60,4 +60,8 @@ public class BlockDeco extends BlockTypeEntity {
     public float getRotationSteps(String itemId) {
         return contentPackDeco.get(checkIfMissing(itemId)).getRotationSteps();
     }
+
+    public boolean isUTF8(String itemId) {
+        return contentPackDeco.get(checkIfMissing(itemId)).isUTF8();
+    }
 }

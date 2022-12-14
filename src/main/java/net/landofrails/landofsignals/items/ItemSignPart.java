@@ -29,6 +29,7 @@ public class ItemSignPart extends CustomItem {
     private static final String MSG_LOS_SIGNS_WRITEABLE = "message.landogsignals:signs.writeable";
     private static final String MSG_LOS_TRUE = "message.landofsignals:true";
     private static final String MSG_LOS_FALSE = "message.landofsignals:false";
+    private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
 
     public ItemSignPart(String modID, String name) {
         super(modID, name);
@@ -99,6 +100,13 @@ public class ItemSignPart extends CustomItem {
             boolean writeable = LOSBlocks.BLOCK_SIGN_PART.isWritable(itemId);
             String writeableRawText = TextUtil.translate(writeable ? MSG_LOS_TRUE : MSG_LOS_FALSE);
             tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, new Object[]{writeableRawText}));
+
+            boolean isUTF8 = LOSBlocks.BLOCK_SIGN_PART.isUTF8(itemId);
+            if (!isUTF8) {
+                tooltips.add("");
+                tooltips.add(TextUtil.translate(MSG_NOT_UTF8));
+            }
+
         }
         return tooltips;
     }
