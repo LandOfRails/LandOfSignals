@@ -52,7 +52,6 @@ public class ContentPackSignal {
         this.itemGroupStates = itemGroupStates;
         this.references = references;
         this.metadata = metadata;
-        this.isUTF8 = true;
     }
 
     public String getName() {
