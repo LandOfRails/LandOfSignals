@@ -31,6 +31,7 @@ public class ContentPackSign {
     // Processed data
     private Map<String, Set<String>> objTextures;
     private String uniqueId;
+    private Boolean isUTF8;
 
     public String getName() {
         return name;
@@ -140,6 +141,8 @@ public class ContentPackSign {
             joiner.add("name");
         if (id == null)
             joiner.add("id");
+        if (isUTF8 == null)
+            joiner.add("isUTF8");
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else if (!base.isEmpty()) {
@@ -197,4 +200,11 @@ public class ContentPackSign {
         }
     }
 
+    public void setUTF8(boolean isUTF8) {
+        this.isUTF8 = isUTF8;
+    }
+
+    public boolean isUTF8() {
+        return isUTF8;
+    }
 }

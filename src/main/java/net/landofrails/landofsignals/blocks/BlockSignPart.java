@@ -62,4 +62,8 @@ public class BlockSignPart extends BlockTypeEntity {
     public float getRotationSteps(String itemId) {
         return contentPackSigns.get(checkIfMissing(itemId)).getRotationSteps();
     }
+
+    public boolean isUTF8(String itemId) {
+        return contentPackSigns.get(checkIfMissing(itemId)).isUTF8();
+    }
 }

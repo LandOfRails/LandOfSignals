@@ -380,11 +380,12 @@ public class LOSBlocks {
                 null,
                 null
         );
+        stellwandMultisignal.setUTF8(true);
         registerStellwandContent(stellwandMultisignal);
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
-        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false, CONTENTPACK);
+        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false, CONTENTPACK, true);
     }
 
     private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models) {
@@ -393,6 +394,7 @@ public class LOSBlocks {
         contentPackSign.setName(name);
         contentPackSign.setWriteable(writable);
         contentPackSign.setBase(models);
+        contentPackSign.setUTF8(true);
 
         contentPackSign.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
@@ -406,6 +408,7 @@ public class LOSBlocks {
         contentPackDeco.setId(id);
         contentPackDeco.setName(name);
         contentPackDeco.setBase(models);
+        contentPackDeco.setUTF8(true);
 
         contentPackDeco.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
@@ -420,6 +423,7 @@ public class LOSBlocks {
         contentPackDeco.setName(name);
         contentPackDeco.setBase(models);
         contentPackDeco.setRotationSteps(90f);
+        contentPackDeco.setUTF8(true);
 
         contentPackDeco.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
@@ -437,19 +441,19 @@ public class LOSBlocks {
         );
         Map<String, ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new ContentPackSignalGroup("default", states));
 
-        registerStellwandContent(
-                new ContentPackSignal(
-                        name,
-                        id,
-                        90f,
-                        LOSTabs.SIGNALS_TAB,
-                        signalModels(objPath, "general"),
-                        group,
-                        Collections.singletonMap(groupIdName, itemGroup),
-                        null,
-                        null
-                )
+        ContentPackSignal contentPackSignal = new ContentPackSignal(
+                name,
+                id,
+                90f,
+                LOSTabs.SIGNALS_TAB,
+                signalModels(objPath, "general"),
+                group,
+                Collections.singletonMap(groupIdName, itemGroup),
+                null,
+                null
         );
+        contentPackSignal.setUTF8(true);
+        registerStellwandContent(contentPackSignal);
     }
 
     private static void registerStellwandContent(ContentPackSignal contentPackSignal) {
@@ -466,6 +470,7 @@ public class LOSBlocks {
         contentPackSignalbox.setName(name);
         contentPackSignalbox.setBase(models);
         contentPackSignalbox.setRotationSteps(45f);
+        contentPackSignalbox.setUTF8(true);
 
         contentPackSignalbox.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
