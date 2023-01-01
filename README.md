@@ -11,6 +11,8 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/landofrails/landofsignals/badge)](https://www.codefactor.io/repository/github/landofrails/landofsignals)
 [![wakatime](https://wakatime.com/badge/github/LandOfRails/LandOfSignals.svg)](https://wakatime.com/badge/github/LandOfRails/LandOfSignals)
 
+❗️All listed minecraft versions are still supported and up to date❗️
+
 ### This mod _requires_ [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 Author: [MarkenJaden](https://github.com/MarkenJaden)
