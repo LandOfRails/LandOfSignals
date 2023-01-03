@@ -12,6 +12,9 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.gui.GuiText;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.text.MessageFormat;
 import java.util.function.Supplier;
 
 public class GuiNewState implements IScreen {
@@ -38,9 +41,12 @@ public class GuiNewState implements IScreen {
             public void onClick(Player.Hand hand) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setMultiSelectionEnabled(true);
+                chooser.setFileFilter(new OBJFileFilter());
                 int returnVal = chooser.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    chooser.getSelectedFiles();
+                    File[] files = chooser.getSelectedFiles();
+                    for (File file : files)
+                        System.out.println(MessageFormat.format("{0} - Dir: {1}, File: {2}", file.getName(), file.isDirectory(), file.isFile()));
                 }
             }
         };
@@ -74,5 +80,22 @@ public class GuiNewState implements IScreen {
         GUI.get().open(player);
         GuiNewState.signal = signal;
         GuiNewState.stateId = stateId;
+    }
+
+    private static class OBJFileFilter extends FileFilter {
+
+        @Override
+        public boolean accept(final File file) {
+            if (file.isDirectory())
+                return true;
+
+            final String name = file.getName();
+            return name.endsWith(".obj") || name.endsWith(".mtl") || name.endsWith(".png");
+        }
+
+        @Override
+        public String getDescription() {
+            return OBJFileFilter.class.getName();
+        }
     }
 }
