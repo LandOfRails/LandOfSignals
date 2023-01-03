@@ -9,6 +9,7 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSTabs;
+import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ItemCreator extends CustomItem {
             }
             final OBJModel model;
             try {
-                model = new OBJModel(new Identifier(path), 0);
+                model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
