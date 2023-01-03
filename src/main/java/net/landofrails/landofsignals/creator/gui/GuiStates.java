@@ -21,8 +21,8 @@ public class GuiStates implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        statesTextField = new TextField(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 100, 100, 20);
-        Button createStateButton = new Button(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() - 100, GuiText.LABEL_CREATOR_CREATE.toString()) {
+        statesTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
+        new Button(screen, 0 - 100, -24 + 2 * 22, 200, 20, GuiText.LABEL_CREATOR_CREATE.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 GuiNewState.open(MinecraftClient.getPlayer(), signal, statesTextField.getText());

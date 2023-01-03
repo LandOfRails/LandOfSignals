@@ -31,7 +31,7 @@ public class ContentPackHandler {
         if (assetFolder.exists()) {
             LandOfSignals.info("Searching for assets..");
 
-            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
+            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip") && !name.startsWith("temp_"));
 
             if (assets == null || assets.length == 0) {
                 LandOfSignals.info("No assets found.");

@@ -27,13 +27,10 @@ public class GuiNameId implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        nameTextField = new TextField(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 100, 100, 20);
-        idTextField = new TextField(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2, 100, 20);
+        nameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
+        idTextField = new TextField(screen, 0 - 100, -24 + 3 * 22, 200, 20);
 
-        screen.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 120, 0xffffff);
-        screen.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 20, 0xffffff);
-
-        Button confirmButton = new Button(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() - 100, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
+        new Button(screen, 0 - 100, -24 + 4 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 if (entryType == EntryType.BLOCKSIGNAL) {
