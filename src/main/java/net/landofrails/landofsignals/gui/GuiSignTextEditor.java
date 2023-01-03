@@ -34,6 +34,7 @@ public class GuiSignTextEditor implements IScreen {
         TextField textField = new TextField(screen, -100, 25, 200, 20);
         textField.setText(prevText != null ? prevText : "");
         textField.setFocused(true);
+
         new Button(screen, -100, 55, 200, 20, TextUtil.translate(SAVEBUTTONLABELKEY)) {
             @Override
             public void onClick(Player.Hand hand) {
