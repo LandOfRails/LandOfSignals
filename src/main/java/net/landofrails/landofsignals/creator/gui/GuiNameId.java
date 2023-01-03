@@ -31,8 +31,8 @@ public class GuiNameId implements IScreen {
         nameTextField = new TextField(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 100, 100, 20);
         idTextField = new TextField(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2, 100, 20);
 
-        GUIHelpers.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 120, 0xffffff);
-        GUIHelpers.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 20, 0xffffff);
+        screen.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 120, 0xffffff);
+        screen.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2 - 20, 0xffffff);
 
         Button confirmButton = new Button(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() - 100, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override

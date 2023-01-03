@@ -3,7 +3,8 @@ package net.landofrails.landofsignals.commands;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.text.Command;
 import cam72cam.mod.text.PlayerMessage;
-import net.landofrails.landofsignals.creator.gui.Test;
+import net.landofrails.api.contentpacks.v2.EntryType;
+import net.landofrails.landofsignals.packet.CreatorPacket;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -41,40 +42,41 @@ public class CreatorCommand extends Command {
         if (args.length != 1) {
             return false;
         }
-        Test.open(player.get());
 
-//        if (!player.isPresent()) {
-//            sender.accept(PlayerMessage.direct("Only the player is allowed to enter this command!"));
-//            return true;
-//        }
-//
-//        Player realPlayer = player.get();
-//
-//        switch (args[0].toUpperCase()) {
-//            case "SIGNAL":
-//                GuiNameId.open(realPlayer, EntryType.BLOCKSIGNAL);
-//                break;
-//            case "SIGNALBOX":
-//                sender.accept(PlayerMessage.direct("Signalbox is currently not available."));
-//                break;
-//            case "SIGN":
-//                sender.accept(PlayerMessage.direct("Sign is currently not available."));
-//                break;
-//            case "ASSET":
-//            case "DECO":
-//                sender.accept(PlayerMessage.direct("Deco is currently not available."));
-//                break;
-//            case "HELP":
-//            case "WIKI":
-//            case "DOCU":
-//            case "DOCUMENTATION":
-//                sender.accept(PlayerMessage.direct("You can find more information in our github wiki:"));
-//                sender.accept(PlayerMessage.url(LANDOFSIGNALS_WIKI));
-//                break;
-//            default:
-//                return false;
-//        }
-//
+        if (!player.isPresent()) {
+            sender.accept(PlayerMessage.direct("Only the player is allowed to enter this command!"));
+            return true;
+        }
+
+        if (!player.get().getWorld().isServer) {
+            return true;
+        }
+
+        switch (args[0].toUpperCase()) {
+            case "SIGNAL":
+                CreatorPacket.sendToPlayer(player.get(), EntryType.BLOCKSIGNAL);
+                break;
+            case "SIGNALBOX":
+                sender.accept(PlayerMessage.direct("Signalbox is currently not available."));
+                break;
+            case "SIGN":
+                sender.accept(PlayerMessage.direct("Sign is currently not available."));
+                break;
+            case "ASSET":
+            case "DECO":
+                sender.accept(PlayerMessage.direct("Deco is currently not available."));
+                break;
+            case "HELP":
+            case "WIKI":
+            case "DOCU":
+            case "DOCUMENTATION":
+                sender.accept(PlayerMessage.direct("You can find more information in our github wiki:"));
+                sender.accept(PlayerMessage.url(LANDOFSIGNALS_WIKI));
+                break;
+            default:
+                return false;
+        }
+
         return true;
     }
 

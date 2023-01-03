@@ -68,6 +68,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
+            Packet.register(CreatorPacket::new, PacketDirection.ServerToClient);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
