@@ -2,7 +2,6 @@ package net.landofrails.landofsignals.creator.gui;
 
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.GuiRegistry;
-import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
@@ -29,14 +28,11 @@ public class GuiNewState implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
 
-        final int width = GUIHelpers.getScreenWidth();
-        final int height = GUIHelpers.getScreenHeight();
-
         // Wir wollen einen Statenamen (Signalname)
-        stateNameTextField = new TextField(screen, width / 2, height / 2 - 100, 100, 20);
+        stateNameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
 
         // Wir wollen die OBJ
-        Button loadOBJButton = new Button(screen, width / 2, height / 2, GuiText.LABEL_CREATOR_LOADOBJ.toString()) {
+        new Button(screen, 0 - 100, -24 + 2 * 22, 200, 20, GuiText.LABEL_CREATOR_LOADOBJ.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
                 JFileChooser chooser = new JFileChooser();
@@ -51,9 +47,16 @@ public class GuiNewState implements IScreen {
             }
         };
 
-        stateTextureTextField = new TextField(screen, width / 2, height / 2 - 200, 100, 20);
-
         // Wir wollen die Texturen
+        stateTextureTextField = new TextField(screen, 0 - 100, -24 + 5 * 22, 200, 20);
+
+        new Button(screen, 0 - 100, -24 + 7 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
+            @Override
+            public void onClick(Player.Hand hand) {
+
+            }
+        };
+
         // Wir wollen die OBJ-Gruppen ?
         // Wir wollen die Translation ?
         // Wir wollen die Rotation ?
@@ -73,7 +76,8 @@ public class GuiNewState implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
-
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_TEXTURE.toString(), 0, -24 + 4 * 22 + 10, 0xffffff);
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_STATENAME.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
     }
 
     public static void open(Player player, ContentPackSignal signal, String stateId) {
@@ -90,7 +94,7 @@ public class GuiNewState implements IScreen {
                 return true;
 
             final String name = file.getName();
-            return name.endsWith(".obj") || name.endsWith(".mtl") || name.endsWith(".png");
+            return name.endsWith(".obj") || name.endsWith(".mtl") || name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg");
         }
 
         @Override

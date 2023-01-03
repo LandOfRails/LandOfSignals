@@ -3,7 +3,6 @@ package net.landofrails.landofsignals.creator.gui;
 import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.GuiRegistry;
-import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
@@ -57,7 +56,8 @@ public class GuiNameId implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
-
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), 0, -24 + 2 * 22 + 10, 0xffffff);
     }
 
     private ContentPackSignal getGenericContentPackSignal(String id, String name) {

@@ -3,7 +3,6 @@ package net.landofrails.landofsignals.creator.gui;
 import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.GuiRegistry;
-import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
@@ -30,13 +29,11 @@ public class GuiStates implements IScreen {
             }
         };
 
-        String states = String.join("\n", signal.getSignals().get("default").getStates().keySet());
-        GUIHelpers.drawCenteredString(states, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() / 2, 0xffffff);
-
-        Button confirmButton = new Button(screen, GUIHelpers.getScreenWidth() / 2, GUIHelpers.getScreenHeight() - 100, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
+        if (signal.getSignals().get("default").getStates() == null) return;
+        new Button(screen, 0 - 100, -24 + 5 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
-                //TODO Create zip file
+                //TODO Create final content pack zip file
             }
         };
     }
@@ -53,11 +50,15 @@ public class GuiStates implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_CREATESTATE.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
 
+        if (signal.getSignals().get("default").getStates() == null) return;
+        String states = String.join("\n", signal.getSignals().get("default").getStates().keySet());
+        builder.drawCenteredString(states, 0, -24 + 3 * 22 + 10, 0xffffff);
     }
 
     public static void open(Player player, ContentPackSignal signal) {
-        GUI.get().open(player);
         GuiStates.signal = signal;
+        GUI.get().open(player);
     }
 }
