@@ -22,7 +22,14 @@ public enum GuiText {
     LABEL_LEGACYMODE_OFF("legacymode.off.label"),
     LABEL_LEGACYMODE_OFF_DESCRIPTION("legacymode.off.description"),
     LABEL_LEGACYMODE_ON("legacymode.on.label"),
-    LABEL_LEGACYMODE_ON_DESCRIPTION("legacymode.on.description");
+    LABEL_LEGACYMODE_ON_DESCRIPTION("legacymode.on.description"),
+
+    //CREATOR
+    LABEL_CREATOR_NAME("creator.name"),
+    LABEL_CREATOR_ID("creator.id"),
+    LABEL_CREATOR_CONFIRM("creator.confirm"),
+    LABEL_CREATOR_CREATE("creator.create"),
+    LABEL_CREATOR_LOADOBJ("creator.loadobj");
 
     private final String value;
 

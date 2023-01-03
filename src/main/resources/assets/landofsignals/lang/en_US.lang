@@ -16,6 +16,10 @@ gui.landofsignals:legacymode.off.label=Legacymode: Off
 gui.landofsignals:legacymode.off.description=Uses order from contentpack
 gui.landofsignals:legacymode.on.label=Legacymode: On
 gui.landofsignals:legacymode.on.description=Uses last set signal
+gui.landofsignals:creator.name=Content name
+gui.landofsignals:creator.id=Content id
+gui.landofsignals:creator.confirm=Confirm
+gui.landofsignals:creator.loadobj=Select a .obj file
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signal Lever

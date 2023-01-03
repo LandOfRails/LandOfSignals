@@ -16,6 +16,11 @@ gui.landofsignals:legacymode.off.label=Legacymode: Aus
 gui.landofsignals:legacymode.off.description=Nutzt Reihenfolge vom Contentpack
 gui.landofsignals:legacymode.on.label=Legacymode: An
 gui.landofsignals:legacymode.on.description=Nutzt das letzte gesetzte Signal
+gui.landofsignals:creator.name=Content name
+gui.landofsignals:creator.id=Content id
+gui.landofsignals:creator.confirm=Bestätigen
+gui.landofsignals:creator.create=Erstellen
+gui.landofsignals:creator.loadobj=Wähle eine .obj Datei aus
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signalhebel
