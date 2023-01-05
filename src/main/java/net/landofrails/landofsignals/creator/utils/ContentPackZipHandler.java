@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ContentPackZipHandler {
 
-    private ContentPackZipHandler() {
+    private File contentPackZipFile = null;
 
+    private ContentPackZipHandler(File contentPackZipFile) {
+        this.contentPackZipFile = contentPackZipFile;
     }
 
     public static Optional<ContentPackZipHandler> getInstanceOrCreate(String packName) {
@@ -31,19 +34,21 @@ public class ContentPackZipHandler {
 
         if (!target.exists()) {
             // Create empty ZIP
+            // Create assets/landofsignals folders
             try {
-                ZipOutputStream zipStream = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)));
-                zipStream.close();
+                try (ZipOutputStream zipStream = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
+                    zipStream.putNextEntry(new ZipEntry("ignore.me"));
+                    zipStream.putNextEntry(new ZipEntry("assets/"));
+                    zipStream.putNextEntry(new ZipEntry("assets/landofsignals/"));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        // Create ZIP
-        // Create assets/landofsignals folders
         // Create ignore file
 
-        return null;
+        return new ContentPackZipHandler(target);
     }
 
     // Creates contentpacks

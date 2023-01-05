@@ -7,10 +7,12 @@ import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
+import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSGuis;
+import net.landofrails.landofsignals.creator.utils.ContentPackZipHandler;
 import net.landofrails.landofsignals.gui.GuiText;
 
 import java.util.Collections;
@@ -33,8 +35,16 @@ public class GuiNameId implements IScreen {
         new Button(screen, 0 - 100, -24 + 4 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
+                String idText = idTextField.getText();
+                String nameText = nameTextField.getText();
+                if (idText.length() < 3 || nameText.length() < 3) {
+                    MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("id and name need to be atleast 3 characters"));
+                    return;
+                }
+
                 if (entryType == EntryType.BLOCKSIGNAL) {
                     ContentPackSignal signal = getGenericContentPackSignal(idTextField.getText(), nameTextField.getText());
+                    ContentPackZipHandler.getInstanceOrCreate(nameTextField.getText());
                     GuiStates.open(MinecraftClient.getPlayer(), signal);
                 }
             }

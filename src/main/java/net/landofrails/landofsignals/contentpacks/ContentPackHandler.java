@@ -58,7 +58,7 @@ public class ContentPackHandler {
 
             List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
 
-            if (files.stream().anyMatch(f -> f.getName().contains("ignore"))) {
+            if (files.stream().anyMatch(f -> f.getName().contains("ignore.me"))) {
                 return;
             }
 
