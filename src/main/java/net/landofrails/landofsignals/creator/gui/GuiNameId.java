@@ -24,27 +24,27 @@ public class GuiNameId implements IScreen {
 
     private static EntryType entryType;
 
-    private TextField nameTextField;
-    private TextField idTextField;
+    private TextField signalNameTextField;
+    private TextField signalIdTextField;
 
     @Override
     public void init(IScreenBuilder screen) {
-        nameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
-        idTextField = new TextField(screen, 0 - 100, -24 + 3 * 22, 200, 20);
+        signalNameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
+        signalIdTextField = new TextField(screen, 0 - 100, -24 + 3 * 22, 200, 20);
 
         new Button(screen, 0 - 100, -24 + 4 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
-                String idText = idTextField.getText();
-                String nameText = nameTextField.getText();
-                if (idText.length() < 3 || nameText.length() < 3) {
+                String signalIdText = signalIdTextField.getText();
+                String signalNameText = signalNameTextField.getText();
+                if (signalIdText.length() < 3 || signalNameText.length() < 3) {
                     MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("id and name need to be atleast 3 characters"));
                     return;
                 }
 
                 if (entryType == EntryType.BLOCKSIGNAL) {
-                    ContentPackSignal signal = getGenericContentPackSignal(idTextField.getText(), nameTextField.getText());
-                    ContentPackZipHandler.getInstanceOrCreate(nameTextField.getText());
+                    ContentPackSignal signal = getGenericContentPackSignal(signalIdText, signalNameText);
+                    ContentPackZipHandler.getInstanceOrCreate(signalNameText, signalIdText);
                     GuiStates.open(MinecraftClient.getPlayer(), signal);
                 }
             }
