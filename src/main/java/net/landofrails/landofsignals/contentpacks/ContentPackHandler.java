@@ -31,7 +31,7 @@ public class ContentPackHandler {
         if (assetFolder.exists()) {
             LandOfSignals.info("Searching for assets..");
 
-            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip") && !name.startsWith("temp_"));
+            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
 
             if (assets == null || assets.length == 0) {
                 LandOfSignals.info("No assets found.");
@@ -57,6 +57,10 @@ public class ContentPackHandler {
         try (ZipFile zip = new ZipFile(asset, charset)) {
 
             List<ZipEntry> files = zip.stream().filter(not(ZipEntry::isDirectory)).collect(Collectors.toList());
+
+            if (files.stream().anyMatch(f -> f.getName().contains("ignore"))) {
+                return;
+            }
 
             // File.getName() returns full qualified name
             Optional<ZipEntry> landofsignalsJson = files.stream().filter(f -> f.getName().endsWith("landofsignals.json"))
