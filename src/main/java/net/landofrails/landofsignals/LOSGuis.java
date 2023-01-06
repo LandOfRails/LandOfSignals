@@ -5,11 +5,13 @@ import cam72cam.mod.gui.GuiRegistry;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.creator.gui.GuiNameId;
 import net.landofrails.landofsignals.creator.gui.GuiNewState;
+import net.landofrails.landofsignals.creator.gui.GuiSelectContentpack;
 import net.landofrails.landofsignals.creator.gui.GuiStates;
 import net.landofrails.landofsignals.gui.*;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 
 public class LOSGuis {
+
 
     private LOSGuis() {
 
@@ -22,6 +24,8 @@ public class LOSGuis {
     public static final GuiRegistry.GUI LEGACYMODE_SELECTOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "LEGACYMODE_SELECTER"), GuiLegacyModeSelection::new);
     public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipualtor::new);
     public static final GuiRegistry.GUI SIGN_TEXTEDITOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_TEXTEDTIOR"), GuiSignTextEditor::new);
+
+    public static final GuiRegistry.GUI CREATOR_SELECT_CONTENTPACK = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_SELECT_CONTENTPACK"), GuiSelectContentpack::new);
     public static final GuiRegistry.GUI CREATOR_NAME_ID = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NAME_ID"), GuiNameId::new);
     public static final GuiRegistry.GUI CREATOR_STATES = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_STATES"), GuiStates::new);
     public static final GuiRegistry.GUI CREATOR_NEWSTATE = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NEWSTATE"), GuiNewState::new);

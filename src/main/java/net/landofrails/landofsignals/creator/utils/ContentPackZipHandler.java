@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.creator.utils;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
@@ -66,7 +67,7 @@ public class ContentPackZipHandler {
             return Optional.empty();
 
         for (File contentPackFile : contentpacks) {
-            try (ZipFile zipFile = new ZipFile(contentPackFile)) {
+            try (ZipFile zipFile = new ZipFile(contentPackFile, StandardCharsets.UTF_8)) {
 
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
 

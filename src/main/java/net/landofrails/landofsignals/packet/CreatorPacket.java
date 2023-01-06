@@ -5,7 +5,7 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.api.contentpacks.v2.EntryType;
-import net.landofrails.landofsignals.creator.gui.GuiNameId;
+import net.landofrails.landofsignals.creator.gui.GuiSelectContentpack;
 
 public class CreatorPacket extends Packet {
 
@@ -28,6 +28,6 @@ public class CreatorPacket extends Packet {
     @Override
     protected void handle() {
 
-        GuiNameId.open(MinecraftClient.getPlayer(), this.entryType);
+        GuiSelectContentpack.open(MinecraftClient.getPlayer(), this.entryType);
     }
 }
