@@ -1,16 +1,24 @@
 package net.landofrails.landofsignals.creator.utils;
 
+import cam72cam.mod.MinecraftClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ContentPackZipHandler {
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private File contentPackZipFile = null;
 
@@ -49,13 +57,18 @@ public class ContentPackZipHandler {
                 zipStream.putNextEntry(new ZipEntry("ignore.me"));
                 zipStream.putNextEntry(new ZipEntry("assets/"));
                 zipStream.putNextEntry(new ZipEntry("assets/landofsignals/"));
+                createLandOfSignalsJson(zipStream, packId, MinecraftClient.getPlayer().internal.getName());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
         return Optional.of(new ContentPackZipHandler(target));
+    }
+
+    public static boolean contentPackFileExists(String packName) {
+        final File assetFolder = new File("./config/landofsignals");
+        return new File(assetFolder, packName + ".zip").exists();
     }
 
     private static Optional<File> tryFindContentPack(String packId) {
@@ -72,17 +85,31 @@ public class ContentPackZipHandler {
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
                 while (entries.hasMoreElements()) {
-                    ZipEntry entry = entries.nextElement();
+                    ZipEntry entry = null;
+                    try {
+                        entry = entries.nextElement();
+                    } catch (IllegalArgumentException illegalArgumentException) {
+                        if ("MALFORMED".equals(illegalArgumentException.getMessage())) {
+                            continue;
+                        }
+                        throw illegalArgumentException;
+                    }
                     if (entry.getName().endsWith("landofsignals.json")) {
-                        ObjectInputStream stream = new ObjectInputStream(zipFile.getInputStream(entry));
-                        ContentPack contentPack = (ContentPack) stream.readObject();
+                        InputStream stream = zipFile.getInputStream(entry);
+
+                        String landofsignalsJson = new BufferedReader(
+                                new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                .lines()
+                                .collect(Collectors.joining("\n"));
+
+                        ContentPack contentPack = GSON.fromJson(landofsignalsJson, ContentPack.class);
                         if (contentPack.getId().equalsIgnoreCase(packId)) {
                             return Optional.of(contentPackFile);
                         }
                     }
                 }
 
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -91,9 +118,18 @@ public class ContentPackZipHandler {
 
     }
 
-    // Creates contentpacks
-    // Loads contentpacks
-    // Modifys contentpacks
+    public static void createLandOfSignalsJson(ZipOutputStream zos, String packId, String author) throws IOException {
+
+        ContentPack contentPack = new ContentPack(packId, author, "1.0", "2", new HashMap<>(), new ArrayList<>());
+        String landOfSignalsJson = GSON.toJson(contentPack);
+
+        ZipEntry zipEntry = new ZipEntry("landofsignals.json");
+        zos.putNextEntry(zipEntry);
+
+        byte[] data = landOfSignalsJson.getBytes();
+        zos.write(data, 0, data.length);
+        zos.closeEntry();
+    }
 
 
 }

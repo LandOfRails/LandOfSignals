@@ -9,19 +9,17 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
 import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.api.contentpacks.v2.EntryType;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.creator.utils.ContentPackZipHandler;
 import net.landofrails.landofsignals.gui.GuiText;
 
-import java.util.Collections;
 import java.util.function.Supplier;
 
 public class GuiNameId implements IScreen {
 
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_NAME_ID;
 
+    private static ContentPackZipHandler zipHandler;
     private static EntryType entryType;
 
     private TextField signalNameTextField;
@@ -43,9 +41,10 @@ public class GuiNameId implements IScreen {
                 }
 
                 if (entryType == EntryType.BLOCKSIGNAL) {
-                    ContentPackSignal signal = getGenericContentPackSignal(signalIdText, signalNameText);
-                    ContentPackZipHandler.getInstanceOrCreate(signalNameText, signalIdText);
-                    GuiStates.open(MinecraftClient.getPlayer(), signal);
+
+                    // Create signal
+
+                    GuiStates.open(MinecraftClient.getPlayer(), zipHandler);
                 }
             }
         };
@@ -63,24 +62,12 @@ public class GuiNameId implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
-        builder.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
+        builder.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), 0, -24 + 10, 0xffffff);
         builder.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), 0, -24 + 2 * 22 + 10, 0xffffff);
     }
 
-    private ContentPackSignal getGenericContentPackSignal(String id, String name) {
-        ContentPackSignal signal = new ContentPackSignal();
-
-        signal.setId(id);
-        signal.setName(name);
-
-        ContentPackSignalGroup group = new ContentPackSignalGroup();
-        group.setGroupName("Default");
-        signal.setSignals(Collections.singletonMap("default", group));
-
-        return signal;
-    }
-
-    public static void open(Player player, EntryType entryType) {
+    public static void open(Player player, ContentPackZipHandler zipHandler, EntryType entryType) {
+        GuiNameId.zipHandler = zipHandler;
         GuiNameId.entryType = entryType;
         GUI.get().open(player);
     }

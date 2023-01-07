@@ -9,6 +9,7 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSGuis;
+import net.landofrails.landofsignals.creator.utils.ContentPackZipHandler;
 import net.landofrails.landofsignals.gui.GuiText;
 
 import java.util.function.Supplier;
@@ -16,11 +17,13 @@ import java.util.function.Supplier;
 public class GuiStates implements IScreen {
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_STATES;
 
-    private static ContentPackSignal signal;
+    private static ContentPackZipHandler zipHandler;
     private TextField statesTextField;
 
     @Override
     public void init(IScreenBuilder screen) {
+        ContentPackSignal signal = null;
+
         statesTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
         new Button(screen, 0 - 100, -24 + 2 * 22, 200, 20, GuiText.LABEL_CREATOR_CREATE.toString()) {
             @Override
@@ -40,7 +43,7 @@ public class GuiStates implements IScreen {
 
     @Override
     public void onEnterKey(IScreenBuilder builder) {
-        GuiNewState.open(MinecraftClient.getPlayer(), signal, statesTextField.getText());
+        GuiNewState.open(MinecraftClient.getPlayer(), null, statesTextField.getText());
     }
 
     @Override
@@ -52,13 +55,15 @@ public class GuiStates implements IScreen {
     public void draw(IScreenBuilder builder) {
         builder.drawCenteredString(GuiText.LABEL_CREATOR_CREATESTATE.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
 
+        ContentPackSignal signal = null;
+
         if (signal.getSignals().get("default").getStates() == null) return;
         String states = String.join("\n", signal.getSignals().get("default").getStates().keySet());
         builder.drawCenteredString(states, 0, -24 + 3 * 22 + 10, 0xffffff);
     }
 
-    public static void open(Player player, ContentPackSignal signal) {
-        GuiStates.signal = signal;
+    public static void open(Player player, ContentPackZipHandler zipHandler) {
+        GuiStates.zipHandler = zipHandler;
         GUI.get().open(player);
     }
 }
