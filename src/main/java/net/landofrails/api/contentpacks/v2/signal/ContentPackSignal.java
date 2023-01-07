@@ -32,6 +32,10 @@ public class ContentPackSignal {
     // metadataId : data
     private Map<String, Object> metadata;
 
+    /**
+     * String: objPath
+     * Stringset: textureNames
+     */
     // Processed data
     private Map<String, Set<String>> objTextures;
     private String uniqueId;

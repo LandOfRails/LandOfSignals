@@ -24,6 +24,8 @@ gui.landofsignals:creator.loadobj=Select one .obj AND .mtl AND textures files
 gui.landofsignals:creator.createstate=Name of new state
 gui.landofsignals:creator.texture=Name of folder with textures
 gui.landofsignals:creator.statename=Name of state (signalname)
+gui.landofsignals:creator.add=Add
+gui.landofsignals:creator.remove=Remove
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signal Lever

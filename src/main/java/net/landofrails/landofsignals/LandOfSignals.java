@@ -15,7 +15,6 @@ import net.landofrails.landofsignals.commands.CreatorCommand;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
-import net.landofrails.landofsignals.items.ItemCreator;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
@@ -107,7 +106,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
                 ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
-                ItemRender.register(LOSItems.ITEM_CREATOR, ItemCreator.getModelFor());
+                ItemRender.register(LOSItems.ITEM_CREATOR, new ItemCreatorRender());
 
                 // Deprecated: Only for compatability - Removes warnings
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);

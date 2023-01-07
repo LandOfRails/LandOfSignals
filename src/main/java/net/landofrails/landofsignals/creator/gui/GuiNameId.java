@@ -22,21 +22,21 @@ public class GuiNameId implements IScreen {
     private static ContentPackZipHandler zipHandler;
     private static EntryType entryType;
 
-    private TextField signalNameTextField;
-    private TextField signalIdTextField;
+    private TextField nameTextField;
+    private TextField idTextField;
 
     @Override
     public void init(IScreenBuilder screen) {
-        signalNameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
-        signalIdTextField = new TextField(screen, 0 - 100, -24 + 3 * 22, 200, 20);
+        nameTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
+        idTextField = new TextField(screen, 0 - 100, -24 + 3 * 22, 200, 20);
 
         new Button(screen, 0 - 100, -24 + 4 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
-                String signalIdText = signalIdTextField.getText();
-                String signalNameText = signalNameTextField.getText();
-                if (signalIdText.length() < 3 || signalNameText.length() < 3) {
-                    MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("id and name need to be atleast 3 characters"));
+                String idText = idTextField.getText();
+                String nameText = nameTextField.getText();
+                if (idText.length() < 3 || nameText.length() < 3) {
+                    MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("id and name need to be at least 3 characters"));
                     return;
                 }
 

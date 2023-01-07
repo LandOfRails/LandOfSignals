@@ -7,6 +7,7 @@ import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
+import cam72cam.mod.item.ItemStack;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.gui.GuiText;
@@ -27,12 +28,6 @@ import java.util.zip.ZipOutputStream;
 public class GuiNewState implements IScreen {
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_NEWSTATE;
 
-    private static ContentPackSignal signal;
-    private static String stateId;
-
-    private TextField stateNameTextField;
-    private TextField stateTextureTextField;
-
     static {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -41,6 +36,13 @@ public class GuiNewState implements IScreen {
             System.out.println(e);
         }
     }
+
+    private static ContentPackSignal signal;
+    private static String stateId;
+
+    private TextField stateNameTextField;
+    private TextField stateTextureTextField;
+    private ItemStack itemStack;
 
     @Override
     public void init(IScreenBuilder screen) {
@@ -64,16 +66,28 @@ public class GuiNewState implements IScreen {
                     }
                     zipFiles(files);
                 }
+
+                //TODO set tags with path information
+//                itemStack = new ItemStack(LOSItems.ITEM_CREATOR, 1);
+//                final TagCompound tag = itemStack.getTagCompound();
+//                tag.setString("path", MISSING);
+//                itemStack.setTagCompound(tag);
             }
         };
 
         // Wir wollen die Texturen
-        stateTextureTextField = new TextField(screen, 0 - 100, -24 + 5 * 22, 200, 20);
+        stateTextureTextField = new TextField(screen, 0 - 200, -24 + 5 * 22, 180, 20);
+        new Button(screen, 0 - 20, -24 + 5 * 22, 180, 20, GuiText.LABEL_CREATOR_ADD.toString()) {
+            @Override
+            public void onClick(Player.Hand hand) {
+
+            }
+        };
 
         new Button(screen, 0 - 100, -24 + 7 * 22, 200, 20, GuiText.LABEL_CREATOR_CONFIRM.toString()) {
             @Override
             public void onClick(Player.Hand hand) {
-
+                //TODO Save and back to GuiStates
             }
         };
 

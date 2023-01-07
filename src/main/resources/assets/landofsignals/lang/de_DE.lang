@@ -24,6 +24,8 @@ gui.landofsignals:creator.loadobj=Wähle eine .obj UND .mtl UND Textur aus
 gui.landofsignals:creator.createstate=Name des Zustandes
 gui.landofsignals:creator.texture=Name des Ordners mit Texturen
 gui.landofsignals:creator.statename=Name des Zustandes (Signalname)
+gui.landofsignals:creator.add=Hinzufügen
+gui.landofsignals:creator.remove=Entfernen
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signalhebel

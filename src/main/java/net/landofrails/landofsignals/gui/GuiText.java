@@ -32,7 +32,9 @@ public enum GuiText {
     LABEL_CREATOR_LOADOBJ("creator.loadobj"),
     LABEL_CREATOR_CREATESTATE("creator.createstate"),
     LABEL_CREATOR_TEXTURE("creator.texture"),
-    LABEL_CREATOR_STATENAME("creator.statename");
+    LABEL_CREATOR_STATENAME("creator.statename"),
+    LABEL_CREATOR_ADD("creator.add"),
+    LABEL_CREATOR_REMOVE("creator.remove");
 
     private final String value;
 
