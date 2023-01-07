@@ -4,13 +4,15 @@ import cam72cam.mod.MinecraftClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPack;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Optional;
+import java.nio.file.FileSystem;
+import java.nio.file.*;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -20,6 +22,7 @@ public class ContentPackZipHandler {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+    private static final File ASSET_FOLDER = new File("./config/landofsignals");
     private File contentPackZipFile = null;
 
     private ContentPackZipHandler(File contentPackZipFile) {
@@ -42,8 +45,7 @@ public class ContentPackZipHandler {
 
     private static Optional<ContentPackZipHandler> create(String packName, String packId) {
 
-        final File assetFolder = new File("./config/landofsignals");
-        final File target = new File(assetFolder, packName + ".zip");
+        final File target = new File(ASSET_FOLDER, packName + ".zip");
 
         if (target.exists()) {
             return Optional.empty();
@@ -52,13 +54,11 @@ public class ContentPackZipHandler {
         // Create empty ZIP
         // Create assets/landofsignals folders
         // Create ignore file
-        try {
-            try (ZipOutputStream zipStream = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-                zipStream.putNextEntry(new ZipEntry("ignore.me"));
-                zipStream.putNextEntry(new ZipEntry("assets/"));
-                zipStream.putNextEntry(new ZipEntry("assets/landofsignals/"));
-                createLandOfSignalsJson(zipStream, packId, MinecraftClient.getPlayer().internal.getGameProfile().getName());
-            }
+        try (ZipOutputStream zipStream = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
+            zipStream.putNextEntry(new ZipEntry("ignore.me"));
+            zipStream.putNextEntry(new ZipEntry("assets/"));
+            zipStream.putNextEntry(new ZipEntry("assets/landofsignals/"));
+            createLandOfSignalsJson(zipStream, packId, MinecraftClient.getPlayer().internal.getGameProfile().getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,14 +67,12 @@ public class ContentPackZipHandler {
     }
 
     public static boolean contentPackFileExists(String packName) {
-        final File assetFolder = new File("./config/landofsignals");
-        return new File(assetFolder, packName + ".zip").exists();
+        return new File(ASSET_FOLDER, packName + ".zip").exists();
     }
 
     private static Optional<File> tryFindContentPack(String packId) {
 
-        final File assetFolder = new File("./config/landofsignals");
-        final File[] contentpacks = assetFolder.listFiles();
+        final File[] contentpacks = ASSET_FOLDER.listFiles();
 
         if (contentpacks == null)
             return Optional.empty();
@@ -132,4 +130,28 @@ public class ContentPackZipHandler {
     }
 
 
+    public void createSignal(String signalIdText, String signalNameText) {
+
+        ContentPackSignal signal = new ContentPackSignal();
+        signal.setId(signalIdText);
+        signal.setName(signalNameText);
+        signal.setSignals(new HashMap<>());
+        signal.setRotationSteps(10f);
+        String signalJson = GSON.toJson(signal);
+
+        Map<String, String> env = Collections.singletonMap("create", "false");
+        URI uri = URI.create("jar:file:" + contentPackZipFile.toURI().getPath());
+        try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
+
+            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalIdText);
+            Path nf = fs.getPath(jsonpath);
+            if (Files.notExists(nf.getParent()))
+                Files.createDirectory(nf.getParent());
+            try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
+                writer.write(signalJson);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
