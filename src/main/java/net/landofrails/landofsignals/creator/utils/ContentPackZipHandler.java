@@ -57,7 +57,7 @@ public class ContentPackZipHandler {
                 zipStream.putNextEntry(new ZipEntry("ignore.me"));
                 zipStream.putNextEntry(new ZipEntry("assets/"));
                 zipStream.putNextEntry(new ZipEntry("assets/landofsignals/"));
-                createLandOfSignalsJson(zipStream, packId, MinecraftClient.getPlayer().internal.getName());
+                createLandOfSignalsJson(zipStream, packId, MinecraftClient.getPlayer().internal.getGameProfile().getName());
             }
         } catch (IOException e) {
             e.printStackTrace();
