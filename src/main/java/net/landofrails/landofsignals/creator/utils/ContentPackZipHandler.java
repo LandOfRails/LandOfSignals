@@ -141,12 +141,14 @@ public class ContentPackZipHandler {
         signal.setRotationSteps(10f);
         String signalJson = GSON.toJson(signal);
 
+        // TODO Create group
+
         newZipFileSystem(fs -> {
             String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
             Path nf = fs.getPath(jsonpath);
+            if (Files.notExists(nf.getParent()))
+                Files.createDirectory(nf.getParent());
             try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
-                if (Files.notExists(nf.getParent()))
-                    Files.createDirectory(nf.getParent());
                 writer.write(signalJson);
             }
         });

@@ -18,12 +18,13 @@ public class GuiStates implements IScreen {
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_STATES;
 
     private static ContentPackZipHandler zipHandler;
+    private static String signalId;
     private TextField statesTextField;
 
     @Override
     public void init(IScreenBuilder screen) {
-        ContentPackSignal signal = null;
-
+        ContentPackSignal signal = zipHandler.getSignal(signalId).orElseThrow(() -> new RuntimeException("Oh oh!"));
+        
         statesTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
         new Button(screen, 0 - 100, -24 + 2 * 22, 200, 20, GuiText.LABEL_CREATOR_CREATE.toString()) {
             @Override
@@ -62,8 +63,9 @@ public class GuiStates implements IScreen {
         builder.drawCenteredString(states, 0, -24 + 3 * 22 + 10, 0xffffff);
     }
 
-    public static void open(Player player, ContentPackZipHandler zipHandler) {
+    public static void open(Player player, ContentPackZipHandler zipHandler, String signalId) {
         GuiStates.zipHandler = zipHandler;
+        GuiStates.signalId = signalId;
         GUI.get().open(player);
     }
 }

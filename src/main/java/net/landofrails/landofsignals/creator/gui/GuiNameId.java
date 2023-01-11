@@ -43,7 +43,7 @@ public class GuiNameId implements IScreen {
                 if (entryType == EntryType.BLOCKSIGNAL) {
 
                     zipHandler.createSignal(idText, nameText);
-                    // GuiStates.open(MinecraftClient.getPlayer(), zipHandler);
+                    GuiStates.open(MinecraftClient.getPlayer(), zipHandler, idText);
                 }
             }
         };
