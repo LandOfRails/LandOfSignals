@@ -13,6 +13,8 @@ import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -130,28 +132,92 @@ public class ContentPackZipHandler {
     }
 
 
-    public void createSignal(String signalIdText, String signalNameText) {
+    public void createSignal(String signalId, String signalName) {
 
         ContentPackSignal signal = new ContentPackSignal();
-        signal.setId(signalIdText);
-        signal.setName(signalNameText);
+        signal.setId(signalId);
+        signal.setName(signalName);
         signal.setSignals(new HashMap<>());
         signal.setRotationSteps(10f);
         String signalJson = GSON.toJson(signal);
 
+        newZipFileSystem(fs -> {
+            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
+            Path nf = fs.getPath(jsonpath);
+            try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
+                if (Files.notExists(nf.getParent()))
+                    Files.createDirectory(nf.getParent());
+                writer.write(signalJson);
+            }
+        });
+    }
+
+    public Optional<ContentPackSignal> getSignal(String signalId) {
+        ContentPackSignal signal = newZipFileSystem(fs -> {
+            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
+            Path nf = fs.getPath(jsonpath);
+            if (Files.exists(nf)) {
+                List<String> lines = Files.readAllLines(nf, StandardCharsets.UTF_8);
+                String allLines = String.join("\n", lines);
+                return GSON.fromJson(allLines, ContentPackSignal.class);
+            }
+            return null;
+        });
+        return Optional.ofNullable(signal);
+    }
+
+    private void newZipFileSystem(IOExceptionConsumer<FileSystem> zipFileSystem) {
         Map<String, String> env = Collections.singletonMap("create", "false");
         URI uri = URI.create("jar:file:" + contentPackZipFile.toURI().getPath());
         try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
-
-            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalIdText);
-            Path nf = fs.getPath(jsonpath);
-            if (Files.notExists(nf.getParent()))
-                Files.createDirectory(nf.getParent());
-            try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
-                writer.write(signalJson);
-            }
+            zipFileSystem.acceptThrows(fs);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private <T> T newZipFileSystem(IOExceptionFunction<FileSystem, T> zipFileSystem) {
+        Map<String, String> env = Collections.singletonMap("create", "false");
+        URI uri = URI.create("jar:file:" + contentPackZipFile.toURI().getPath());
+        try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
+            return zipFileSystem.applyThrows(fs);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @FunctionalInterface
+    private interface IOExceptionConsumer<T> extends Consumer<T> {
+
+        @Override
+        default void accept(T t) {
+            try {
+                acceptThrows(t);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        void acceptThrows(T t) throws IOException;
+
+    }
+
+    @FunctionalInterface
+    private interface IOExceptionFunction<T, R> extends Function<T, R> {
+
+        @Override
+        default R apply(T t) {
+            try {
+                return applyThrows(t);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        R applyThrows(T t) throws IOException;
+
+    }
+
 }
