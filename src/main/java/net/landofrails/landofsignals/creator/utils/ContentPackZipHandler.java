@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 
 import java.io.*;
 import java.net.URI;
@@ -137,11 +138,12 @@ public class ContentPackZipHandler {
         ContentPackSignal signal = new ContentPackSignal();
         signal.setId(signalId);
         signal.setName(signalName);
-        signal.setSignals(new HashMap<>());
+
+        ContentPackSignalGroup group = new ContentPackSignalGroup("default", new LinkedHashMap<>());
+        signal.setSignals(Collections.singletonMap("default", group));
+
         signal.setRotationSteps(10f);
         String signalJson = GSON.toJson(signal);
-
-        // TODO Create group
 
         newZipFileSystem(fs -> {
             String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);

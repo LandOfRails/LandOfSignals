@@ -15,15 +15,8 @@ import net.landofrails.landofsignals.gui.GuiText;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class GuiNewState implements IScreen {
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_NEWSTATE;
@@ -32,7 +25,7 @@ public class GuiNewState implements IScreen {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
-                 InstantiationException e) {
+                InstantiationException e) {
             System.out.println(e);
         }
     }
@@ -64,7 +57,7 @@ public class GuiNewState implements IScreen {
                     for (File file : files) {
                         ModCore.info(MessageFormat.format("{0} - Dir: {1}, File: {2}", file.getName(), file.isDirectory(), file.isFile()));
                     }
-                    zipFiles(files);
+                    // save them
                 }
 
                 //TODO set tags with path information
@@ -134,52 +127,6 @@ public class GuiNewState implements IScreen {
         @Override
         public String getDescription() {
             return "*.obj, *.mtl, *.png, *.jpg, *.jpeg and directories";
-        }
-    }
-
-    private void zipFiles(File[] files) {
-        final File assetFolder = new File("./config/landofsignals");
-        final File zipFile = new File(assetFolder, "temp_" + stateId + ".zip");
-
-        final String pathPrefix = "assets/landofsignals/";
-
-        try (ZipOutputStream zipOut = new ZipOutputStream(Files.newOutputStream(zipFile.toPath()))) {
-            for (File file : files) {
-                zipFile(file, zipOut, pathPrefix);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void zipFile(File file, ZipOutputStream zipOut, String pathPrefix) throws IOException {
-
-        if (file.isDirectory()) {
-            String fileName = pathPrefix + file.getName();
-            if (!fileName.endsWith("/"))
-                fileName += "/";
-            zipOut.putNextEntry(new ZipEntry(fileName));
-
-            for (File subFile : file.listFiles()) {
-                zipFile(subFile, zipOut, fileName);
-            }
-
-            return;
-        }
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-
-            Path targetFile = Paths.get(pathPrefix + file.getName());
-            zipOut.putNextEntry(new ZipEntry(targetFile.toString()));
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = fis.read(buffer)) > 0) {
-                zipOut.write(buffer, 0, len);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

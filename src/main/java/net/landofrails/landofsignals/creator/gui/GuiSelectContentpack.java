@@ -60,7 +60,16 @@ public class GuiSelectContentpack implements IScreen {
 
     @Override
     public void onEnterKey(IScreenBuilder builder) {
-
+        if (!validateName()) {
+            packNameTextField.setFocused(true);
+            packIdTextField.setFocused(false);
+        } else if (!validateId()) {
+            packIdTextField.setFocused(true);
+            packNameTextField.setFocused(false);
+        } else {
+            packIdTextField.setFocused(false);
+            packNameTextField.setFocused(false);
+        }
     }
 
     @Override

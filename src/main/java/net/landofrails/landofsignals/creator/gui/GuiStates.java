@@ -24,7 +24,7 @@ public class GuiStates implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
         ContentPackSignal signal = zipHandler.getSignal(signalId).orElseThrow(() -> new RuntimeException("Oh oh!"));
-        
+
         statesTextField = new TextField(screen, 0 - 100, -24 + 1 * 22, 200, 20);
         new Button(screen, 0 - 100, -24 + 2 * 22, 200, 20, GuiText.LABEL_CREATOR_CREATE.toString()) {
             @Override
@@ -56,7 +56,7 @@ public class GuiStates implements IScreen {
     public void draw(IScreenBuilder builder) {
         builder.drawCenteredString(GuiText.LABEL_CREATOR_CREATESTATE.toString(), 0, -24 + 0 * 22 + 10, 0xffffff);
 
-        ContentPackSignal signal = null;
+        ContentPackSignal signal = zipHandler.getSignal(signalId).orElseThrow(() -> new RuntimeException("Oh oh!"));
 
         if (signal.getSignals().get("default").getStates() == null) return;
         String states = String.join("\n", signal.getSignals().get("default").getStates().keySet());
