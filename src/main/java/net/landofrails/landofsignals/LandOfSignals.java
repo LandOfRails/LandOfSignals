@@ -10,10 +10,10 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
-import cam72cam.mod.text.Command;
-import net.landofrails.landofsignals.commands.CreatorCommand;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
+import net.landofrails.landofsignals.creator.content.CreatorBlock;
+import net.landofrails.landofsignals.creator.content.CreatorItem;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
@@ -67,7 +67,6 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
-            Packet.register(CreatorPacket::new, PacketDirection.ServerToClient);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -99,6 +98,7 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGN_PART, TileSignPartRender::render, TileSignPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_CREATOR, CreatorBlock.CreatorRender::render, CreatorBlock.CreatorTile.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, new ItemSignalPartRender());
@@ -106,15 +106,12 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
                 ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
-                ItemRender.register(LOSItems.ITEM_CREATOR, new ItemCreatorRender());
+                ItemRender.register(LOSItems.ITEM_CREATOR, new CreatorItem.CreatorRender());
 
                 // Deprecated: Only for compatability - Removes warnings
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileMissingRender::render, TileTicketMachineDB.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileMissingRender::render, TileTicketMachineSBB.class);
-
-
-                Command.register(new CreatorCommand());
 
                 break;
             case SETUP:

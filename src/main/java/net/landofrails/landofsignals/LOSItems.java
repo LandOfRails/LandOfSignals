@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals;
 
+import net.landofrails.landofsignals.creator.content.CreatorItem;
 import net.landofrails.landofsignals.items.*;
 
 public class LOSItems {
@@ -17,7 +18,7 @@ public class LOSItems {
     public static final ItemSignPart ITEM_SIGN_PART = new ItemSignPart(LandOfSignals.MODID, "item_sign");
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemDeco ITEM_DECO = new ItemDeco(LandOfSignals.MODID, "item_deco");
-    public static final ItemCreator ITEM_CREATOR = new ItemCreator(LandOfSignals.MODID, "item_creator");
+    public static final CreatorItem ITEM_CREATOR = new CreatorItem(LandOfSignals.MODID, "item_creator");
 
     public static void register() {
         // loads static classes and ctrs

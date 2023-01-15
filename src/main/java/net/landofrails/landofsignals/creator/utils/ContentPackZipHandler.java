@@ -4,6 +4,7 @@ import cam72cam.mod.MinecraftClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPack;
+import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
 
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -132,6 +134,61 @@ public class ContentPackZipHandler {
         zos.closeEntry();
     }
 
+    private Path getLandOfSignalsJson(FileSystem fs) {
+        Path root = fs.getPath("/");
+        final Path[] cp = {null};
+        try {
+            Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                    if (path.endsWith("landofsignals.json")) {
+                        cp[0] = path;
+                    }
+                    return cp[0] == null ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("No landofsignals.json found!", e);
+        }
+        return cp[0];
+    }
+
+    private void addEntryToLandOfSignalsJson(FileSystem fs, String path, EntryType type) throws IOException {
+        Path losJsonPath = getLandOfSignalsJson(fs);
+        List<String> lines = Files.readAllLines(losJsonPath, StandardCharsets.UTF_8);
+        String allLines = String.join("\n", lines);
+        ContentPack cp = GSON.fromJson(allLines, ContentPack.class);
+        cp.getContent().put(path, type);
+        String json = GSON.toJson(cp);
+        try (Writer writer = Files.newBufferedWriter(losJsonPath, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+            writer.write(json);
+        }
+    }
+
+    public Map<String, String> listSignals() {
+        return newZipFileSystem(fs -> {
+            List<String> lines = Files.readAllLines(getLandOfSignalsJson(fs), StandardCharsets.UTF_8);
+            String allLines = String.join("\n", lines);
+            ContentPack cp = GSON.fromJson(allLines, ContentPack.class);
+
+            if (cp.getContent() == null)
+                return Collections.emptyMap();
+            // TODO Contentsets
+            List<String> signalPaths = cp.getContent().entrySet().stream().filter(entry -> entry.getValue() == EntryType.BLOCKSIGNAL).map(Map.Entry::getKey).collect(Collectors.toList());
+            Map<String, String> signals = new HashMap<>();
+            for (String signalPath : signalPaths) {
+                String[] signalPathParts = signalPath.split("/");
+                String signalId = signalPathParts[signalPathParts.length - 1];
+                Optional<ContentPackSignal> signal = getSignal(signalId);
+                signal.ifPresent(s ->
+                        signals.put(signalId, s.getName())
+                );
+                signals.putIfAbsent(signalId, "Not Found! Wrong path?");
+                // TODO We have the signalPath, use it instead of the signalId.
+            }
+            return signals;
+        });
+    }
 
     public void createSignal(String signalId, String signalName) {
 
@@ -147,6 +204,7 @@ public class ContentPackZipHandler {
 
         newZipFileSystem(fs -> {
             String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
+            addEntryToLandOfSignalsJson(fs, jsonpath, EntryType.BLOCKSIGNAL);
             Path nf = fs.getPath(jsonpath);
             if (Files.notExists(nf.getParent()))
                 Files.createDirectory(nf.getParent());

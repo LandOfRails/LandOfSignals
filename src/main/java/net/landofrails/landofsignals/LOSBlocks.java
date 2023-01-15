@@ -12,11 +12,13 @@ import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
+import net.landofrails.landofsignals.creator.content.CreatorBlock;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
 
 public class LOSBlocks {
+
 
     private LOSBlocks() {
 
@@ -28,6 +30,7 @@ public class LOSBlocks {
     public static final BlockTicketMachineSBB BLOCK_TICKET_MACHINE_SBB = new BlockTicketMachineSBB(LandOfSignals.MODID, "BlockTicketMachineSBB");
     public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
     public static final BlockDeco BLOCK_DECO = new BlockDeco(LandOfSignals.MODID, "BlockDeco");
+    public static final CreatorBlock BLOCK_CREATOR = new CreatorBlock(LandOfSignals.MODID, "BlockCreator");
 
     // Contentpack
     private static final ContentPack CONTENTPACK = new ContentPack("LandOfSignals", "LandOfSignals", "1.0", "2", null, null);

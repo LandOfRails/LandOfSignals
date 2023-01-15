@@ -65,10 +65,10 @@ public class GuiNameId implements IScreen {
         builder.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), 0, -24 + 2 * 22 + 10, 0xffffff);
     }
 
-    public static void open(Player player, ContentPackZipHandler zipHandler, EntryType entryType) {
+    public static void open(ContentPackZipHandler zipHandler, EntryType entryType) {
         GuiNameId.zipHandler = zipHandler;
         GuiNameId.entryType = entryType;
-        GUI.get().open(player);
+        GUI.get().open(MinecraftClient.getPlayer());
     }
 
 }
