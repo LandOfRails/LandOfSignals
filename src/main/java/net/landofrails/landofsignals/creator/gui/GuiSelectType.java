@@ -24,7 +24,7 @@ public class GuiSelectType implements IScreen {
         new Button(screen, -100, 40, 100, 20, "Signals") {
             @Override
             public void onClick(Player.Hand hand) {
-                GuiTypeOverview.open(contentPackZipHandler, EntryType.BLOCKSIGNAL);
+                GuiEntryOverview.open(contentPackZipHandler, EntryType.BLOCKSIGNAL);
             }
         };
 

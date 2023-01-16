@@ -23,8 +23,10 @@ public class LOSGuis {
 
     public static final GuiRegistry.GUI CREATOR_SELECT_CONTENTPACK = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_SELECT_CONTENTPACK"), GuiSelectContentpack::new);
     public static final GuiRegistry.GUI CREATOR_SELECT_TYPE = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_SELECT_TYPE"), GuiSelectType::new);
-    public static final GuiRegistry.GUI CREATOR_TYPE_OVERVIEW = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_TYPE_OVERVIEW"), GuiTypeOverview::new);
+    public static final GuiRegistry.GUI CREATOR_ENTRY_OVERVIEW = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_ENTRY_OVERVIEW"), GuiEntryOverview::new);
     public static final GuiRegistry.GUI CREATOR_NAME_ID = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NAME_ID"), GuiNameId::new);
+    public static final GuiRegistry.GUI CREATOR_GROUP_OVERVIEW = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_GROUP_OVERVIEW"), GuiGroupOverview::new);
+
     public static final GuiRegistry.GUI CREATOR_STATES = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_STATES"), GuiStates::new);
     public static final GuiRegistry.GUI CREATOR_NEWSTATE = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NEWSTATE"), GuiNewState::new);
 

@@ -63,9 +63,9 @@ public class GuiStates implements IScreen {
         builder.drawCenteredString(states, 0, -24 + 3 * 22 + 10, 0xffffff);
     }
 
-    public static void open(Player player, ContentPackZipHandler zipHandler, String signalId) {
+    public static void open(ContentPackZipHandler zipHandler, String signalId) {
         GuiStates.zipHandler = zipHandler;
         GuiStates.signalId = signalId;
-        GUI.get().open(player);
+        GUI.get().open(MinecraftClient.getPlayer());
     }
 }
