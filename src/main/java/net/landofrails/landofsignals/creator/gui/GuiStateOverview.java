@@ -9,6 +9,7 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.Slider;
 import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.creator.utils.ContentPackZipHandler;
 
@@ -18,13 +19,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GuiGroupOverview implements IScreen {
-
-    private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_GROUP_OVERVIEW;
+public class GuiStateOverview implements IScreen {
+    private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.CREATOR_STATE_OVERVIEW;
 
     private static ContentPackZipHandler contentPackZipHandler;
     private static String signalId;
-    private static Map<String, String> groups;
+    private static String groupId;
+    private static Map<String, String> states;
 
     private Button[] buttons = new Button[6];
     private Consumer<Integer>[] actions = new Consumer[6];
@@ -35,14 +36,14 @@ public class GuiGroupOverview implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        slider = new Slider(screen, -75, 120, "Index: ", 0, Math.max(0, groups.size() - 5d), entriesIndex, false) {
+        slider = new Slider(screen, -75, 120, "Index: ", 0, Math.max(0, states.size() - 5d), entriesIndex, false) {
             @Override
             public void onSlider() {
                 entriesIndex = slider.getValueInt();
                 updateButtons();
             }
         };
-        slider.setEnabled(groups.size() > 5);
+        slider.setEnabled(states.size() > 5);
 
         for (int i = 0; i < 6; i++) {
             int finalI = i;
@@ -54,11 +55,10 @@ public class GuiGroupOverview implements IScreen {
             };
             actions[i] = indexOffset -> {
                 int index = entriesIndex + indexOffset;
-                if (groups.size() > index) {
-                    GuiStateOverview.open(contentPackZipHandler, signalId, groups.keySet().toArray(new String[0])[index]);
-                } else if (groups.size() == index) {
-
+                if (states.size() > index) {
                     MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("Not implemented yet."));
+                } else if (states.size() == index) {
+                    GuiNewState.open(contentPackZipHandler, signalId, groupId);
                 } else {
                     MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("How???"));
                 }
@@ -74,7 +74,7 @@ public class GuiGroupOverview implements IScreen {
     @Override
     public void draw(IScreenBuilder builder) {
         // Nothing to draw
-        builder.drawCenteredString("Select group...", 0, -20, 0xFFFFFF);
+        builder.drawCenteredString("Select state...", 0, -20, 0xFFFFFF);
     }
 
     @Override
@@ -96,12 +96,12 @@ public class GuiGroupOverview implements IScreen {
 
     private String getTextForIndex(int indexOffset) {
         int index = entriesIndex + indexOffset;
-        if (groups.size() > index) {
-            String groupId = groups.keySet().toArray(new String[0])[index];
-            String groupName = groups.get(groupId);
-            return MessageFormat.format("{1} (ID: {0})", groupId, groupName);
-        } else if (groups.size() == index) {
-            return "Create new group..";
+        if (states.size() > index) {
+            String stateId = states.keySet().toArray(new String[0])[index];
+            String stateName = states.get(stateId);
+            return MessageFormat.format("{1} (ID: {0})", stateId, stateName);
+        } else if (states.size() == index) {
+            return "Create new state..";
         } else {
             return "";
         }
@@ -109,16 +109,19 @@ public class GuiGroupOverview implements IScreen {
 
     private boolean shouldBeEnabled(int indexOffset) {
         int index = entriesIndex + indexOffset;
-        return groups.size() > index;
+        return states.size() >= index;
     }
 
-    public static void open(ContentPackZipHandler contentPackZipHandler, String signalId) {
-        GuiGroupOverview.contentPackZipHandler = contentPackZipHandler;
-        GuiGroupOverview.signalId = signalId;
+    public static void open(ContentPackZipHandler contentPackZipHandler, String signalId, String groupId) {
+        GuiStateOverview.contentPackZipHandler = contentPackZipHandler;
+        GuiStateOverview.signalId = signalId;
+        GuiStateOverview.groupId = groupId;
         ContentPackSignal signal = contentPackZipHandler.getSignal(signalId).orElseThrow(() -> new RuntimeException("error"));
-        GuiGroupOverview.groups = new HashMap<>();
-        signal.getSignals().forEach((groupId, group) -> GuiGroupOverview.groups.put(groupId, group.getGroupName()));
+        GuiStateOverview.states = new HashMap<>();
+        Map<String, ContentPackSignalState> states = signal.getSignals().get(groupId).getStates();
+        if (states != null && !states.isEmpty()) {
+            states.forEach((stateId, state) -> GuiStateOverview.states.put(stateId, state.getSignalName()));
+        }
         GUI.get().open(MinecraftClient.getPlayer());
     }
-
 }

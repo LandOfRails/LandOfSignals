@@ -7,6 +7,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.EntryType;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 
 import java.io.*;
 import java.net.URI;
@@ -200,32 +201,52 @@ public class ContentPackZipHandler {
         signal.setSignals(Collections.singletonMap("default", group));
 
         signal.setRotationSteps(10f);
-        String signalJson = GSON.toJson(signal);
+        writeSignal(signalId, signal);
+    }
 
+    private void writeSignal(FileSystem fs, String signalId, ContentPackSignal signal) throws IOException {
+        String signalJson = GSON.toJson(signal);
+        String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
+        addEntryToLandOfSignalsJson(fs, jsonpath, EntryType.BLOCKSIGNAL);
+        Path nf = fs.getPath(jsonpath);
+        if (Files.notExists(nf.getParent()))
+            Files.createDirectory(nf.getParent());
+        try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE)) {
+            writer.write(signalJson);
+        }
+    }
+
+    private void writeSignal(String signalId, ContentPackSignal signal) {
         newZipFileSystem(fs -> {
-            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
-            addEntryToLandOfSignalsJson(fs, jsonpath, EntryType.BLOCKSIGNAL);
-            Path nf = fs.getPath(jsonpath);
-            if (Files.notExists(nf.getParent()))
-                Files.createDirectory(nf.getParent());
-            try (Writer writer = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
-                writer.write(signalJson);
-            }
+            writeSignal(fs, signalId, signal);
         });
     }
 
     public Optional<ContentPackSignal> getSignal(String signalId) {
-        ContentPackSignal signal = newZipFileSystem(fs -> {
-            String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
-            Path nf = fs.getPath(jsonpath);
-            if (Files.exists(nf)) {
-                List<String> lines = Files.readAllLines(nf, StandardCharsets.UTF_8);
-                String allLines = String.join("\n", lines);
-                return GSON.fromJson(allLines, ContentPackSignal.class);
-            }
-            return null;
+        return newZipFileSystem(fs -> {
+            return getSignal(fs, signalId);
         });
+    }
+
+    public Optional<ContentPackSignal> getSignal(FileSystem fs, String signalId) throws IOException {
+        ContentPackSignal signal = null;
+        String jsonpath = MessageFormat.format("assets/landofsignals/{0}/{0}.json", signalId);
+        Path nf = fs.getPath(jsonpath);
+        if (Files.exists(nf)) {
+            List<String> lines = Files.readAllLines(nf, StandardCharsets.UTF_8);
+            String allLines = String.join("\n", lines);
+            signal = GSON.fromJson(allLines, ContentPackSignal.class);
+        }
         return Optional.ofNullable(signal);
+    }
+
+    public void createState(String signalId, String groupId, String stateId, String stateName) {
+        newZipFileSystem(fs -> {
+            ContentPackSignal signal = getSignal(fs, signalId).orElseThrow(() -> new RuntimeException("Oh oh"));
+            ContentPackSignalState state = new ContentPackSignalState(stateName, new LinkedHashMap<>());
+            signal.getSignals().get(groupId).getStates().put(stateId, state);
+            writeSignal(fs, signalId, signal);
+        });
     }
 
     private void newZipFileSystem(IOExceptionConsumer<FileSystem> zipFileSystem) {
