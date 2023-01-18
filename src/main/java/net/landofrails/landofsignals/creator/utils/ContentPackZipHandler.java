@@ -216,7 +216,7 @@ public class ContentPackZipHandler {
         }
     }
 
-    private void writeSignal(String signalId, ContentPackSignal signal) {
+    public void writeSignal(String signalId, ContentPackSignal signal) {
         newZipFileSystem(fs -> {
             writeSignal(fs, signalId, signal);
         });
