@@ -80,7 +80,7 @@ public class GuiStateOverview implements IScreen {
             actions[i] = indexOffset -> {
                 int index = entriesIndex + indexOffset;
                 if (states.length > index) {
-                    MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("Not implemented yet."));
+                    GuiModifyState.open(contentPackZipHandler, signalId, groupId, states[index][0]);
                 } else if (states.length == index) {
                     GuiNewState.open(contentPackZipHandler, signalId, groupId);
                 } else {

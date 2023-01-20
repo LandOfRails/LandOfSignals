@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals.creator.utils;
 
 import cam72cam.mod.MinecraftClient;
+import cam72cam.mod.ModCore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v2.ContentPack;
@@ -246,6 +247,35 @@ public class ContentPackZipHandler {
             ContentPackSignalState state = new ContentPackSignalState(stateName, new LinkedHashMap<>());
             signal.getSignals().get(groupId).getStates().put(stateId, state);
             writeSignal(fs, signalId, signal);
+        });
+    }
+
+    public boolean containsOBJ(String signalId) {
+        return Boolean.TRUE.equals(newZipFileSystem(fs -> {
+            String path = MessageFormat.format("assets/landofsignals/{0}/", signalId);
+            Path nf = fs.getPath(path);
+            return Files.list(nf).anyMatch(p -> p.endsWith(signalId + ".obj"));
+        }));
+    }
+
+    public void openSignalFolder(String signalId) {
+        newZipFileSystem(fs -> {
+            String abstractPath = MessageFormat.format("assets/landofsignals/{0}/", signalId);
+            String path = contentPackZipFile.toPath().resolve(abstractPath).toAbsolutePath().toString();
+            ModCore.info(path);
+            try {
+                String sevenZip = "C:\\Program Files\\7-Zip\\7zFM.exe";
+
+                Runtime.getRuntime()
+                        .exec(new String[]{
+                                sevenZip,
+                                path
+                        });
+            } catch (IOException e) {
+                // Unpretty fallback
+                e.printStackTrace();
+                Runtime.getRuntime().exec("explorer.exe /select," + path);
+            }
         });
     }
 

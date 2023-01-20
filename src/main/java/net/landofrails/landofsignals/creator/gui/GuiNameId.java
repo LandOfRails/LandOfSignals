@@ -61,8 +61,8 @@ public class GuiNameId implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
-        builder.drawCenteredString(GuiText.LABEL_CREATOR_NAME.toString(), 0, -24 + 10, 0xffffff);
-        builder.drawCenteredString(GuiText.LABEL_CREATOR_ID.toString(), 0, -24 + 2 * 22 + 10, 0xffffff);
+        builder.drawCenteredString("Signalname", 0, -24 + 10, 0xffffff);
+        builder.drawCenteredString("Signalid", 0, -24 + 2 * 22 + 10, 0xffffff);
     }
 
     public static void open(ContentPackZipHandler zipHandler, EntryType entryType) {
