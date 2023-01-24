@@ -37,6 +37,8 @@ jobs:
       - name: Hack Forge Gradle
         run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
       - name: Hack Forge Gradle Part Two
+        env:
+          BRANCH: ${{ matrix.branch }}
         run: git apply ${BRANCH}.patch || true
       - name: Setup Universal Mod Core (and helpers)
         env:
