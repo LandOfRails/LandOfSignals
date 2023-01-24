@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'cam72cam.universalmodcore'
 apply plugin: 'maven'
 
-String version = '0.0.6'
+String version = '0.0.7'
 
 universalmodcore {
     modPackage = 'net.landofrails.landofsignals'
