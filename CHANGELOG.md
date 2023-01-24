@@ -1,5 +1,4 @@
-#### Release 1.0.0
+#### Release 0.0.7
 
-* Upgraded to UMC 1.1.3
-* Added Stellwand (see Documentation)
-* Fixed NullPointerException (#35)
+* Fixed crash on startup for 1.15.x + 1.16.x\
+  "Exception message: java.util.UnknownFormatConversionException: Conversion = ' '"

@@ -1,7 +1,6 @@
 package net.landofrails.stellwand.contentpacks.loader;
 
 import cam72cam.mod.ModCore;
-import cam72cam.mod.gui.Progress;
 import net.landofrails.stellwand.Stellwand;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.ContentPack;
@@ -21,8 +20,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class Loader {
-
-    private static Progress.Bar progressBar = null;
 
     private Loader() {
 
@@ -49,10 +46,8 @@ public class Loader {
             if (assets == null || assets.length == 0) {
                 ModCore.Mod.info("No assets found.");
             } else {
-                progressBar = Progress.push("Loading contentpacks", assets.length);
                 for (File asset : assets)
                     loadAsset(asset);
-                Progress.pop(progressBar);
             }
 
         } else {
@@ -92,8 +87,6 @@ public class Loader {
 
         try {
             ContentPack contentPack = ContentPack.fromJson(zip.getInputStream(zip.getEntry(stellwandJson.getName())));
-
-            progressBar.step(String.format("Contentpack: %s v%s", contentPack.getName(), contentPack.getPackversion()));
 
             // @formatter:off
 			List<ZipEntry> files = zip.stream().

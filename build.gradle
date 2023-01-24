@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven { url = 'https://teamopenindustry.cc/maven/' }
     }
@@ -11,7 +12,7 @@ buildscript {
 apply plugin: 'cam72cam.universalmodcore'
 apply plugin: 'maven'
 
-String version = '0.0.4'
+String version = '0.0.7'
 
 universalmodcore {
     modPackage = 'net.landofrails.landofsignals'

@@ -42,12 +42,12 @@ public class LandOfSignals extends ModCore.Mod {
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
             final Optional<String> mcVersion = getMCVersion();
-            ModCore.Mod.info("Detected MC Version: " + mcVersion.orElse("Failed to receive"));
+            ModCore.Mod.info("Detected MC Version: " + mcVersion.orElse("Failed to receive")));
 
             ContentPackHandler.init();
 
             LOSTabs.register();
-            
+
             LOSBlocks.register();
             LOSItems.register();
             LOSGuis.register();
@@ -133,7 +133,7 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void serverEvent(final ModEvent event) {
-        // Do nothing for now
+        // Do nothing forever
         Stellwand.serverEvent(event);
     }
 }

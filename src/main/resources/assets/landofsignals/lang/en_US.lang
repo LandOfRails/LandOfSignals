@@ -43,5 +43,6 @@ message.stellwand:connector.newsignalselected=New signal selected! (%s, %s, %s)
 message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=This block is not connectable!
 message.stellwand:connector.notthesameworld=Can't connect blocks between different worlds!
+message.stellwand:stellwand.warning=§4Warning: §cThe Stellwand part is being reconstructed. Placed blocks will likely disappear with the next major update.
 
 gui.stellwand:selectsendermodes.group=Group: %s
