@@ -18,34 +18,34 @@ jobs:
         branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: '1.8' # The JDK version to make available on the path.
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          architecture: x64 # (x64 or x86) - defaults to x64
-      - name: Install deps
-        run: sudo apt install -y pngquant findutils xvfb
-      - name: Hack Forge Gradle
-        run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
-      - name: Setup Universal Mod Core (and helpers)
-        env:
-          BRANCH: ${{ matrix.branch }}
-        run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true
-      - name: Hack Forge Gradle Part Two
-        env:
-          BRANCH: ${{ matrix.branch }}
-        run: git apply ${BRANCH}.patch || true
-      - name: Gradle compile
-        run: ./gradlew classes
-      - name: Process images
-        run: find src/main/resources/assets/landofsignals/ | grep png | xargs -I foo pngquant -s1 -f --ext .png foo
-      - name: Run Data (optionalish)
-        run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
-      - name: Gradle build
-        run: ./gradlew build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: LandOfSignals ${{matrix.branch}}
-          path: build/libs/LandOfSignals-${{matrix.branch}}-*
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: '1.8' # The JDK version to make available on the path.
+        java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+        architecture: x64 # (x64 or x86) - defaults to x64
+    - name: Install deps
+      run: sudo apt install -y pngquant findutils xvfb
+    - name: Hack Forge Gradle
+      run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
+    - name: Setup Universal Mod Core (and helpers)
+      env:
+        BRANCH: ${{ matrix.branch }}
+      run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true
+    - name: Hack Forge Gradle Part Two
+      env:
+        BRANCH: ${{ matrix.branch }}
+      run: git apply ${BRANCH}.patch || true
+    - name: Gradle compile
+      run: ./gradlew classes
+    - name: Process images
+      run: find src/main/resources/assets/landofsignals/ | grep png | xargs -I foo pngquant -s1 -f --ext .png foo
+    - name: Run Data (optionalish)
+      run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
+    - name: Gradle build
+      run: ./gradlew build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: LandOfSignals ${{matrix.branch}}
+        path: build/libs/LandOfSignals-${{matrix.branch}}-*
