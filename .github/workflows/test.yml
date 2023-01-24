@@ -16,8 +16,8 @@ jobs:
         run: echo "::set-output name=suffix::$(cat SUFFIX)"
       - name: Replace version number with new version
         run: | 
-          sed -i 's/^acl public static final String VERSION.*/acl     public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
-          sed -i 's/^acl String version =.*/acl String version = '${{ steps.getversion.outputs.version }}'/' ./build.gradle
+          sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
+          sed -i "s/String version =.*/String version = '${{ steps.getversion.outputs.version }}'/" ./build.gradle
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
