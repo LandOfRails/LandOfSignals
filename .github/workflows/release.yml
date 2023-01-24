@@ -40,6 +40,10 @@ jobs:
         env:
           BRANCH: ${{ matrix.branch }}
         run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true -Dtarget=release
+      - name: Hack Forge Gradle Part Two
+        env:
+          BRANCH: ${{ matrix.branch }}
+        run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
       - name: Gradle compile
         run: ./gradlew classes
       - name: Process images
@@ -66,7 +70,7 @@ jobs:
       - name: Rename with suffix
         run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload to CurseForge ${{matrix.branch}}
-        uses: MarkenJaden/curseforge-upload@master
+        uses: itsmeow/curseforge-upload@master
         with:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307

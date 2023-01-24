@@ -1,5 +1,4 @@
-#### Release 0.0.6
+#### Release 0.0.7
 
-* LandOfSignals: Fixed crash when destorying a signalbox that wasn't connected to a signal
-* Stellwand: Added warning for stellwand (Blocks will be removed in next major update)
-* Stellwand: Fixed issue when opening gui of sender (NullPointer, kicking player from server)
+* Fixed crash on startup for 1.15.x + 1.16.x\
+  "Exception message: java.util.UnknownFormatConversionException: Conversion = ' '"
