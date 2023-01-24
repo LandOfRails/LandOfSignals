@@ -70,7 +70,7 @@ jobs:
       - name: Rename with suffix
         run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload to CurseForge ${{matrix.branch}}
-        uses: MarkenJaden/curseforge-upload@master
+        uses: itsmeow/curseforge-upload@master
         with:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307
