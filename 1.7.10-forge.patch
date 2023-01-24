@@ -1,0 +1,20 @@
+--- umc.gradle	2022-12-10 08:11:23.923524299 -0500
++++ umc.gradle.1.7.10	2022-12-10 08:11:18.239496512 -0500
+@@ -4,7 +4,7 @@
+         mavenCentral()
+         maven {
+             name = "forge"
+-            url = "http://files.minecraftforge.net/maven"
++            url = "https://teamopenindustry.cc/maven"
+         }
+     }
+ 	dependencies {
+@@ -32,7 +32,7 @@
+ sourceCompatibility = targetCompatibility = 1.8
+
+ minecraft {
+-    version = "1.7.10-10.13.4.1558-1.7.10"
++    version = "1.7.10-10.13.4.9999-1.7.10"
+     runDir = "run"
+
+     // the mappings can be changed at any time, and must be in the following format.
