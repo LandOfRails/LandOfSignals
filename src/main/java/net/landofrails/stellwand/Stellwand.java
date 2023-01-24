@@ -25,6 +25,7 @@ public class Stellwand {
     public static LocalDateTime WARNINGTIMESTAMP = null;
 
     public static void warnPlayers() {
+        // Please dont use me :(
         if (WARNINGTIMESTAMP == null || WARNINGTIMESTAMP.plusMinutes(30).isBefore(LocalDateTime.now())) {
             WARNINGTIMESTAMP = LocalDateTime.now();
             MinecraftClient.getPlayer().sendMessage(PlayerMessage.translate("message." + Stellwand.DOMAIN + ":" + "stellwand.warning"));
