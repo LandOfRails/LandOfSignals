@@ -31,7 +31,7 @@ public class Stellwand {
         }
     }
 
-    // Version 2 statt 0.0.2 => Anderes contentpacksystem (!)
+    // Version 2 statt 0.0.2 => Another contentpacksystem (!)
     public static final String ADDON_VERSION = "2";
 
     private Stellwand() {
