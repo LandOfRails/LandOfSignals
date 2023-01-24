@@ -62,6 +62,11 @@ public class ContentPackHandler {
         } catch (final IOException zipException) {
             ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
             ModCore.Mod.error("Error: %s", zipException.getMessage());
+            ModCore.Mod.error("There seems to be an issue with the zip file.");
+        } catch (IllegalArgumentException illegalArgumentException) {
+            ModCore.Mod.error("Couldn't load asset: %s", asset.getName());
+            ModCore.Mod.error("Error: %s", illegalArgumentException.getMessage());
+            ModCore.Mod.error("You might have some characters that are not strict UTF-8.");
         }
     }
 
@@ -69,6 +74,11 @@ public class ContentPackHandler {
 
         try {
             final ContentPackHead contentPack = ContentPackHead.fromJson(zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
+
+            if (!contentPack.isValidAddonVersion()) {
+                ModCore.warn("%s by %s is on a newer version of the contentpacksystem! Check for updates!", contentPack.getName(), contentPack.getAuthor());
+                return;
+            }
             // @formatter:off
             final List<ZipEntry> files = zip.stream().
                     filter(not(ZipEntry::isDirectory)).

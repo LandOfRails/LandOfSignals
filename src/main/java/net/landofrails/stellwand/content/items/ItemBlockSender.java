@@ -157,6 +157,9 @@ public class ItemBlockSender extends CustomItem {
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Hand hand, Facing facing, Vec3d inBlockPos) {
         Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
 
+        if (world.isClient)
+            Stellwand.warnPlayers();
+
         if (isStandingInBlock(player.getBlockPosition().subtract(target)))
             return ClickResult.REJECTED;
 

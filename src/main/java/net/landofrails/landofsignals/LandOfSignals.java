@@ -47,7 +47,7 @@ public class LandOfSignals extends ModCore.Mod {
             ContentPackHandler.init();
 
             LOSTabs.register();
-            
+
             LOSBlocks.register();
             LOSItems.register();
             LOSGuis.register();
@@ -133,7 +133,7 @@ public class LandOfSignals extends ModCore.Mod {
 
     @Override
     public void serverEvent(final ModEvent event) {
-        // Do nothing for now
+        // Do nothing forever
         Stellwand.serverEvent(event);
     }
 }
