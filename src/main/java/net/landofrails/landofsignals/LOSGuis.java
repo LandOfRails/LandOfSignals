@@ -29,6 +29,7 @@ public class LOSGuis {
     public static final GuiRegistry.GUI CREATOR_STATE_OVERVIEW = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_STATE_OVERVIEW"), GuiStateOverview::new);
     public static final GuiRegistry.GUI CREATOR_NEWSTATE = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NEWSTATE"), GuiNewState::new);
     public static final GuiRegistry.GUI CREATOR_MODIFY_STATE = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_MODIFY_STATE"), GuiModifyState::new);
+    public static final GuiRegistry.GUI CREATOR_NEW_OBJ = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "CREATOR_NEW_OBJ"), GuiNewObj::new);
 
     public static void register() {
         // loads static classes and ctrs

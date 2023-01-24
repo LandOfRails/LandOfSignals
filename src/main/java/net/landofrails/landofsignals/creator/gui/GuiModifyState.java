@@ -8,15 +8,12 @@ import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.Slider;
 import cam72cam.mod.text.PlayerMessage;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.creator.utils.ContentPackZipHandler;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -29,7 +26,7 @@ public class GuiModifyState implements IScreen {
     private static String groupId;
     private static String[] stateInfo;
 
-    private static Map<String, ContentPackModel[]> entries;
+    private static String[] entries;
 
     private Button[] buttons = new Button[6];
     private Consumer<Integer>[] actions = new Consumer[6];
@@ -43,14 +40,14 @@ public class GuiModifyState implements IScreen {
 
     @Override
     public void init(IScreenBuilder screen) {
-        slider = new Slider(screen, -75, 120, "Index: ", 0, Math.max(0, entries.size() - 5d), entriesIndex, false) {
+        slider = new Slider(screen, -75, 120, "Index: ", 0, Math.max(0, entries.length - 5d), entriesIndex, false) {
             @Override
             public void onSlider() {
                 entriesIndex = slider.getValueInt();
                 updateButtons();
             }
         };
-        slider.setEnabled(entries.size() > 5);
+        slider.setEnabled(entries.length > 5);
 
         for (int i = 0; i < 6; i++) {
             int finalI = i;
@@ -62,9 +59,9 @@ public class GuiModifyState implements IScreen {
             };
             actions[i] = indexOffset -> {
                 int index = entriesIndex + indexOffset;
-                if (entries.size() > index) {
+                if (entries.length > index) {
                     MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("Not implemented yet."));
-                } else if (entries.size() == index) {
+                } else if (entries.length == index) {
                     // Create new OBJ
                     MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("Not implemented yet."));
                 } else {
@@ -79,7 +76,11 @@ public class GuiModifyState implements IScreen {
             };
             deleteActions[i] = indexOffset -> {
                 int index = entriesIndex + indexOffset;
-                MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct("Not implemented yet."));
+                String[] copyArray = new String[entries.length - 1];
+                System.arraycopy(entries, 0, copyArray, 0, index);
+                System.arraycopy(entries, index + 1, copyArray, index, entries.length - index - 1);
+                entries = copyArray;
+                updateButtons();
             };
         }
 
@@ -119,9 +120,9 @@ public class GuiModifyState implements IScreen {
 
     private String getTextForIndex(int indexOffset) {
         int index = entriesIndex + indexOffset;
-        if (entries.size() > index) {
-            return entries.keySet().toArray(new String[0])[index];
-        } else if (entries.size() == index) {
+        if (entries.length > index) {
+            return entries[index];
+        } else if (entries.length == index) {
             return "Create new model..";
         } else {
             return "";
@@ -130,7 +131,7 @@ public class GuiModifyState implements IScreen {
 
     private boolean shouldBeEnabled(int indexOffset) {
         int index = entriesIndex + indexOffset;
-        return entries.size() >= index && contentPackZipHandler.containsOBJ(signalId);
+        return entries.length >= index && contentPackZipHandler.containsOBJ(signalId);
     }
 
     public static void open(ContentPackZipHandler contentPackZipHandler, String signalId, String groupId, String stateId) {
@@ -141,7 +142,7 @@ public class GuiModifyState implements IScreen {
         ContentPackSignalState state = signal.getSignals().get(groupId).getStates().get(stateId);
         String stateName = state.getSignalName();
         GuiModifyState.stateInfo = new String[]{stateId, stateName};
-        GuiModifyState.entries = state.getModels() != null ? state.getModels() : new HashMap<>();
+        GuiModifyState.entries = state.getModels() != null ? state.getModels().keySet().toArray(new String[0]) : new String[0];
         GUI.get().open(MinecraftClient.getPlayer());
     }
 
