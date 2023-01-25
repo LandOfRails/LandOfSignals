@@ -50,7 +50,7 @@ jobs:
           - branch: 1.16.5-forge
             version: 1.16.5
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
