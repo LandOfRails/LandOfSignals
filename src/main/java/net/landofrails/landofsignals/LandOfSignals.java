@@ -10,6 +10,8 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.text.Command;
+import net.landofrails.landofsignals.commands.ConfigCommand;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
@@ -66,6 +68,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
+            Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -109,6 +112,8 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileMissingRender::render, TileTicketMachineDB.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileMissingRender::render, TileTicketMachineSBB.class);
+
+                Command.register(new ConfigCommand());
 
                 break;
             case SETUP:
