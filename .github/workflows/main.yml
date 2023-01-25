@@ -24,7 +24,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: '8.0.312+7'
+        java-version: '8.0.212+4'
     - name: Install deps
       run: sudo apt install -y pngquant findutils xvfb
     - name: Hack Forge Gradle
