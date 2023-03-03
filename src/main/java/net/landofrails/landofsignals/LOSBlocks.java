@@ -3,12 +3,10 @@ package net.landofrails.landofsignals;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
@@ -35,6 +33,7 @@ public class LOSBlocks {
 
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
+    public static final BlockComplexSignal BLOCK_COMPLEX_SIGNAL = new BlockComplexSignal(LandOfSignals.MODID, "blockcomplexsignal");
     public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
 
     // Sign
@@ -199,6 +198,14 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_ra11b_sign", "GSAR Wartezeichen RA11 (b)", false, models("models/block/landofsignals/signs/gsar/ra11b/signalra11b.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Stellwand
+        
+        registerSingleGroupStellwandContent(
+                Static.MISSING,
+                Static.MISSING_NAME,
+                Static.MISSING_OBJ,
+                keyValueLinkedMap("default", null),
+                null
+        );
 
         registerSingleGroupStellwandContent(
                 "block_signal_straight_track",
@@ -343,7 +350,7 @@ public class LOSBlocks {
 
     private static void registerStreckenblock() {
         String objPath = "models/block/stellwand/blockstreckenblock/streckenblock.obj";
-        Map<String, ContentPackSignalGroup> groups = new HashMap<>();
+        Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> groups = new HashMap<>();
 
         String[][] preparedGroups = new String[][]{
                 {"topLeft", "Top left"},
@@ -360,16 +367,16 @@ public class LOSBlocks {
         for (String[] group : preparedGroups) {
             String groupId = group[0];
             String groupName = group[1];
-            LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+            LinkedHashMap<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState> states = new LinkedHashMap<>();
             for (String[] state : preparedStates) {
                 String stateId = groupId + state[0];
                 String stateName = groupName + " " + state[1];
-                states.put(stateId, new ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
+                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
             }
-            groups.put(groupName, new ContentPackSignalGroup(groupName, states));
+            groups.put(groupName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup(groupName, states));
         }
 
-        ContentPackSignal stellwandMultisignal = new ContentPackSignal(
+        ContentPackComplexSignal stellwandMultisignal = new ContentPackComplexSignal(
                 "Streckenblock",
                 "block_signal_streckenblock",
                 90f,
@@ -435,32 +442,37 @@ public class LOSBlocks {
     private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {
         String groupIdName = "default";
 
-        LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+        LinkedHashMap<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState> states = new LinkedHashMap<>();
         signalNameAndId.forEach((signalName, signalId) ->
-                states.put(signalId, new ContentPackSignalState(signalName, signalModels(objPath, signalId)))
+                states.put(signalId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(signalName, signalModels(objPath, signalId)))
         );
-        Map<String, ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new ContentPackSignalGroup("default", states));
+        Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup("default", states));
+        Map<String, String> itemGroupStates = null;
+        if (itemGroup != null) {
+            itemGroupStates = new HashMap<>();
+            itemGroupStates.put(groupIdName, itemGroup);
+        }
 
-        ContentPackSignal contentPackSignal = new ContentPackSignal(
+        ContentPackComplexSignal contentPackComplexSignal = new ContentPackComplexSignal(
                 name,
                 id,
                 90f,
                 LOSTabs.SIGNALS_TAB,
                 signalModels(objPath, "general"),
                 group,
-                Collections.singletonMap(groupIdName, itemGroup),
+                itemGroupStates,
                 null,
                 null
         );
-        contentPackSignal.setUTF8(true);
-        registerStellwandContent(contentPackSignal);
+        contentPackComplexSignal.setUTF8(true);
+        registerStellwandContent(contentPackComplexSignal);
     }
 
-    private static void registerStellwandContent(ContentPackSignal contentPackSignal) {
-        contentPackSignal.validate(missing -> {
+    private static void registerStellwandContent(ContentPackComplexSignal contentPackComplexSignal) {
+        contentPackComplexSignal.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK_STELLWAND);
-        BLOCK_SIGNAL_PART.add(contentPackSignal);
+        BLOCK_COMPLEX_SIGNAL.add(contentPackComplexSignal);
     }
 
     private static void registerSignalboxContentPack(String id, String name, Map<String, ContentPackModel[]> models) {
