@@ -198,7 +198,7 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_ra11b_sign", "GSAR Wartezeichen RA11 (b)", false, models("models/block/landofsignals/signs/gsar/ra11b/signalra11b.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Stellwand
-        
+
         registerSingleGroupStellwandContent(
                 Static.MISSING,
                 Static.MISSING_NAME,
@@ -392,7 +392,7 @@ public class LOSBlocks {
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
-        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false, CONTENTPACK, true);
+        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, CONTENTPACK, true);
     }
 
     private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models) {
