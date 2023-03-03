@@ -146,16 +146,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                 final Vec3d translate = item.getAsVec3d(item::getTranslation);
                 final Vec3d scale = item.getAsVec3d(item::getScaling);
                 final Vec3d rotation = item.getAsVec3d(item::getRotation);
-                final List<OpenGL.With> closables = new ArrayList<>();
-                try {
-                    // Load
-                    closables.add(OpenGL.matrix());
-                    for (String texture : baseModel.getTextures()) {
-                        closables.add(renderer.bindTexture(texture));
-                    }
-                    if (closables.size() == 1) {
-                        closables.add(renderer.bindTexture());
-                    }
+
+                try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
 
                     // Render
                     if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
@@ -180,10 +172,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                         renderer.drawGroups(groupCache.get(groupCacheId));
                     }
 
-                } finally {
-                    closables.forEach(OpenGL.With::close);
                 }
-
 
             }
         }
@@ -220,16 +209,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                     final Vec3d translate = item.getAsVec3d(item::getTranslation);
                     final Vec3d scale = item.getAsVec3d(item::getScaling);
                     final Vec3d rotation = item.getAsVec3d(item::getRotation);
-                    final List<OpenGL.With> closables = new ArrayList<>();
-                    try {
-                        // Load
-                        closables.add(OpenGL.matrix());
-                        for (String texture : signalModel.getTextures()) {
-                            closables.add(renderer.bindTexture(texture));
-                        }
-                        if (closables.size() == 1) {
-                            closables.add(renderer.bindTexture());
-                        }
+
+                    try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(signalModel.getTextures())) {
 
                         // Render
                         if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
@@ -254,8 +235,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
                             renderer.drawGroups(groupCache.get(groupCacheId));
                         }
 
-                    } finally {
-                        closables.forEach(OpenGL.With::close);
                     }
                 }
 

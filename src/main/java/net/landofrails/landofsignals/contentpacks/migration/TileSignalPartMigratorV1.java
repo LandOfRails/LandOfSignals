@@ -15,6 +15,8 @@ import java.util.function.Predicate;
 
 public class TileSignalPartMigratorV1 implements IMigrator {
 
+    private static final String VERSION_KEY = "version";
+
     private static TileSignalPartMigratorV1 tileSignalPartMigratorV1;
 
     private TileSignalPartMigratorV1() {
@@ -29,7 +31,7 @@ public class TileSignalPartMigratorV1 implements IMigrator {
 
     @Override
     public boolean shouldBeMigrated(TagCompound nbt) {
-        return nbt.hasKey("version") && nbt.getInteger("version") == 1;
+        return nbt.hasKey(VERSION_KEY) && nbt.getInteger(VERSION_KEY) == 1;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class TileSignalPartMigratorV1 implements IMigrator {
 
             String texturePath = nbt.getString("texturePath");
             Map.Entry<String, ContentPackSignalGroup> firstGroup = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals().entrySet().iterator().next();
-            Predicate<Map<String, ContentPackModel[]>> containsTexture = map -> map.values().stream().flatMap(Arrays::stream).flatMap(model -> Arrays.stream(model.getTextures())).anyMatch(tex -> Objects.equals(tex, texturePath));
+            Predicate<Map<String, ContentPackModel[]>> containsTexture = map -> map.values().stream().flatMap(Arrays::stream).map(ContentPackModel::getTextures).anyMatch(tex -> Objects.equals(tex, texturePath));
             Optional<String> stateId = firstGroup.getValue().getStates().entrySet().stream().filter(stateEntry -> containsTexture.test(stateEntry.getValue().getModels())).map(Map.Entry::getKey).findFirst();
             if (stateId.isPresent()) {
                 Map.Entry<String, String> groupStateEntry = new AbstractMap.SimpleEntry<>(firstGroup.getKey(), stateId.get());
@@ -59,6 +61,6 @@ public class TileSignalPartMigratorV1 implements IMigrator {
             }
 
         }
-        nbt.setInteger("version", 2);
+        nbt.setInteger(VERSION_KEY, 2);
     }
 }

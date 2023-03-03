@@ -58,7 +58,7 @@ public class ContentPackHandlerV1 {
                                 states.add(0, null);
                                 contentPackSignalPart.setStates(states);
 
-                                convertToV2(contentPackSignalPart, true, new ContentPack(contentPack), isUTF8);
+                                convertToV2(contentPackSignalPart, new ContentPack(contentPack), isUTF8);
 
                             }
                         }
@@ -69,7 +69,7 @@ public class ContentPackHandlerV1 {
         }
     }
 
-    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation, ContentPack contentPack, boolean isUTF8) {
+    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, ContentPack contentPack, boolean isUTF8) {
 
         // ContentPackSignal
         ContentPackSignal contentPackSignal = new ContentPackSignal();
@@ -91,7 +91,7 @@ public class ContentPackHandlerV1 {
             contentPackSignalState.setSignalName("State " + index++);
 
             ContentPackModel contentPackModel = new ContentPackModel();
-            contentPackModel.setTextures(new String[]{texture});
+            contentPackModel.setTextures(texture);
 
             // ContentPackBlock
             ContentPackBlock contentPackBlock = new ContentPackBlock();
