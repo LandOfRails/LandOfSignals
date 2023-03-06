@@ -33,7 +33,6 @@ public class LegacyModePromptBlockPacket extends Packet {
     protected void handle() {
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(blockRotation);
-        LOSBlocks.BLOCK_SIGNAL_PART.setLegacyMode(legacyMode);
         getWorld().setBlock(blockPos, LOSBlocks.BLOCK_SIGNAL_PART);
         // If client -> server, send to all clients
         if (!getWorld().isClient) {

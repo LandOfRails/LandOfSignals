@@ -8,13 +8,13 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -40,9 +40,11 @@ public class GuiSignalPartBox implements IScreen {
 
     public GuiSignalPartBox(final TileSignalBox tsb) {
         this.tsb = tsb;
-        final TileSignalPart tsp = tsb.getTileSignalPart();
 
-        modes = LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tsp.getId());
+        // FIXME Decide what signal to use.
+        final TileComplexSignal tsp = tsb.getTileComplexSignal();
+
+        modes = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
         originalSignalGroup = tsb.getGroupId(getFirstValue(modeGroups));
         signalGroup = originalSignalGroup;

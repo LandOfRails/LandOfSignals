@@ -4,12 +4,9 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.landofsignals.configs.LegacyMode;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +16,6 @@ public class BlockSignalPart extends BlockTypeEntity {
     private final Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
     private String id;
     private int rot;
-    private LegacyMode legacyMode;
 
     public BlockSignalPart(final String modID, final String name) {
         super(modID, name);
@@ -27,7 +23,7 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     @Override
     protected BlockEntity constructBlockEntity() {
-        return new TileSignalPart(id, rot, legacyMode);
+        return new TileSignalPart(id, rot);
     }
 
     public void setRot(final int rot) {
@@ -36,10 +32,6 @@ public class BlockSignalPart extends BlockTypeEntity {
 
     public void setId(final String id) {
         this.id = id;
-    }
-
-    public void setLegacyMode(final LegacyMode legacyMode) {
-        this.legacyMode = legacyMode;
     }
 
     public String getName(final String uncheckedId) {
@@ -73,10 +65,10 @@ public class BlockSignalPart extends BlockTypeEntity {
                 (Integer) contentPackSignals.get(id).getMetadata().get("addonversion") != 2;
     }
 
-    public Map<String, ContentPackSignalGroup> getAllGroupStates(String id) {
-        if (!contentPackSignals.containsKey(id)) return Collections.emptyMap();
+    public String[] getAllStates(String id) {
+        if (!contentPackSignals.containsKey(id)) return new String[0];
 
-        return contentPackSignals.get(id).getSignals();
+        return contentPackSignals.get(id).getStates();
     }
 
     public float getRotationSteps(String id) {

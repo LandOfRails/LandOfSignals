@@ -66,8 +66,6 @@ public class ItemSignalPart extends CustomItem {
         }
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(rotation);
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
-        LegacyMode legacyMode = LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId) ? LandOfSignalsConfig.legacyMode : LegacyMode.OFF;
-        LOSBlocks.BLOCK_SIGNAL_PART.setLegacyMode(legacyMode);
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
         return ClickResult.ACCEPTED;
 
