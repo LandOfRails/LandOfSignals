@@ -16,8 +16,6 @@ import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
-import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
-import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
@@ -63,9 +61,6 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
-            Packet.register(LegacyModePromptToClientPacket::new, PacketDirection.ServerToClient);
-            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ClientToServer);
-            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
             Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);

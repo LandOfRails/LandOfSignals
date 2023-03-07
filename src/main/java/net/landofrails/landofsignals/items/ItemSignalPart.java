@@ -15,9 +15,6 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
-import net.landofrails.landofsignals.configs.LegacyMode;
-import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
@@ -55,15 +52,7 @@ public class ItemSignalPart extends CustomItem {
         int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
         final TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rotation = tileSignalPart.getBlockRotate();
-
-        if (LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId)) {
-            if (world.isServer && LandOfSignalsConfig.legacyMode == LegacyMode.PROMPT) {
-                new LegacyModePromptToClientPacket(target.get(), itemId, rotation).sendToPlayer(player);
-                return ClickResult.ACCEPTED;
-            } else if (!world.isServer && world.isClient) {
-                return ClickResult.ACCEPTED;
-            }
-        }
+        
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(rotation);
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
