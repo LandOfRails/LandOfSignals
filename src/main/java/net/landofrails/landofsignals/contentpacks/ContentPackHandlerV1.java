@@ -46,12 +46,11 @@ public class ContentPackHandlerV1 {
                             if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
                                 ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
                                 ModCore.debug("SignalPart v1: %s", contentPackSignalPart.getName());
-                                String[] states = contentPackSignalPart.getStates();
-                                if (states == null) {
-                                    states = new String[]{null};
-                                } else {
-                                    System.arraycopy(states, 0, states, 1, states.length);
-                                    states[0] = null;
+                                String[] cpStates = contentPackSignalPart.getStates();
+                                String[] states = new String[1 + (cpStates != null ? cpStates.length : 0)];
+                                states[0] = null;
+                                if (cpStates != null && cpStates.length > 0) {
+                                    System.arraycopy(cpStates, 0, states, 1, cpStates.length);
                                 }
                                 contentPackSignalPart.setStates(states);
 

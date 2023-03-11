@@ -71,6 +71,7 @@ public class TileSignalPartRender {
             // Render
             GL11.glScaled(scale[0], scale[1], scale[2]);
             GL11.glTranslated(translate.x, translate.y, translate.z);
+            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
             renderer.draw();
 
         } catch (Exception e) {
@@ -109,6 +110,7 @@ public class TileSignalPartRender {
             // Render
             GL11.glScaled(scale[0], scale[1], scale[2]);
             GL11.glTranslated(translate.x, translate.y, translate.z);
+            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
             renderer.draw();
 
         } catch (Exception e) {
