@@ -15,6 +15,7 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
         if (!cache.containsKey(objPath)) {
             try {
-                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0)));
+                String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
+                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
                 cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
@@ -90,7 +92,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
         if (!cache.containsKey(objPath)) {
             try {
-                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0)));
+                String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
+                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
                 cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);

@@ -13,6 +13,8 @@ public class SignalUpdatePacket extends Packet {
 
     @TagField("signalPos")
     private Vec3i signalPos;
+    @TagField("signalType")
+    private Byte signalType;
     @TagField("state")
     private String state;
     @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
@@ -25,11 +27,13 @@ public class SignalUpdatePacket extends Packet {
     public SignalUpdatePacket(Vec3i signalPos, String state) {
         this.signalPos = signalPos;
         this.state = state;
+        this.signalType = (byte) 0;
     }
 
     public SignalUpdatePacket(Vec3i signalPos, Map<String, String> signalGroupStates) {
         this.signalPos = signalPos;
         this.signalGroupStates = signalGroupStates;
+        this.signalType = (byte) 1;
     }
 
     @Override
@@ -38,11 +42,11 @@ public class SignalUpdatePacket extends Packet {
             getWorld().keepLoaded(signalPos);
         }
 
-        if (state != null) {
+        if (0 == signalType) {
             // Simple signal
             TileSignalPart tile = getWorld().getBlockEntity(signalPos, TileSignalPart.class);
             tile.setState(state);
-        } else if (signalGroupStates != null) {
+        } else if (1 == signalType) {
             // Complex signal
             TileComplexSignal tile = getWorld().getBlockEntity(signalPos, TileComplexSignal.class);
             tile.setSignalGroupStates(signalGroupStates);

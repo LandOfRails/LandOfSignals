@@ -2,6 +2,7 @@ package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
@@ -9,10 +10,12 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import cam72cam.mod.text.PlayerMessage;
+import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
-import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
+import net.landofrails.landofsignals.serialization.MapVec3iStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 
 import java.util.HashMap;
@@ -31,7 +34,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("texturePath")
     private String texturePath;
     // for server only
-    @TagField(value = "senderSignalStates", mapper = MapVec3iStringStringMapper.class)
+    @TagField(value = "senderSignalStates", mapper = MapVec3iStringMapper.class)
     private Map<Vec3i, String> senderSignalStates = new HashMap<>();
 
     @TagField("offset")
@@ -75,8 +78,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     public void setState(final String state) {
-        if (texturePath == null) this.texturePath = "null";
-        else this.texturePath = texturePath;
+        if (state == null) this.texturePath = "null";
+        else this.texturePath = state;
         markDirty();
     }
 
@@ -143,10 +146,12 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     private void refreshSignals(boolean updateClients) {
         String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getStates();
+        boolean first = true;
         String lastState = null;
         for (String state : states) {
-            if (lastState == null || senderSignalStates.containsValue(state)) {
+            if (first == true || senderSignalStates.containsValue(state)) {
                 lastState = state;
+                first = false;
             }
         }
         this.texturePath = lastState;
@@ -193,5 +198,12 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
         }
 
+    }
+
+    @Override
+    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+        if (getWorld().isServer)
+            player.sendMessage(PlayerMessage.direct("Current texturePath: " + texturePath));
+        return true;
     }
 }

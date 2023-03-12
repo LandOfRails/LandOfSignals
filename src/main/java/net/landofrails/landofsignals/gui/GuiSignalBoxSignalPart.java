@@ -9,17 +9,16 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
-import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
+import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
-import net.landofrails.landofsignals.serialization.EmptyStringMapper;
-import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.Objects;
 
 public class GuiSignalBoxSignalPart implements IScreen {
 
@@ -28,13 +27,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
 
-    // List of modes
-    private Map<String, ContentPackSignalGroup> modes;
-    private Set<String> modeGroups;
-
-    // Group
-    private String signalGroup;
-    private String originalSignalGroup;
+    private String[] states;
     private Button groupButton;
     private String rightState;
     private String leftState;
@@ -43,16 +36,14 @@ public class GuiSignalBoxSignalPart implements IScreen {
 
     public GuiSignalBoxSignalPart() {
 
-        final TileComplexSignal tsp = tsb.getTileComplexSignal();
+        final TileSignalPart tsp = tsb.getTileSignalPart();
         String itemId = tsp.getId();
 
-        modes = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tsp.getId());
-        modeGroups = modes.keySet();
-        originalSignalGroup = tsb.getGroupId(getFirstValue(modeGroups));
-        signalGroup = originalSignalGroup;
-        originalRightState = tsb.getActiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(tsp.getId());
+
+        originalRightState = tsb.getActiveGroupState(new String[]{null});
         rightState = originalRightState;
-        originalLeftState = tsb.getInactiveGroupState(modes.get(signalGroup).getStates().keySet().iterator().next());
+        originalLeftState = tsb.getInactiveGroupState(new String[]{null});
         leftState = originalLeftState;
 
 
@@ -77,27 +68,24 @@ public class GuiSignalBoxSignalPart implements IScreen {
     @Override
     public void init(final IScreenBuilder screen) {
         // Use first available group
-        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
+        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString("default")) {
             @Override
             public void onClick(Player.Hand hand) {
-                originalSignalGroup = nextMode(signalGroup);
-                signalGroup = originalSignalGroup;
-                originalRightState = modes.get(signalGroup).getStates().keySet().iterator().next();
-                rightState = originalRightState;
-                originalLeftState = modes.get(signalGroup).getStates().keySet().iterator().next();
-                leftState = originalLeftState;
+
             }
         };
         new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
             @Override
             public void onClick(final Player.Hand hand) {
                 leftState = nextState(leftState);
+                MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct(leftState != null ? leftState : "its null"));
             }
         };
         new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->") {
             @Override
             public void onClick(final Player.Hand hand) {
                 rightState = nextState(rightState);
+                MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct(rightState != null ? rightState : "its null"));
             }
         };
 
@@ -111,8 +99,8 @@ public class GuiSignalBoxSignalPart implements IScreen {
     @Override
     public void onClose() {
 
-        if (!Objects.equals(originalSignalGroup, signalGroup) || !Objects.equals(originalLeftState, leftState) || !Objects.equals(originalRightState, rightState)) {
-            tsb.setGroupId(signalGroup);
+        if (!Objects.equals(originalLeftState, leftState) || !Objects.equals(originalRightState, rightState)) {
+            tsb.setGroupId(null);
             tsb.setInactiveGroupState(leftState);
             tsb.setActiveGroupState(rightState);
 
@@ -127,7 +115,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
         final int scale = 8;
 
         final TagCompound rightTag = itemStackRight.getTagCompound();
-        rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
+        rightTag.setString("itemState", rightState);
         itemStackRight.setTagCompound(rightTag);
 
         try (final OpenGL.With ignored = OpenGL.matrix()) {
@@ -137,7 +125,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
         }
 
         final TagCompound leftTag = itemStackLeft.getTagCompound();
-        leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
+        leftTag.setString("itemState", leftState);
         itemStackLeft.setTagCompound(leftTag);
 
         try (final OpenGL.With ignored = OpenGL.matrix()) {
@@ -146,34 +134,23 @@ public class GuiSignalBoxSignalPart implements IScreen {
             GUIHelpers.drawItem(itemStackLeft, 0, 0);
         }
 
-        groupButton.setText(GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName()));
+        groupButton.setText(GuiText.LABEL_SIGNALGROUP.toString("default"));
     }
 
-    private String nextMode(String mode) {
+    private String nextState(String currentState) {
         boolean useNext = false;
-        for (String m : modeGroups) {
-            if (Objects.equals(m, mode))
+        for (String state : states) {
+            if (Objects.equals(state, currentState) || (state != null && state.equalsIgnoreCase(currentState)))
                 useNext = true;
             else if (useNext)
-                return m;
+                return state;
         }
-        return getFirstValue(modeGroups);
-    }
-
-    private String nextState(String state) {
-        boolean useNext = false;
-        for (String m : modes.get(signalGroup).getStates().keySet()) {
-            if (Objects.equals(m, state) || (m != null && m.equalsIgnoreCase(state)))
-                useNext = true;
-            else if (useNext)
-                return m;
-        }
-        return getFirstValue(modes.get(signalGroup).getStates().keySet());
+        return getFirstValue(states);
     }
 
     @SuppressWarnings("java:S1751")
-    private static <T> T getFirstValue(Collection<T> collection) {
-        for (T object : collection)
+    private static <T> T getFirstValue(T[] values) {
+        for (T object : values)
             return object;
         return null;
     }
