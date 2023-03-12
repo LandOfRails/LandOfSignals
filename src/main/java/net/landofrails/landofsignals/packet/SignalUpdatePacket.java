@@ -23,7 +23,8 @@ public class SignalUpdatePacket extends Packet {
     }
 
     public SignalUpdatePacket(Vec3i signalPos, String state) {
-
+        this.signalPos = signalPos;
+        this.state = state;
     }
 
     public SignalUpdatePacket(Vec3i signalPos, Map<String, String> signalGroupStates) {

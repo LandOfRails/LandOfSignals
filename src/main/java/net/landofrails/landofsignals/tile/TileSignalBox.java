@@ -32,7 +32,7 @@ public class TileSignalBox extends BlockEntity {
     @Nullable
     private Vec3i tileSignalPartPos = Vec3i.ZERO;
 
-    @TagField()
+    @TagField("signalType")
     @Nullable
     private Byte signalType; // null = none, 0 = simple (old), 1 = complex
 
@@ -80,11 +80,21 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
         if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && tileSignalPartPos != null) {
-            TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-            if (tempSignalPart != null) {
-                refreshOldRedstoneVariables();
-                new SignalBoxTileSignalPartPacket(tempSignalPart, this, getPos()).sendToPlayer(player);
-                return true;
+
+            if (signalType == 0) {
+                TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+                if (tempSignalPart != null) {
+                    refreshOldRedstoneVariables();
+                    new SignalBoxTileSignalPartPacket(tempSignalPart, this).sendToPlayer(player);
+                    return true;
+                }
+            } else if (signalType == 1) {
+                TileComplexSignal tempComplexSignal = player.getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
+                if (tempComplexSignal != null) {
+                    refreshOldRedstoneVariables();
+                    new SignalBoxTileSignalPartPacket(tempComplexSignal, this).sendToPlayer(player);
+                    return true;
+                }
             }
         }
         return false;
@@ -122,16 +132,26 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onBreak() {
-        if (tileSignalPartPos == null) {
+        if (tileSignalPartPos == null || signalType == null) {
+            tileSignalPartPos = null;
+            signalType = null;
             return;
         }
 
         if (!getWorld().isBlockLoaded(tileSignalPartPos)) {
             getWorld().keepLoaded(tileSignalPartPos);
         }
-        TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
-        if (entity != null) {
-            entity.removeSignal(getPos());
+
+        if (0 == signalType) {
+            TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+            if (entity != null) {
+                entity.removeSignal(getPos());
+            }
+        } else if (1 == signalType) {
+            TileComplexSignal entity = getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
+            if (entity != null) {
+                entity.removeSignal(getPos());
+            }
         }
     }
 
@@ -139,14 +159,16 @@ public class TileSignalBox extends BlockEntity {
         return this.id;
     }
 
-    public void setTileSignalPartPos(final Vec3i pos) {
+    public void setTileSignalPartPos(final Vec3i pos, final byte signalType) {
         tileSignalPartPos = pos;
+        this.signalType = signalType;
         markDirty();
     }
 
     public void setTileSignalPart(final TileSignalPart tileSignalPart) {
         this.tileComplexSignal = null;
         this.tileSignalPart = tileSignalPart;
+        this.signalType = 0;
     }
 
     public TileSignalPart getTileSignalPart() {
@@ -156,10 +178,15 @@ public class TileSignalBox extends BlockEntity {
     public void setTileComplexSignal(TileComplexSignal tileComplexSignal) {
         this.tileSignalPart = null;
         this.tileComplexSignal = tileComplexSignal;
+        this.signalType = 1;
     }
 
     public TileComplexSignal getTileComplexSignal() {
         return tileComplexSignal;
+    }
+
+    public Byte getSignalType() {
+        return this.signalType;
     }
 
     /**

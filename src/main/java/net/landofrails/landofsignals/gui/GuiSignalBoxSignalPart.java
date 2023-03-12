@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals.gui;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
@@ -10,6 +11,7 @@ import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
@@ -19,11 +21,12 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
-public class GuiSignalPartBox implements IScreen {
+public class GuiSignalBoxSignalPart implements IScreen {
+
+    private static TileSignalBox tsb;
 
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
-    private final TileSignalBox tsb;
 
     // List of modes
     private Map<String, ContentPackSignalGroup> modes;
@@ -38,11 +41,10 @@ public class GuiSignalPartBox implements IScreen {
     private String originalRightState;
     private String originalLeftState;
 
-    public GuiSignalPartBox(final TileSignalBox tsb) {
-        this.tsb = tsb;
+    public GuiSignalBoxSignalPart() {
 
-        // FIXME Decide what signal to use.
         final TileComplexSignal tsp = tsb.getTileComplexSignal();
+        String itemId = tsp.getId();
 
         modes = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tsp.getId());
         modeGroups = modes.keySet();
@@ -56,15 +58,20 @@ public class GuiSignalPartBox implements IScreen {
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         final TagCompound tag = itemStackLeft.getTagCompound();
-        tag.setString("itemId", tsp.getId());
+        tag.setString("itemId", itemId);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         final TagCompound tag2 = itemStackRight.getTagCompound();
-        tag2.setString("itemId", tsp.getId());
+        tag2.setString("itemId", itemId);
         itemStackRight.setTagCompound(tag2);
 
 
+    }
+
+    public static void open(final TileSignalBox tileSignalBox) {
+        tsb = tileSignalBox;
+        LOSGuis.SIGNAL_BOX_SIGNAL_PART.open(MinecraftClient.getPlayer());
     }
 
     @Override
