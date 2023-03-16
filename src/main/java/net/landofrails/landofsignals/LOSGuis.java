@@ -20,6 +20,7 @@ public class LOSGuis {
     public static final GuiRegistry.BlockGUI SIGNAL_ANIMATED_BOX = null;
     public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipualtor::new);
     public static final GuiRegistry.GUI SIGN_TEXTEDITOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_TEXTEDTIOR"), GuiSignTextEditor::new);
+    public static final GuiRegistry.GUI SIGNAL_PRIORITIZATION = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_PRIORITIZATION"), GuiSignalPrioritization::new);
 
     public static final GuiRegistry.GUI CONFIG = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "config"), () -> new ConfigGui(LandOfSignalsConfig.class));
 

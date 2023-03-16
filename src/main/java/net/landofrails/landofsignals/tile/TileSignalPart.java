@@ -10,10 +10,10 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
-import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapVec3iStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
@@ -43,6 +43,20 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     public TileSignalPart(final String id, final int rot) {
         this.blockRotate = rot;
         this.id = id;
+    }
+
+    @Override
+    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+        if (player.isCrouching() || player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR)) {
+            return false;
+        }
+        if (!getWorld().isServer) {
+            return true;
+        }
+
+        GuiSignalPrioritizationToClientPacket.sendToPlayer(player, this);
+
+        return true;
     }
 
     @Override
@@ -200,10 +214,4 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     }
 
-    @Override
-    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (getWorld().isServer)
-            player.sendMessage(PlayerMessage.direct("Current texturePath: " + texturePath));
-        return true;
-    }
 }
