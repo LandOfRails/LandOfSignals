@@ -33,11 +33,13 @@ public class GuiSignalPrioritizationToClientPacket extends Packet {
 
     @Override
     protected void handle() {
-        if (tileSignalPart != null)
+        if (tileSignalPart != null) {
             getWorld().setBlockEntity(signalPos, tileSignalPart);
-        else if (tileComplexSignal != null)
+            GuiSignalPrioritization.open(signalPos, tileSignalPart);
+        } else if (tileComplexSignal != null) {
             getWorld().setBlockEntity(signalPos, tileComplexSignal);
-        GuiSignalPrioritization.open(signalPos, tileSignalPart);
+            GuiSignalPrioritization.open(signalPos, tileComplexSignal);
+        }
     }
 
     public static void sendToPlayer(Player player, TileSignalPart tileSignalPart) {

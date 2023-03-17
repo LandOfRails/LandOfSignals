@@ -2,16 +2,20 @@ package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import cam72cam.mod.util.Facing;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
+import net.landofrails.landofsignals.serialization.MapStringStringArrayMapper;
 import net.landofrails.landofsignals.serialization.MapStringStringMapper;
 import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
@@ -19,6 +23,7 @@ import net.landofrails.landofsignals.utils.IManipulate;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("java:S1133")
 public class TileComplexSignal extends BlockEntity implements IManipulate {
@@ -32,6 +37,8 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     // for server only
     @TagField(value = "senderSignalGroupStates", mapper = MapVec3iStringStringMapper.class)
     private Map<Vec3i, Map.Entry<String, String>> senderSignalGroupStates = new HashMap<>();
+    @TagField(value = "orderedGroupStates", mapper = MapStringStringArrayMapper.class)
+    private Map<String, String[]> orderedGroupStates;
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
@@ -39,6 +46,21 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     public TileComplexSignal(final String id, final int rot) {
         blockRotate = rot;
         this.id = id;
+    }
+
+    @Override
+    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+
+        if (player.isCrouching() || player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR)) {
+            return false;
+        }
+        if (!getWorld().isServer) {
+            return true;
+        }
+
+        GuiSignalPrioritizationToClientPacket.sendToPlayer(player, this);
+
+        return true;
     }
 
     @Override
@@ -96,6 +118,22 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @Override
     public int getRotation() {
         return getBlockRotate();
+    }
+
+    public Map<String, String[]> getOrderedGroupStates() {
+        if (this.orderedGroupStates == null) {
+            Map<String, ContentPackSignalGroup> allGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(id);
+            this.orderedGroupStates = new HashMap<>();
+            allGroups.forEach((groupId, group) -> {
+                Set<String> stateIds = group.getStates().keySet();
+                orderedGroupStates.put(groupId, stateIds.toArray(new String[0]));
+            });
+        }
+        return this.orderedGroupStates;
+    }
+
+    public void setOrderedGroupStates(Map<String, String[]> orderedGroupStates) {
+        this.orderedGroupStates = orderedGroupStates;
     }
 
     /**
@@ -156,10 +194,10 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     }
 
     private void refreshSignals(boolean updateClients) {
-        Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getSignals();
-        signals.forEach((signalGroupId, group) -> {
+        Map<String, String[]> signals = getOrderedGroupStates();
+        signals.forEach((signalGroupId, states) -> {
             String lastState = null;
-            for (String state : group.getStates().keySet()) {
+            for (String state : states) {
                 if (lastState == null || senderSignalGroupStates.containsValue(new AbstractMap.SimpleEntry<>(signalGroupId, state))) {
                     lastState = state;
                 }

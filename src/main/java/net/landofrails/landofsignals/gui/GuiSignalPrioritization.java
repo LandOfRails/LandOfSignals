@@ -12,20 +12,25 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
+import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToServerPacket;
+import net.landofrails.landofsignals.serialization.EmptyStringMapper;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GuiSignalPrioritization implements IScreen {
 
-    private static TileSignalPart signal;
+    private static TileSignalPart tileSignalPart;
+    private static TileComplexSignal tileComplexSignal;
     private static Vec3i signalPos;
 
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.SIGNAL_PRIORITIZATION;
@@ -35,34 +40,30 @@ public class GuiSignalPrioritization implements IScreen {
     private Button[] downButtons = new Button[6];
     private Consumer<Integer>[] actions = new Consumer[6];
     private ItemStack item;
+    private Slider slider;
+    private Button groupButton;
 
+    // TileSignalPart + TileComplexSignal
     private String[] originalStates;
     private String[] states;
     private int itemIndex = 0;
     private int entriesIndex = 0;
 
-    private Slider slider;
+    // TileComplexSignal
+    private Map<String, String[]> originalGroupStates;
+    private Map<String, String[]> groupStates;
+    private Map<String, String> groupNames;
+    private String[] groups;
+    private String groupId;
 
     @Override
     public void init(IScreenBuilder screen) {
 
+        createItem();
 
-        String blockId = signal.getId();
-
-        item = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
-        TagCompound tag = item.getTagCompound();
-        tag.setString("itemId", blockId);
-        item.setTagCompound(tag);
-
-        states = signal.getOrderedStates();
-        if (states == null || states.length == 0) {
-            screen.close();
+        boolean shouldContinue = initStates(screen);
+        if (!shouldContinue)
             return;
-        }
-
-        originalStates = new String[states.length];
-        System.arraycopy(states, 0, originalStates, 0, states.length);
-
 
         slider = new Slider(screen, -175, 120, "Index: ", 0, Math.max(1, states.length - 6d), entriesIndex, false) {
             @Override
@@ -72,6 +73,19 @@ public class GuiSignalPrioritization implements IScreen {
             }
         };
         slider.setEnabled(states.length > 6);
+
+        groupButton = new Button(screen, -190, -20, 180, 20, "Group: -") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                String newGroup = next(groups, groupId);
+                updateGroup(newGroup);
+            }
+        };
+        if (groups.length > 1) {
+            groupButton.setText("Group: " + groupNames.get(groupId));
+        } else {
+            groupButton.setEnabled(false);
+        }
 
         for (int i = 0; i < 6; i++) {
             int finalI = i;
@@ -127,26 +141,20 @@ public class GuiSignalPrioritization implements IScreen {
         }
 
         updateButtons();
-
-        final int scale = 8;
-        final TagCompound rightTag = item.getTagCompound();
-        rightTag.setString("itemState", states[itemIndex]);
-        item.setTagCompound(rightTag);
+        refreshItem();
 
     }
 
     @Override
     public void draw(IScreenBuilder builder) {
-        builder.drawCenteredString("Prioritize states...", 0, -20, 0xFFFFFF);
+        builder.drawCenteredString("Prioritize states...", 0, -40, 0xFFFFFF);
 
         builder.drawCenteredString("Low", 35, 6, 0xFFFFFF);
         builder.drawCenteredString("High", 35, 106, 0xFFFFFF);
 
-        final int scale = 8;
-        final TagCompound rightTag = item.getTagCompound();
-        rightTag.setString("itemState", states[itemIndex]);
-        item.setTagCompound(rightTag);
+        refreshItem();
 
+        final int scale = 8;
         try (final OpenGL.With ignored = OpenGL.matrix()) {
             GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 6, (double) builder.getHeight() / 4, 0);
             GL11.glScaled(scale, scale, 1);
@@ -168,11 +176,26 @@ public class GuiSignalPrioritization implements IScreen {
     @Override
     public void onClose() {
 
-        if (Arrays.deepEquals(originalStates, states)) {
-            return;
+        if (tileSignalPart != null) {
+            if (Arrays.deepEquals(originalStates, states)) {
+                return;
+            }
+
+            new GuiSignalPrioritizationToServerPacket(signalPos, states).sendToServer();
+        } else {
+
+            if (!Arrays.deepEquals(originalStates, states)) {
+                groupStates.put(groupId, states);
+            }
+
+            if (originalGroupStates.equals(groupStates)) {
+                return;
+            }
+
+            new GuiSignalPrioritizationToServerPacket(signalPos, groupStates).sendToServer();
         }
 
-        new GuiSignalPrioritizationToServerPacket(signalPos, states).sendToServer();
+
     }
 
     private void updateButtons() {
@@ -207,11 +230,124 @@ public class GuiSignalPrioritization implements IScreen {
         }
     }
 
+    private static <T> T next(T[] arr, T value) {
+        boolean useNext = false;
+        for (T m : arr) {
+            if (Objects.equals(m, value))
+                useNext = true;
+            else if (useNext)
+                return m;
+        }
+        return getFirstValue(arr);
+    }
+
+    private static <T> T getFirstValue(T[] values) {
+        for (T object : values)
+            return object;
+        return null;
+    }
+
+    private static Map<String, String[]> cleanCopy(Map<String, String[]> map) {
+        Map<String, String[]> val = new HashMap<>();
+        map.forEach((groupId, states) -> {
+            val.put(groupId, Arrays.copyOf(states, states.length));
+        });
+        return val;
+    }
+
+    // Getters for signal-dependent stuff
+    private String getId() {
+        if (tileSignalPart != null)
+            return tileSignalPart.getId();
+        return tileComplexSignal.getId();
+    }
+
+    private boolean initStates(IScreenBuilder screen) {
+        if (tileSignalPart != null) {
+            states = tileSignalPart.getOrderedStates();
+            if (states == null || states.length == 0) {
+                screen.close();
+                return false;
+            }
+
+            originalStates = new String[states.length];
+            System.arraycopy(states, 0, originalStates, 0, states.length);
+
+            groups = new String[0];
+        } else {
+            groupStates = tileComplexSignal.getOrderedGroupStates();
+            if (groupStates == null || groupStates.size() == 0) {
+                screen.close();
+                return false;
+            }
+
+            originalGroupStates = cleanCopy(groupStates);
+
+            Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tileComplexSignal.getId());
+            groups = signalGroups.keySet().toArray(new String[0]);
+            groupNames = new HashMap<>();
+            signalGroups.forEach((groupId, group) ->
+                    groupNames.put(groupId, group.getGroupName())
+            );
+            groupId = groups[0];
+            states = groupStates.get(groupId);
+        }
+        return true;
+    }
+
+    private void createItem() {
+        String blockId = getId();
+        if (tileSignalPart != null) {
+            item = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+            TagCompound tag = item.getTagCompound();
+            tag.setString("itemId", blockId);
+            item.setTagCompound(tag);
+        } else {
+            item = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, 1);
+            TagCompound tag = item.getTagCompound();
+            tag.setString("itemId", blockId);
+            item.setTagCompound(tag);
+        }
+    }
+
+    private void refreshItem() {
+        if (tileSignalPart != null) {
+            final TagCompound rightTag = item.getTagCompound();
+            rightTag.setString("itemState", states[itemIndex]);
+            item.setTagCompound(rightTag);
+        } else {
+            final TagCompound rightTag = item.getTagCompound();
+            rightTag.setMap("itemGroupState", Collections.singletonMap(groupId, states[itemIndex]), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", EmptyStringMapper.toNullString(value)));
+            item.setTagCompound(rightTag);
+        }
+    }
+
+    private void updateGroup(String newGroup) {
+        if (!Arrays.deepEquals(originalStates, states)) {
+            groupStates.put(groupId, states);
+        }
+
+        groupId = newGroup;
+        groupButton.setText("Group: " + groupNames.get(groupId));
+        states = groupStates.get(groupId);
+
+        updateButtons();
+    }
+
+    // Open-Functions
+
     public static void open(Vec3i signalPos, TileSignalPart tileSignalPart) {
         GuiSignalPrioritization.signalPos = signalPos;
-        GuiSignalPrioritization.signal = tileSignalPart;
+        GuiSignalPrioritization.tileSignalPart = tileSignalPart;
+        GuiSignalPrioritization.tileComplexSignal = null;
         GUI.get().open(MinecraftClient.getPlayer());
     }
 
+    public static void open(Vec3i signalPos, TileComplexSignal tileComplexSignal) {
+        GuiSignalPrioritization.signalPos = signalPos;
+        GuiSignalPrioritization.tileSignalPart = null;
+        GuiSignalPrioritization.tileComplexSignal = tileComplexSignal;
+        GUI.get().open(MinecraftClient.getPlayer());
+    }
 
 }
