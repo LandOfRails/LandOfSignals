@@ -65,6 +65,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
             Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
+            Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);

@@ -52,7 +52,7 @@ public class ItemSignalPart extends CustomItem {
         int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
         final TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
         if (tileSignalPart != null && !player.isCrouching()) rotation = tileSignalPart.getBlockRotate();
-        
+
         LOSBlocks.BLOCK_SIGNAL_PART.setRot(rotation);
         LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);

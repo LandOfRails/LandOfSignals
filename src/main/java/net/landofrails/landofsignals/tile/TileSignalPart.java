@@ -16,6 +16,7 @@ import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapVec3iStringMapper;
+import net.landofrails.landofsignals.serialization.StringArrayMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 
 import java.util.HashMap;
@@ -33,6 +34,8 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     private final String id;
     @TagField("texturePath")
     private String texturePath;
+    @TagField(value = "orderedStates", mapper = StringArrayMapper.class)
+    private String[] orderedStates;
     // for server only
     @TagField(value = "senderSignalStates", mapper = MapVec3iStringMapper.class)
     private Map<Vec3i, String> senderSignalStates = new HashMap<>();
@@ -130,6 +133,26 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     /**
      * server-only
      *
+     * @return Ordered States, if null, use order of states in ContentPack
+     */
+    public String[] getOrderedStates() {
+        if (orderedStates == null)
+            orderedStates = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(id);
+        return orderedStates;
+    }
+
+    /**
+     * server-only
+     *
+     * @param orderedStates All states in the wanted order
+     */
+    public void setOrderedStates(String[] orderedStates) {
+        this.orderedStates = orderedStates;
+    }
+
+    /**
+     * server-only
+     *
      * @param pos   Sender position
      * @param state Current sender state
      */
@@ -159,11 +182,10 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     private void refreshSignals(boolean updateClients) {
-        String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getStates();
         boolean first = true;
         String lastState = null;
-        for (String state : states) {
-            if (first == true || senderSignalStates.containsValue(state)) {
+        for (String state : getOrderedStates()) {
+            if (first || senderSignalStates.containsValue(state)) {
                 lastState = state;
                 first = false;
             }

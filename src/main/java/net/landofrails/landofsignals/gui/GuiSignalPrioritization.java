@@ -12,13 +12,14 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
-import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
+import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import org.lwjgl.opengl.GL11;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -35,6 +36,7 @@ public class GuiSignalPrioritization implements IScreen {
     private Consumer<Integer>[] actions = new Consumer[6];
     private ItemStack item;
 
+    private String[] originalStates;
     private String[] states;
     private int itemIndex = 0;
     private int entriesIndex = 0;
@@ -44,6 +46,7 @@ public class GuiSignalPrioritization implements IScreen {
     @Override
     public void init(IScreenBuilder screen) {
 
+
         String blockId = signal.getId();
 
         item = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
@@ -51,7 +54,15 @@ public class GuiSignalPrioritization implements IScreen {
         tag.setString("itemId", blockId);
         item.setTagCompound(tag);
 
-        states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
+        states = signal.getOrderedStates();
+        if (states == null || states.length == 0) {
+            screen.close();
+            return;
+        }
+
+        originalStates = new String[states.length];
+        System.arraycopy(states, 0, originalStates, 0, states.length);
+
 
         slider = new Slider(screen, -175, 120, "Index: ", 0, Math.max(1, states.length - 6d), entriesIndex, false) {
             @Override
@@ -146,7 +157,7 @@ public class GuiSignalPrioritization implements IScreen {
         // Has no effect, but makes slider work :)
         GUIHelpers.drawRect(-175, 120, 200, 20, 0x616161);
         //
-        
+
     }
 
     @Override
@@ -157,9 +168,11 @@ public class GuiSignalPrioritization implements IScreen {
     @Override
     public void onClose() {
 
-        // TODO Save the old states in Constructor
-        // TODO Save the new states to the Tile if changes were made.
+        if (Arrays.deepEquals(originalStates, states)) {
+            return;
+        }
 
+        new GuiSignalPrioritizationToServerPacket(signalPos, states).sendToServer();
     }
 
     private void updateButtons() {

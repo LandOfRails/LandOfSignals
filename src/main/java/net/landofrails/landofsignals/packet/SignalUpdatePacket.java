@@ -15,8 +15,10 @@ public class SignalUpdatePacket extends Packet {
     private Vec3i signalPos;
     @TagField("signalType")
     private Byte signalType;
+
     @TagField("state")
     private String state;
+
     @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
     private Map<String, String> signalGroupStates;
 
