@@ -15,7 +15,7 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.LOSTabs;
-import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -26,9 +26,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S1192")
-public class ItemSignalPart extends CustomItem {
+public class ItemComplexSignal extends CustomItem {
 
-    public ItemSignalPart(final String modID, final String name) {
+    public ItemComplexSignal(final String modID, final String name) {
         super(modID, name);
     }
 
@@ -47,15 +47,15 @@ public class ItemSignalPart extends CustomItem {
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
 
-        float rotationSteps = LOSBlocks.BLOCK_SIGNAL_PART.getRotationSteps(itemId);
+        float rotationSteps = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getRotationSteps(itemId);
 
         int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
-        final TileSignalPart tileSignalPart = world.getBlockEntity(pos, TileSignalPart.class);
-        if (tileSignalPart != null && !player.isCrouching()) rotation = tileSignalPart.getBlockRotate();
+        final TileComplexSignal tileComplexSignal = world.getBlockEntity(pos, TileComplexSignal.class);
+        if (tileComplexSignal != null && !player.isCrouching()) rotation = tileComplexSignal.getBlockRotate();
 
-        LOSBlocks.BLOCK_SIGNAL_PART.setRot(rotation);
-        LOSBlocks.BLOCK_SIGNAL_PART.setId(itemId);
-        world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_PART);
+        LOSBlocks.BLOCK_COMPLEX_SIGNAL.setRot(rotation);
+        LOSBlocks.BLOCK_COMPLEX_SIGNAL.setId(itemId);
+        world.setBlock(target.get(), LOSBlocks.BLOCK_COMPLEX_SIGNAL);
         return ClickResult.ACCEPTED;
 
     }
@@ -65,14 +65,14 @@ public class ItemSignalPart extends CustomItem {
         if (world.isServer) {
             String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
             if (!itemId.contains(":")) {
-                List<String> foundIds = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals()
+                List<String> foundIds = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals()
                         .keySet().stream().filter(itemIdIterator -> itemIdIterator.contains(":") && !itemIdIterator.equals("MISSING") && itemIdIterator
                                 .split(":")[1].equalsIgnoreCase(itemId)).collect(Collectors.toList());
                 if (foundIds.isEmpty()) {
                     player.sendMessage(PlayerMessage.direct("§cThe id \"" + itemId + "\" couldn't be resolved to an existing contentpack!"));
                     player.setHeldItem(hand, ItemStack.EMPTY);
                 } else if (foundIds.size() == 1) {
-                    ItemStack newSignalPart = new ItemStack(LOSItems.ITEM_SIGNAL_PART, player.getHeldItem(hand).getCount());
+                    ItemStack newSignalPart = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, player.getHeldItem(hand).getCount());
                     String foundId = foundIds.get(0);
 
                     TagCompound tag = newSignalPart.getTagCompound();
@@ -94,9 +94,9 @@ public class ItemSignalPart extends CustomItem {
         List<ItemStack> itemStackList = new ArrayList<>();
 
         if (creativeTab == null || creativeTab.equals(LOSTabs.get(LOSTabs.SIGNALS_TAB))) {
-            for (String id : LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().keySet()) {
+            for (String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()) {
                 if (!id.equals(Static.MISSING)) {
-                    ItemStack is = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
+                    ItemStack is = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, 1);
                     TagCompound tag = is.getTagCompound();
                     tag.setString(ITEMIDKEY, id);
                     is.setTagCompound(tag);
@@ -115,7 +115,7 @@ public class ItemSignalPart extends CustomItem {
         final TagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey(ITEMIDKEY)) {
             String itemId = tag.getString(ITEMIDKEY);
-            return LOSBlocks.BLOCK_SIGNAL_PART.getName(itemId);
+            return LOSBlocks.BLOCK_COMPLEX_SIGNAL.getName(itemId);
         } else {
             return "Error missing tag \"itemId\" for ItemSignalPart";
         }
@@ -134,7 +134,7 @@ public class ItemSignalPart extends CustomItem {
                 tooltips.add("ID: " + itemId);
             }
 
-            boolean isUTF8 = LOSBlocks.BLOCK_SIGNAL_PART.isUTF8(itemId);
+            boolean isUTF8 = LOSBlocks.BLOCK_COMPLEX_SIGNAL.isUTF8(itemId);
             if (!isUTF8) {
                 tooltips.add("");
                 tooltips.add(TextUtil.translate(MSG_NOT_UTF8));

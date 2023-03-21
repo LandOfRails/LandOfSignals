@@ -13,7 +13,7 @@ public class ContentPackReferences {
     private Map<String, float[]> rotationRefs;
     private Map<String, float[]> scalingRefs;
 
-    private Map<String, String[]> textureRefs;
+    private Map<String, String> textureRefs;
     private Map<String, String[]> obj_groupRefs;
 
     private Map<String, ContentPackItem> contentPackItemRefs;
@@ -23,7 +23,7 @@ public class ContentPackReferences {
 
     }
 
-    public ContentPackReferences(Map<String, float[]> translationRefs, Map<String, float[]> rotationRefs, Map<String, float[]> scalingRefs, Map<String, String[]> textureRefs, Map<String, String[]> obj_groupRefs, Map<String, ContentPackItem> contentPackItemRefs, Map<String, ContentPackBlock> contentPackBlockRefs) {
+    public ContentPackReferences(Map<String, float[]> translationRefs, Map<String, float[]> rotationRefs, Map<String, float[]> scalingRefs, Map<String, String> textureRefs, Map<String, String[]> obj_groupRefs, Map<String, ContentPackItem> contentPackItemRefs, Map<String, ContentPackBlock> contentPackBlockRefs) {
         this.translationRefs = translationRefs;
         this.rotationRefs = rotationRefs;
         this.scalingRefs = scalingRefs;
@@ -57,11 +57,11 @@ public class ContentPackReferences {
         this.scalingRefs = scalingRefs;
     }
 
-    public Map<String, String[]> getTextureRefs() {
+    public Map<String, String> getTextureRefs() {
         return textureRefs;
     }
 
-    public void setTextureRefs(Map<String, String[]> textureRefs) {
+    public void setTextureRefs(Map<String, String> textureRefs) {
         this.textureRefs = textureRefs;
     }
 
@@ -189,7 +189,7 @@ public class ContentPackReferences {
         return scalingRefs.getOrDefault(id, defaultScaling);
     }
 
-    public String[] getTexturesOrElse(String id, String[] defaultTextures) {
+    public String getTexturesOrElse(String id, String defaultTextures) {
         return textureRefs.getOrDefault(id, defaultTextures);
     }
 

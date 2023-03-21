@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.packet;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
+import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 
 public class SignalBoxGuiToServerPacket extends Packet {
@@ -10,11 +11,11 @@ public class SignalBoxGuiToServerPacket extends Packet {
     @TagField("pos")
     private Vec3i pos;
 
-    @TagField("signalGroupId")
+    @TagField(value = "signalGroupId", mapper = EmptyStringMapper.class)
     private String groupId;
-    @TagField("activeGroupState")
+    @TagField(value = "activeGroupState", mapper = EmptyStringMapper.class)
     private String activeGroupState;
-    @TagField("inactiveGroupState")
+    @TagField(value = "inactiveGroupState", mapper = EmptyStringMapper.class)
     private String inactiveGroupState;
 
     public SignalBoxGuiToServerPacket() {

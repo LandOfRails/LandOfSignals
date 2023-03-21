@@ -98,16 +98,8 @@ public class TileDecoRender {
                 Vec3d translate = block.getAsVec3d(block::getTranslation);
                 Vec3d scale = block.getAsVec3d(block::getScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
-                List<OpenGL.With> closables = new ArrayList<>();
-                try {
-                    // Load
-                    closables.add(OpenGL.matrix());
-                    for (String texture : baseModel.getTextures()) {
-                        closables.add(renderer.bindTexture(texture));
-                    }
-                    if (closables.size() == 1) {
-                        closables.add(renderer.bindTexture());
-                    }
+
+                try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
 
                     // Render
                     GL11.glScaled(scale.x, scale.y, scale.z);
@@ -129,8 +121,6 @@ public class TileDecoRender {
                     ModCore.error("Removing local TileDeco (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
                     tile.getWorld().breakBlock(tile.getPos());
 
-                } finally {
-                    closables.forEach(OpenGL.With::close);
                 }
 
             }

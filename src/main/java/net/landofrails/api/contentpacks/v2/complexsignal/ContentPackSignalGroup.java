@@ -1,4 +1,4 @@
-package net.landofrails.api.contentpacks.v2.signal;
+package net.landofrails.api.contentpacks.v2.complexsignal;
 
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 

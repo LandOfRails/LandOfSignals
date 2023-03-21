@@ -9,6 +9,7 @@ public enum EntryType {
 
     // @formatter:off
     BLOCKSIGNAL(() -> LOSItems.ITEM_SIGNAL_PART),
+    BLOCKCOMPLEXSIGNAL(() -> LOSItems.ITEM_COMPLEX_SIGNAL),
     BLOCKSIGN(() -> LOSItems.ITEM_SIGN_PART),
     BLOCKSIGNALBOX(() -> LOSItems.ITEM_SIGNAL_BOX),
     BLOCKDECO(() -> LOSItems.ITEM_DECO);

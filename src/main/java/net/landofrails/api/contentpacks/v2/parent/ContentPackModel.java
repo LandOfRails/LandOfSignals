@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 @SuppressWarnings({"java:S100", "java:S116", "java:S117"})
 public class ContentPackModel {
 
-    private String[] textures;
+    private String textures;
     private String[] obj_groups;
     private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
@@ -23,7 +23,7 @@ public class ContentPackModel {
     }
 
     @SuppressWarnings("java:S117")
-    public ContentPackModel(String[] textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
+    public ContentPackModel(String textures, String[] obj_groups, Map<ContentPackItemRenderType, ContentPackItem> item, ContentPackBlock block) {
         this.textures = textures;
         this.obj_groups = obj_groups;
         this.item = item;
@@ -72,7 +72,7 @@ public class ContentPackModel {
     public void validate(Consumer<String> modelConsumer, ContentPackReferences references) {
 
         if (textures == null) {
-            textures = references.getTexturesOrElse(texturesRef, new String[0]);
+            textures = references.getTexturesOrElse(texturesRef, null);
         }
         if (obj_groups == null) {
             obj_groups = references.getObj_groupsOrElse(obj_groupsRef, new String[0]);
@@ -101,11 +101,11 @@ public class ContentPackModel {
 
     }
 
-    public String[] getTextures() {
+    public String getTextures() {
         return textures;
     }
 
-    public void setTextures(String[] textures) {
+    public void setTextures(String textures) {
         this.textures = textures;
     }
 

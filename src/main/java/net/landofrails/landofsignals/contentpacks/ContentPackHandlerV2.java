@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.contentpacks;
 import cam72cam.mod.ModCore;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
@@ -40,6 +41,9 @@ public class ContentPackHandlerV2 {
                 switch (type) {
                     case BLOCKSIGNAL:
                         loadSignal(zip, path, contentPack, isUTF8);
+                        break;
+                    case BLOCKCOMPLEXSIGNAL:
+                        loadComplexSignal(zip, path, contentPack, isUTF8);
                         break;
                     case BLOCKSIGN:
                         loadSign(zip, path, contentPack, isUTF8);
@@ -81,6 +85,31 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackSignal in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void loadComplexSignal(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
+
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackComplexSignal contentPackComplexSignal = ContentPackComplexSignal.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackComplexSignal.setUTF8(isUTF8);
+                contentPackComplexSignal.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
+                ModCore.info("Signal: %s", contentPackComplexSignal.getName());
+                LOSBlocks.BLOCK_COMPLEX_SIGNAL.add(contentPackComplexSignal);
+            } else {
+                ModCore.error("Couldn't find ContentPackComplexSignal under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContentPackComplexSignal in path %s\nError: %s", path, e.getMessage());
             if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
                 writeStacktraceHead();
                 e.printStackTrace();
@@ -176,6 +205,9 @@ public class ContentPackHandlerV2 {
                     switch (type) {
                         case BLOCKSIGNAL:
                             loadSignal(zip, entryPath, contentPack, isUTF8);
+                            break;
+                        case BLOCKCOMPLEXSIGNAL:
+                            loadComplexSignal(zip, path, contentPack, isUTF8);
                             break;
                         case BLOCKSIGN:
                             loadSign(zip, entryPath, contentPack, isUTF8);

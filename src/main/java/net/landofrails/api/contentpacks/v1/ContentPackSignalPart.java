@@ -6,7 +6,6 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 @SuppressWarnings({"java:S107"})
 public class ContentPackSignalPart {
@@ -21,13 +20,13 @@ public class ContentPackSignalPart {
 
     private float[] itemScaling;
 
-    private List<String> states;
+    private String[] states;
 
-    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final List<String> states) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final String[] states) {
         this(id, name, model, translation, itemTranslation, scaling, scaling, states);
     }
 
-    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final float[] itemScaling, final List<String> states) {
+    public ContentPackSignalPart(final String id, final String name, final String model, final float[] translation, final float[] itemTranslation, final float[] scaling, final float[] itemScaling, final String[] states) {
         this.id = id;
         this.name = name;
         this.model = model;
@@ -86,11 +85,11 @@ public class ContentPackSignalPart {
         this.scaling = scaling;
     }
 
-    public List<String> getStates() {
+    public String[] getStates() {
         return states;
     }
 
-    public void setStates(final List<String> states) {
+    public void setStates(final String[] states) {
         this.states = states;
     }
 

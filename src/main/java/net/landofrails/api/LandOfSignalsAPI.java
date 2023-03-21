@@ -2,8 +2,9 @@ package net.landofrails.api;
 
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.contentpacks.types.DirectionType;
@@ -57,11 +58,11 @@ public class LandOfSignalsAPI {
             World world = World.get(mcWorld);
             Vec3i position = new Vec3i(pos.x, pos.y, pos.z);
 
-            TileSignalPart tileSignal = world.getBlockEntity(position,
-                    TileSignalPart.class);
+            TileComplexSignal tileSignal = world.getBlockEntity(position,
+                    TileComplexSignal.class);
 
             if (tileSignal != null) {
-                return LOSBlocks.BLOCK_SIGNAL_PART.getAllGroupStates(tileSignal.getId());
+                return LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tileSignal.getId());
             }
 
             return null;

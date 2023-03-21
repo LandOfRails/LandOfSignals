@@ -3,12 +3,10 @@ package net.landofrails.landofsignals;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.blocks.*;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandlerV1;
@@ -35,6 +33,7 @@ public class LOSBlocks {
 
     //Signal
     public static final BlockSignalPart BLOCK_SIGNAL_PART = new BlockSignalPart(LandOfSignals.MODID, "blocksignalpart");
+    public static final BlockComplexSignal BLOCK_COMPLEX_SIGNAL = new BlockComplexSignal(LandOfSignals.MODID, "blockcomplexsignal");
     public static final BlockSignalPartAnimated BLOCK_SIGNAL_PART_ANIMATED = new BlockSignalPartAnimated(LandOfSignals.MODID, "blocksignalpartanimated");
 
     // Sign
@@ -45,118 +44,68 @@ public class LOSBlocks {
 
 
         // loads static classes and ctrs
-        final ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, Static.MISSING_NAME, Static.MISSING_OBJ, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -1995088635629060337L;
-
-            {
-                add(null);
-            }
+        final ContentPackSignalPart MISSING_SIGNAL = new ContentPackSignalPart(Static.MISSING, Static.MISSING_NAME, Static.MISSING_OBJ, new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null
         });
-
         registerSignalContentPack(MISSING_SIGNAL);
 
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "Sperrsignal Sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 4147652253740899871L;
-
-            {
-                add(null);
-                add("white");
-                add("off");
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_vorsignal_base", "Vorsignal Base", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/boden/vorsignal_boden.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -4735826034425691080L;
-
-            {
-                add(null);
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_mast", "Mast", "models/block/landofsignals/skyman_luna/mast/vorsignal_mast.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -7736454714742385604L;
-
-            {
-                add(null);
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_vorsignal_kopf", "Vorsignal Kopf", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 7937173305097109394L;
-
-            {
-                add(null);
-                add("green");
-                add("greenyellow");
-                add("off");
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_base", "Hauptsignal Base", "models/block/landofsignals/skyman_luna/hv_hauptsignal/boden/hauptsignal_boden.obj", new float[]{0.77f, -0.4f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 1986676804127454924L;
-
-            {
-                add(null);
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_schild", "Hauptsignal Schild", "models/block/landofsignals/skyman_luna/hv_hauptsignal/schild/hauptsignal_schild.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -1465489635273018445L;
-
-            {
-                add(null);
-            }
-        }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_kopf", "Hauptsignal Kopf", "models/block/landofsignals/skyman_luna/hv_hauptsignal/kopf/hauptsignal_kopf.obj", new float[]{0.77f, -0.4f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -176728690413574760L;
-
-            {
-                add(null);
-                add("hp1");
-                add("hp2");
-                add("sh1");
-                add("zs1");
-                add("off");
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_sperrsignal_sh0", "Sperrsignal Sh0", "models/block/landofsignals/skyman_luna/sperrsignal_sh0/sperrsignal_sh0.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                "off",
+                "white",
+                null
         }));
 
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_base", "Base", "models/block/landofsignals/gamertv/boden/hv_boden.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 8010261550984398621L;
-
-            {
-                add(null);
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_vorsignal_base", "Vorsignal Base", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/boden/vorsignal_boden.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null
         }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_mast", "Mast", "models/block/landofsignals/gamertv/mast/hv_mast.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 5869590144384251497L;
-
-            {
-                add(null);
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_mast", "Mast", "models/block/landofsignals/skyman_luna/mast/vorsignal_mast.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null
         }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_vorsignal", "Vorsignal", "models/block/landofsignals/gamertv/vorsignal/hv_vr.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 1870792251691530651L;
-
-            {
-                add(null);
-                add("gruen");
-                add("gruenorange");
-                add("off");
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_vorsignal_kopf", "Vorsignal Kopf", "models/block/landofsignals/skyman_luna/vr0_hv_vorsignal/kopf/vorsignal_kopf.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null,
+                "off",
+                "green",
+                "greenyellow"
         }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_hvhp", "HvHp", "models/block/landofsignals/gamertv/kopf/hv_hp.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = 882310492762338085L;
 
-            {
-                add(null);
-                add("hp1");
-                add("hp2");
-                add("sh1");
-                add("off");
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_base", "Hauptsignal Base", "models/block/landofsignals/skyman_luna/hv_hauptsignal/boden/hauptsignal_boden.obj", new float[]{0.77f, -0.4f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null
         }));
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_hversatz", "Hv Ersatz", "models/block/landofsignals/gamertv/ersatzsignal/hv_ersatzsignal.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new ArrayList<String>() {
-            private static final long serialVersionUID = -6520565720448485429L;
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_schild", "Hauptsignal Schild", "models/block/landofsignals/skyman_luna/hv_hauptsignal/schild/hauptsignal_schild.obj", new float[]{0.77f, -1.2f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null
+        }));
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_skymanluna_hauptsignal_kopf", "Hauptsignal Kopf", "models/block/landofsignals/skyman_luna/hv_hauptsignal/kopf/hauptsignal_kopf.obj", new float[]{0.77f, -0.4f, 0.77f}, new float[]{0.5f, -0.9f, 0.5f}, new float[]{0.63f, 0.63f, 0.63f}, new String[]{
+                null,
+                "off",
+                "zs1",
+                "sh1",
+                "hp1",
+                "hp2"
+        }));
 
-            {
-                add(null);
-                add("an");
-            }
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_base", "Base", "models/block/landofsignals/gamertv/boden/hv_boden.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null
+        }));
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_mast", "Mast", "models/block/landofsignals/gamertv/mast/hv_mast.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null
+        }));
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_vorsignal", "Vorsignal", "models/block/landofsignals/gamertv/vorsignal/hv_vr.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null,
+                "off",
+                "gruen",
+                "gruenorange"
+        }));
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_hvhp", "HvHp", "models/block/landofsignals/gamertv/kopf/hv_hp.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null,
+                "off",
+                "hp1",
+                "hp2",
+                "sh1"
+        }));
+
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_gamertv_hversatz", "Hv Ersatz", "models/block/landofsignals/gamertv/ersatzsignal/hv_ersatzsignal.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                null,
+                "an"
         }));
 
         // Animated Signals
@@ -199,6 +148,14 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_ra11b_sign", "GSAR Wartezeichen RA11 (b)", false, models("models/block/landofsignals/signs/gsar/ra11b/signalra11b.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Stellwand
+
+        registerSingleGroupStellwandContent(
+                Static.MISSING,
+                Static.MISSING_NAME,
+                Static.MISSING_OBJ,
+                keyValueLinkedMap("default", null),
+                null
+        );
 
         registerSingleGroupStellwandContent(
                 "block_signal_straight_track",
@@ -343,7 +300,7 @@ public class LOSBlocks {
 
     private static void registerStreckenblock() {
         String objPath = "models/block/stellwand/blockstreckenblock/streckenblock.obj";
-        Map<String, ContentPackSignalGroup> groups = new HashMap<>();
+        Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> groups = new HashMap<>();
 
         String[][] preparedGroups = new String[][]{
                 {"topLeft", "Top left"},
@@ -360,16 +317,16 @@ public class LOSBlocks {
         for (String[] group : preparedGroups) {
             String groupId = group[0];
             String groupName = group[1];
-            LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+            LinkedHashMap<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState> states = new LinkedHashMap<>();
             for (String[] state : preparedStates) {
                 String stateId = groupId + state[0];
                 String stateName = groupName + " " + state[1];
-                states.put(stateId, new ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
+                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
             }
-            groups.put(groupName, new ContentPackSignalGroup(groupName, states));
+            groups.put(groupName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup(groupName, states));
         }
 
-        ContentPackSignal stellwandMultisignal = new ContentPackSignal(
+        ContentPackComplexSignal stellwandMultisignal = new ContentPackComplexSignal(
                 "Streckenblock",
                 "block_signal_streckenblock",
                 90f,
@@ -385,7 +342,7 @@ public class LOSBlocks {
     }
 
     private static void registerSignalContentPack(ContentPackSignalPart contentPackSignalPartV1) {
-        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, false, CONTENTPACK, true);
+        ContentPackHandlerV1.convertToV2(contentPackSignalPartV1, CONTENTPACK, true);
     }
 
     private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models) {
@@ -435,32 +392,37 @@ public class LOSBlocks {
     private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {
         String groupIdName = "default";
 
-        LinkedHashMap<String, ContentPackSignalState> states = new LinkedHashMap<>();
+        LinkedHashMap<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState> states = new LinkedHashMap<>();
         signalNameAndId.forEach((signalName, signalId) ->
-                states.put(signalId, new ContentPackSignalState(signalName, signalModels(objPath, signalId)))
+                states.put(signalId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(signalName, signalModels(objPath, signalId)))
         );
-        Map<String, ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new ContentPackSignalGroup("default", states));
+        Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup("default", states));
+        Map<String, String> itemGroupStates = null;
+        if (itemGroup != null) {
+            itemGroupStates = new HashMap<>();
+            itemGroupStates.put(groupIdName, itemGroup);
+        }
 
-        ContentPackSignal contentPackSignal = new ContentPackSignal(
+        ContentPackComplexSignal contentPackComplexSignal = new ContentPackComplexSignal(
                 name,
                 id,
                 90f,
                 LOSTabs.SIGNALS_TAB,
                 signalModels(objPath, "general"),
                 group,
-                Collections.singletonMap(groupIdName, itemGroup),
+                itemGroupStates,
                 null,
                 null
         );
-        contentPackSignal.setUTF8(true);
-        registerStellwandContent(contentPackSignal);
+        contentPackComplexSignal.setUTF8(true);
+        registerStellwandContent(contentPackComplexSignal);
     }
 
-    private static void registerStellwandContent(ContentPackSignal contentPackSignal) {
-        contentPackSignal.validate(missing -> {
+    private static void registerStellwandContent(ContentPackComplexSignal contentPackComplexSignal) {
+        contentPackComplexSignal.validate(missing -> {
             throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
         }, CONTENTPACK_STELLWAND);
-        BLOCK_SIGNAL_PART.add(contentPackSignal);
+        BLOCK_COMPLEX_SIGNAL.add(contentPackComplexSignal);
     }
 
     private static void registerSignalboxContentPack(String id, String name, Map<String, ContentPackModel[]> models) {

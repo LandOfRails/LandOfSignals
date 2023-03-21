@@ -6,17 +6,12 @@ import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.api.contentpacks.v1.ContentPackSignalSet;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackItem;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackItemRenderType;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalState;
 import net.landofrails.landofsignals.LOSBlocks;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -51,14 +46,15 @@ public class ContentPackHandlerV1 {
                             if (zipEntry1.getName().equalsIgnoreCase(pathToContentPackSignalPart)) {
                                 ContentPackSignalPart contentPackSignalPart = ContentPackSignalPart.fromJson(zip.getInputStream(zipEntry1));
                                 ModCore.debug("SignalPart v1: %s", contentPackSignalPart.getName());
-                                List<String> states = contentPackSignalPart.getStates();
-                                if (states == null) {
-                                    states = new ArrayList<>();
+                                String[] cpStates = contentPackSignalPart.getStates();
+                                String[] states = new String[1 + (cpStates != null ? cpStates.length : 0)];
+                                states[0] = null;
+                                if (cpStates != null && cpStates.length > 0) {
+                                    System.arraycopy(cpStates, 0, states, 1, cpStates.length);
                                 }
-                                states.add(0, null);
                                 contentPackSignalPart.setStates(states);
 
-                                convertToV2(contentPackSignalPart, true, new ContentPack(contentPack), isUTF8);
+                                convertToV2(contentPackSignalPart, new ContentPack(contentPack), isUTF8);
 
                             }
                         }
@@ -69,7 +65,7 @@ public class ContentPackHandlerV1 {
         }
     }
 
-    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, boolean addToItemTranslation, ContentPack contentPack, boolean isUTF8) {
+    public static void convertToV2(ContentPackSignalPart contentPackSignalPart, ContentPack contentPack, boolean isUTF8) {
 
         // ContentPackSignal
         ContentPackSignal contentPackSignal = new ContentPackSignal();
@@ -78,44 +74,12 @@ public class ContentPackHandlerV1 {
         contentPackSignal.setName(contentPackSignalPart.getName());
         contentPackSignal.setMetadata(Collections.singletonMap("addonversion", 1));
         contentPackSignal.setUTF8(isUTF8);
-
-        // ContentPackSignalGroup
-        ContentPackSignalGroup contentPackSignalGroup = new ContentPackSignalGroup();
-        contentPackSignalGroup.setGroupName(contentPackSignal.getName());
-
-        // ContentPackSignalState(s)
-        int index = 1;
-        LinkedHashMap<String, ContentPackSignalState> contentPackSignalStateMap = new LinkedHashMap<>();
-        for (String texture : contentPackSignalPart.getStates()) {
-            ContentPackSignalState contentPackSignalState = new ContentPackSignalState();
-            contentPackSignalState.setSignalName("State " + index++);
-
-            ContentPackModel contentPackModel = new ContentPackModel();
-            contentPackModel.setTextures(new String[]{texture});
-
-            // ContentPackBlock
-            ContentPackBlock contentPackBlock = new ContentPackBlock();
-            contentPackBlock.setTranslation(contentPackSignalPart.getTranslation());
-            contentPackBlock.setScaling(contentPackSignalPart.getScaling());
-
-            // ContentPackItem
-            ContentPackItem contentPackItem = new ContentPackItem();
-            contentPackItem.setTranslation(contentPackSignalPart.getItemTranslation());
-            contentPackItem.setScaling(contentPackSignalPart.getItemScaling());
-            Map<ContentPackItemRenderType, ContentPackItem> contentPackItemRenderTypeContentPackItemMap = new HashMap<>();
-            contentPackItemRenderTypeContentPackItemMap.put(ContentPackItemRenderType.DEFAULT, contentPackItem);
-
-            // Nesting
-            contentPackModel.setBlock(contentPackBlock);
-            contentPackModel.setItem(contentPackItemRenderTypeContentPackItemMap);
-            ContentPackModel[] contentPackModels = new ContentPackModel[]{contentPackModel};
-            contentPackSignalState.setModels(Collections.singletonMap(contentPackSignalPart.getModel(), contentPackModels));
-            contentPackSignalStateMap.put(texture, contentPackSignalState);
-        }
-
-        // Nesting
-        contentPackSignalGroup.setStates(contentPackSignalStateMap);
-        contentPackSignal.setSignals(Collections.singletonMap(contentPackSignal.getUniqueId(), contentPackSignalGroup));
+        contentPackSignal.setModel(contentPackSignalPart.getModel());
+        contentPackSignal.setStates(contentPackSignalPart.getStates());
+        contentPackSignal.setTranslation(contentPackSignalPart.getTranslation());
+        contentPackSignal.setItemTranslation(contentPackSignalPart.getItemTranslation());
+        contentPackSignal.setScaling(contentPackSignalPart.getScaling());
+        contentPackSignal.setItemScaling(contentPackSignalPart.getItemScaling());
 
         ModCore.info("Signal (v1->v2): %s", contentPackSignal.getName());
         // Validate

@@ -16,8 +16,6 @@ import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
-import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptBlockPacket;
-import net.landofrails.landofsignals.packet.legacymode.LegacyModePromptToClientPacket;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
@@ -63,12 +61,11 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
-            Packet.register(LegacyModePromptToClientPacket::new, PacketDirection.ServerToClient);
-            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ClientToServer);
-            Packet.register(LegacyModePromptBlockPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
             Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
+            Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
+            Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -98,11 +95,13 @@ public class LandOfSignals extends ModCore.Mod {
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_COMPLEX_SIGNAL, TileComplexSignalRender::render, TileComplexSignal.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGN_PART, TileSignPartRender::render, TileSignPart.class);
 
                 //SignalPart : Item
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART, new ItemSignalPartRender());
+                ItemRender.register(LOSItems.ITEM_COMPLEX_SIGNAL, new ItemComplexSignalRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());

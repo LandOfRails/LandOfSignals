@@ -3,16 +3,14 @@ package net.landofrails.api.contentpacks.v2.signal;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
-import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 import net.landofrails.landofsignals.LOSTabs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class ContentPackSignal {
 
@@ -22,36 +20,41 @@ public class ContentPackSignal {
     private String id;
     private Float rotationSteps;
     private String creativeTab;
-    // objPath : objProperties
-    private Map<String, ContentPackModel[]> base;
-    // groupId : group
-    private Map<String, ContentPackSignalGroup> signals;
-    // groupId : state
-    private Map<String, String> itemGroupStates;
-    private ContentPackReferences references;
+    private String model;
+    private String base;
+    private String[] states;
+    private String itemState;
+
+    private float[] translation;
+    private float[] itemTranslation;
+    private float[] scaling;
+    private float[] itemScaling;
+
     // metadataId : data
     private Map<String, Object> metadata;
 
     // Processed data
-    private Map<String, Set<String>> objTextures;
     private String uniqueId;
     private Boolean isUTF8;
-
 
     public ContentPackSignal() {
 
     }
 
-    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, Map<String, ContentPackModel[]> base, Map<String, ContentPackSignalGroup> signals, Map<String, String> itemGroupStates, ContentPackReferences references, Map<String, Object> metadata) {
+
+    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, String model, String base, String[] states, String itemState, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
         this.creativeTab = creativeTab;
+        this.model = model;
         this.base = base;
-        this.signals = signals;
-        this.itemGroupStates = itemGroupStates;
-        this.references = references;
-        this.metadata = metadata;
+        this.states = states;
+        this.itemState = itemState;
+        this.translation = translation;
+        this.itemTranslation = itemTranslation;
+        this.scaling = scaling;
+        this.itemScaling = itemScaling;
     }
 
     public String getName() {
@@ -86,28 +89,68 @@ public class ContentPackSignal {
         this.creativeTab = creativeTab;
     }
 
-    public Map<String, ContentPackModel[]> getBase() {
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getBase() {
         return base;
     }
 
-    public void setBase(Map<String, ContentPackModel[]> base) {
+    public void setBase(String base) {
         this.base = base;
     }
 
-    public Map<String, ContentPackSignalGroup> getSignals() {
-        return signals;
+    public String[] getStates() {
+        return states;
     }
 
-    public void setSignals(Map<String, ContentPackSignalGroup> signals) {
-        this.signals = signals;
+    public void setStates(String[] states) {
+        this.states = states;
     }
 
-    public Map<String, String> getItemGroupStates() {
-        return itemGroupStates;
+    public String getItemState() {
+        return itemState;
     }
 
-    public void setItemGroupStates(Map<String, String> itemGroupStates) {
-        this.itemGroupStates = itemGroupStates;
+    public void setItemGroupStates(String itemState) {
+        this.itemState = itemState;
+    }
+
+    public float[] getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(float[] translation) {
+        this.translation = translation;
+    }
+
+    public float[] getItemTranslation() {
+        return itemTranslation;
+    }
+
+    public void setItemTranslation(float[] itemTranslation) {
+        this.itemTranslation = itemTranslation;
+    }
+
+    public float[] getScaling() {
+        return scaling;
+    }
+
+    public void setScaling(float[] scaling) {
+        this.scaling = scaling;
+    }
+
+    public float[] getItemScaling() {
+        return itemScaling;
+    }
+
+    public void setItemScaling(float[] itemScaling) {
+        this.itemScaling = itemScaling;
     }
 
     public Map<String, Object> getMetadata() {
@@ -116,10 +159,6 @@ public class ContentPackSignal {
 
     public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
-    }
-
-    public Map<String, Set<String>> getObjTextures() {
-        return objTextures;
     }
 
     public String getUniqueId() {
@@ -145,12 +184,6 @@ public class ContentPackSignal {
 
     public void validate(Consumer<String> invalid, ContentPack contentPack) {
 
-        if (references == null) {
-            references = new ContentPackReferences();
-        }
-        Consumer<String> referencesConsumer = text -> invalid.accept("references" + ": [" + text + "]");
-        references.validate(referencesConsumer);
-
         defaultMissing();
 
         StringJoiner joiner = new StringJoiner(",", "[", "]");
@@ -158,7 +191,9 @@ public class ContentPackSignal {
             joiner.add("name");
         if (id == null)
             joiner.add("id");
-        if (signals == null || signals.isEmpty())
+        if (model == null)
+            joiner.add("model");
+        if (states == null || states.length == 0)
             joiner.add("signals");
         if (isUTF8 == null)
             joiner.add("isUTF8");
@@ -172,52 +207,8 @@ public class ContentPackSignal {
                 uniqueId = id;
             }
 
-            if (signals != null) {
-
-                for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signals.entrySet()) {
-                    ContentPackSignalGroup signalGroup = signalGroupEntry.getValue();
-                    Consumer<String> signalConsumer = text -> invalid.accept(signalGroupEntry.getKey() + ": [" + text + "]");
-                    signalGroup.validate(signalConsumer, references);
-                }
-            }
-            if (!base.isEmpty()) {
-                for (Map.Entry<String, ContentPackModel[]> signalModelEntry : base.entrySet()) {
-                    Consumer<String> signalConsumer = text -> invalid.accept(signalModelEntry.getKey() + ": [" + text + "]");
-                    Stream.of(signalModelEntry.getValue()).forEach(model -> model.validate(signalConsumer, references));
-                }
-            }
-            if (objTextures.isEmpty()) {
-                initObjTextures();
-            }
         }
 
-    }
-
-    private void initObjTextures() {
-        for (ContentPackSignalGroup group : signals.values()) {
-            for (ContentPackSignalState state : group.getStates().values()) {
-                for (Map.Entry<String, ContentPackModel[]> modelEntry : state.getModels().entrySet()) {
-                    for (ContentPackModel model : modelEntry.getValue()) {
-                        String objPath = modelEntry.getKey();
-                        objTextures.putIfAbsent(objPath, new HashSet<>());
-                        objTextures.computeIfPresent(objPath, (key, value) -> {
-                            value.addAll(Arrays.asList(model.getTextures()));
-                            return value;
-                        });
-                    }
-                }
-            }
-        }
-        for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
-            for (ContentPackModel model : modelEntry.getValue()) {
-                String objPath = modelEntry.getKey();
-                objTextures.putIfAbsent(objPath, new HashSet<>());
-                objTextures.computeIfPresent(objPath, (key, value) -> {
-                    value.addAll(Arrays.asList(model.getTextures()));
-                    return value;
-                });
-            }
-        }
     }
 
     private void defaultMissing() {
@@ -236,32 +227,26 @@ public class ContentPackSignal {
             metadata = new HashMap<>();
         }
 
-        if (base == null) {
-            base = new HashMap<>();
+        if (itemState == null) {
+            itemState = states[0];
         }
 
-        if (itemGroupStates == null) {
-            itemGroupStates = new HashMap<>();
+        if (translation == null) {
+            translation = new float[]{0, 0, 0};
         }
 
-        if (itemGroupStates.size() != signals.size()) {
-
-            Function<ContentPackSignalGroup, String> nullDefault = group -> {
-                String stateId = group.getStates().keySet().iterator().next();
-                if (stateId == null) {
-                    if (group.getStates().containsKey("default")) {
-                        throw new ContentPackException("There is a null and a \"default\" state. Sorry, this will not work. :(");
-                    }
-                    stateId = "default";
-                }
-                return stateId;
-            };
-            signals.forEach((groupId, group) -> itemGroupStates.putIfAbsent(groupId, nullDefault.apply(group)));
+        if (itemTranslation == null) {
+            itemTranslation = new float[]{0, 0, 0};
         }
 
-        if (objTextures == null) {
-            objTextures = new HashMap<>();
+        if (scaling == null) {
+            scaling = new float[]{0, 0, 0};
         }
+
+        if (itemScaling == null) {
+            itemScaling = new float[]{0, 0, 0};
+        }
+
     }
 
     public boolean isUTF8() {

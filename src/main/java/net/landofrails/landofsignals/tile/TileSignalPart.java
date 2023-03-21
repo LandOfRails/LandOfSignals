@@ -2,6 +2,7 @@ package net.landofrails.landofsignals.tile;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
@@ -9,17 +10,15 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
-import net.landofrails.api.contentpacks.v2.signal.ContentPackSignalGroup;
+import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.landofsignals.configs.LegacyMode;
-import net.landofrails.landofsignals.contentpacks.migration.TileSignalPartMigratorV1;
+import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket;
 import net.landofrails.landofsignals.packet.SignalUpdatePacket;
-import net.landofrails.landofsignals.serialization.MapStringStringMapper;
-import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
+import net.landofrails.landofsignals.serialization.MapVec3iStringMapper;
+import net.landofrails.landofsignals.serialization.StringArrayMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,31 +28,38 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     private static final String MISSING = "MISSING";
 
-    @TagField("version")
-    private Integer version;
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
     private final String id;
     @TagField("texturePath")
-    @Deprecated
-    @SuppressWarnings("java:S1123")
     private String texturePath;
-    @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
-    private Map<String, String> signalGroupStates = new HashMap<>();
+    @TagField(value = "orderedStates", mapper = StringArrayMapper.class)
+    private String[] orderedStates;
     // for server only
-    @TagField(value = "senderSignalGroupStates", mapper = MapVec3iStringStringMapper.class)
-    private Map<Vec3i, Map.Entry<String, String>> senderSignalGroupStates = new HashMap<>();
-    @TagField(value = "legacyMode", typeHint = LegacyMode.class)
-    private LegacyMode legacyMode;
+    @TagField(value = "senderSignalStates", mapper = MapVec3iStringMapper.class)
+    private Map<Vec3i, String> senderSignalStates = new HashMap<>();
 
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
-    public TileSignalPart(final String id, final int rot, LegacyMode legacyMode) {
-        blockRotate = rot;
+    public TileSignalPart(final String id, final int rot) {
+        this.blockRotate = rot;
         this.id = id;
-        this.legacyMode = legacyMode;
+    }
+
+    @Override
+    public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
+        if (player.isCrouching() || player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR)) {
+            return false;
+        }
+        if (!getWorld().isServer) {
+            return true;
+        }
+
+        GuiSignalPrioritizationToClientPacket.sendToPlayer(player, this);
+
+        return true;
     }
 
     @Override
@@ -79,12 +85,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return blockRotate;
     }
 
-    /**
-     * @return the old texturepath
-     * @deprecated (1.0.0, Only needed for backwards compatability)
-     */
-    @Deprecated
-    public String getTexturePath_depr() {
+    public String getState() {
         if ("null".equals(texturePath)) return null;
         else return texturePath;
     }
@@ -93,14 +94,9 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
         return id;
     }
 
-    /**
-     * @param texturePath The texturepath provided by the contentpack
-     * @deprecated (1.0.0, Only needed for backwards compatability)
-     */
-    @Deprecated
-    public void setTexturePath_depr(final String texturePath) {
-        if (texturePath == null) this.texturePath = "null";
-        else this.texturePath = texturePath;
+    public void setState(final String state) {
+        if (state == null) this.texturePath = "null";
+        else this.texturePath = state;
         markDirty();
     }
 
@@ -135,44 +131,35 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     /**
-     * client-only
+     * server-only
      *
-     * @param signalGroupStates Map of Groups and each State
+     * @return Ordered States, if null, use order of states in ContentPack
      */
-    public void setSignalGroupStates(Map<String, String> signalGroupStates) {
-        this.signalGroupStates = signalGroupStates;
-    }
-
-    /**
-     * client-only
-     *
-     * @return Map<Group, Groupstate>
-     */
-    @SuppressWarnings("java:S1134")
-    public Map<String, String> getSignalGroupStates() {
-
-        // CHECK: Is there a more performance-friendly way of doing this?
-        if (this.signalGroupStates.isEmpty()) {
-            refreshSignals(false);
-        }
-
-        return this.signalGroupStates;
+    public String[] getOrderedStates() {
+        if (orderedStates == null)
+            orderedStates = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(id);
+        return orderedStates;
     }
 
     /**
      * server-only
      *
-     * @param pos        Sender position
-     * @param groupId    Selected sender groupId
-     * @param groupState Current sender groupstate
+     * @param orderedStates All states in the wanted order
      */
-    public void updateSignals(Vec3i pos, String groupId, String groupState) {
-        ModCore.debug("Pos: %s, GroupId: %s, State: %s", pos.toString(), groupId, groupState);
+    public void setOrderedStates(String[] orderedStates) {
+        this.orderedStates = orderedStates;
+    }
 
-        if (legacyMode == LegacyMode.ON) {
-            senderSignalGroupStates.clear();
-        }
-        senderSignalGroupStates.put(pos, new AbstractMap.SimpleEntry<>(groupId, groupState));
+    /**
+     * server-only
+     *
+     * @param pos   Sender position
+     * @param state Current sender state
+     */
+    public void updateSignals(Vec3i pos, String state) {
+        ModCore.debug("Pos: %s, State: %s", pos.toString(), state);
+
+        senderSignalStates.put(pos, state);
 
         refreshSignals(true);
     }
@@ -190,34 +177,28 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
      * @param pos Sender position
      */
     public void removeSignal(Vec3i pos) {
-        if (legacyMode == LegacyMode.OFF) {
-            senderSignalGroupStates.remove(pos);
-        }
+        senderSignalStates.remove(pos);
         refreshSignals(true);
     }
 
     private void refreshSignals(boolean updateClients) {
-        Map<String, ContentPackSignalGroup> signals = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id).getSignals();
-        signals.forEach((signalGroupId, group) -> {
-            String lastState = null;
-            for (String state : group.getStates().keySet()) {
-                if (lastState == null || senderSignalGroupStates.containsValue(new AbstractMap.SimpleEntry<>(signalGroupId, state))) {
-                    lastState = state;
-                }
+        boolean first = true;
+        String lastState = null;
+        for (String state : getOrderedStates()) {
+            if (first || senderSignalStates.containsValue(state)) {
+                lastState = state;
+                first = false;
             }
-            signalGroupStates.put(signalGroupId, lastState);
-        });
+        }
+        this.texturePath = lastState;
 
         if (updateClients) {
-            new SignalUpdatePacket(getPos(), signalGroupStates).sendToAll();
+            new SignalUpdatePacket(getPos(), texturePath).sendToAll();
         }
     }
 
     @Override
     public void load(TagCompound nbt) throws SerializationException {
-
-        if (!nbt.hasKey("version"))
-            nbt.setInteger("version", 1);
 
         if (nbt.hasKey("id") && !nbt.getString("id").contains(":") && !nbt.getString("id").equalsIgnoreCase(MISSING)) {
 
@@ -253,10 +234,6 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
         }
 
-        TileSignalPartMigratorV1 tileSignalPartMigratorV1 = TileSignalPartMigratorV1.getInstance();
-        if (tileSignalPartMigratorV1.shouldBeMigrated(nbt)) {
-            tileSignalPartMigratorV1.migrate(nbt);
-        }
-
     }
+
 }
