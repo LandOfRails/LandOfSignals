@@ -41,7 +41,9 @@ public class TileSignalPartRender {
         }
 
         ContentPackSignal signal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id);
-        renderBase(id, signal, tsp);
+        if (signal.getUseBase()) {
+            renderBase(id, signal, tsp);
+        }
         renderSignals(id, signal, tsp);
 
     }
