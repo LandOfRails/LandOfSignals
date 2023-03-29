@@ -21,6 +21,7 @@ public class ContentPackSignal {
     private Float rotationSteps;
     private String creativeTab;
     private String model;
+    private Boolean useBase;
     private String base;
     private String[] states;
     private String itemState;
@@ -42,12 +43,13 @@ public class ContentPackSignal {
     }
 
 
-    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, String model, String base, String[] states, String itemState, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, Map<String, Object> metadata) {
+    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, String model, Boolean useBase, String base, String[] states, String itemState, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, Map<String, Object> metadata) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
         this.creativeTab = creativeTab;
         this.model = model;
+        this.useBase = useBase;
         this.base = base;
         this.states = states;
         this.itemState = itemState;
@@ -95,6 +97,14 @@ public class ContentPackSignal {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public Boolean getUseBase() {
+        return useBase;
+    }
+
+    public void setUseBase(Boolean useBase) {
+        this.useBase = useBase;
     }
 
     public String getBase() {
@@ -221,6 +231,10 @@ public class ContentPackSignal {
 
         if (creativeTab == null) {
             creativeTab = LOSTabs.SIGNALS_TAB;
+        }
+
+        if (useBase == null) {
+            useBase = false;
         }
 
         if (metadata == null) {

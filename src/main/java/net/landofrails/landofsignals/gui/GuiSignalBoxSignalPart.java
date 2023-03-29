@@ -9,7 +9,6 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
-import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
@@ -78,14 +77,12 @@ public class GuiSignalBoxSignalPart implements IScreen {
             @Override
             public void onClick(final Player.Hand hand) {
                 leftState = nextState(leftState);
-                MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct(leftState != null ? leftState : "its null"));
             }
         };
         new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->") {
             @Override
             public void onClick(final Player.Hand hand) {
                 rightState = nextState(rightState);
-                MinecraftClient.getPlayer().sendMessage(PlayerMessage.direct(rightState != null ? rightState : "its null"));
             }
         };
 
