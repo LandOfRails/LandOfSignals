@@ -241,7 +241,7 @@ public class ContentPackSignal {
             metadata = new HashMap<>();
         }
 
-        if (itemState == null) {
+        if (itemState == null && states.length > 0) {
             itemState = states[0];
         }
 
