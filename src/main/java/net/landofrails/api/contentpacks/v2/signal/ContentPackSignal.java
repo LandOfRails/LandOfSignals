@@ -7,9 +7,7 @@ import net.landofrails.landofsignals.LOSTabs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ContentPackSignal {
@@ -42,8 +40,8 @@ public class ContentPackSignal {
 
     }
 
-
-    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, String model, Boolean useBase, String base, String[] states, String itemState, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling, Map<String, Object> metadata) {
+    @SuppressWarnings("java:S107")
+    public ContentPackSignal(String name, String id, Float rotationSteps, String creativeTab, String model, Boolean useBase, String base, String[] states, String itemState, float[] translation, float[] itemTranslation, float[] scaling, float[] itemScaling) {
         this.name = name;
         this.id = id;
         this.rotationSteps = rotationSteps;
@@ -222,6 +220,15 @@ public class ContentPackSignal {
     }
 
     private void defaultMissing() {
+
+        if (states == null || Arrays.stream(states).noneMatch(Objects::isNull)) {
+            String[] tempStates = new String[1 + (this.states != null ? this.states.length : 0)];
+            tempStates[0] = null;
+            if (this.states != null && this.states.length > 0) {
+                System.arraycopy(this.states, 0, tempStates, 1, this.states.length);
+            }
+            this.states = tempStates;
+        }
 
         if (rotationSteps == null) {
             rotationSteps = 10f;
