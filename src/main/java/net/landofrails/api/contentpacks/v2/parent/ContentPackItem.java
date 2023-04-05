@@ -49,7 +49,7 @@ public class ContentPackItem {
             stringJoiner.add("rotation should contain 3 values");
         }
         if (scaling == null) {
-            scaling = references.getScalingOrElse(scalingRef, new float[]{.7f, .7f, .7f});
+            scaling = references.getScalingOrElse(scalingRef, new float[]{1f, 1f, 1f});
         } else if (scaling.length != 3) {
             stringJoiner.add("scaling should contain 3 values");
         }
