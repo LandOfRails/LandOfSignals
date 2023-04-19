@@ -79,19 +79,24 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer && signalType != null) {
+        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer) {
 
-            if (signalType == 0) {
+            if(signalType == null) {
+                refreshOldRedstoneVariables();
+            }
+            if(signalType == null){
+                return false;
+            }
+
+            if (0 == signalType) {
                 TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
                 if (tempSignalPart != null) {
-                    refreshOldRedstoneVariables();
                     new SignalBoxTileSignalPartPacket(tempSignalPart, this).sendToPlayer(player);
                     return true;
                 }
-            } else if (signalType == 1) {
+            } else if (1 == signalType) {
                 TileComplexSignal tempComplexSignal = player.getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
                 if (tempComplexSignal != null) {
-                    refreshOldRedstoneVariables();
                     new SignalBoxTileSignalPartPacket(tempComplexSignal, this).sendToPlayer(player);
                     return true;
                 }
@@ -109,8 +114,13 @@ public class TileSignalBox extends BlockEntity {
             lastRedstone = currentRedstone;
         }
 
-        if (tileSignalPartPos != null && signalType != null) {
-            refreshOldRedstoneVariables();
+        if (tileSignalPartPos != null) {
+            if (signalType == null) {
+                refreshOldRedstoneVariables();
+            }
+            if(signalType == null){
+                return;
+            }
 
             if (getWorld().isServer) {
                 if (signalType == 0) {
@@ -132,8 +142,7 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onBreak() {
-        if (tileSignalPartPos == null || signalType == null) {
-            tileSignalPartPos = null;
+        if (tileSignalPartPos == null) {
             signalType = null;
             return;
         }
@@ -142,7 +151,7 @@ public class TileSignalBox extends BlockEntity {
             getWorld().keepLoaded(tileSignalPartPos);
         }
 
-        if (0 == signalType) {
+        if (signalType == null || 0 == signalType) {
             TileSignalPart entity = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
             if (entity != null) {
                 entity.removeSignal(getPos());
