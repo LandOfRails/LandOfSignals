@@ -261,11 +261,11 @@ public class ContentPackSignal {
         }
 
         if (scaling == null) {
-            scaling = new float[]{0, 0, 0};
+            scaling = new float[]{1, 1, 1};
         }
 
         if (itemScaling == null) {
-            itemScaling = new float[]{0, 0, 0};
+            itemScaling = new float[]{1, 1, 1};
         }
 
     }
