@@ -3,42 +3,54 @@ package net.landofrails.landofsignals.packet;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
-import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.landofsignals.gui.GuiSignalBoxComplexSignal;
+import net.landofrails.landofsignals.gui.GuiSignalBoxSignalPart;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 public class SignalBoxTileSignalPartPacket extends Packet {
 
     @TagField("tileSignalPart")
     TileSignalPart tileSignalPart;
-    @TagField("tileSignalPartAnimated")
-    TileSignalPartAnimated tileSignalPartAnimated;
+    @TagField("tileComplexSignal")
+    TileComplexSignal tileComplexSignal;
+
+    @TagField("tileSignalBox")
+    TileSignalBox tileSignalBox;
     @TagField("posSignalBox")
     Vec3i posSignalBox;
+    @TagField("signalType")
+    Byte signalType;
 
     public SignalBoxTileSignalPartPacket() {
     }
 
-    public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final Vec3i posSignalBox) {
+    public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final TileSignalBox tileSignalBox) {
         this.tileSignalPart = tileSignalPart;
-        this.posSignalBox = posSignalBox;
+        this.tileSignalBox = tileSignalBox;
+        this.posSignalBox = tileSignalBox.getPos();
+        this.signalType = tileSignalBox.getSignalType();
     }
 
-    public SignalBoxTileSignalPartPacket(final TileSignalPartAnimated tileSignalPartAnimated, final Vec3i posSignalBox) {
-        this.tileSignalPartAnimated = tileSignalPartAnimated;
-        this.posSignalBox = posSignalBox;
+    public SignalBoxTileSignalPartPacket(final TileComplexSignal tileComplexSignal, final TileSignalBox tileSignalBox) {
+        this.tileComplexSignal = tileComplexSignal;
+        this.tileSignalBox = tileSignalBox;
+        this.posSignalBox = tileSignalBox.getPos();
+        this.signalType = tileSignalBox.getSignalType();
     }
 
     @Override
     protected void handle() {
         if (tileSignalPart != null) {
+            getWorld().setBlockEntity(posSignalBox, tileSignalBox);
             getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
-            LOSGuis.SIGNAL_BOX.open(getPlayer(), posSignalBox);
-        } else if (tileSignalPartAnimated != null) {
-            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPartAnimated(tileSignalPartAnimated);
-            LOSGuis.SIGNAL_ANIMATED_BOX.open(getPlayer(), posSignalBox);
+            GuiSignalBoxSignalPart.open(tileSignalBox);
+        } else if (tileComplexSignal != null) {
+            getWorld().setBlockEntity(posSignalBox, tileSignalBox);
+            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileComplexSignal(tileComplexSignal);
+            GuiSignalBoxComplexSignal.open(tileSignalBox);
         } else {
             LandOfSignals.error("Can't open Signalbox, no tile entity given.");
         }

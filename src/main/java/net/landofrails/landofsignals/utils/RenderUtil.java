@@ -5,10 +5,15 @@ import org.lwjgl.opengl.ARBMultitexture;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+@SuppressWarnings({"java:S1444", "java:S1104", "java:S1149"})
 public class RenderUtil {
 
     public static float lastBrightnessX;
     public static float lastBrightnessY;
+
+    private RenderUtil() {
+
+    }
 
     /**
      * Lightmap stack used to remember existing lightmap settings when doing lightmap hacks.
@@ -22,7 +27,7 @@ public class RenderUtil {
      */
     public static void lightmapBright() {
         final int maxBright = (15 << 20) | (15 << 4);
-        lightmapBright(maxBright % 65536, maxBright / 65536);
+        lightmapBright(maxBright % 65536, maxBright / 65536f);
     }
 
     /**
@@ -59,8 +64,8 @@ public class RenderUtil {
      * @author Jaffa
      */
     private static class LightmapState {
-        public float x, y;
-
+        public float x;
+        public float y;
 
         public LightmapState(final float x, final float y) {
             this.x = x;

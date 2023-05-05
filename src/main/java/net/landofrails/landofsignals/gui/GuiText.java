@@ -8,6 +8,14 @@ public enum GuiText {
     //Signalbox
     LABEL_REDSTONE("signalbox.redstone"),
     LABEL_NOREDSTONE("signalbox.noredstone"),
+    LABEL_SIGNALGROUP("signalbox.signalgroup"),
+
+    //Priority
+    LABEL_PAGE("priority.page"),
+    LABEL_GROUP("priority.group"),
+    LABEL_PRIORITY("priority.priority"),
+    LABEL_LOW("priority.low"),
+    LABEL_HIGH("priority.high"),
 
     //ManipulatorOverlay
     LABEL_UNATTACH("manipulator.unattach"),

@@ -3,18 +3,17 @@ package net.landofrails.landofsignals.blocks;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
-import cam72cam.mod.math.Vec3d;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"java:S2387", "java:S1135"})
 public class BlockSignalPart extends BlockTypeEntity {
 
-    private final Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
+    private final Map<String, ContentPackSignal> contentPackSignals = new HashMap<>();
     private String id;
     private int rot;
 
@@ -35,61 +34,48 @@ public class BlockSignalPart extends BlockTypeEntity {
         this.id = id;
     }
 
-    public String getPath(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getModel();
-    }
-
-    public Vec3d getTranslation(final String uncheckedId) {
-        final String id = checkIfMissing(uncheckedId);
-        final float[] translation = signalParts.get(id).getTranslation();
-        return new Vec3d(translation[0], translation[1], translation[2]);
-    }
-
-    public Vec3d getScaling(final String uncheckedId) {
-        final String id = checkIfMissing(uncheckedId);
-        final float[] scaling = signalParts.get(id).getScaling();
-        return new Vec3d(scaling[0], scaling[1], scaling[2]);
-    }
-
-    public Vec3d getItemScaling(final String uncheckedId) {
-        final String id = checkIfMissing(uncheckedId);
-        final float[] scaling = signalParts.get(id).getItemScaling();
-        return new Vec3d(scaling[0], scaling[1], scaling[2]);
-    }
-
-    public List<String> getStates(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getStates();
-    }
-
-    public String getId(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getId();
-    }
-
-    public Vec3d getItemTranslation(final String uncheckedId) {
-        final String id = checkIfMissing(uncheckedId);
-        final float[] translation = signalParts.get(id).getItemTranslation();
-        return new Vec3d(translation[0], translation[1], translation[2]);
-    }
-
     public String getName(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getName();
+        if (!uncheckedId.contains(":")) {
+            return "ID: " + uncheckedId + "; Click into air to refresh item!";
+        }
+        return contentPackSignals.get(checkIfMissing(uncheckedId)).getName();
     }
 
-    public void add(final ContentPackSignalPart contentPackSignalPart) {
-        if (!signalParts.containsKey(contentPackSignalPart.getId())) {
-            signalParts.put(contentPackSignalPart.getId(), contentPackSignalPart);
+    public void add(final ContentPackSignal contentPackSignal) {
+        if (!contentPackSignals.containsKey(contentPackSignal.getUniqueId())) {
+            contentPackSignals.put(contentPackSignal.getUniqueId(), contentPackSignal);
         } else {
             //TODO: Add conflict info for user after he entered a world
-            ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignalPart.getId());
+            ModCore.error("There is already a SignalPart registered with this ID! ID: " + contentPackSignal.getUniqueId());
         }
     }
 
-    public Map<String, ContentPackSignalPart> getSignalParts() {
-        return signalParts;
+    public Map<String, ContentPackSignal> getContentpackSignals() {
+        return contentPackSignals;
     }
 
     private String checkIfMissing(final String id) {
-        if (signalParts.containsKey(id)) return id;
+        if (contentPackSignals.containsKey(id)) return id;
         else return Static.MISSING;
+    }
+
+    public boolean isOldContentPack(String id) {
+        return contentPackSignals.containsKey(id) &&
+                contentPackSignals.get(id).getMetadata().containsKey("addonversion") &&
+                (Integer) contentPackSignals.get(id).getMetadata().get("addonversion") != 2;
+    }
+
+    public String[] getAllStates(String id) {
+        if (!contentPackSignals.containsKey(id)) return new String[0];
+
+        return contentPackSignals.get(id).getStates();
+    }
+
+    public float getRotationSteps(String id) {
+        return contentPackSignals.get(id).getRotationSteps();
+    }
+
+    public boolean isUTF8(String id) {
+        return contentPackSignals.get(checkIfMissing(id)).isUTF8();
     }
 }

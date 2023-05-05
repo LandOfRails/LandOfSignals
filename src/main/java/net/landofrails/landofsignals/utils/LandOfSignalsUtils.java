@@ -1,9 +1,11 @@
 package net.landofrails.landofsignals.utils;
 
 import cam72cam.mod.entity.Player;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+import net.landofrails.landofsignals.LOSItems;
 
 import java.util.Optional;
 
@@ -25,6 +27,22 @@ public class LandOfSignalsUtils {
 
     private static boolean isStandingInBlock(final Vec3i vec3i) {
         return vec3i.x == 0 && vec3i.z == 0 && (vec3i.y == 0 || vec3i.y == -1);
+    }
+
+    public static String getUniqueIdOfItemStack(final ItemStack itemStack) {
+        return itemStack.getTagCompound().getString("itemId");
+    }
+
+    public static boolean isLandOfSignalsItem(final ItemStack itemStack){
+        return itemStack.is(LOSItems.ITEM_CONNECTOR)
+                || itemStack.is(LOSItems.ITEM_MANIPULATOR)
+                || itemStack.is(LOSItems.ITEM_COMPLEX_SIGNAL)
+                || itemStack.is(LOSItems.ITEM_DECO)
+                || itemStack.is(LOSItems.ITEM_SIGN_PART)
+                || itemStack.is(LOSItems.ITEM_SIGNAL_BOX)
+                || itemStack.is(LOSItems.ITEM_SIGNAL_LEVER)
+                || itemStack.is(LOSItems.ITEM_SIGNAL_PART)
+                || itemStack.is(LOSItems.ITEM_SIGNAL_PART_ANIMATED);
     }
 
 }

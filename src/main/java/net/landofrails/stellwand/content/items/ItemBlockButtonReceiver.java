@@ -1,6 +1,5 @@
 package net.landofrails.stellwand.content.items;
 
-import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.item.ClickResult;
 import cam72cam.mod.item.CreativeTab;
@@ -19,15 +18,12 @@ import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.stellwand.Stellwand;
-import net.landofrails.stellwand.content.blocks.CustomBlocks;
-import net.landofrails.stellwand.content.entities.storage.BlockButtonReceiverStorageEntity;
-import net.landofrails.stellwand.content.guis.SelectItem;
-import net.landofrails.stellwand.content.network.ChangeHandHeldItem;
+import net.landofrails.stellwand.content.messages.EMessage;
+import net.landofrails.stellwand.content.network.ServerMessagePacket;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 import net.landofrails.stellwand.contentpacks.Content;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntry;
 import net.landofrails.stellwand.contentpacks.entries.parent.ContentPackEntryItem;
-import net.landofrails.stellwand.contentpacks.types.EntryType;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -127,21 +123,9 @@ public class ItemBlockButtonReceiver extends CustomItem {
 
     @Override
     public void onClickAir(Player player, World world, Player.Hand hand) {
-
         if (world.isServer) {
-            return;
+            ServerMessagePacket.send(player, EMessage.MESSAGE_DEPRECATED);
         }
-
-        int sizeInHand = player.getHeldItem(hand).getCount();
-        SelectItem.open(player, EntryType.BLOCKBUTTONRECEIVER, new ItemStack(CustomItems.ITEMBLOCKBUTTONRECEIVER, 1), item -> {
-            if (item != null) {
-                player.setHeldItem(hand, item);
-                item.setCount(sizeInHand);
-                ChangeHandHeldItem packet = new ChangeHandHeldItem(player, item, hand);
-                packet.sendToServer();
-            }
-        });
-
     }
 
     public static ItemRender.IItemModel getModelFor() {
@@ -202,47 +186,10 @@ public class ItemBlockButtonReceiver extends CustomItem {
 
     @Override
     public ClickResult onClickBlock(Player player, World world, Vec3i pos, Player.Hand hand, Facing facing, Vec3d inBlockPos) {
-        Vec3i target = world.isReplaceable(pos) ? pos : pos.offset(facing);
-
-        if (world.isClient)
-            Stellwand.warnPlayers();
-
-        if (isStandingInBlock(player.getBlockPosition().subtract(target)))
-            return ClickResult.REJECTED;
-
-        if (world.isAir(target) || world.isReplaceable(target)) {
-
-            BlockTypeEntity block = CustomBlocks.BLOCKRECEIVER;
-
-            world.setBlock(target, block);
-            if (!player.isCreative()) {
-                ItemStack is = player.getHeldItem(hand);
-                is.shrink(1);
-                player.setHeldItem(hand, is);
-            }
-            BlockButtonReceiverStorageEntity blockEntity = world.getBlockEntity(target,
-                    BlockButtonReceiverStorageEntity.class);
-            // Set ContentPackBlockId
-            ItemStack item = player.getHeldItem(hand);
-            TagCompound tag = item.getTagCompound();
-            if (blockEntity != null) {
-                if (tag != null && !tag.isEmpty())
-                    blockEntity
-                            .setContentBlockId(tag.hasKey(ITEMID)
-                                    ? tag.getString(ITEMID)
-                                    : MISSING);
-                else
-                    blockEntity.setContentBlockId(MISSING);
-                blockEntity.renderEntity
-                        .setRotation(player.getRotationYawHead());
-                blockEntity.setWallMounted(!facing.equals(Facing.DOWN) && !facing.equals(Facing.UP));
-            }
-            //
-
-            return ClickResult.ACCEPTED;
+        if (world.isServer) {
+            ServerMessagePacket.send(player, EMessage.MESSAGE_DEPRECATED);
         }
-
-        return ClickResult.REJECTED;
+        return ClickResult.ACCEPTED;
     }
 
     private boolean isStandingInBlock(Vec3i vec3i) {

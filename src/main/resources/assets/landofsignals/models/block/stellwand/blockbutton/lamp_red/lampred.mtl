@@ -1,0 +1,10 @@
+# Made in Blockbench 3.8.4
+newmtl m_0
+map_Kd gray 
+newmtl m_2
+map_Kd texture 
+newmtl m_3
+map_Kd onglass 
+newmtl m_4
+map_Kd offglass 
+newmtl none

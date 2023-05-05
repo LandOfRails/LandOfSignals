@@ -20,4 +20,5 @@ public class BlockTicketMachineSBB extends BlockTypeEntity {
     public void setRot(final float rot) {
         this.rot = rot;
     }
+
 }

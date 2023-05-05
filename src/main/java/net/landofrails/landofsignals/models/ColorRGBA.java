@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+@SuppressWarnings({"java:S100", "java:S1182", "java:S3008", "java:S2975", "java:S1149"})
 public class ColorRGBA implements Cloneable {
     /**
      * Default black color.
@@ -50,7 +51,7 @@ public class ColorRGBA implements Cloneable {
     /**
      * A {@link java.util.Stack Stack} to keep track of which colour multipliers have been applied to {@link ColorRGBA}.
      */
-    private static final Stack<ColorRGBA> multiplierStack = new Stack<ColorRGBA>();
+    private static final Stack<ColorRGBA> multiplierStack = new Stack<>();
 
     /**
      * Red color component, ranging from {@code 0.0F} to {@code 1.0F}.
@@ -119,6 +120,7 @@ public class ColorRGBA implements Cloneable {
 
     @Override
     public ColorRGBA clone() {
+
         return new ColorRGBA(r, g, b, a);
     }
 
@@ -273,6 +275,7 @@ public class ColorRGBA implements Cloneable {
      * Encode this color into 32-Bit HEX color space, with the alpha channel in front.<br>
      * This method can be used to convert this color into Minecraft's ARGB color scheme.
      */
+    @SuppressWarnings("java:S2234")
     public int toAHEX() {
         return encodeRGBtoHEX(a, r, g, b);
     }
@@ -325,7 +328,7 @@ public class ColorRGBA implements Cloneable {
      * Encodes the given red, green and blue color components into HEX color space.
      */
     public static int encodeRGBtoHEX(final float r, final float g, final float b, final float a) {
-        return (((int) (r * 255F + 0.5F) & 0xFF) << 24) | (((int) (g * 255F + 0.5F) & 0xFF) << 16) | (((int) (b * 255F + 0.5F) & 0xFF) << 8) | (((int) (a * 255F + 0.5F) & 0xFF));
+        return (((int) (r * 255F + 0.5F) & 0xFF) << 24) | (((int) (g * 255F + 0.5F) & 0xFF) << 16) | (((int) (b * 255F + 0.5F) & 0xFF) << 8) | ((int) (a * 255F + 0.5F) & 0xFF);
     }
 
     /**

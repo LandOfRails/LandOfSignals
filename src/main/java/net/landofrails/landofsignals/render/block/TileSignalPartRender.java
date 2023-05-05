@@ -1,17 +1,21 @@
 package net.landofrails.landofsignals.render.block;
 
+import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.landofsignals.render.item.ItemRenderException;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.apache.commons.lang3.tuple.Pair;
+import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,73 +25,111 @@ public class TileSignalPartRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom(() -> renderStuff(tsp));
     }
 
     private static void renderStuff(final TileSignalPart tsp) {
-        final String id = tsp.getId();
-        if (!cache.containsKey("flare")) {
-            try {
-                final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                final OBJRender flareRenderer = new OBJRender(flareModel);
-                cache.put("flare", Pair.of(flareModel, flareRenderer));
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (!cache.containsKey(id)) {
-            try {
-                final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART.getStates(id));
-                final OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        }
-        final OBJRender renderer = cache.get(id).getRight();
-        try (final OpenGL.With matrix = OpenGL.matrix(); final OpenGL.With tex = renderer.bindTexture(tsp.getTexturePath())) {
-            final Vec3d scale = LOSBlocks.BLOCK_SIGNAL_PART.getScaling(id);
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            final Vec3d trans = LOSBlocks.BLOCK_SIGNAL_PART.getTranslation(id).add(tsp.getOffset());
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
+
+        String id = tsp.getId();
+
+        if (id == null) {
+            id = Static.MISSING;
         }
 
-//        OBJRender flareRenderer = cache.get("flare").getRight();
-//
-//        GL11.glPushMatrix();
-//        {
-//            GL11.glPushAttrib(GL11.GL_ALPHA_TEST_FUNC);
-//            GL11.glPushAttrib(GL11.GL_ALPHA_TEST_REF);
-//            GL11.glPushAttrib(GL11.GL_LIGHTING);
-//            GL11.glPushAttrib(GL11.GL_BLEND);
-//
-//            RenderUtil.lightmapPush();
-//            {
-//                RenderUtil.lightmapBright();
-//
-//                // Disable lighting & enable alpha blending.
-//                GL11.glAlphaFunc(GL11.GL_GREATER, 0.01F);
-//                GL11.glDisable(GL11.GL_LIGHTING);
-//                GL11.glEnable(GL11.GL_BLEND);
-//
-//                OpenGL.With color = OpenGL.color(0.5F, 1.0F, 0.0F, 0.0F);
-//
-//                GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-//
-//                flareRenderer.draw();
-//            }
-//            RenderUtil.lightmapPop();
-//
-//            GL11.glPopAttrib(); /* GL11.GL_BLEND */
-//            GL11.glPopAttrib(); /* GL11.GL_LIGHTING */
-//            GL11.glPopAttrib(); /* GL11.GL_ALPHA_TEST_REF */
-//            GL11.glPopAttrib(); /* GL11.GL_ALPHA_TEST_FUNC */
-//        }
-//        GL11.glPopMatrix();
+        ContentPackSignal signal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id);
+
+        if(signal == null) {
+            signal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(Static.MISSING);
+            tsp.setState(null);
+        }
+
+        if (signal.getUseBase()) {
+            renderBase(id, signal, tsp);
+        }
+        renderSignals(id, signal, tsp);
+
     }
+
+    @SuppressWarnings("java:S1134")
+    private static void renderBase(String blockId, ContentPackSignal signal, TileSignalPart tile) {
+
+        final Vec3d offset = tile.getOffset();
+        final String base = signal.getBase();
+        final String objPath = signal.getModel();
+
+        if (!cache.containsKey(objPath)) {
+            try {
+                String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
+                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
+            } catch (Exception e) {
+                throw new ItemRenderException("Error loading item model/renderer...", e);
+            }
+        }
+        final OBJRender renderer = cache.get(objPath);
+
+        final float[] originalTranslate = signal.getTranslation();
+        final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
+        final float[] scale = signal.getScaling();
+
+        try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(base)) {
+
+            // Render
+            GL11.glScaled(scale[0], scale[1], scale[2]);
+            GL11.glTranslated(translate.x, translate.y, translate.z);
+            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
+            renderer.draw();
+
+        } catch (Exception e) {
+            // Removes TileEntity on client-side, prevents crash
+            ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+            tile.getWorld().breakBlock(tile.getPos());
+
+        }
+
+    }
+
+
+    @SuppressWarnings("java:S1134")
+    private static void renderSignals(String blockId, ContentPackSignal signal, TileSignalPart tile) {
+
+        final Vec3d offset = tile.getOffset();
+        final String signalState = tile.getState();
+        final String objPath = signal.getModel();
+
+        if (!cache.containsKey(objPath)) {
+            try {
+                String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
+                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
+            } catch (Exception e) {
+                throw new ItemRenderException("Error loading item model/renderer...", e);
+            }
+        }
+        final OBJRender renderer = cache.get(objPath);
+
+        final float[] originalTranslate = signal.getTranslation();
+        final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
+        final float[] scale = signal.getScaling();
+
+        try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(signalState)) {
+
+            // Render
+            GL11.glScaled(scale[0], scale[1], scale[2]);
+            GL11.glTranslated(translate.x, translate.y, translate.z);
+            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
+            renderer.draw();
+
+        } catch (Exception e) {
+            // Removes TileEntity on client-side, prevents crash
+            ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
+            tile.getWorld().breakBlock(tile.getPos());
+
+        }
+    }
+
 }

@@ -73,4 +73,4 @@ You should be ready to go ^^
 
 I am **not** the creator of any 3D models, textures or other assets. All these contents belong to their honorable
 original creators. If the mod contains any content that is unwanted or have any other concerns, please contact me by
-email at: **markenjaden@landofrails.net**
+email at: **jjsch1410@gmail.com**

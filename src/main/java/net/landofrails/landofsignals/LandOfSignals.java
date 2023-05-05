@@ -2,6 +2,7 @@ package net.landofrails.landofsignals;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
+import cam72cam.mod.config.ConfigFile;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.net.PacketDirection;
@@ -9,24 +10,25 @@ import cam72cam.mod.render.BlockRender;
 import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.text.Command;
+import net.landofrails.landofsignals.commands.ConfigCommand;
+import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
+import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
 import net.landofrails.landofsignals.packet.*;
 import net.landofrails.landofsignals.render.block.*;
-import net.landofrails.landofsignals.render.item.ItemSignalPartAnimatedRender;
-import net.landofrails.landofsignals.render.item.ItemSignalPartRender;
-import net.landofrails.landofsignals.render.item.ObjItemRender;
+import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackHandler;
 import net.landofrails.stellwand.Stellwand;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class LandOfSignals extends ModCore.Mod {
+    @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
-    public static final String VERSION = "0.0.4";
+    // Current version
+    public static final String VERSION = "1.0.0";
 
     @Override
     public String modID() {
@@ -55,9 +57,18 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignalBoxGuiToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalBoxTileSignalPartPacket::new, PacketDirection.ServerToClient);
             Packet.register(SignalSelectorGuiPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignSelectorGuiPacket::new, PacketDirection.ClientToServer);
             Packet.register(ManipulatorToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(ManipulatorToServerPacket::new, PacketDirection.ClientToServer);
-
+            Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
+            Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
+            Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
+            Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
+            Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
+            Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
+        } else if (event == ModEvent.INITIALIZE) {
+            // LandOfSignals Config
+            ConfigFile.sync(LandOfSignalsConfig.class);
         }
 
     }
@@ -73,61 +84,61 @@ public class LandOfSignals extends ModCore.Mod {
                 ModCore.Mod.info("Starting client construct...");
 
                 // Block
-                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileSignalSO12Render::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_LEVER, TileSignalLeverRender::render, TileSignalLever.class);
-                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileTicketMachineDBRender::render, TileTicketMachineDB.class);
-                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileTicketMachineSBBRender::render, TileTicketMachineSBB.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
+                BlockRender.register(LOSBlocks.BLOCK_DECO, TileDecoRender::render, TileDeco.class);
 
                 // Items
-                ItemRender.register(LOSItems.ITEM_SIGNALSO12, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/so12/signalso12.obj"), new Vec3d(0.5, 0, 0.5), 2));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_DB, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/fahrkartenautomat_db/fahrkartenautomat_db.obj"), new Vec3d(0.5, 0, 0.5), 0.5f));
-                ItemRender.register(LOSItems.ITEM_TICKET_MACHINE_SBB, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/fahrkartenautomat_sbb/ticketautomat.obj"), new Vec3d(0.5, 0, 0.5), 0.3f));
-                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, ObjItemRender.getModelFor(new Identifier(MODID, "models/block/landofsignals/signalbox/untitled.obj"), new Vec3d(0.5, 0, 0.5), 0.25f));
-                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(MODID, "items/itemconnector1"));
-                ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(MODID, "items/manipulator"));
-
-                ItemRender.register(LOSItems.ITEM_SIGNAL_SELECTOR, new Identifier(MODID, "items/signalchest"));
+                ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
+                ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
+                ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
+                BlockRender.register(LOSBlocks.BLOCK_COMPLEX_SIGNAL, TileComplexSignalRender::render, TileComplexSignal.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED, TileSignalPartAnimatedRender::render, TileSignalPartAnimated.class);
+                BlockRender.register(LOSBlocks.BLOCK_SIGN_PART, TileSignPartRender::render, TileSignPart.class);
 
                 //SignalPart : Item
-                ItemRender.register(LOSItems.ITEM_SIGNAL_PART, ItemSignalPartRender.getModelFor());
+                ItemRender.register(LOSItems.ITEM_SIGNAL_PART, new ItemSignalPartRender());
+                ItemRender.register(LOSItems.ITEM_COMPLEX_SIGNAL, new ItemComplexSignalRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_PART_ANIMATED, ItemSignalPartAnimatedRender.getModelFor());
-                break;
-            case INITIALIZE:
+                ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
+                ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
+                ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
+
+                // Deprecated: Only for compatability - Removes warnings
+                BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);
+                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileMissingRender::render, TileTicketMachineDB.class);
+                BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileMissingRender::render, TileTicketMachineSBB.class);
+
+                Command.register(new ConfigCommand());
+
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
                 break;
             case RELOAD:
-            case START:
             case FINALIZE:
+            default:
                 break;
         }
     }
 
     public Optional<String> getMCVersion() {
+        try {
+            Class<?> loader = Class.forName("net.minecraftforge.fml.common.Loader");
+            Method instanceMethod = loader.getMethod("instance");
+            Object loaderInstance = instanceMethod.invoke(null);
+            Method getMCVersionString = loader.getMethod("getMCVersionString");
+            String version = (String) getMCVersionString.invoke(loaderInstance);
 
-        for (final Annotation annotation : ModCore.class.getAnnotations()) {
-            if (annotation.annotationType().getName().contains("Mod")) {
-                for (final Method method : Mod.class.getDeclaredMethods()) {
-                    if (method.getName().contains("Minecraft") || method.getName().contains("minecraft")) {
-                        try {
-                            return Optional.of((String) method.invoke(annotation));
-                        } catch (final IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                            e.printStackTrace();
-                            return Optional.empty();
-                        }
-                    }
-                }
-            }
+            return Optional.ofNullable(version);
+
+        } catch (Exception e) {
+
+            return Optional.empty();
         }
-
-        return Optional.empty();
 
     }
 

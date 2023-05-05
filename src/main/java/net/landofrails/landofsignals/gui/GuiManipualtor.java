@@ -140,6 +140,7 @@ public class GuiManipualtor implements IScreen {
         builder.close();
     }
 
+    @SuppressWarnings("java:S125")
     @Override
     public void onClose() {
         send();

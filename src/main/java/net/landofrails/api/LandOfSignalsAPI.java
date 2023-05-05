@@ -2,7 +2,9 @@ package net.landofrails.api;
 
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.world.World;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
+import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.contentpacks.types.DirectionType;
@@ -11,7 +13,6 @@ import net.landofrails.stellwand.utils.compact.SignalContainer;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3d;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -52,16 +53,16 @@ public class LandOfSignalsAPI {
         }
 
         @Nullable
-        public List<String> getStates(net.minecraft.world.World mcWorld,
-                                      Vector3d pos) {
+        public Map<String, ContentPackSignalGroup> getStates(net.minecraft.world.World mcWorld,
+                                                             Vector3d pos) {
             World world = World.get(mcWorld);
             Vec3i position = new Vec3i(pos.x, pos.y, pos.z);
 
-            TileSignalPart tileSignal = world.getBlockEntity(position,
-                    TileSignalPart.class);
+            TileComplexSignal tileSignal = world.getBlockEntity(position,
+                    TileComplexSignal.class);
 
             if (tileSignal != null) {
-                return LOSBlocks.BLOCK_SIGNAL_PART.getStates(tileSignal.getId());
+                return LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tileSignal.getId());
             }
 
             return null;
@@ -77,7 +78,7 @@ public class LandOfSignalsAPI {
                     TileSignalPart.class);
 
             if (tileSignal != null) {
-                return tileSignal.getTexturePath();
+                throw new UnsupportedOperationException("This method is currently unavailable");
             }
 
             return null;
@@ -92,7 +93,7 @@ public class LandOfSignalsAPI {
                     TileSignalPart.class);
 
             if (tileSignal != null) {
-                tileSignal.setTexturePath(state);
+                throw new UnsupportedOperationException("This method is currently unavailable");
             }
         }
 
@@ -231,7 +232,7 @@ public class LandOfSignalsAPI {
             }
             return new DirectionType[0];
         }
-        
+
     }
 
 }

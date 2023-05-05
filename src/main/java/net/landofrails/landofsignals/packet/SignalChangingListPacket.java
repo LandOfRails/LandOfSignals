@@ -6,6 +6,7 @@ import cam72cam.mod.serialization.TagField;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused") // Is this class needed?
 public class SignalChangingListPacket extends Packet {
 
     @TagField("uuid")
@@ -26,5 +27,6 @@ public class SignalChangingListPacket extends Packet {
 
     @Override
     protected void handle() {
+        // Unsure if needed, see comment above
     }
 }

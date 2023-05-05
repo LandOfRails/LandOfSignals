@@ -10,7 +10,6 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 
 public class GuiSignalPartAnimatedBox implements IScreen {
 
@@ -26,23 +25,23 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     private String[] listTexureNames;
     private final String[] listAnimationNames;
 
-    @SuppressWarnings("java:S3010")
+    @SuppressWarnings({"java:S3010", "java:S2259", "java:S1134", "java:S125"})
     public GuiSignalPartAnimatedBox(final TileSignalBox tsb) {
         this.tsb = tsb;
-        final TileSignalPartAnimated tsp = tsb.getTileSignalPartAnimated();
+        String tspId = "null";
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
         final TagCompound tag = itemStackLeft.getTagCompound();
-        tag.setString("itemId", tsp.getId());
+        tag.setString("itemId", tspId);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART_ANIMATED, 1);
         final TagCompound tag2 = itemStackRight.getTagCompound();
-        tag2.setString("itemId", tsp.getId());
+        tag2.setString("itemId", tspId);
         itemStackRight.setTagCompound(tag2);
 
-        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tsp.getId()).toArray(new String[0]);
-        listAnimationNames = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tsp.getId()).keySet().toArray(new String[0]);
+        listTexureNames = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(tspId).toArray(new String[0]);
+        listAnimationNames = LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getAniamtions(tspId).keySet().toArray(new String[0]);
 
         stateRight = tsb.getRedstone();
         stateLeft = tsb.getNoRedstone();
@@ -101,13 +100,11 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     @Override
     public void onClose() {
         name = null;
-        tsb.setNoRedstone(stateLeft);
-        tsb.setRedstone(stateRight);
-        final SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(stateRight, stateLeft, tsb.getPos());
+        SignalBoxGuiToServerPacket packet = new SignalBoxGuiToServerPacket(tsb);
         packet.sendToServer();
     }
 
-    @SuppressWarnings("java:S2696")
+    @SuppressWarnings({"java:S2696", "java:S125"})
     @Override
     public void draw(final IScreenBuilder builder) {
 //        int scale = 8;

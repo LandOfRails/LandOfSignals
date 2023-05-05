@@ -89,7 +89,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         try {
             save(new TagCompound().setVec3d("offset", vec));
         } catch (final Exception e) {
-
+            // Nothing you can do now.
         }
     }
 
@@ -104,13 +104,13 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
         } catch (final Exception e) {
-
+            // Nothing you can do now.
         }
     }
 
     @Override
     public int getRotation() {
-        return blockRotate;
+        return getBlockRotate();
     }
 
     public void setActive(final boolean active) {

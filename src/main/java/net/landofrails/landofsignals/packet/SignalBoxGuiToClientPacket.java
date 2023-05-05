@@ -3,39 +3,47 @@ package net.landofrails.landofsignals.packet;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
-import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 
 public class SignalBoxGuiToClientPacket extends Packet {
 
-    @TagField("textureNameRedstone")
-    private int textureNameRedstone;
-    @TagField("textureNameNoRedstone")
-    private int textureNameNoRedstone;
     @TagField("pos")
     private Vec3i pos;
+
+    @TagField("signalGroupId")
+    private String groupId;
+    @TagField("activeGroupState")
+    private String activeGroupState;
+    @TagField("inactiveGroupState")
+    private String inactiveGroupState;
 
     public SignalBoxGuiToClientPacket() {
     }
 
-    public SignalBoxGuiToClientPacket(final int textureNameRedstone, final int textureNameNoRedstone, final Vec3i pos) {
-        this.textureNameRedstone = textureNameRedstone;
-        this.textureNameNoRedstone = textureNameNoRedstone;
-        this.pos = pos;
+    public SignalBoxGuiToClientPacket(final TileSignalBox tsb) {
+        this.pos = tsb.getPos();
+        this.groupId = tsb.getGroupId();
+        this.activeGroupState = tsb.getActiveGroupState();
+        this.inactiveGroupState = tsb.getInactiveGroupState();
+
     }
 
     @Override
     protected void handle() {
-        final TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
-        if (box != null) {
-            box.setRedstone(textureNameRedstone);
-            box.setNoRedstone(textureNameNoRedstone);
-        } else {
-            if (pos != null) {
-                LandOfSignals.debug("TileSignalBox could not be loaded: [xyz: %f, %f, %f] not found!", pos.x, pos.y, pos.z);
-            } else {
-                LandOfSignals.warn("TileSignalBox could not be loaded: \"pos\" is not set!");
-            }
+
+        if (!getWorld().isBlockLoaded(pos)) {
+            getWorld().keepLoaded(pos);
         }
+
+        final TileSignalBox box = getWorld().getBlockEntity(pos, TileSignalBox.class);
+
+        if (box == null) {
+            return;
+        }
+
+        box.setGroupId(groupId);
+        box.setActiveGroupState(activeGroupState);
+        box.setInactiveGroupState(inactiveGroupState);
+        
     }
 }

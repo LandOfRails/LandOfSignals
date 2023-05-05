@@ -4,15 +4,17 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 import cam72cam.mod.math.Vec3d;
+import net.landofrails.api.contentpacks.v1.ContentPackAnimation;
+import net.landofrails.api.contentpacks.v1.ContentPackSignalPart;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackAnimation;
-import net.landofrails.landofsignals.utils.contentpacks.ContentPackSignalPart;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"java:S2387", "java:S1135", "java:S1172", "java:S1117"})
 public class BlockSignalPartAnimated extends BlockTypeEntity {
 
     private final Map<String, ContentPackSignalPart> signalParts = new HashMap<>();
@@ -53,7 +55,7 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
     }
 
     public List<String> getStates(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getStates();
+        return Collections.singletonList(null);
     }
 
     public String getId(final String uncheckedId) {
@@ -71,11 +73,11 @@ public class BlockSignalPartAnimated extends BlockTypeEntity {
     }
 
     public List<ContentPackAnimation> getAnimation(final String uncheckedId, final String animation) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations().get(animation);
+        return Collections.emptyList();
     }
 
     public Map<String, List<ContentPackAnimation>> getAniamtions(final String uncheckedId) {
-        return signalParts.get(checkIfMissing(uncheckedId)).getAnimations();
+        return Collections.emptyMap();
     }
 
     public void add(final ContentPackSignalPart contentPackSignalPart) {
