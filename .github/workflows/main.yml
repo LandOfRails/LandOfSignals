@@ -7,7 +7,8 @@ on:
   push:
     paths:
       - 'src/**'
-  
+      - '.github/workflows/**'
+
   workflow_dispatch:
 
 jobs:
@@ -36,7 +37,7 @@ jobs:
     - name: Hack Forge Gradle Part Two
       env:
         BRANCH: ${{ matrix.branch }}
-      run: git apply ${BRANCH}.patch || true
+      run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
     - name: Gradle compile
       run: ./gradlew classes
     - name: Process images

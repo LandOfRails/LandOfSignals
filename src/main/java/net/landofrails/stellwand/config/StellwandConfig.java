@@ -14,8 +14,8 @@ public class StellwandConfig {
         // Currently nothing to initialize
     }
 
-    @Comment("Disables the stellwand part | Default: false")
-    public static boolean disableStellwand = false;
+    @Comment("Disables the stellwand part. If you want to play on a server that has this activated, set it to \"false\". | Default: true")
+    public static boolean disableStellwand = true;
 
     @Comment("Disables all stellwand recipes | Default: false")
     public static boolean disableRecipes = false;

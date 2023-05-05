@@ -87,14 +87,8 @@ public class Stellwand {
 
                 break;
             case RELOAD:
-                // Release renderers after reload (rejoining a world for example)
-                BlockButtonReceiverStorageEntity.releaseRenderersIntoTheWild();
-                BlockFillerStorageEntity.releaseRenderersIntoTheWild();
-                BlockMultisignalStorageEntity.releaseRenderersIntoTheWild();
-                BlockSenderStorageEntity.releaseRenderersIntoTheWild();
-                BlockSignalStorageEntity.releaseRenderersIntoTheWild();
-
-                break;
+            case START:
+            case FINALIZE:
             default:
                 break;
         }
