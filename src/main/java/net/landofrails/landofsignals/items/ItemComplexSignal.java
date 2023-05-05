@@ -47,6 +47,8 @@ public class ItemComplexSignal extends CustomItem {
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
 
+        if(!LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().containsKey(itemId)) return ClickResult.REJECTED;
+
         float rotationSteps = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getRotationSteps(itemId);
 
         int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);

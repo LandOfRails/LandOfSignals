@@ -45,7 +45,12 @@ public class ItemSignalBox extends CustomItem {
         TileSignalBox tileSignalBox = world.getBlockEntity(pos, TileSignalBox.class);
         if (tileSignalBox != null && !player.isCrouching()) rot = tileSignalBox.getBlockRotate();
         LOSBlocks.BLOCK_SIGNAL_BOX.setRot(rot);
-        LOSBlocks.BLOCK_SIGNAL_BOX.setId(player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY));
+
+        String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
+
+        if(!LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().containsKey(itemId)) return ClickResult.REJECTED;
+
+        LOSBlocks.BLOCK_SIGNAL_BOX.setId(itemId);
         world.setBlock(target.get(), LOSBlocks.BLOCK_SIGNAL_BOX);
         return ClickResult.ACCEPTED;
     }

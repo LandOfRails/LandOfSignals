@@ -10,6 +10,13 @@ public enum GuiText {
     LABEL_NOREDSTONE("signalbox.noredstone"),
     LABEL_SIGNALGROUP("signalbox.signalgroup"),
 
+    //Priority
+    LABEL_PAGE("priority.page"),
+    LABEL_GROUP("priority.group"),
+    LABEL_PRIORITY("priority.priority"),
+    LABEL_LOW("priority.low"),
+    LABEL_HIGH("priority.high"),
+
     //ManipulatorOverlay
     LABEL_UNATTACH("manipulator.unattach"),
     LABEL_EDITINGAME("manipulator.editingame"),

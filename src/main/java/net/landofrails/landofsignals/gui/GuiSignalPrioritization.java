@@ -65,7 +65,7 @@ public class GuiSignalPrioritization implements IScreen {
         if (!shouldContinue)
             return;
 
-        slider = new Slider(screen, -175, 120, "Index: ", 0, Math.max(1, states.length - 6d), entriesIndex, false) {
+        slider = new Slider(screen, -175, 120, GuiText.LABEL_PAGE + ": ", 0, Math.max(1, states.length - 6d), entriesIndex, false) {
             @Override
             public void onSlider() {
                 entriesIndex = slider.getValueInt();
@@ -74,7 +74,7 @@ public class GuiSignalPrioritization implements IScreen {
         };
         slider.setEnabled(states.length > 6);
 
-        groupButton = new Button(screen, -190, -20, 180, 20, "Group: -") {
+        groupButton = new Button(screen, -190, -20, 180, 20, GuiText.LABEL_GROUP + ": -") {
             @Override
             public void onClick(Player.Hand hand) {
                 String newGroup = next(groups, groupId);
@@ -82,7 +82,7 @@ public class GuiSignalPrioritization implements IScreen {
             }
         };
         if (groups.length > 1) {
-            groupButton.setText("Group: " + groupNames.get(groupId));
+            groupButton.setText(GuiText.LABEL_GROUP + ": " + groupNames.get(groupId));
         } else {
             groupButton.setEnabled(false);
         }
@@ -147,10 +147,10 @@ public class GuiSignalPrioritization implements IScreen {
 
     @Override
     public void draw(IScreenBuilder builder) {
-        builder.drawCenteredString("Prioritize states...", 0, -40, 0xFFFFFF);
+        builder.drawCenteredString(GuiText.LABEL_PRIORITY.toString(), 0, -40, 0xFFFFFF);
 
-        builder.drawCenteredString("Low", 35, 6, 0xFFFFFF);
-        builder.drawCenteredString("High", 35, 106, 0xFFFFFF);
+        builder.drawCenteredString(GuiText.LABEL_LOW.toString(), 35, 6, 0xFFFFFF);
+        builder.drawCenteredString(GuiText.LABEL_HIGH.toString(), 35, 106, 0xFFFFFF);
 
         refreshItem();
 

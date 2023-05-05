@@ -46,6 +46,9 @@ public class ItemSignPart extends CustomItem {
         if (!target.isPresent()) return ClickResult.REJECTED;
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
+
+        if(!LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().containsKey(itemId)) return ClickResult.REJECTED;
+
         float rotationSteps = LOSBlocks.BLOCK_SIGN_PART.getRotationSteps(itemId);
         int rot = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
         TileSignPart tileSignPartPart = world.getBlockEntity(pos, TileSignPart.class);

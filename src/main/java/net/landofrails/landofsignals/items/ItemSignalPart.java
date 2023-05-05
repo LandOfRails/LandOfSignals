@@ -47,6 +47,8 @@ public class ItemSignalPart extends CustomItem {
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
 
+        if(!LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().containsKey(itemId)) return ClickResult.REJECTED;
+
         float rotationSteps = LOSBlocks.BLOCK_SIGNAL_PART.getRotationSteps(itemId);
 
         int rotation = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);

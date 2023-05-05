@@ -42,6 +42,9 @@ public class ItemDeco extends CustomItem {
         if (!target.isPresent()) return ClickResult.REJECTED;
 
         String itemId = player.getHeldItem(hand).getTagCompound().getString(ITEMIDKEY);
+
+        if(!LOSBlocks.BLOCK_DECO.getContentpackDeco().containsKey(itemId)) return ClickResult.REJECTED;
+
         float rotationSteps = LOSBlocks.BLOCK_DECO.getRotationSteps(itemId);
         int rot = (int) (-(Math.round(player.getRotationYawHead() / rotationSteps) * rotationSteps) + 180);
 
