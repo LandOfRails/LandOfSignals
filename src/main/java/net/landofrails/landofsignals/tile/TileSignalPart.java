@@ -18,6 +18,7 @@ import net.landofrails.landofsignals.packet.SignalUpdatePacket;
 import net.landofrails.landofsignals.serialization.MapVec3iStringMapper;
 import net.landofrails.landofsignals.serialization.StringArrayMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
+import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (player.isCrouching() || player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR)) {
+        if (player.isCrouching() || LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(hand))) {
             return false;
         }
         if (!getWorld().isServer) {
