@@ -1,10 +1,8 @@
 package net.landofrails.stellwand;
 
-import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 import cam72cam.mod.config.ConfigFile;
-import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.config.StellwandConfig;
 import net.landofrails.stellwand.content.blocks.CustomBlocks;
 import net.landofrails.stellwand.content.entities.storage.*;
@@ -15,20 +13,9 @@ import net.landofrails.stellwand.content.network.CustomPackets;
 import net.landofrails.stellwand.content.recipes.CustomRecipes;
 import net.landofrails.stellwand.content.tabs.CustomTabs;
 
-import java.time.LocalDateTime;
-
 public class Stellwand {
 
     public static final String DOMAIN = "stellwand";
-
-    public static LocalDateTime WARNINGTIMESTAMP = null;
-
-    public static void warnPlayers() {
-        if (WARNINGTIMESTAMP == null || WARNINGTIMESTAMP.plusMinutes(30).isBefore(LocalDateTime.now())) {
-            WARNINGTIMESTAMP = LocalDateTime.now();
-            MinecraftClient.getPlayer().sendMessage(PlayerMessage.translate("message." + Stellwand.DOMAIN + ":" + "stellwand.warning"));
-        }
-    }
 
     // Version 2 statt 0.0.2 => Another contentpacksystem (!) -> Will be gone with 1.0.0
     public static final String ADDON_VERSION = "2";
@@ -101,8 +88,6 @@ public class Stellwand {
                 break;
             case RELOAD:
             case START:
-                WARNINGTIMESTAMP = null;
-                break;
             case FINALIZE:
             default:
                 break;
