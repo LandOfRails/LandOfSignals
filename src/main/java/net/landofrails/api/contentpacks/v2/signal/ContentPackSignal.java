@@ -114,7 +114,7 @@ public class ContentPackSignal {
     }
 
     public String[] getStates() {
-        return states;
+        return states.clone();
     }
 
     public void setStates(String[] states) {
