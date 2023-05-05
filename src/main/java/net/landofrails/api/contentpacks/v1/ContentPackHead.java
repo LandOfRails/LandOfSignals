@@ -13,6 +13,7 @@ public class ContentPackHead {
 
     private String name;
     private String packversion;
+    private String addonversion;
     private String author;
 
     private List<String> signals;
@@ -68,6 +69,10 @@ public class ContentPackHead {
 
     public String getId() {
         return name + "@" + author;
+    }
+
+    public boolean isValidAddonVersion() {
+        return addonversion == null || "1".equalsIgnoreCase(addonversion);
     }
 
     public static ContentPackHead fromJson(final InputStream landofsignalsJsonStream) {

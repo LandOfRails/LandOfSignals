@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
-      
+
       - name: Read VERSION file
         id: getversion
         run: echo "::set-output name=version::$(cat VERSION)"
@@ -27,7 +27,7 @@ jobs:
           git add -A
           git commit -m "Updated mod version"
           git push
-          
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -68,7 +68,7 @@ jobs:
       - name: Hack Forge Gradle Part Two
         env:
           BRANCH: ${{ matrix.branch }}
-        run: git apply ${BRANCH}.patch || true
+        run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
       - name: Gradle compile
         run: ./gradlew classes
       - name: Process images
