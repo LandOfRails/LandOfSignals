@@ -35,7 +35,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             }
 
             String itemState = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getItemState();
-            if (tag.hasKey("itemState")) {
+            if (tag.hasKey("itemState") && !itemId.equals(Static.MISSING)) {
                 itemState = tag.getString("itemState");
             }
 

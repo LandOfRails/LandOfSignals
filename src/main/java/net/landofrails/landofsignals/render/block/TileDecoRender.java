@@ -84,6 +84,9 @@ public class TileDecoRender {
     private static void renderBase(String blockId, TileDeco tile) {
 
         ContentPackDeco contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(blockId);
+
+        if(contentPackDeco == null) contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(Static.MISSING);
+
         checkCache(blockId, contentPackDeco.getBase());
 
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackDeco.getBase().entrySet()) {

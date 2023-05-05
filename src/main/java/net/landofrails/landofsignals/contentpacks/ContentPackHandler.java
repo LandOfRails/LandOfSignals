@@ -46,7 +46,6 @@ public class ContentPackHandler {
                 LandOfSignals.info("Asset folder created.");
             else
                 LandOfSignals.warn("Couldn't create asset folder: %s", assetFolder.getPath());
-
         }
     }
 

@@ -83,7 +83,10 @@ public class TileSignalBoxRender {
 
     private static void renderBase(final String blockId, final TileSignalBox tile) {
 
-        final ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
+        ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
+
+        if(contentPackSignalboxes == null) contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(Static.MISSING);
+
         checkCache(blockId, contentPackSignalboxes.getBase());
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSignalboxes.getBase().entrySet()) {
 

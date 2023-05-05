@@ -84,6 +84,9 @@ public class TileSignPartRender {
     private static void renderBase(String blockId, TileSignPart tile) {
 
         ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId);
+
+        if(contentPackSign == null) contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(Static.MISSING);
+
         checkCache(blockId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase());
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSign.getBase().entrySet()) {
 
