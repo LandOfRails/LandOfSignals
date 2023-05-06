@@ -37,7 +37,7 @@ public class ItemSignPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNS_TAB);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class ItemSignPart extends CustomItem {
     }
 
     @Override
+    @SuppressWarnings("java:S3878")
     public List<String> getTooltip(ItemStack itemStack) {
         String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
         List<String> tooltips = new ArrayList<>();
@@ -102,6 +103,7 @@ public class ItemSignPart extends CustomItem {
 
             boolean writeable = LOSBlocks.BLOCK_SIGN_PART.isWritable(itemId);
             String writeableRawText = TextUtil.translate(writeable ? MSG_LOS_TRUE : MSG_LOS_FALSE);
+            // String has to be converted by us, build pipeline is not able to do it itself.
             tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, new Object[]{writeableRawText}));
 
             boolean isUTF8 = LOSBlocks.BLOCK_SIGN_PART.isUTF8(itemId);

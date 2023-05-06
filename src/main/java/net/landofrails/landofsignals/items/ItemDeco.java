@@ -33,7 +33,7 @@ public class ItemDeco extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.ASSETS_TAB);
     }
 
     @Override

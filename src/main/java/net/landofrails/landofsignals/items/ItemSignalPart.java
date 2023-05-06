@@ -37,7 +37,7 @@ public class ItemSignalPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNALS_TAB);
     }
 
     @Override
