@@ -91,12 +91,20 @@ public class TileSignalBox extends BlockEntity {
             if (0 == signalType) {
                 TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
                 if (tempSignalPart != null) {
+                    if(!tempSignalPart.compatible(this)){
+                        clearPreviousData();
+                    }
+
                     new SignalBoxTileSignalPartPacket(tempSignalPart, this).sendToPlayer(player);
                     return true;
                 }
             } else if (1 == signalType) {
                 TileComplexSignal tempComplexSignal = player.getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
                 if (tempComplexSignal != null) {
+                    if(!tempComplexSignal.compatible(this)){
+                        clearPreviousData();
+                    }
+
                     new SignalBoxTileSignalPartPacket(tempComplexSignal, this).sendToPlayer(player);
                     return true;
                 }
@@ -142,6 +150,24 @@ public class TileSignalBox extends BlockEntity {
 
     @Override
     public void onBreak() {
+        disconnectFromSignal();
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void clearPreviousData(){
+        disconnectFromSignal();
+
+        groupId = null;
+        activeGroupState = null;
+        inactiveGroupState = null;
+        redstone = null;
+        noRedstone = null;
+    }
+
+    private void disconnectFromSignal(){
         if (tileSignalPartPos == null) {
             signalType = null;
             return;
@@ -162,10 +188,6 @@ public class TileSignalBox extends BlockEntity {
                 entity.removeSignal(getPos());
             }
         }
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public void setTileSignalPartPos(final Vec3i pos, final byte signalType) {
@@ -194,6 +216,7 @@ public class TileSignalBox extends BlockEntity {
         return tileComplexSignal;
     }
 
+    @Nullable
     public Byte getSignalType() {
         return this.signalType;
     }
@@ -244,7 +267,7 @@ public class TileSignalBox extends BlockEntity {
     /**
      * @param groupId GroupId
      */
-    public void setGroupId(String groupId) {
+    public void setGroupId(@Nullable String groupId) {
         this.groupId = groupId;
     }
 

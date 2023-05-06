@@ -10,6 +10,7 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
@@ -21,10 +22,7 @@ import net.landofrails.landofsignals.serialization.MapVec3iStringStringMapper;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("java:S1133")
 public class TileComplexSignal extends BlockEntity implements IManipulate {
@@ -211,4 +209,22 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
         }
     }
 
+    public boolean compatible(TileSignalBox tileSignalBox) {
+        ContentPackComplexSignal contentPackComplexSignal = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id);
+        if(contentPackComplexSignal == null ||
+                !contentPackComplexSignal.getSignals().containsKey(tileSignalBox.getGroupId()))
+            return false;
+
+        ContentPackSignalGroup signalGroup = contentPackComplexSignal.getSignals().get(tileSignalBox.getGroupId());
+        boolean foundActiveState = false;
+        boolean foundInactiveState = false;
+        for(String state : signalGroup.getStates().keySet()){
+            if(Objects.equals(state, tileSignalBox.getActiveGroupState()))
+                foundActiveState = true;
+            if(Objects.equals(state, tileSignalBox.getInactiveGroupState()))
+                foundInactiveState = true;
+        }
+
+        return foundActiveState && foundInactiveState;
+    }
 }
