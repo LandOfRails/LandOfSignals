@@ -68,6 +68,10 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getObjTextures().get(path);
                 // TODO is null okay or should it be replaced with ""?
+                if(objTextures.contains(null)){
+                    objTextures.remove(null);
+                    objTextures.add("");
+                }
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
                 cache.putIfAbsent(objId, model);
 
@@ -78,6 +82,10 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                         List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);
+                        if(modes.contains(null)){
+                            modes.remove(null);
+                            modes.add("");
+                        }
                         groupCache.put(groupCacheId, modes);
                     }
                 }
@@ -103,6 +111,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
             if (tag.hasKey("itemGroupState")) {
                 itemGroupStates.putAll(tag.getMap("itemGroupState", EmptyStringMapper::fromNullString, value -> value.getString("string")));
             }
+            itemGroupStates.replaceAll((key, value) -> value == null ? "" : value);
 
             renderBase(itemId, state);
             renderSignals(itemId, itemGroupStates, state);
@@ -187,6 +196,10 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                     try {
                         final Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getObjTextures().get(path);
                         // TODO is null okay or should it be replaced with ""?
+                        if(objTextures.contains(null)){
+                            objTextures.remove(null);
+                            objTextures.add("");
+                        }
                         cache.put(objId, new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
                     } catch (final Exception e) {
                         throw new ItemRenderException("Error loading item model/renderer...", e);

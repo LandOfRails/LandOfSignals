@@ -42,6 +42,8 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getObjTextures().get(path);
                 // TODO is null okay or should it be replaced with ""?
+                objTextures.remove(null);
+                objTextures.add("");
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
                 cache.putIfAbsent(objId, model);
 
@@ -121,6 +123,10 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
 
                 }
 
+                state.rotate(-rotation.z, 0,0, 1);
+                state.rotate(-rotation.y, 0, 1, 0);
+                state.rotate(-rotation.x, 1, 0, 0);
+                state.translate(translate.scale(-1.0));
             }
         }
     }

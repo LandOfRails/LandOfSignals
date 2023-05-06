@@ -42,6 +42,10 @@ public class ItemSignalBoxRender implements ItemRender.IItemModel {
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(itemId).getObjTextures().get(path);
                 // TODO is null okay or should it be replaced with ""?
+                if(objTextures.contains(null)){
+                    objTextures.remove(null);
+                    objTextures.add("");
+                }
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
                 cache.putIfAbsent(objId, model);
 
@@ -51,6 +55,10 @@ public class ItemSignalBoxRender implements ItemRender.IItemModel {
                         Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
                         List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
+                        if(modes.contains(null)){
+                            modes.remove(null);
+                            modes.add("");
+                        }
                         String groupCacheId = objId + "@" + String.join("+", groups);
                         groupCache.put(groupCacheId, modes);
                     }

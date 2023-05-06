@@ -42,6 +42,8 @@ public class ItemDecoRender implements ItemRender.IItemModel {
 
                 Set<String> objTextures = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(itemId).getObjTextures().get(path);
                 // TODO is null okay or should it be replaced with ""?
+                objTextures.remove(null);
+                objTextures.add("");
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
                 cache.putIfAbsent(objId, model);
 
@@ -108,7 +110,10 @@ public class ItemDecoRender implements ItemRender.IItemModel {
                 state.rotate(rotation.y, 0, 1, 0);
                 state.rotate(rotation.z, 0, 0, 1);
 
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(state)) {
+                String texture = baseModel.getTextures();
+                if(texture == null)
+                    texture = "";
+                try (OBJRender.Binding vbo = model.binder().texture(texture).bind(state)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
