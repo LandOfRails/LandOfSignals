@@ -11,6 +11,7 @@ import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import cam72cam.mod.util.Facing;
+import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket;
@@ -22,6 +23,7 @@ import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @SuppressWarnings("java:S1133")
@@ -237,4 +239,20 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
 
     }
 
+    public boolean compatible(TileSignalBox tileSignalBox) {
+        ContentPackSignal contentPackSignal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(id);
+        if(contentPackSignal == null || tileSignalBox.getGroupId() != null)
+            return false;
+
+        boolean foundActiveState = false;
+        boolean foundInactiveState = false;
+        for(String state : contentPackSignal.getStates()){
+            if(Objects.equals(state, tileSignalBox.getActiveGroupState()))
+                foundActiveState = true;
+            if(Objects.equals(state, tileSignalBox.getInactiveGroupState()))
+                foundInactiveState = true;
+        }
+
+        return foundActiveState && foundInactiveState;
+    }
 }
