@@ -37,7 +37,7 @@ public class ItemSignPart extends CustomItem {
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
-        return LOSTabs.getAsList(LOSTabs.HIDDEN_TAB);
+        return LOSTabs.getAsList(LOSTabs.SIGNS_TAB);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ItemSignPart extends CustomItem {
 
             boolean writeable = LOSBlocks.BLOCK_SIGN_PART.isWritable(itemId);
             String writeableRawText = TextUtil.translate(writeable ? MSG_LOS_TRUE : MSG_LOS_FALSE);
-            tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, new Object[]{writeableRawText}));
+            tooltips.add(TextUtil.translate(MSG_LOS_SIGNS_WRITEABLE, writeableRawText));
 
             boolean isUTF8 = LOSBlocks.BLOCK_SIGN_PART.isUTF8(itemId);
             if (!isUTF8) {
