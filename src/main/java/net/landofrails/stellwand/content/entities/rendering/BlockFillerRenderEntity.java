@@ -1,11 +1,9 @@
 package net.landofrails.stellwand.content.entities.rendering;
 
-import org.lwjgl.opengl.GL11;
-
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import net.landofrails.stellwand.content.entities.storage.BlockFillerStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
@@ -13,7 +11,6 @@ public class BlockFillerRenderEntity implements IRotatableBlockEntity {
 
 	// Rendering
 	private OBJModel model;
-	private OBJRender renderer;
 	private float[] defaultRotation;
 	private float[] defaultTranslation;
 
@@ -42,25 +39,6 @@ public class BlockFillerRenderEntity implements IRotatableBlockEntity {
 		return model;
 	}
 
-	public OBJRender getRenderer() {
-		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-				if (!BlockFillerStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-					OBJModel m = BlockFillerStorageEntity.getModels().get(entity.contentPackBlockId);
-					BlockFillerStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
-				}
-				renderer = BlockFillerStorageEntity.getRenderers().get(entity.contentPackBlockId);
-			} else {
-				if (BlockFillerStorageEntity.getRenderers().containsKey(BlockFillerStorageEntity.MISSING)) {
-					OBJModel m = BlockFillerStorageEntity.getModels().get(BlockFillerStorageEntity.MISSING);
-					BlockFillerStorageEntity.getRenderers().put(BlockFillerStorageEntity.MISSING, new OBJRender(m));
-				}
-				renderer = BlockFillerStorageEntity.getRenderers().get(BlockFillerStorageEntity.MISSING);
-			}
-		}
-		return renderer;
-	}
-
 	public float[] getTranslation() {
 		if (defaultTranslation == null) {
 			if (entity.contentPackBlockId != null && BlockFillerStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
@@ -82,27 +60,24 @@ public class BlockFillerRenderEntity implements IRotatableBlockEntity {
 	}
 
 	public static StandardModel render(BlockFillerStorageEntity entity) {
-		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
+		return new StandardModel().addCustom((state, partialTicks) -> renderStuff(entity, state));
 	}
 
-	private static void renderStuff(BlockFillerStorageEntity entity, float partialTicks) {
+	private static void renderStuff(BlockFillerStorageEntity entity, RenderState state) {
 
-		OBJRender renderer = entity.renderEntity.getRenderer();
+		OBJModel model = entity.renderEntity.getModel();
 		float[] translation = entity.renderEntity.getTranslation();
 		float[] rotation = entity.renderEntity.getRotation();
 
-		try {
-			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-				GL11.glTranslated(translation[0], translation[1], translation[2]);
+		state.translate(translation[0], translation[1], translation[2]);
 
-				GL11.glRotated(rotation[0], 1, 0, 0);
-				GL11.glRotated(entity.blockRotation + rotation[1], 0, 1, 0);
-				GL11.glRotated(rotation[2], 0, 0, 1);
+		state.rotate(rotation[0], 1, 0, 0);
+		state.rotate(entity.blockRotation + rotation[1], 0, 1, 0);
+		state.rotate(rotation[2], 0, 0, 1);
 
-				renderer.draw();
-
-			}
-		} catch (Exception e) {
+		try (OBJRender.Binding vbo = model.binder().bind(state)) {
+			vbo.draw();
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

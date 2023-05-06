@@ -9,13 +9,12 @@ import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
-import cam72cam.mod.render.OpenGL;
 import net.landofrails.landofsignals.gui.GuiText;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.content.messages.EMessage;
 import net.landofrails.stellwand.content.network.ChangeSenderModes;
 import net.landofrails.stellwand.utils.compact.SignalContainer;
-import org.lwjgl.opengl.GL11;
+import util.Matrix4;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -150,22 +149,22 @@ public class SelectSenderModes implements IScreen {
 
     private void drawBlocks(IScreenBuilder builder) {
         int scale = 8;
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(
-                    (double) GUIHelpers.getScreenWidth() / 2
-                            + (double) builder.getWidth() / 4,
-                    (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemPowerOn, 0, 0);
-        }
-        try (OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(
-                    ((double) GUIHelpers.getScreenWidth() / 2
-                            - (double) builder.getWidth() / 4) - 120,
-                    (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemPowerOff, 0, 0);
-        }
+        Matrix4 matrix = new Matrix4();
+        matrix.translate(
+                (double) GUIHelpers.getScreenWidth() / 2
+                        + (double) builder.getWidth() / 4,
+                (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemPowerOn, 0, 0, matrix);
+
+        matrix = new Matrix4();
+        matrix.translate(
+                ((double) GUIHelpers.getScreenWidth() / 2
+                        - (double) builder.getWidth() / 4) - 120,
+                (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemPowerOff, 0, 0, matrix);
+
     }
 
     @SuppressWarnings("java:S2259")

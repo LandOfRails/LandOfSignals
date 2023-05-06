@@ -3,9 +3,9 @@ package net.landofrails.stellwand.content.entities.rendering;
 import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import net.landofrails.stellwand.content.entities.storage.BlockMultisignalStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 import org.lwjgl.opengl.GL11;
@@ -19,7 +19,6 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
     private BlockMultisignalStorageEntity entity;
 
     private OBJModel model;
-    private OBJRender renderer;
     private float[] defaultRotation;
     private float[] defaultTranslation;
 
@@ -46,25 +45,6 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
         return model;
     }
 
-    public OBJRender getRenderer() {
-        if (renderer == null) {
-            if (entity.contentPackBlockId != null && BlockMultisignalStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-                if (!BlockMultisignalStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-                    OBJModel m = BlockMultisignalStorageEntity.getModels().get(entity.contentPackBlockId);
-                    BlockMultisignalStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
-                }
-                renderer = BlockMultisignalStorageEntity.getRenderers().get(entity.contentPackBlockId);
-            } else {
-                if (BlockMultisignalStorageEntity.getRenderers().containsKey(BlockMultisignalStorageEntity.MISSING)) {
-                    OBJModel m = BlockMultisignalStorageEntity.getModels().get(BlockMultisignalStorageEntity.MISSING);
-                    BlockMultisignalStorageEntity.getRenderers().put(BlockMultisignalStorageEntity.MISSING, new OBJRender(m));
-                }
-                renderer = BlockMultisignalStorageEntity.getRenderers().get(BlockMultisignalStorageEntity.MISSING);
-            }
-        }
-        return renderer;
-    }
-
     public float[] getTranslation() {
         if (defaultTranslation == null) {
             if (entity.contentPackBlockId != null && BlockMultisignalStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
@@ -86,29 +66,30 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
     }
 
     public static StandardModel render(BlockMultisignalStorageEntity entity) {
-        return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(entity, state));
     }
 
     @SuppressWarnings("java:S1172")
-    private static void renderStuff(BlockMultisignalStorageEntity entity, float partialTicks) {
+    private static void renderStuff(BlockMultisignalStorageEntity entity, RenderState state) {
 
         OBJModel model = entity.getRenderEntity().getModel();
-        OBJRender renderer = entity.getRenderEntity().getRenderer();
         float[] translation = entity.getRenderEntity().getTranslation();
         float[] rotation = entity.getRenderEntity().getRotation();
         Map<String, String> displayModes = entity.getDisplayModes();
 
+        state.translate(translation[0], translation[1], translation[2]);
+
+        state.rotate(rotation[0], 1, 0, 0);
+        state.rotate(entity.blockRotation + rotation[1], 0, 1, 0);
+        state.rotate(rotation[2], 0, 0, 1);
+
         try {
-            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+            try (OBJRender.Binding vbo = model.binder().bind(state)) {
 
-                GL11.glTranslated(translation[0], translation[1], translation[2]);
 
-                GL11.glRotated(rotation[0], 1, 0, 0);
-                GL11.glRotated(entity.blockRotation + rotation[1], 0, 1, 0);
-                GL11.glRotated(rotation[2], 0, 0, 1);
 
                 if (displayModes == null || displayModes.isEmpty()) {
-                    renderer.draw();
+                    vbo.draw();
                 } else {
 
                     ArrayList<String> modes = new ArrayList<>();
@@ -119,9 +100,9 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
                         ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
                                 .collect(Collectors.toCollection(ArrayList::new));
                         modes.addAll(generals);
-                        renderer.drawGroups(modes);
+                        vbo.draw(modes);
                     } else {
-                        renderer.drawGroups(model.groups());
+                        vbo.draw(model.groups());
                     }
 
                 }
@@ -137,6 +118,7 @@ public class BlockMultisignalRenderEntity implements IRotatableBlockEntity {
     }
 
     private static void renderMarking(BlockMultisignalStorageEntity entity) {
+        // TODO Unclear if this still wortks
         float[] color = entity.getMarkedColor();
 
         // 0.5 is edge of block

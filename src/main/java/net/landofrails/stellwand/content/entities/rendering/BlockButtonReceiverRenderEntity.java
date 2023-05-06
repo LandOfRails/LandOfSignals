@@ -3,9 +3,9 @@ package net.landofrails.stellwand.content.entities.rendering;
 import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import net.landofrails.stellwand.content.entities.storage.BlockButtonReceiverStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 import org.lwjgl.opengl.GL11;
@@ -18,7 +18,6 @@ public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
     private BlockButtonReceiverStorageEntity entity;
 
     private OBJModel model;
-    private OBJRender renderer;
     private float[] defaultRotation;
     private float[] defaultTranslation;
 
@@ -45,25 +44,6 @@ public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
         return model;
     }
 
-    public OBJRender getRenderer() {
-        if (renderer == null) {
-            if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-                if (!BlockButtonReceiverStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-                    OBJModel m = BlockButtonReceiverStorageEntity.getModels().get(entity.contentPackBlockId);
-                    BlockButtonReceiverStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
-                }
-                renderer = BlockButtonReceiverStorageEntity.getRenderers().get(entity.contentPackBlockId);
-            } else {
-                if (BlockButtonReceiverStorageEntity.getRenderers().containsKey(BlockButtonReceiverStorageEntity.MISSING)) {
-                    OBJModel m = BlockButtonReceiverStorageEntity.getModels().get(BlockButtonReceiverStorageEntity.MISSING);
-                    BlockButtonReceiverStorageEntity.getRenderers().put(BlockButtonReceiverStorageEntity.MISSING, new OBJRender(m));
-                }
-                renderer = BlockButtonReceiverStorageEntity.getRenderers().get(BlockButtonReceiverStorageEntity.MISSING);
-            }
-        }
-        return renderer;
-    }
-
     public float[] getTranslation() {
         if (defaultTranslation == null) {
             if (entity.contentPackBlockId != null && BlockButtonReceiverStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
@@ -85,27 +65,28 @@ public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
     }
 
     public static StandardModel render(BlockButtonReceiverStorageEntity entity) {
-        return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(entity, state));
     }
 
     @SuppressWarnings("java:S1172")
-    private static void renderStuff(BlockButtonReceiverStorageEntity entity, float partialTicks) {
+    private static void renderStuff(BlockButtonReceiverStorageEntity entity, RenderState state) {
 
         OBJModel model = entity.renderEntity.getModel();
-        OBJRender renderer = entity.renderEntity.getRenderer();
         float[] translation = entity.renderEntity.getTranslation();
         float[] rotation = entity.renderEntity.getRotation();
         String mode = entity.getActive() ? "on" : "off";
         boolean wall = entity.getWallMounted();
 
-        try {
-            try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
+        state.translate(translation[0], (wall ? .5 : 0) + translation[1], translation[2]);
+        state.rotate(entity.blockRotation + rotation[1], 0, 1, 0);
+        state.rotate((wall ? -90 : 0) + rotation[0], 1, 0, 0);
+        state.rotate(rotation[2], 0, 0, 1);
+        state.translate(0, (wall ? -.5 : 0), 0);
 
-                GL11.glTranslated(translation[0], (wall ? .5 : 0) + translation[1], translation[2]);
-                GL11.glRotated(entity.blockRotation + rotation[1], 0, 1, 0);
-                GL11.glRotated((wall ? -90 : 0) + rotation[0], 1, 0, 0);
-                GL11.glRotated(rotation[2], 0, 0, 1);
-                GL11.glTranslated(0, (wall ? -.5 : 0), 0);
+        try {
+            try (OBJRender.Binding vbo = model.binder().bind(state)) {
+
+
 
 
                 ArrayList<String> modes = model.groups().stream().filter(s -> s.startsWith(mode))
@@ -115,9 +96,9 @@ public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
                     ArrayList<String> generals = model.groups().stream().filter(s -> s.startsWith("general"))
                             .collect(Collectors.toCollection(ArrayList::new));
                     modes.addAll(generals);
-                    renderer.drawGroups(modes);
+                    vbo.draw(modes);
                 } else {
-                    renderer.drawGroups(model.groups());
+                    vbo.draw(model.groups());
                 }
 
                 // Muss erst translated werden.
@@ -131,6 +112,7 @@ public class BlockButtonReceiverRenderEntity implements IRotatableBlockEntity {
     }
 
     private static void renderMarking(BlockButtonReceiverStorageEntity entity) {
+        // TODO Unclear if this still works
         float[] color = entity.getMarkedColor();
 
         // 0.5 is edge of block
