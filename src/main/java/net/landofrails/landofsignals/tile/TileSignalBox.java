@@ -91,12 +91,20 @@ public class TileSignalBox extends BlockEntity {
             if (0 == signalType) {
                 TileSignalPart tempSignalPart = player.getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
                 if (tempSignalPart != null) {
+                    if(!tempSignalPart.compatible(this)){
+                        clearPreviousData();
+                    }
+
                     new SignalBoxTileSignalPartPacket(tempSignalPart, this).sendToPlayer(player);
                     return true;
                 }
             } else if (1 == signalType) {
                 TileComplexSignal tempComplexSignal = player.getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
                 if (tempComplexSignal != null) {
+                    if(!tempComplexSignal.compatible(this)){
+                        clearPreviousData();
+                    }
+
                     new SignalBoxTileSignalPartPacket(tempComplexSignal, this).sendToPlayer(player);
                     return true;
                 }
