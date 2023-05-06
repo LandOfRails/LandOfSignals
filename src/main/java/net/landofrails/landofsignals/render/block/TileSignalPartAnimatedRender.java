@@ -2,14 +2,13 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalPartAnimated;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -21,57 +20,59 @@ public class TileSignalPartAnimatedRender {
 
     }
 
-    private static final Map<String, Pair<OBJModel, OBJRender>> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final List<String> groupNames = Arrays.asList("wing");
 
     public static StandardModel render(final TileSignalPartAnimated tsp) {
-        return new StandardModel().addCustom(partialTicks -> renderStuff(tsp, partialTicks));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(final TileSignalPartAnimated tsp, final float partialTicks) {
+    private static void renderStuff(final TileSignalPartAnimated tsp, RenderState state) {
         final String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
                 final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
-                final OBJRender flareRenderer = new OBJRender(flareModel);
-                cache.put("flare", Pair.of(flareModel, flareRenderer));
+                cache.put("flare", flareModel);
             } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
         if (!cache.containsKey(id)) {
             try {
+                // TODO is null okay or should it be replaced with ""?
                 final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
-                final OBJRender renderer = new OBJRender(model);
-                cache.put(id, Pair.of(model, renderer));
+                cache.put(id, model);
             } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
-        final OBJRender renderer = cache.get(id).getRight();
+        final OBJModel model = cache.get(id);
         final List<String> groupsWithoutWing = new ArrayList<>();
-        for (final String s : renderer.model.groups()) groupsWithoutWing.add(s);
+        for (final String s : model.groups()) groupsWithoutWing.add(s);
         final boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
 
-        try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture(tsp.getAnimationOrTextureName())) {
-            final Vec3d scale = Vec3d.ZERO;
-            GL11.glScaled(scale.x, scale.y, scale.z);
-            final Vec3d trans = Vec3d.ZERO;
-            GL11.glTranslated(trans.x, trans.y, trans.z);
-            GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
-            renderer.drawGroups(groupsWithoutWing);
+        final Vec3d scale = Vec3d.ZERO;
+        final Vec3d trans = Vec3d.ZERO;
+        GL11.glRotated(tsp.getBlockRotate(), 0, 1, 0);
+        state.scale(scale);
+        state.translate(trans);
+        state.rotate(tsp.getBlockRotate(), 0, 1, 0);
 
-            if (wingsExist) {
-                Vec3d center = renderer.model.centerOfGroups(groupNames);
-                center = new Vec3d(-center.x, -center.y, -center.z);
-                final Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
+        try (OBJRender.Binding vbo = model.binder().texture(tsp.getAnimationOrTextureName()).bind(state)) {
+            vbo.draw(groupsWithoutWing);
+        }
 
-                GL11.glTranslated(0, -center.y, 0);
-                GL11.glRotatef(tsp.getPartRotate(), 1, 0, 0);
-                GL11.glTranslated(0, rotateYaw.y, 0);
+        if (wingsExist) {
+            Vec3d center = model.centerOfGroups(groupNames);
+            center = new Vec3d(-center.x, -center.y, -center.z);
+            final Vec3d rotateYaw = center.rotateYaw(tsp.getPartRotate());
 
-                renderer.drawGroups(groupNames);
+            state.translate(0, -center.y, 0);
+            state.rotate(tsp.getPartRotate(), 1, 0, 0);
+            state.translate(0, rotateYaw.y, 0);
+            try(OBJRender.Binding vbo = model.binder().texture(tsp.getAnimationOrTextureName()).bind(state)){
+                vbo.draw(groupNames);
             }
         }
 
