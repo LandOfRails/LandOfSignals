@@ -1,6 +1,12 @@
+#### Release 1.0.2
+
+Fixed #76 | 1.7.10 - 1.16.5:
+Switching connection to another signalblock wont crash the game after trying to open the signalbox afterwards
+
 #### Release 1.0.1
 
-1.7.10: Items are now available in their creative tab
+Fixed #72 | 1.7.10:
+Items are now available in their creative tab
 
 #### Release 1.0.0
 
