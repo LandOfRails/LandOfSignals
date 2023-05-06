@@ -7,7 +7,6 @@ import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -17,7 +16,7 @@ import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import org.lwjgl.opengl.GL11;
+import util.Matrix4;
 
 import java.util.*;
 
@@ -129,21 +128,19 @@ public class GuiSignalBoxComplexSignal implements IScreen {
         rightTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, rightState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackRight.setTagCompound(rightTag);
 
-        try (final OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackRight, 0, 0);
-        }
+        Matrix4 matrix = new Matrix4();
+        matrix.translate((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackRight, 0, 0, matrix);
 
         final TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setMap("itemGroupState", Collections.singletonMap(signalGroup, leftState), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", value));
         itemStackLeft.setTagCompound(leftTag);
 
-        try (final OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackLeft, 0, 0);
-        }
+        matrix = new Matrix4();
+        matrix.translate(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackLeft, 0, 0, matrix);
 
         groupButton.setText(GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName()));
     }
