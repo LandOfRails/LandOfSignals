@@ -4,9 +4,9 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.ItemRender;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.world.World;
@@ -16,7 +16,6 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.utils.Static;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class ItemSignPartRender implements ItemRender.IItemModel {
 
-    protected static final Map<String, OBJRender> cache = new HashMap<>();
+    protected static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     private static void checkCache(String itemId, Map<String, ContentPackModel[]> models) {
@@ -42,14 +41,15 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
                 final String objId = itemId + "/" + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getObjTextures().get(path);
-                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
-                cache.putIfAbsent(objId, renderer);
+                // TODO is null okay or should it be replaced with ""?
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signModel : modelEntry.getValue()) {
                     String[] groups = signModel.getObj_groups();
                     if (groups.length > 0) {
                         Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
-                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                        List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);
                         groupCache.put(groupCacheId, modes);
@@ -65,7 +65,7 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
-        return new StandardModel().addCustom(() -> {
+        return new StandardModel().addCustom((state, partialTicks) -> {
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
@@ -73,19 +73,19 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
                 itemId = Static.MISSING;
             }
 
-            renderBase(itemId);
+            renderBase(itemId, state);
 
         });
     }
 
     @Override
-    public void applyTransform(ItemRender.ItemRenderType type) {
+    public void applyTransform(ItemStack stack, ItemRender.ItemRenderType type, RenderState ctx) {
 
         // Implement ItemRenderType with new UMC rendering
-        ItemRender.IItemModel.super.applyTransform(type);
+        ItemRender.IItemModel.super.applyTransform(stack, type, ctx);
     }
 
-    private static void renderBase(String itemId) {
+    private static void renderBase(String itemId, RenderState state) {
 
         checkCache(itemId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(itemId).getBase());
 
@@ -94,7 +94,7 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
             String path = baseModels.getKey();
 
             String objId = itemId + "/" + path;
-            OBJRender renderer = cache.get(objId);
+            OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
                 ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
@@ -102,21 +102,21 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
                 Vec3d scale = item.getAsVec3d(item::getScaling);
                 Vec3d rotation = item.getAsVec3d(item::getRotation);
 
-                try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
+                state.scale(scale);
+                state.translate(translate);
+                state.rotate(rotation.x, 1, 0, 0);
+                state.rotate(rotation.y, 0, 1, 0);
+                state.rotate(rotation.z, 0, 0, 1);
+
+                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(state)) {
 
                     // Render
-                    GL11.glScaled(scale.x, scale.y, scale.z);
-                    GL11.glTranslated(translate.x, translate.y, translate.z);
-                    GL11.glRotated(rotation.x, 1, 0, 0);
-                    GL11.glRotated(rotation.y, 0, 1, 0);
-                    GL11.glRotated(rotation.z, 0, 0, 1);
-
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        renderer.draw();
+                        vbo.draw();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        renderer.drawGroups(groupCache.get(groupCacheId));
+                        vbo.draw(groupCache.get(groupCacheId));
                     }
 
                 }
