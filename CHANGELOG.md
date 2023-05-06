@@ -1,3 +1,7 @@
+#### Release 1.0.1
+
+1.7.10: Items are now available in their creative tab
+
 #### Release 1.0.0
 
 * Changed literally everything
