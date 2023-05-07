@@ -43,7 +43,7 @@ public class TileSignalPartRender {
 
         if(signal == null) {
             signal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(Static.MISSING);
-            tsp.setState(null);
+            tsp.setState("");
         }
 
         if (signal.getUseBase()) {

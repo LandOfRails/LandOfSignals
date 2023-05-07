@@ -221,9 +221,9 @@ public class ContentPackSignal {
 
     private void defaultMissing() {
 
-        if (states == null || Arrays.stream(states).noneMatch(Objects::isNull)) {
+        if (states == null || Arrays.stream(states).noneMatch(String::isEmpty)) {
             String[] tempStates = new String[1 + (this.states != null ? this.states.length : 0)];
-            tempStates[0] = null;
+            tempStates[0] = "";
             if (this.states != null && this.states.length > 0) {
                 System.arraycopy(this.states, 0, tempStates, 1, this.states.length);
             }

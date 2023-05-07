@@ -210,7 +210,7 @@ public class GuiSignalPrioritization implements IScreen {
     private String getTextForIndex(int indexOffset) {
         int index = entriesIndex + indexOffset;
         if (states.length > index) {
-            return MessageFormat.format("{0}. {1}", index + 1, states[index]);
+            return MessageFormat.format("{0}. {1}", index + 1, states[index].isEmpty() ? "Default" : states[index]);
         } else {
             return "-";
         }
@@ -276,7 +276,7 @@ public class GuiSignalPrioritization implements IScreen {
             groups = new String[0];
         } else {
             groupStates = tileComplexSignal.getOrderedGroupStates();
-            if (groupStates == null || groupStates.size() == 0) {
+            if (groupStates == null || groupStates.isEmpty()) {
                 screen.close();
                 return false;
             }

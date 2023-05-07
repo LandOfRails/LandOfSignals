@@ -72,7 +72,7 @@ public class ContentPackModel {
     public void validate(Consumer<String> modelConsumer, ContentPackReferences references) {
 
         if (textures == null) {
-            textures = references.getTexturesOrElse(texturesRef, null);
+            textures = references.getTexturesOrElse(texturesRef, "");
         }
         if (obj_groups == null) {
             obj_groups = references.getObj_groupsOrElse(obj_groupsRef, new String[0]);
