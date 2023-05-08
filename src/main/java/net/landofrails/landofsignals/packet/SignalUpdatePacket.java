@@ -47,10 +47,14 @@ public class SignalUpdatePacket extends Packet {
         if (0 == signalType) {
             // Simple signal
             TileSignalPart tile = getWorld().getBlockEntity(signalPos, TileSignalPart.class);
+            if(tile == null)
+                return;
             tile.setState(state);
         } else if (1 == signalType) {
             // Complex signal
             TileComplexSignal tile = getWorld().getBlockEntity(signalPos, TileComplexSignal.class);
+            if(tile == null)
+                return;
             tile.setSignalGroupStates(signalGroupStates);
         }
     }
