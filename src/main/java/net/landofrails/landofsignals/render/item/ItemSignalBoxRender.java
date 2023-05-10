@@ -41,7 +41,6 @@ public class ItemSignalBoxRender implements ItemRender.IItemModel {
                 final String objId = itemId + "/" + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(itemId).getObjTextures().get(path);
-                // TODO is null okay or should it be replaced with ""?
                 if(objTextures.contains(null)){
                     objTextures.remove(null);
                     objTextures.add("");

@@ -35,7 +35,6 @@ public class ObjItemRender {
                 try {
                     final OBJModel model;
                     if (collection != null) {
-                        // TODO is null okay or should it be replaced with ""?
                         model = new OBJModel(id, 0, collection);
                     } else {
                         model = new OBJModel(id, 0);

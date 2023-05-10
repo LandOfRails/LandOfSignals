@@ -41,7 +41,6 @@ public class ItemDecoRender implements ItemRender.IItemModel {
                 final String objId = itemId + "/" + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(itemId).getObjTextures().get(path);
-                // TODO is null okay or should it be replaced with ""?
                 objTextures.remove(null);
                 objTextures.add("");
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);

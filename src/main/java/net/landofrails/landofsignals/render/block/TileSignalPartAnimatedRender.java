@@ -39,7 +39,6 @@ public class TileSignalPartAnimatedRender {
         }
         if (!cache.containsKey(id)) {
             try {
-                // TODO is null okay or should it be replaced with ""?
                 final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
                 cache.put(id, model);
             } catch (final Exception e) {

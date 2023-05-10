@@ -67,7 +67,6 @@ public class TileComplexSignalRender {
                 final String objId = blockId + identifier + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getObjTextures().get(path);
-                // TODO is null okay or should it be replaced with ""?
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
                 cache.putIfAbsent(objId, model);
 

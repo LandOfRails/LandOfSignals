@@ -67,7 +67,6 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 final String objId = itemId + identifier + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getObjTextures().get(path);
-                // TODO is null okay or should it be replaced with ""?
                 if(objTextures.contains(null)){
                     objTextures.remove(null);
                     objTextures.add("");
@@ -198,7 +197,6 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 if (!cache.containsKey(objId)) {
                     try {
                         final Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getObjTextures().get(path);
-                        // TODO is null okay or should it be replaced with ""?
                         if(objTextures.contains(null)){
                             objTextures.remove(null);
                             objTextures.add("");

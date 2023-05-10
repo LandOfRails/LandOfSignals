@@ -63,7 +63,6 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                // TODO is null okay or should it be replaced with ""?
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
                 cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
             } catch (Exception e) {
@@ -103,7 +102,6 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                // TODO is null okay or should it be replaced with ""?
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
                 cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
             } catch (Exception e) {
