@@ -39,9 +39,9 @@ public class GuiSignalBoxSignalPart implements IScreen {
 
         states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(tsp.getId());
 
-        originalRightState = tsb.getActiveGroupState(new String[]{null});
+        originalRightState = tsb.getActiveGroupState("");
         rightState = originalRightState;
-        originalLeftState = tsb.getInactiveGroupState(new String[]{null});
+        originalLeftState = tsb.getInactiveGroupState("");
         leftState = originalLeftState;
 
 
@@ -61,6 +61,13 @@ public class GuiSignalBoxSignalPart implements IScreen {
     public static void open(final TileSignalBox tileSignalBox) {
         tsb = tileSignalBox;
         LOSGuis.SIGNAL_BOX_SIGNAL_PART.open(MinecraftClient.getPlayer());
+    }
+
+    @SuppressWarnings("java:S1751")
+    private static <T> T getFirstValue(T[] values) {
+        for (T object : values)
+            return object;
+        return null;
     }
 
     @Override
@@ -141,13 +148,6 @@ public class GuiSignalBoxSignalPart implements IScreen {
                 return state;
         }
         return getFirstValue(states);
-    }
-
-    @SuppressWarnings("java:S1751")
-    private static <T> T getFirstValue(T[] values) {
-        for (T object : values)
-            return object;
-        return null;
     }
 
 }
