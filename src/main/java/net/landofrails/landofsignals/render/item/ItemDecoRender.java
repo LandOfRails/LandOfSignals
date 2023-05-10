@@ -123,8 +123,14 @@ public class ItemDecoRender implements ItemRender.IItemModel {
                         String groupCacheId = objId + "@" + String.join("+", groups);
                         vbo.draw(groupCache.get(groupCacheId));
                     }
-
+                    vbo.restore();
                 }
+
+                state.rotate(-rotation.z, 0,0, 1);
+                state.rotate(-rotation.y, 0, 1, 0);
+                state.rotate(-rotation.x, 1, 0, 0);
+                state.translate(translate.scale(-1.0));
+                state.scale(1 / scale.x, 1 / scale.y, 1 / scale.z);
             }
         }
     }
