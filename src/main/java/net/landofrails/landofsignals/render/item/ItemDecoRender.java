@@ -99,6 +99,9 @@ public class ItemDecoRender implements ItemRender.IItemModel {
             OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
+
+                RenderState iterationState = state.clone();
+
                 ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                 Vec3d translate = item.getAsVec3d(item::getTranslation);
                 Vec3d scale = item.getAsVec3d(item::getScaling);
@@ -126,11 +129,6 @@ public class ItemDecoRender implements ItemRender.IItemModel {
 
                 }
 
-                state.rotate(-rotation.z, 0,0, 1);
-                state.rotate(-rotation.y, 0, 1, 0);
-                state.rotate(-rotation.x, 1, 0, 0);
-                state.translate(translate.scale(-1.0));
-                state.scale(1 / scale.x, 1 / scale.y, 1 / scale.z);
             }
         }
     }

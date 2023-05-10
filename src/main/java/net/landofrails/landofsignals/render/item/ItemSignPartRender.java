@@ -99,18 +99,21 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
             OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
+
+                RenderState iterationState = state.clone();
+
                 ContentPackItem item = baseModel.getItem().get(ContentPackItemRenderType.DEFAULT);
                 Vec3d translate = item.getAsVec3d(item::getTranslation);
                 Vec3d scale = item.getAsVec3d(item::getScaling);
                 Vec3d rotation = item.getAsVec3d(item::getRotation);
 
-                state.scale(scale);
-                state.translate(translate);
-                state.rotate(rotation.x, 1, 0, 0);
-                state.rotate(rotation.y, 0, 1, 0);
-                state.rotate(rotation.z, 0, 0, 1);
+                iterationState.scale(scale);
+                iterationState.translate(translate);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(state)) {
+                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
@@ -123,11 +126,6 @@ public class ItemSignPartRender implements ItemRender.IItemModel {
 
                 }
 
-                state.rotate(-rotation.z, 0,0, 1);
-                state.rotate(-rotation.y, 0, 1, 0);
-                state.rotate(-rotation.x, 1, 0, 0);
-                state.translate(translate.scale(-1.0));
-                state.scale(1 / scale.x, 1 / scale.y, 1 / scale.z);
             }
         }
     }
