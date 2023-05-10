@@ -26,7 +26,7 @@ jobs:
           git config --global user.name "MarkenJaden"
           git config --global user.email "jjsch1410@gmail.com"
           git add -A
-          git commit -m "Updated mod version"
+          git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
           
   build:
