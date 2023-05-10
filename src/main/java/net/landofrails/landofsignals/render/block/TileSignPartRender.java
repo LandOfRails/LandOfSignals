@@ -96,18 +96,21 @@ public class TileSignPartRender {
             OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
+
+                RenderState iterationState = state.clone();
+
                 ContentPackBlock block = baseModel.getBlock();
                 Vec3d translate = block.getAsVec3d(block::getTranslation);
                 Vec3d scale = block.getAsVec3d(block::getScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
 
-                state.scale(scale);
-                state.translate(translate);
-                state.rotate(rotation.x, 1, 0, 0);
-                state.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                state.rotate(rotation.z, 0, 0, 1);
+                iterationState.scale(scale);
+                iterationState.translate(translate);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(state)) {
+                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
