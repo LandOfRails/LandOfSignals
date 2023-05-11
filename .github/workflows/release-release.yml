@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
-      
+
       - name: Read VERSION file
         id: getversion
         run: echo "::set-output name=version::$(cat VERSION)"
@@ -17,7 +17,7 @@ jobs:
         id: getsuffix
         run: echo "::set-output name=suffix::$(cat SUFFIX)"
       - name: Replace version number with new version
-        run: | 
+        run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
           sed -i "s/String version =.*/String version = '${{ steps.getversion.outputs.version }}'/" ./build.gradle
           sed -i 's/"version":.*/"version": "${{ steps.getversion.outputs.version }}"/' src/main/resources/mcmod.info
@@ -28,7 +28,7 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
-          
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -101,7 +101,7 @@ jobs:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307
           game_endpoint: minecraft
-          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}-${{ steps.getsuffix.outputs.suffix }}.jar
           changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
