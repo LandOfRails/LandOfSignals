@@ -62,7 +62,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
-                states[0] = "";
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
                 cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
@@ -91,7 +90,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
-                states[0] = "";
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
                 cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
