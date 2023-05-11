@@ -1,3 +1,13 @@
+### BACKUP YOUR WORLD BEFORE UPDATING!
+
+#### Release 1.0.3-UMC-testbuild
+
+This build is compatible with current UMC testbuilds in combination with Immersive Railroading testbuilds.
+
+We encourage you to backup your world before updating to this build as it is not excluded that there are still major
+bugs in it. Please report any bugs you find to our [issue tracker](https://github.com/LandOfRails/LandOfSignals/issues)
+or our [discord](https://discord.gg/ykAqHKYjVM).
+
 #### Release 1.0.3
 
 Fixed #82 | 1.7.10 - 1.16.5:\
