@@ -20,12 +20,13 @@ jobs:
         run: | 
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
           sed -i "s/String version =.*/String version = '${{ steps.getversion.outputs.version }}'/" ./build.gradle
+          sed -i 's/"version":.*/"version": "${{ steps.getversion.outputs.version }}"/' src/main/resources/mcmod.info
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
           git config --global user.email "jjsch1410@gmail.com"
           git add -A
-          git commit -m "Updated mod version"
+          git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
 
   build:

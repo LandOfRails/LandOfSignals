@@ -136,14 +136,6 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
             final String path = baseModels.getKey();
 
             final String objId = itemId + "/base/" + path;
-            // TODO Why is the cache being checked again?
-            if (!cache.containsKey(objId)) {
-                try {
-                    cache.put(objId, new OBJModel(new Identifier(LandOfSignals.MODID, path), 0));
-                } catch (Exception e) {
-                    throw new ItemRenderException("Error loading item model/renderer...", e);
-                }
-            }
             final OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
@@ -193,19 +185,6 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 final String path = signalModels.getKey();
 
                 final String objId = itemId + "/signals/" + path;
-                // TODO Why is the cache being checked again?
-                if (!cache.containsKey(objId)) {
-                    try {
-                        final Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getObjTextures().get(path);
-                        if(objTextures.contains(null)){
-                            objTextures.remove(null);
-                            objTextures.add("");
-                        }
-                        cache.put(objId, new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
-                    } catch (final Exception e) {
-                        throw new ItemRenderException("Error loading item model/renderer...", e);
-                    }
-                }
                 final OBJModel model = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {

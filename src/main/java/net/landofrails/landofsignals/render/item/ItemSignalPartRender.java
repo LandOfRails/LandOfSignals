@@ -21,7 +21,6 @@ import java.util.Map;
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
     protected static final Map<String, OBJModel> cache = new HashMap<>();
-    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -63,7 +62,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
-                cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
@@ -91,7 +89,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
-                cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
