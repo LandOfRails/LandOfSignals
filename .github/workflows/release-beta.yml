@@ -93,7 +93,7 @@ jobs:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307
           game_endpoint: minecraft
-          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}-${{ steps.getsuffix.outputs.suffix }}.jar
           changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
