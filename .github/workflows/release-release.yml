@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
-      
+
       - name: Read VERSION file
         id: getversion
         run: echo "::set-output name=version::$(cat VERSION)"
@@ -17,7 +17,7 @@ jobs:
         id: getsuffix
         run: echo "::set-output name=suffix::$(cat SUFFIX)"
       - name: Replace version number with new version
-        run: | 
+        run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
           sed -i "s/String version =.*/String version = '${{ steps.getversion.outputs.version }}'/" ./build.gradle
           sed -i 's/"version":.*/"version": "${{ steps.getversion.outputs.version }}"/' src/main/resources/mcmod.info
@@ -28,28 +28,29 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
-          
+
   build:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        branch: [ 1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge ]
+        #        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
+        branch: [ 1.12.2-forge ]
         include:
-          - branch: 1.7.10-forge
-            version: 1.7.10
-          - branch: 1.10.2-forge
-            version: 1.10.2
-          - branch: 1.11.2-forge
-            version: 1.11.2
+          #          - branch: 1.7.10-forge
+          #            version: 1.7.10
+          #          - branch: 1.10.2-forge
+          #            version: 1.10.2
+          #          - branch: 1.11.2-forge
+          #            version: 1.11.2
           - branch: 1.12.2-forge
             version: 1.12.2
-          - branch: 1.14.4-forge
-            version: 1.14.4
-          - branch: 1.15.2-forge
-            version: 1.15.2
-          - branch: 1.16.5-forge
-            version: 1.16.5
+    #          - branch: 1.14.4-forge
+    #            version: 1.14.4
+    #          - branch: 1.15.2-forge
+    #            version: 1.15.2
+    #          - branch: 1.16.5-forge
+    #            version: 1.16.5
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
