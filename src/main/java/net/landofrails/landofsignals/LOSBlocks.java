@@ -154,7 +154,8 @@ public class LOSBlocks {
                 Static.MISSING_NAME,
                 Static.MISSING_OBJ,
                 keyValueLinkedMap("default", null),
-                null
+                null,
+                false
         );
 
         registerSingleGroupStellwandContent(
@@ -162,7 +163,17 @@ public class LOSBlocks {
                 "Signal Straight Track",
                 "models/block/stellwand/blocksignal/blocktrackstraight/blocksignal.obj",
                 keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
-                "white"
+                "white",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_straight_track_90deg",
+                "Signal Straight Track (90deg)",
+                "models/block/stellwand/blocksignal/blocktrackstraight/blocksignal.obj",
+                keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
+                "white",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -170,7 +181,17 @@ public class LOSBlocks {
                 "Signal Straight Unisolated",
                 "models/block/stellwand/blocksignal/blocktrackunisolated/unisolated.obj",
                 keyValueLinkedMap("Off", "off", "White", "white"),
-                "white"
+                "white",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_straight_unisolated_90deg",
+                "Signal Straight Unisolated (90deg)",
+                "models/block/stellwand/blocksignal/blocktrackunisolated/unisolated.obj",
+                keyValueLinkedMap("Off", "off", "White", "white"),
+                "white",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -178,7 +199,8 @@ public class LOSBlocks {
                 "Signal Diagonal Track DL",
                 "models/block/stellwand/blocksignal/trackdiag/downleft/trackdiagdownleft.obj",
                 keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
-                "white"
+                "white",
+                false
         );
 
         registerSingleGroupStellwandContent(
@@ -186,7 +208,8 @@ public class LOSBlocks {
                 "Signal Diagonal Track DR",
                 "models/block/stellwand/blocksignal/trackdiag/downright/trackdiagdownright.obj",
                 keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
-                "white"
+                "white",
+                false
         );
 
         registerSingleGroupStellwandContent(
@@ -194,7 +217,8 @@ public class LOSBlocks {
                 "Signal Diagonal Track UL",
                 "models/block/stellwand/blocksignal/trackdiag/upleft/trackdiagupleft.obj",
                 keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
-                "white"
+                "white",
+                false
         );
 
         registerSingleGroupStellwandContent(
@@ -202,7 +226,8 @@ public class LOSBlocks {
                 "Signal Diagonal Track UR",
                 "models/block/stellwand/blocksignal/trackdiag/upright/trackdiagupright.obj",
                 keyValueLinkedMap("Off", "off", "White", "white", "Red", "red"),
-                "white"
+                "white",
+                false
         );
 
         registerSingleGroupStellwandContent(
@@ -210,7 +235,17 @@ public class LOSBlocks {
                 "Signal HSig Left",
                 "models/block/stellwand/blocksignal/trackmainsignal/left/hsigleft.obj",
                 keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
-                "green"
+                "green",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_hsig_left_90deg",
+                "Signal HSig Left (90deg)",
+                "models/block/stellwand/blocksignal/trackmainsignal/left/hsigleft.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
+                "green",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -218,7 +253,17 @@ public class LOSBlocks {
                 "Signal HSig Right",
                 "models/block/stellwand/blocksignal/trackmainsignal/right/hsigright.obj",
                 keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
-                "green"
+                "green",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_hsig_right_90deg",
+                "Signal HSig Right (90deg)",
+                "models/block/stellwand/blocksignal/trackmainsignal/right/hsigright.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green", "Orange", "orange", "Red", "red"),
+                "green",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -226,7 +271,17 @@ public class LOSBlocks {
                 "Dwarfsignal bottom",
                 "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignalbottom.obj",
                 keyValueLinkedMap("Off", "off", "Green", "green"),
-                "green"
+                "green",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_dwarf_left",
+                "Dwarfsignal left",
+                "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignalbottom.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green"),
+                "green",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -234,7 +289,17 @@ public class LOSBlocks {
                 "Dwarfsignal top",
                 "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignaltop.obj",
                 keyValueLinkedMap("Off", "off", "Green", "green"),
-                "green"
+                "green",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_dwarf_right",
+                "Dwarfsignal right",
+                "models/block/stellwand/blocksignal/blockdwarfsignal/blockdwarfsignaltop.obj",
+                keyValueLinkedMap("Off", "off", "Green", "green"),
+                "green",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -243,7 +308,18 @@ public class LOSBlocks {
                 "models/block/stellwand/blocksignal/trackswitch/lrd/trackswitch.obj",
                 keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite",
                         "Branch white", "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
-                "branch_white"
+                "branch_white",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_uld",
+                "Track switch (Up -> Left, Down)",
+                "models/block/stellwand/blocksignal/trackswitch/lrd/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite",
+                        "Branch white", "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -252,7 +328,18 @@ public class LOSBlocks {
                 "models/block/stellwand/blocksignal/trackswitch/lru/trackswitch.obj",
                 keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
                         "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
-                "branch_white"
+                "branch_white",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_urd",
+                "Track switch (Up -> Right, Down)",
+                "models/block/stellwand/blocksignal/trackswitch/lru/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -261,7 +348,18 @@ public class LOSBlocks {
                 "models/block/stellwand/blocksignal/trackswitch/rld/trackswitch.obj",
                 keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
                         "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
-                "branch_white"
+                "branch_white",
+                false
+        );
+
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_dlu",
+                "Track switch (Down -> Left, Up)",
+                "models/block/stellwand/blocksignal/trackswitch/rld/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white",
+                true
         );
 
         registerSingleGroupStellwandContent(
@@ -270,10 +368,22 @@ public class LOSBlocks {
                 "models/block/stellwand/blocksignal/trackswitch/rlu/trackswitch.obj",
                 keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
                         "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
-                "branch_white"
+                "branch_white",
+                false
         );
 
-        registerStreckenblock();
+        registerSingleGroupStellwandContent(
+                "block_signal_track_switch_dru",
+                "Track switch (Down -> Right, Up)",
+                "models/block/stellwand/blocksignal/trackswitch/rlu/trackswitch.obj",
+                keyValueLinkedMap("Off", "off", "Main single white", "main_signalwhite", "Main double white", "main_doublewhite", "Branch white",
+                        "branch_white", "Main double red", "main_doublered", "Branch red", "branch_red"),
+                "branch_white",
+                true
+        );
+
+        registerStreckenblock(false);
+        registerStreckenblock(true);
 
         // Signalboxes
 
@@ -291,6 +401,8 @@ public class LOSBlocks {
 
         registerDecoContentPackStellwand("deco_filler", "Block Filler", models("models/block/stellwand/blockfiller/blockfiller/blockfiller.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f})}));
         registerDecoContentPackStellwand("deco_straight_track", "Straight track", models("models/block/stellwand/blockfiller/trackstraight/trackstraight.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
+        registerDecoContentPackStellwand("deco_straight_track_90deg", "Straight track (90deg)", models("models/block/stellwand/blockfiller/trackstraight/trackstraight.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180, 90f})}));
+
         registerDecoContentPackStellwand("deco_trackdiag_down_left", "Diagonal track (down - left)", models("models/block/stellwand/blockfiller/trackdiag/dl/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
         registerDecoContentPackStellwand("deco_trackdiag_down_right", "Diagonal track (down - right)", models("models/block/stellwand/blockfiller/trackdiag/dr/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
         registerDecoContentPackStellwand("deco_trackdiag_up_left", "Diagonal track (up - left)", models("models/block/stellwand/blockfiller/trackdiag/ul/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
@@ -298,7 +410,9 @@ public class LOSBlocks {
 
     }
 
-    private static void registerStreckenblock() {
+    private static void registerStreckenblock(boolean ninetyDegree) {
+        String name = "Streckenblock" + (ninetyDegree ? " (90deg)" : "");
+        String id = "block_signal_streckenblock" + (ninetyDegree ? "_90deg" : "");
         String objPath = "models/block/stellwand/blockstreckenblock/streckenblock.obj";
         Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> groups = new HashMap<>();
 
@@ -321,17 +435,17 @@ public class LOSBlocks {
             for (String[] state : preparedStates) {
                 String stateId = groupId + state[0];
                 String stateName = groupName + " " + state[1];
-                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f})));
+                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{0.5f, 0f, 0.5f}, new float[]{.5f, 0f, .5f}, ninetyDegree)));
             }
             groups.put(groupName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup(groupName, states));
         }
 
         ContentPackComplexSignal stellwandMultisignal = new ContentPackComplexSignal(
-                "Streckenblock",
-                "block_signal_streckenblock",
+                name,
+                id,
                 90f,
                 LOSTabs.SIGNALS_TAB,
-                signalModels(objPath, "general", new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f}),
+                signalModels(objPath, "general", new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f}, ninetyDegree),
                 groups,
                 keyValueLinkedMap("Top left", "topLeftWhite", "Bottom right", "bottomRightRed"),
                 null,
@@ -389,12 +503,12 @@ public class LOSBlocks {
         BLOCK_DECO.add(contentPackDeco);
     }
 
-    private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup) {
+    private static void registerSingleGroupStellwandContent(String id, String name, String objPath, Map<String, String> signalNameAndId, String itemGroup, boolean ninetyDegree) {
         String groupIdName = "default";
 
         LinkedHashMap<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState> states = new LinkedHashMap<>();
         signalNameAndId.forEach((signalName, signalId) ->
-                states.put(signalId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(signalName, signalModels(objPath, signalId)))
+                states.put(signalId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(signalName, signalModels(objPath, signalId, ninetyDegree)))
         );
         Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> group = Collections.singletonMap(groupIdName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup("default", states));
         Map<String, String> itemGroupStates = null;
@@ -408,7 +522,7 @@ public class LOSBlocks {
                 id,
                 90f,
                 LOSTabs.SIGNALS_TAB,
-                signalModels(objPath, "general"),
+                signalModels(objPath, "general", ninetyDegree),
                 group,
                 itemGroupStates,
                 null,
@@ -458,7 +572,7 @@ public class LOSBlocks {
         return map;
     }
 
-    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup) {
+    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, boolean rotateNinetyDegrees) {
         return models(
                 objPath,
                 new ContentPackModel[]{
@@ -467,14 +581,14 @@ public class LOSBlocks {
                                 new float[]{0.5f, 0.5f, 0.5f},
                                 new float[]{1f, 1f, 1f},
                                 new float[]{1f, 1f, 1f},
-                                new float[]{0f, 180f, 0f},
+                                new float[]{0f, 180f, rotateNinetyDegrees ? 90f : 0f},
                                 new String[]{objGroup}
                         )
                 }
         );
     }
 
-    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, float[] blockTranslation, float[] itemTranslation) {
+    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, float[] blockTranslation, float[] itemTranslation, boolean rotateNinetyDegrees) {
         return models(
                 objPath,
                 new ContentPackModel[]{
@@ -483,7 +597,7 @@ public class LOSBlocks {
                                 itemTranslation,
                                 new float[]{1f, 1f, 1f},
                                 new float[]{1f, 1f, 1f},
-                                new float[]{0f, 180f, 0f},
+                                new float[]{0f, 180f, rotateNinetyDegrees ? 90f : 0f},
                                 new String[]{objGroup}
                         )
                 }
