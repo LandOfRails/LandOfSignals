@@ -1,6 +1,16 @@
-name: LandOfSignals Publish-Alpha Pipeline
+name: LandOfSignals Publish Pipeline
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Type of release'
+        required: true
+        default: 'release'
+        options:
+          - 'alpha'
+          - 'beta'
+          - 'release'
 
 jobs:
   versioncommit:
@@ -78,10 +88,6 @@ jobs:
         run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
       - name: Gradle build
         run: ./gradlew build -Dtarget=release
-      - uses: actions/upload-artifact@v3
-        with:
-          name: LandOfSignals ${{matrix.branch}}
-          path: build/libs/LandOfSignals-${{matrix.branch}}-*
       - name: Read CHANGELOG.md file
         id: getchangelog
         uses: juliangruber/read-file-action@v1.1.6
@@ -95,42 +101,53 @@ jobs:
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Rename with suffix
         run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-      - name: Upload ${{matrix.branch}}
-        uses: Kir-Antipov/mc-publish@master
+      - uses: actions/upload-artifact@v3
         with:
-          # Modrinth
-          modrinth-id: r7aBIx6Q
-          modrinth-featured: true
-          modrinth-unfeature-mode: subset
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          # CurseForge
-          #curseforge-id: 434307
-          #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          #curseforge-dependencies: |
-          #  universal-mod-core | depends | *
-
-          # GitHub
-          github-tag: v${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
-          github-generate-changelog: true
-          github-draft: false
-          github-prerelease: false
-          github-discussion: Announcements
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-          files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-
-          version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
-          version-type: alpha
-          changelog-file: CHANGELOG.md
-
-          loaders: |
-            forge
-          game-versions: |
-            ${{ matrix.version }}
-          java: |
-            8
-
-          retry-attempts: 2
-          retry-delay: 10000
-          fail-mode: fail
+          name: LandOfSignals ${{matrix.branch}}
+          path: build/libs/LandOfSignals-*
+#      - uses: cloudposse/github-action-matrix-outputs-write@main
+#        id: out
+#        with:
+#          matrix-step-name: ${{ github.job }}
+#          matrix-key: ${{ matrix.branch }}
+#          outputs: |-
+#            image: ${{ steps.build.outputs.image }}:${{ steps.build.outputs.tag }}
+#      - name: Upload ${{matrix.branch}}
+#        uses: Kir-Antipov/mc-publish@master
+#        with:
+#          # Modrinth
+#          modrinth-id: r7aBIx6Q
+#          modrinth-featured: true
+#          modrinth-unfeature-mode: subset
+#          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+#
+#          # CurseForge
+#          #curseforge-id: 434307
+#          #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+#          #curseforge-dependencies: |
+#          #  universal-mod-core | depends | *
+#
+#          # GitHub
+#          github-tag: v${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
+#          github-generate-changelog: true
+#          github-draft: false
+#          github-prerelease: false
+#          github-discussion: Announcements
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#
+#          files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+#
+#          version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
+#          version-type: ${{ inputs.type }}
+#          changelog-file: CHANGELOG.md
+#
+#          loaders: |
+#            forge
+#          game-versions: |
+#            ${{ matrix.version }}
+#          java: |
+#            8
+#
+#          retry-attempts: 2
+#          retry-delay: 10000
+#          fail-mode: fail
