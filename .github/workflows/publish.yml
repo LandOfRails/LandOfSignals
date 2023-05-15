@@ -135,6 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
+      - uses: actions/checkout@v3
       - name: Read VERSION file
         id: getversion
         run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
@@ -144,7 +145,6 @@ jobs:
       - uses: actions/download-artifact@v3
       - run: mkdir upload
       - run: cp **/LandOfSignals-*.jar upload
-      - uses: actions/checkout@v3
       - name: Upload to GitHub
         uses: Kir-Antipov/mc-publish@master
         with:
