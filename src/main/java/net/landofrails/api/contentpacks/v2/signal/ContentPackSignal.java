@@ -221,7 +221,10 @@ public class ContentPackSignal {
 
     private void defaultMissing() {
 
-        if (states == null || Arrays.stream(states).anyMatch(Objects::isNull) || Arrays.stream(states).noneMatch(String::isEmpty)) {
+        if (states != null && Arrays.stream(states).anyMatch(Objects::isNull)) {
+            //Replace null with empty string
+            states = Arrays.stream(states).map(s -> s == null ? "" : s).toArray(String[]::new);
+        } else if (states == null || Arrays.stream(states).noneMatch(String::isEmpty)) {
             String[] tempStates = new String[1 + (this.states != null ? this.states.length : 0)];
             tempStates[0] = "";
             if (this.states != null && this.states.length > 0) {
