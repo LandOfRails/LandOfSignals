@@ -12,10 +12,10 @@ jobs:
 
       - name: Read VERSION file
         id: getversion
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
       - name: Read SUFFIX file
         id: getsuffix
-        run: echo "::set-output name=suffix::$(cat SUFFIX)"
+        run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Replace version number with new version
         run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
@@ -84,15 +84,15 @@ jobs:
           path: build/libs/LandOfSignals-${{matrix.branch}}-*
       - name: Read CHANGELOG.md file
         id: getchangelog
-        uses: juliangruber/read-file-action@v1.1.4
+        uses: juliangruber/read-file-action@v1.1.6
         with:
           path: ./CHANGELOG.md
       - name: Read VERSION file
         id: getversion
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
       - name: Read SUFFIX file
         id: getsuffix
-        run: echo "::set-output name=suffix::$(cat SUFFIX)"
+        run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Rename with suffix
         run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload to CurseForge ${{matrix.branch}}
