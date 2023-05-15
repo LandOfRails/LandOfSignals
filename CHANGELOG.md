@@ -3,6 +3,7 @@
 #### Alpha 1.0.4-UMC-testbuild
 
 Fix crash due to some contentpacks still containing null. Improved logic to prevent this from happening again.
+Fixed missing logging parameter in ContentPackHandlerV2#load
 
 #### Alpha 1.0.3-UMC-testbuild
 
