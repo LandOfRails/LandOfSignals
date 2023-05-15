@@ -1,4 +1,4 @@
-name: LandOfSignals Release Pipeline
+name: LandOfSignals Publish-Release Pipeline
 
 on: [ workflow_dispatch ]
 

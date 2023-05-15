@@ -1,4 +1,4 @@
-name: LandOfSignals Release Alpha Pipeline
+name: LandOfSignals Publish-Beta Pipeline
 
 on: [ workflow_dispatch ]
 
@@ -97,5 +97,5 @@ jobs:
           changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
-          release_type: alpha
+          release_type: beta
           relations: universal-mod-core:requiredDependency
