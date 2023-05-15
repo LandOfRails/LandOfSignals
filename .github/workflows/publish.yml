@@ -7,10 +7,11 @@ on:
         description: 'Type of release'
         required: true
         default: 'release'
+        type: choice
         options:
-          - 'alpha'
-          - 'beta'
-          - 'release'
+          - alpha
+          - beta
+          - release
 
 jobs:
   versioncommit:
