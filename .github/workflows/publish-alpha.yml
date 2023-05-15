@@ -1,4 +1,4 @@
-name: LandOfSignals Release Pipeline
+name: LandOfSignals Publish-Alpha Pipeline
 
 on: [ workflow_dispatch ]
 
@@ -69,7 +69,7 @@ jobs:
       - name: Hack Forge Gradle Part Two
         env:
           BRANCH: ${{ matrix.branch }}
-        run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
+        run: git apply ${BRANCH}.patch || true
       - name: Gradle compile
         run: ./gradlew classes
       - name: Process images
@@ -105,5 +105,5 @@ jobs:
           changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
-          release_type: release
+          release_type: alpha
           relations: universal-mod-core:requiredDependency
