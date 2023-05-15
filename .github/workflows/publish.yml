@@ -121,15 +121,7 @@ jobs:
           #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           #curseforge-dependencies: |
           #  universal-mod-core | depends | *
-
-          # GitHub
-          github-tag: v${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
-          github-generate-changelog: true
-          github-draft: false
-          github-prerelease: false
-          github-discussion: Announcements
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
+          
           files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
 
           version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
@@ -159,7 +151,7 @@ jobs:
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - uses: actions/download-artifact@v3
       - run: mkdir upload
-      - run: cp **/LandOfSignals-*.jar upload
+      - run: cp **/*.jar upload
       - name: Upload to GitHub
         uses: Kir-Antipov/mc-publish@master
         with:
