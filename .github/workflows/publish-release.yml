@@ -87,15 +87,42 @@ jobs:
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Rename with suffix
         run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-      - name: Upload to CurseForge ${{matrix.branch}}
-        uses: MarkenJaden/curseforge-upload@master
+      - name: Upload ${{matrix.branch}}
+        uses: Kir-Antipov/mc-publish@master
         with:
-          token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
-          project_id: 434307
-          game_endpoint: minecraft
-          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-          changelog: ${{ steps.getchangelog.outputs.content }}
-          changelog_type: markdown
-          game_versions: ${{ matrix.version }}
-          release_type: release
-          relations: universal-mod-core:requiredDependency
+          # Modrinth
+          modrinth-id: r7aBIx6Q
+          modrinth-featured: true
+          modrinth-unfeature-mode: subset
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          # CurseForge
+          #curseforge-id: 434307
+          #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          #curseforge-dependencies: |
+          #  universal-mod-core | depends | *
+
+          # GitHub
+          github-tag: v${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
+          github-generate-changelog: true
+          github-draft: false
+          github-prerelease: false
+          github-discussion: Announcements
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+
+          version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+          loaders: |
+            forge
+          game-versions: |
+            ${{ matrix.version }}
+          java: |
+            8
+
+          retry-attempts: 2
+          retry-delay: 10000
+          fail-mode: fail
