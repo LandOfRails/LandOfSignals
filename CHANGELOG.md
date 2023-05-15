@@ -1,3 +1,7 @@
+#### Release 1.0.4
+
+Fixed missing logging parameter in ContentPackHandlerV2#load
+
 #### Release 1.0.3
 
 Fixed #82 | 1.7.10 - 1.16.5:\

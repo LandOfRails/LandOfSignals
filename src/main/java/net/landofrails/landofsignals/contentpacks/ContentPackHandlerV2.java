@@ -63,7 +63,7 @@ public class ContentPackHandlerV2 {
             contentPack.getContentSets().forEach(path -> loadSet(zip, path, contentPack, isUTF8));
         }
         if (!hasContent && !hasContentSets) {
-            ModCore.warn("ContentPack %s does not contain any blocks");
+            ModCore.warn("ContentPack %s does not contain any blocks", contentPack.getId());
         }
     }
 
