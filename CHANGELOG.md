@@ -1,6 +1,10 @@
 ### BACKUP YOUR WORLD BEFORE UPDATING!
 
-#### Release 1.0.3-UMC-testbuild
+#### Alpha 1.0.4-UMC-testbuild
+
+Fix crash due to some contentpacks still containing null. Improved logic to prevent this from happening again.
+
+#### Alpha 1.0.3-UMC-testbuild
 
 This build is compatible with current UMC testbuilds in combination with Immersive Railroading testbuilds.
 
