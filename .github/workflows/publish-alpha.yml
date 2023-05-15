@@ -94,14 +94,14 @@ jobs:
         id: getsuffix
         run: echo "::set-output name=suffix::$(cat SUFFIX)"
       - name: Rename with suffix
-        run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}-${{ steps.getsuffix.outputs.suffix }}.jar
+        run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload to CurseForge ${{matrix.branch}}
         uses: MarkenJaden/curseforge-upload@master
         with:
           token: ${{ secrets.LANDOFSIGNALS_UPLOAD }}
           project_id: 434307
           game_endpoint: minecraft
-          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}-${{ steps.getsuffix.outputs.suffix }}.jar
+          file_path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
           changelog: ${{ steps.getchangelog.outputs.content }}
           changelog_type: markdown
           game_versions: ${{ matrix.version }}
