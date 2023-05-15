@@ -143,6 +143,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
+      - uses: actions/checkout@v3
       - name: Read VERSION file
         id: getversion
         run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
@@ -151,7 +152,7 @@ jobs:
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - uses: actions/download-artifact@v3
       - run: mkdir upload
-      - run: cp **/*.jar upload
+      - run: cp **/LandOfSignals-*.jar upload
       - name: Upload to GitHub
         uses: Kir-Antipov/mc-publish@master
         with:
@@ -163,11 +164,11 @@ jobs:
           github-discussion: Announcements
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-          files: upload/*.jar
+          files: upload/LandOfSignals-*.jar
 
           version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
           version-type: ${{ inputs.type }}
-          changelog-file: CHANGELOG.md
+          changelog-file: ./CHANGELOG.md
 
           loaders: |
             forge
