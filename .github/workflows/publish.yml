@@ -109,10 +109,10 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           # CurseForge
-          #curseforge-id: 434307
-          #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          #curseforge-dependencies: |
-          #  universal-mod-core | depends | *
+          curseforge-id: 434307
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-dependencies: |
+            universal-mod-core | depends | *
           
           files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
 
