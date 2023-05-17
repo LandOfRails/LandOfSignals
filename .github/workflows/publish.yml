@@ -125,7 +125,7 @@ jobs:
 
           version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
           version-type: ${{ inputs.type }}
-          changelog-file: CHANGELOG.md
+          changelog-file: ./CHANGELOG.md
 
           loaders: |
             forge
