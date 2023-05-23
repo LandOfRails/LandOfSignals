@@ -30,21 +30,23 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
     protected static final Map<String, OBJRender> cache = new HashMap<>();
     protected static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    private static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups, String identifier) {
+    private static final String SIGNAL_IDENTIFIER = "/signals/";
+
+    private static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups) {
 
         // Get first group, get first state, get first model
         Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
 
         if (!firstPath.isPresent())
             return;
-        final String firstObjId = itemId + identifier + firstPath.get();
+        final String firstObjId = itemId + SIGNAL_IDENTIFIER + firstPath.get();
         if (cache.containsKey(firstObjId)) {
             return;
         }
 
         for (ContentPackSignalGroup group : groups) {
             for (ContentPackSignalState state : group.getStates().values()) {
-                checkCache(itemId, state.getModels(), identifier, false);
+                checkCache(itemId, state.getModels(), SIGNAL_IDENTIFIER, false);
             }
         }
 
@@ -74,7 +76,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
                     String[] groups = signalModel.getObj_groups();
                     if (groups.length > 0) {
-                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).filter(Objects::nonNull).anyMatch(renderOBJGroup::startsWith);
                         List<String> modes = renderer.model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);
@@ -166,7 +168,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
     private static void renderSignals(String itemId, Map<String, String> itemGroupStates) {
         final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getSignals();
 
-        checkCache(itemId, signalGroups.values(), "/signals/");
+        checkCache(itemId, signalGroups.values());
 
         for (Map.Entry<String, ContentPackSignalGroup> signalGroup : signalGroups.entrySet()) {
 
@@ -176,7 +178,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
 
                 final String path = signalModels.getKey();
 
-                final String objId = itemId + "/signals/" + path;
+                final String objId = itemId + SIGNAL_IDENTIFIER + path;
                 final OBJRender renderer = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {

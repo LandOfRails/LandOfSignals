@@ -382,8 +382,7 @@ public class LOSBlocks {
                 true
         );
 
-        registerStreckenblock(false);
-        registerStreckenblock(true);
+        registerStreckenblock();
 
         // Signalboxes
 
@@ -410,9 +409,9 @@ public class LOSBlocks {
 
     }
 
-    private static void registerStreckenblock(boolean ninetyDegree) {
-        String name = "Streckenblock" + (ninetyDegree ? " (90deg)" : "");
-        String id = "block_signal_streckenblock" + (ninetyDegree ? "_90deg" : "");
+    private static void registerStreckenblock() {
+        String name = "Streckenblock";
+        String id = "block_signal_streckenblock";
         String objPath = "models/block/stellwand/blockstreckenblock/streckenblock.obj";
         Map<String, net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup> groups = new HashMap<>();
 
@@ -435,7 +434,7 @@ public class LOSBlocks {
             for (String[] state : preparedStates) {
                 String stateId = groupId + state[0];
                 String stateName = groupName + " " + state[1];
-                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{0.5f, 0f, 0.5f}, new float[]{.5f, 0f, .5f}, ninetyDegree)));
+                states.put(stateId, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState(stateName, signalModels(objPath, stateId, new float[]{0.5f, 0f, 0.5f}, new float[]{.5f, 0f, .5f})));
             }
             groups.put(groupName, new net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup(groupName, states));
         }
@@ -445,7 +444,7 @@ public class LOSBlocks {
                 id,
                 90f,
                 LOSTabs.SIGNALS_TAB,
-                signalModels(objPath, "general", new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f}, ninetyDegree),
+                signalModels(objPath, "general", new float[]{.5f, 0f, .5f}, new float[]{.5f, 0f, .5f}),
                 groups,
                 keyValueLinkedMap("Top left", "topLeftWhite", "Bottom right", "bottomRightRed"),
                 null,
@@ -588,7 +587,7 @@ public class LOSBlocks {
         );
     }
 
-    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, float[] blockTranslation, float[] itemTranslation, boolean rotateNinetyDegrees) {
+    private static Map<String, ContentPackModel[]> signalModels(String objPath, String objGroup, float[] blockTranslation, float[] itemTranslation) {
         return models(
                 objPath,
                 new ContentPackModel[]{
@@ -597,7 +596,7 @@ public class LOSBlocks {
                                 itemTranslation,
                                 new float[]{1f, 1f, 1f},
                                 new float[]{1f, 1f, 1f},
-                                new float[]{0f, 180f, rotateNinetyDegrees ? 90f : 0f},
+                                new float[]{0f, 180f, 0f},
                                 new String[]{objGroup}
                         )
                 }
