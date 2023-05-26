@@ -184,7 +184,7 @@ public class ContentPackHandler {
             // Cache items
             try{
                 ItemComplexSignalRender.checkCache(id, base, "/base/", false);
-                ItemComplexSignalRender.checkCache(id, signalGroups.values(), "/signals/");
+                ItemComplexSignalRender.checkCache(id, signalGroups.values());
             }catch (Exception e){
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
