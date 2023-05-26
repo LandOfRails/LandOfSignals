@@ -32,7 +32,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
 
     private static final String SIGNAL_IDENTIFIER = "/signals/";
 
-    private static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups) {
+    public static void checkCache(String itemId, Collection<ContentPackSignalGroup> groups) {
 
         // Get first group, get first state, get first model
         Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
@@ -52,7 +52,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
 
     }
 
-    private static void checkCache(String itemId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+    public static void checkCache(String itemId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
             if (!firstPath.isPresent())
