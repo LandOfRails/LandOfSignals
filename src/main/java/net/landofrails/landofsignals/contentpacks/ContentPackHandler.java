@@ -3,7 +3,6 @@ package net.landofrails.landofsignals.contentpacks;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.gui.Progress;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.GenericContentPack;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
@@ -156,7 +155,7 @@ public class ContentPackHandler {
 
             // Cache items
             try {
-                ItemSignalPartRender.cache().put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                ItemSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
             } catch (Exception e) {
                 String errmsg = "Couldn't preload item with id \"%s\" (objPath: %s). Cause:";
                 throw new ContentPackException(String.format(errmsg, id, objPath), e);
@@ -164,7 +163,7 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileSignalPartRender.cache().put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                TileSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
             } catch (Exception e) {
                 String errmsg = "Couldn't preload block with id \"%s\" (objPath: %s). Cause:";
                 throw new ContentPackException(String.format(errmsg, id, objPath), e);

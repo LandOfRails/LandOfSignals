@@ -73,7 +73,7 @@ public class TileComplexSignalRender {
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
                     String[] groups = signalModel.getObj_groups();
                     if (groups.length > 0) {
-                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).filter(Objects::nonNull).anyMatch(renderOBJGroup::startsWith);
                         List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);

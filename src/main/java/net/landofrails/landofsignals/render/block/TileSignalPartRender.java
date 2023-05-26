@@ -127,7 +127,7 @@ public class TileSignalPartRender {
         }
     }
 
-    public static Map<String, OBJRender> cache(){
+    public static Map<String, OBJModel> cache(){
         return cache;
     }
 

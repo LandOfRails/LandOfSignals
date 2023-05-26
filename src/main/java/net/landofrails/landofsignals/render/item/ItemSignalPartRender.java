@@ -108,7 +108,7 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         }
     }
 
-    public static Map<String, OBJRender> cache(){
+    public static Map<String, OBJModel> cache(){
         return cache;
     }
 
