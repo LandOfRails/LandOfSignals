@@ -29,7 +29,7 @@ public class TileComplexSignalRender {
     private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    private static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
+    public static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
 
         // Get first group, get first state, get first model
         Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
@@ -49,7 +49,7 @@ public class TileComplexSignalRender {
 
     }
 
-    private static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+    public static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
             if (!firstPath.isPresent())
@@ -73,7 +73,7 @@ public class TileComplexSignalRender {
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
                     String[] groups = signalModel.getObj_groups();
                     if (groups.length > 0) {
-                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
+                        Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).filter(Objects::nonNull).anyMatch(renderOBJGroup::startsWith);
                         List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);

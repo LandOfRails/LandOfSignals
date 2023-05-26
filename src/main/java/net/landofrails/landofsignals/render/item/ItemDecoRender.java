@@ -26,7 +26,7 @@ public class ItemDecoRender implements ItemRender.IItemModel {
     protected static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    private static void checkCache(String itemId, Map<String, ContentPackModel[]> models) {
+    public static void checkCache(String itemId, Map<String, ContentPackModel[]> models) {
         Optional<String> firstPath = models.keySet().stream().findFirst();
         if (!firstPath.isPresent())
             return;

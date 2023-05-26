@@ -12,4 +12,8 @@ public class ContentPackException extends RuntimeException {
 		super(text);
 	}
 
+	public ContentPackException(String text, Throwable throwable) {
+		super(text, throwable);
+	}
+
 }

@@ -25,7 +25,6 @@ public class TileSignalPartRender {
     }
 
     private static final Map<String, OBJModel> cache = new HashMap<>();
-    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
@@ -64,7 +63,6 @@ public class TileSignalPartRender {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
-                cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
@@ -103,7 +101,6 @@ public class TileSignalPartRender {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
                 cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
-                cacheInfoOldContentPack.putIfAbsent(blockId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(blockId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
@@ -128,6 +125,10 @@ public class TileSignalPartRender {
             tile.getWorld().breakBlock(tile.getPos());
 
         }
+    }
+
+    public static Map<String, OBJModel> cache(){
+        return cache;
     }
 
 }

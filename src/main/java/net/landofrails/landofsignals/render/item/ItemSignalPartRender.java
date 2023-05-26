@@ -20,7 +20,7 @@ import java.util.Map;
 
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
-    protected static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -106,6 +106,10 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             // Render
             vbo.draw();
         }
+    }
+
+    public static Map<String, OBJModel> cache(){
+        return cache;
     }
 
 }
