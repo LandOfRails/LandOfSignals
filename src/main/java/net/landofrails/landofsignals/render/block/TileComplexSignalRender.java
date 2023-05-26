@@ -29,7 +29,7 @@ public class TileComplexSignalRender {
     private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    private static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
+    public static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
 
         // Get first group, get first state, get first model
         Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
@@ -49,7 +49,7 @@ public class TileComplexSignalRender {
 
     }
 
-    private static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+    public static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
             if (!firstPath.isPresent())
