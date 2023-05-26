@@ -21,7 +21,7 @@ import java.util.Map;
 
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
-    protected static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, OBJRender> cache = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -104,6 +104,10 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
 
             renderer.draw();
         }
+    }
+
+    public static Map<String, OBJRender> cache(){
+        return cache;
     }
 
 }
