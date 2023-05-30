@@ -36,6 +36,9 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
+    @TagField("scaling")
+    private Vec3d scaling = new Vec3d(1,1,1);
+
     @TagField("signalType")
     @Nullable
     private Byte signalType; // null = none, 0 = simple (old), 1 = complex
@@ -424,11 +427,11 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
 
     @Override
     public void setScaling(Vec3d scaling) {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        this.scaling = scaling;
     }
 
     @Override
     public Vec3d getScaling() {
-        return new Vec3d(1,1, 1);
+        return scaling;
     }
 }

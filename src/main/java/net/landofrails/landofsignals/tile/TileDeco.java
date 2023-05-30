@@ -17,6 +17,8 @@ public class TileDeco extends BlockEntity implements IManipulate {
     private String id;
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
+    @TagField("scaling")
+    private Vec3d scaling = new Vec3d(1,1,1);
 
     public TileDeco(String id, int rot) {
         this.blockRotate = rot;
@@ -83,12 +85,12 @@ public class TileDeco extends BlockEntity implements IManipulate {
 
     @Override
     public void setScaling(Vec3d scaling) {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        this.scaling = scaling;
     }
 
     @Override
     public Vec3d getScaling() {
-        return new Vec3d(1, 1, 1);
+        return scaling;
     }
 
 }

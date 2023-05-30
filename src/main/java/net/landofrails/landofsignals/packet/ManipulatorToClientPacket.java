@@ -21,6 +21,8 @@ public class ManipulatorToClientPacket extends Packet {
     private boolean gui;
     @TagField("rotation")
     private int rotation;
+    @TagField("scaling")
+    private Vec3d scaling;
     @TagField("sneak")
     private boolean sneak;
 
@@ -28,10 +30,11 @@ public class ManipulatorToClientPacket extends Packet {
 
     }
 
-    public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final boolean sneak) {
+    public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final Vec3d scaling, final boolean sneak) {
         movement = offset;
         this.blockPos = blockPos;
         this.rotation = rotation;
+        this.scaling = scaling;
         gui = true;
         this.sneak = sneak;
     }
@@ -62,6 +65,7 @@ public class ManipulatorToClientPacket extends Packet {
                 if (block instanceof IManipulate) {
                     final IManipulate manipulate = (IManipulate) block;
                     manipulate.setOffset(movement);
+                    manipulate.setScaling(scaling);
                 }
             }
         } else {
@@ -71,6 +75,7 @@ public class ManipulatorToClientPacket extends Packet {
                     final IManipulate manipulate = (IManipulate) block;
                     manipulate.setOffset(movement);
                     manipulate.setRotation(rotation);
+                    manipulate.setScaling(scaling);
                 }
             }
         }

@@ -30,6 +30,8 @@ public class TileSignPart extends BlockEntity implements IManipulate {
     private String signText;
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
+    @TagField("scaling")
+    private Vec3d scaling = new Vec3d(1,1,1);
 
     public TileSignPart(String id, int rot) {
         this.blockRotate = rot;
@@ -107,12 +109,12 @@ public class TileSignPart extends BlockEntity implements IManipulate {
 
     @Override
     public void setScaling(Vec3d scaling) {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        this.scaling = scaling;
     }
 
     @Override
     public Vec3d getScaling() {
-        return new Vec3d(1, 1, 1);
+        return scaling;
     }
 
     public void setText(String signText) {

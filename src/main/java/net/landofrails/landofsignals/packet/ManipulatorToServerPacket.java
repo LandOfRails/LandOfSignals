@@ -15,14 +15,17 @@ public class ManipulatorToServerPacket extends Packet {
     private Vec3i blockPos;
     @TagField("rotation")
     private int rotation;
+    @TagField("scaling")
+    private Vec3d scaling;
 
     public ManipulatorToServerPacket() {
 
     }
 
-    public ManipulatorToServerPacket(final Vec3d offset, final int rotation, final Vec3i blockPos) {
+    public ManipulatorToServerPacket(final Vec3d offset, final int rotation, final Vec3d scaling, final Vec3i blockPos) {
         this.offset = offset;
         this.rotation = rotation;
+        this.scaling = scaling;
         this.blockPos = blockPos;
     }
 
@@ -33,6 +36,7 @@ public class ManipulatorToServerPacket extends Packet {
             final IManipulate manipulate = (IManipulate) block;
             manipulate.setOffset(offset);
             manipulate.setRotation(rotation);
+            manipulate.setScaling(scaling);
         }
     }
 }
