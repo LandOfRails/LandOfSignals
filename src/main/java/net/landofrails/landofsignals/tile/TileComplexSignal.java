@@ -53,7 +53,7 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
 
-        if (player.isCrouching() || LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(hand))) {
+        if (player.isCrouching() || LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(Player.Hand.PRIMARY))) {
             return false;
         }
         if (!getWorld().isServer) {

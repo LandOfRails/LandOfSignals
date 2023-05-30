@@ -14,6 +14,7 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
+import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
 import javax.annotation.Nullable;
@@ -91,7 +92,7 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
 
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
-        if (!player.getHeldItem(hand).is(LOSItems.ITEM_CONNECTOR) && !player.isCrouching() && player.getWorld().isServer) {
+        if (!LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(Player.Hand.PRIMARY)) && !player.isCrouching() && player.getWorld().isServer) {
 
             if(signalType == null) {
                 refreshOldRedstoneVariables();
