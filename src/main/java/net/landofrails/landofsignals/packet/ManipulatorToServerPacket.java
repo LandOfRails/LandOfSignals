@@ -31,7 +31,7 @@ public class ManipulatorToServerPacket extends Packet {
         final BlockEntity block = getWorld().getBlockEntity(blockPos, BlockEntity.class);
         if (block instanceof IManipulate) {
             final IManipulate manipulate = (IManipulate) block;
-            manipulate.setOffset(manipulate.getOffset().add(offset));
+            manipulate.setOffset(offset);
             manipulate.setRotation(rotation);
         }
     }

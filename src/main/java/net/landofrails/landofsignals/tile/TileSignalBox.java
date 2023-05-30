@@ -13,6 +13,7 @@ import cam72cam.mod.util.Facing;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxTileSignalPartPacket;
+import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
 import javax.annotation.Nullable;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"java:S116", "java:S1134", "java:S1133"})
-public class TileSignalBox extends BlockEntity {
+public class TileSignalBox extends BlockEntity implements IManipulate {
 
     @TagField("id")
     private String id;
@@ -31,6 +32,9 @@ public class TileSignalBox extends BlockEntity {
     @TagField("UuidTileTop")
     @Nullable
     private Vec3i tileSignalPartPos = Vec3i.ZERO;
+
+    @TagField("offset")
+    private Vec3d offset = Vec3d.ZERO;
 
     @TagField("signalType")
     @Nullable
@@ -75,6 +79,11 @@ public class TileSignalBox extends BlockEntity {
     @Override
     public IBoundingBox getBoundingBox() {
         return IBoundingBox.BLOCK;
+    }
+
+    @Override
+    public IBoundingBox getRenderBoundingBox() {
+        return IBoundingBox.BLOCK.offset(getOffset());
     }
 
     @Override
@@ -393,4 +402,33 @@ public class TileSignalBox extends BlockEntity {
         noRedstone = null;
     }
 
+    @Override
+    public void setOffset(Vec3d offset) {
+        this.offset = offset;
+    }
+
+    @Override
+    public Vec3d getOffset() {
+        return offset;
+    }
+
+    @Override
+    public void setRotation(int rotation) {
+        this.blockRotate = rotation;
+    }
+
+    @Override
+    public int getRotation() {
+        return getBlockRotate();
+    }
+
+    @Override
+    public void setScaling(Vec3d scaling) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return new Vec3d(1,1, 1);
+    }
 }

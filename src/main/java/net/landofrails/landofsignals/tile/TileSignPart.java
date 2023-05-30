@@ -58,7 +58,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setVec3d("offset", vec));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -96,7 +96,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -105,12 +105,22 @@ public class TileSignPart extends BlockEntity implements IManipulate {
         return getBlockRotate();
     }
 
+    @Override
+    public void setScaling(Vec3d scaling) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return new Vec3d(1, 1, 1);
+    }
+
     public void setText(String signText) {
         this.signText = signText;
         try {
             save(getData());
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 

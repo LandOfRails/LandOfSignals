@@ -73,7 +73,7 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -117,6 +117,16 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @Override
     public int getRotation() {
         return getBlockRotate();
+    }
+
+    @Override
+    public void setScaling(Vec3d scaling) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return new Vec3d(1, 1, 1);
     }
 
     public Map<String, String[]> getOrderedGroupStates() {

@@ -34,7 +34,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setVec3d("offset", vec));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -72,7 +72,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -80,5 +80,15 @@ public class TileDeco extends BlockEntity implements IManipulate {
     public int getRotation() {
         return getBlockRotate();
     }
-    
+
+    @Override
+    public void setScaling(Vec3d scaling) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return new Vec3d(1, 1, 1);
+    }
+
 }

@@ -67,6 +67,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
+            Packet.register(GuiItemManipulatorToClient::new, PacketDirection.ServerToClient);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -122,6 +123,7 @@ public class LandOfSignals extends ModCore.Mod {
                 if(LandOfSignalsConfig.preloadModels) {
                     ContentPackHandler.preloadModels();
                 }
+
                 break;
             default:
                 break;

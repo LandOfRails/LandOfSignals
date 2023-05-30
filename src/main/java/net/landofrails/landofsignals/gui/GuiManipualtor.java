@@ -1,14 +1,12 @@
 package net.landofrails.landofsignals.gui;
 
-import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.screen.*;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
-import net.landofrails.landofsignals.LOSItems;
-import net.landofrails.landofsignals.items.ItemManipulator;
 import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
+import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
@@ -19,15 +17,20 @@ public class GuiManipualtor implements IScreen {
     private CheckBox positionBox;
     private CheckBox heightBox;
     private CheckBox rotationBox;
-    private CheckBox hitboxBox;
-
-    private Button ingameButton;
 
     private Slider rotationSlider;
+    private Button rotationAddition;
+    private Button rotationSubtraction;
 
     private TextField positionXField;
+    private Button positionXAddition;
+    private Button positionXSubtraction;
     private TextField positionZField;
+    private Button positionZAddition;
+    private Button positionZSubtraction;
     private TextField heightYField;
+    private Button heightYAddition;
+    private Button heightYSubtraction;
 
     private String textXBefore;
     private String textYBefore;
@@ -52,7 +55,9 @@ public class GuiManipualtor implements IScreen {
     public GuiManipualtor(final BlockEntity be) {
         final IManipulate manipulate = (IManipulate) be;
         offset = manipulate.getOffset();
-        rotation = manipulate.getRotation();
+        rotation = manipulate.getRotation() % 360;
+        if (rotation < 0)
+            rotation += 360;
         blockPos = be.getPos();
     }
 
@@ -64,9 +69,11 @@ public class GuiManipualtor implements IScreen {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
                 positionXField.setVisible(true);
+                positionXAddition.setVisible(true);
+                positionXSubtraction.setVisible(true);
                 positionZField.setVisible(true);
-                ingameButton.setVisible(true);
-                ItemManipulator.editHeight = false;
+                positionZAddition.setVisible(true);
+                positionZSubtraction.setVisible(true);
             }
         };
         heightBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 110, GuiText.LABEL_EDITPOSITION + " (Y)", false) {
@@ -74,9 +81,9 @@ public class GuiManipualtor implements IScreen {
             public void onClick(final Player.Hand hand) {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
-                ingameButton.setVisible(true);
                 heightYField.setVisible(true);
-                ItemManipulator.editHeight = true;
+                heightYAddition.setVisible(true);
+                heightYSubtraction.setVisible(true);
             }
         };
         rotationBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 130, GuiText.LABEL_EDITROTATION.toString(), false) {
@@ -85,37 +92,82 @@ public class GuiManipualtor implements IScreen {
                 uncheckOtherBoxes(this);
                 setAllInvisible();
                 rotationSlider.setVisible(true);
-            }
-        };
-        hitboxBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 150, GuiText.LABEL_EDITHITBOX.toString(), false) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                uncheckOtherBoxes(this);
-                setAllInvisible();
+                rotationAddition.setVisible(true);
+                rotationSubtraction.setVisible(true);
             }
         };
 
-        ingameButton = new Button(screen, screen.getWidth() / 2 - 120, 90, 100, 20, GuiText.LABEL_EDITINGAME.toString()) {
+        renewSlider(screen);
+        rotationSubtraction = new Button(screen,screen.getWidth() / 2 - 220, 100, 20, 20, "-") {
             @Override
-            public void onClick(final Player.Hand hand) {
-                ItemManipulator.editIngame = true;
-                LOSItems.ITEM_MANIPULATOR.setPlayerMainPos(MinecraftClient.getPlayer().getPosition());
-                screen.close();
+            public void onClick(Player.Hand hand) {
+                rotation--;
+                renewSlider(screen);
+                send();
             }
         };
-
-        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 170, 90, GuiText.LABEL_ROTATIONSLIDER + " : " + rotation, 0, 360, rotation, false) {
+        rotationAddition = new Button(screen, screen.getWidth() / 2 - 50, 100, 20, 20, "+") {
             @Override
-            public void onSlider() {
-                rotation = rotationSlider.getValueInt();
-                rotationSlider.setText(GuiText.LABEL_ROTATIONSLIDER + " : " + rotation);
+            public void onClick(Player.Hand hand) {
+                rotation++;
+                renewSlider(screen);
                 send();
             }
         };
 
-        positionXField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 100, 20);
-        positionZField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 100, 100, 20);
-        heightYField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 100, 20);
+        positionXField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 40, 20);
+        positionXAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double positionX = Static.round(Double.parseDouble(positionXField.getText()), 3);
+                positionX += getModifier(hand);
+                positionXField.setText(String.valueOf(positionX));
+            }
+        };
+        positionXSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double positionX = Static.round(Double.parseDouble(positionXField.getText()), 3);
+                positionX -= getModifier(hand);
+                positionXField.setText(String.valueOf(positionX));
+            }
+        };
+
+        positionZField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 100, 40, 20);
+        positionZAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 100, 20, 20, "+") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double positionZ = Static.round(Double.parseDouble(positionZField.getText()), 3);
+                positionZ += getModifier(hand);
+                positionZField.setText(String.valueOf(positionZ));
+            }
+        };
+        positionZSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 100, 20, 20, "-") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double positionZ = Static.round(Double.parseDouble(positionZField.getText()), 3);
+                positionZ -= getModifier(hand);
+                positionZField.setText(String.valueOf(positionZ));
+            }
+        };
+
+        heightYField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 40, 20);
+        heightYAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double heightY = Static.round(Double.parseDouble(heightYField.getText()), 3);
+                heightY += getModifier(hand);
+                heightYField.setText(String.valueOf(heightY));
+            }
+        };
+        heightYSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                double heightY = Static.round(Double.parseDouble(heightYField.getText()), 3);
+                heightY -= getModifier(hand);
+                heightYField.setText(String.valueOf(heightY));
+            }
+        };
 
         positionXField.setValidator(doubleFilter);
         positionZField.setValidator(doubleFilter);
@@ -123,20 +175,20 @@ public class GuiManipualtor implements IScreen {
 
         setAllInvisible();
         positionXField.setVisible(true);
+        positionXAddition.setVisible(true);
+        positionXSubtraction.setVisible(true);
         positionZField.setVisible(true);
-        ingameButton.setVisible(true);
+        positionZAddition.setVisible(true);
+        positionZSubtraction.setVisible(true);
 
         positionXField.setText(String.valueOf(offset.x));
         positionZField.setText(String.valueOf(offset.z));
         heightYField.setText(String.valueOf(offset.y));
 
-        ItemManipulator.editHeight = false;
-
     }
 
     @Override
     public void onEnterKey(final IScreenBuilder builder) {
-        LOSItems.ITEM_MANIPULATOR.clearBlock();
         builder.close();
     }
 
@@ -145,13 +197,12 @@ public class GuiManipualtor implements IScreen {
     public void onClose() {
         send();
         //Server
-//        ManipulatorToServerPacket serverPacket = new ManipulatorToServerPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
-//        serverPacket.sendToServer();
+        ManipulatorToServerPacket serverPacket = new ManipulatorToServerPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos);
+        serverPacket.sendToServer();
     }
 
     @Override
     public void draw(final IScreenBuilder builder) {
-
         final String tempX = positionXField.getText();
         final String tempY = heightYField.getText();
         final String tempZ = positionZField.getText();
@@ -177,23 +228,47 @@ public class GuiManipualtor implements IScreen {
 
     private void send() {
         //Client
-        final ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos, ItemManipulator.sneak);
+        final ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())), rotation, blockPos, false);
         clientPacket.sendToAll();
     }
 
     private void setAllInvisible() {
         positionXField.setVisible(false);
+        positionXAddition.setVisible(false);
+        positionXSubtraction.setVisible(false);
         positionZField.setVisible(false);
+        positionZAddition.setVisible(false);
+        positionZSubtraction.setVisible(false);
         heightYField.setVisible(false);
-        ingameButton.setVisible(false);
+        heightYAddition.setVisible(false);
+        heightYSubtraction.setVisible(false);
         rotationSlider.setVisible(false);
+        rotationAddition.setVisible(false);
+        rotationSubtraction.setVisible(false);
     }
 
     private void uncheckOtherBoxes(final CheckBox box) {
         positionBox.setChecked(false);
         heightBox.setChecked(false);
         rotationBox.setChecked(false);
-        hitboxBox.setChecked(false);
         box.setChecked(true);
     }
+
+    private void renewSlider(IScreenBuilder screen){
+        if(rotationSlider != null){
+            rotationSlider.setVisible(false);
+            rotationSlider = null;
+        }
+        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false) {
+            @Override
+            public void onSlider() {
+                rotation = rotationSlider.getValueInt();
+                send();
+            }
+        };
+    }
+    private double getModifier(Player.Hand hand){
+        return hand == Player.Hand.PRIMARY ? 1.0 : 0.1;
+    }
+
 }

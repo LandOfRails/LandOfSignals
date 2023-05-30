@@ -28,14 +28,6 @@ public class ManipulatorToClientPacket extends Packet {
 
     }
 
-    public ManipulatorToClientPacket(final Vec3d mainPos, final Vec3d movement, final Vec3i blockPos, final boolean sneak) {
-        this.mainPos = mainPos;
-        this.movement = movement;
-        this.blockPos = blockPos;
-        gui = false;
-        this.sneak = sneak;
-    }
-
     public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final boolean sneak) {
         movement = offset;
         this.blockPos = blockPos;
@@ -69,7 +61,7 @@ public class ManipulatorToClientPacket extends Packet {
                 final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
                 if (block instanceof IManipulate) {
                     final IManipulate manipulate = (IManipulate) block;
-                    manipulate.setOffset(manipulate.getOffset().add(movement));
+                    manipulate.setOffset(movement);
                 }
             }
         } else {
