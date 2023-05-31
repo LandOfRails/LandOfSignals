@@ -12,8 +12,9 @@ import net.landofrails.landofsignals.utils.Static;
 
 import java.util.function.Predicate;
 
-public class GuiManipualtor implements IScreen {
+public class GuiManipulator implements IScreen {
 
+    private CheckBox cascadeBox;
     private CheckBox positionBox;
     private CheckBox heightBox;
     private CheckBox rotationBox;
@@ -65,7 +66,7 @@ public class GuiManipualtor implements IScreen {
         return true;
     };
 
-    public GuiManipualtor(final BlockEntity be) {
+    public GuiManipulator(final BlockEntity be) {
         final IManipulate manipulate = (IManipulate) be;
         offset = manipulate.getOffset();
         scaling = manipulate.getScaling();
@@ -77,6 +78,15 @@ public class GuiManipualtor implements IScreen {
 
     @Override
     public void init(final IScreenBuilder screen) {
+
+        cascadeBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 0, GuiText.LABEL_CASCADE.toString(), true) {
+            @Override
+            public void onClick(Player.Hand hand) {
+                // Nothing to do
+            }
+        };
+        cascadeBox.setChecked(false);
+
         positionBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 90, GuiText.LABEL_EDITPOSITION + " (X, Z)", true) {
             @Override
             public void onClick(final Player.Hand hand) {
@@ -294,7 +304,8 @@ public class GuiManipualtor implements IScreen {
                 new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())),
                 rotation,
                 scaling,
-                blockPos
+                blockPos,
+                cascadeBox.isChecked()
         );
         serverPacket.sendToServer();
     }
@@ -362,7 +373,7 @@ public class GuiManipualtor implements IScreen {
                 rotation,
                 blockPos,
                 scaling,
-                false
+                cascadeBox.isChecked()
         );
         clientPacket.sendToAll();
     }

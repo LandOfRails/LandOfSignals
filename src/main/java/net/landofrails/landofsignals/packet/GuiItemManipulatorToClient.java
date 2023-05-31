@@ -8,7 +8,7 @@ import net.landofrails.landofsignals.LOSGuis;
 public class GuiItemManipulatorToClient extends Packet {
 
     @TagField
-    BlockEntity block;
+    private BlockEntity block;
 
     public GuiItemManipulatorToClient(){
     }

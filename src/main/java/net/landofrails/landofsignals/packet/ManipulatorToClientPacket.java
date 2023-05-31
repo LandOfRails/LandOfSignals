@@ -13,37 +13,32 @@ public class ManipulatorToClientPacket extends Packet {
 
     @TagField("movement")
     private Vec3d movement;
-    @TagField("mainPos")
-    private Vec3d mainPos;
     @TagField("blockPos")
     private Vec3i blockPos;
-    @TagField("gui")
-    private boolean gui;
     @TagField("rotation")
     private int rotation;
     @TagField("scaling")
     private Vec3d scaling;
-    @TagField("sneak")
-    private boolean sneak;
+    @TagField("cascade")
+    private Boolean cascade;
 
     public ManipulatorToClientPacket() {
 
     }
 
-    public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final Vec3d scaling, final boolean sneak) {
+    public ManipulatorToClientPacket(final Vec3d offset, final int rotation, final Vec3i blockPos, final Vec3d scaling, final boolean cascade) {
         movement = offset;
         this.blockPos = blockPos;
         this.rotation = rotation;
         this.scaling = scaling;
-        gui = true;
-        this.sneak = sneak;
+        this.cascade = cascade;
     }
 
     @Override
     protected void handle() {
 
         final ArrayList<Vec3i> blockPosList = new ArrayList<>();
-        if (!sneak) {
+        if (Boolean.TRUE.equals(cascade)) {
             //UP
             int i = 0;
             while (getWorld().getBlockEntity(blockPos.up(i), BlockEntity.class) instanceof IManipulate) {
@@ -56,28 +51,19 @@ public class ManipulatorToClientPacket extends Packet {
                 blockPosList.add(blockPos.down(j));
                 j++;
             }
-        } else blockPosList.add(blockPos);
-
-        if (!gui) {
-            getPlayer().setPosition(mainPos);
-            for (final Vec3i bp : blockPosList) {
-                final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
-                if (block instanceof IManipulate) {
-                    final IManipulate manipulate = (IManipulate) block;
-                    manipulate.setOffset(movement);
-                    manipulate.setScaling(scaling);
-                }
-            }
         } else {
-            for (final Vec3i bp : blockPosList) {
-                final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
-                if (block instanceof IManipulate) {
-                    final IManipulate manipulate = (IManipulate) block;
-                    manipulate.setOffset(movement);
-                    manipulate.setRotation(rotation);
-                    manipulate.setScaling(scaling);
-                }
+            blockPosList.add(blockPos);
+        }
+
+        for (final Vec3i bp : blockPosList) {
+            final BlockEntity block = getWorld().getBlockEntity(bp, BlockEntity.class);
+            if (block instanceof IManipulate) {
+                final IManipulate manipulate = (IManipulate) block;
+                manipulate.setOffset(movement);
+                manipulate.setRotation(rotation);
+                manipulate.setScaling(scaling);
             }
         }
+
     }
 }

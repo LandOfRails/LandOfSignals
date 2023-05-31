@@ -23,7 +23,8 @@ public enum GuiText {
     LABEL_EDITROTATION("manipulator.editrotation"),
     LABEL_ROTATIONSLIDER("manipulator.rotationslider"),
     LABEL_EDITPOSITION("manipulator.editposition"),
-    LABEL_EDITSCALING("manipulator.editscaling");
+    LABEL_EDITSCALING("manipulator.editscaling"),
+    LABEL_CASCADE("manipulator.cascade");
 
     private final String value;
 
