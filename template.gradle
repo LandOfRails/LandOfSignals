@@ -1,8 +1,6 @@
 //BUILDSCRIPT//
 
 //PLUGINS//
-apply plugin: 'maven-publish'
-
 
 version = '#MINECRAFT#-#LOADER#-#VERSION#'
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {

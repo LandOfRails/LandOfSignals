@@ -13,6 +13,8 @@ public class ContentPackModel {
     private Map<ContentPackItemRenderType, ContentPackItem> item;
     private ContentPackBlock block;
 
+    private String animatrix;
+
     private String texturesRef;
     private String obj_groupsRef;
     private Map<ContentPackItemRenderType, String> itemRefs;
@@ -28,6 +30,14 @@ public class ContentPackModel {
         this.obj_groups = obj_groups;
         this.item = item;
         this.block = block;
+    }
+
+    public ContentPackModel(final String textures, final String[] obj_groups, final Map<ContentPackItemRenderType, ContentPackItem> item, final ContentPackBlock block, final String animatrix) {
+        this.textures = textures;
+        this.obj_groups = obj_groups;
+        this.item = item;
+        this.block = block;
+        this.animatrix = animatrix;
     }
 
     public ContentPackModel(float[] blockTranslation, float[] itemTranslation, float[] scaling) {
@@ -131,5 +141,13 @@ public class ContentPackModel {
 
     public void setBlock(ContentPackBlock block) {
         this.block = block;
+    }
+
+    public String getAnimatrix() {
+        return animatrix;
+    }
+
+    public void setAnimatrix(final String animatrix) {
+        this.animatrix = animatrix;
     }
 }

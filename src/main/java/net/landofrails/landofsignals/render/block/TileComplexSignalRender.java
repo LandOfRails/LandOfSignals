@@ -13,21 +13,23 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
+import net.landofrails.landofsignals.render.block.animation.Animatrix;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.utils.Static;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TileComplexSignalRender {
 
+    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, List<String>> groupCache = new HashMap<>();
+
     private TileComplexSignalRender() {
 
     }
-
-    private static final Map<String, OBJModel> cache = new HashMap<>();
-    private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
 
@@ -101,7 +103,11 @@ public class TileComplexSignalRender {
         }
 
         renderBase(id, tsp, state);
-        renderSignals(id, tsp, state);
+        try {
+            renderSignals(id, tsp, state);
+        } catch (Exception e) {
+            ModCore.Mod.error("Error rendering signals for " + id, e);
+        }
 
     }
 
@@ -131,7 +137,7 @@ public class TileComplexSignalRender {
 
                 iterationState.scale(scale);
                 iterationState.translate(translate);
-                iterationState.rotate(rotation.x,1, 0, 0);
+                iterationState.rotate(rotation.x, 1, 0, 0);
                 iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                 iterationState.rotate(rotation.z, 0, 0, 1);
                 try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
@@ -156,7 +162,7 @@ public class TileComplexSignalRender {
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderSignals(final String blockId, final TileComplexSignal tile, RenderState state) {
+    private static void renderSignals(final String blockId, final TileComplexSignal tile, RenderState state) throws IOException {
 
         final Vec3d offset = tile.getOffset();
 
@@ -186,6 +192,8 @@ public class TileComplexSignalRender {
 
                     RenderState iterationState = state.clone();
 
+                    Animatrix animatrix = new Animatrix(new Identifier(LandOfSignals.MODID, signalModel.getAnimatrix()).getResourceStream(), 1);
+
                     ContentPackBlock block = signalModel.getBlock();
                     final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                     final Vec3d scale = block.getAsVec3d(block::getScaling);
@@ -193,7 +201,7 @@ public class TileComplexSignalRender {
 
                     iterationState.scale(scale);
                     iterationState.translate(translate);
-                    iterationState.rotate(rotation.x,1, 0, 0);
+                    iterationState.rotate(rotation.x, 1, 0, 0);
                     iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                     iterationState.rotate(rotation.z, 0, 0, 1);
                     try (OBJRender.Binding vbo = model.binder().texture(signalModel.getTextures()).bind(iterationState)) {
@@ -203,9 +211,10 @@ public class TileComplexSignalRender {
                         if (groups.length == 0) {
                             vbo.draw();
                         } else {
-
                             String groupCacheId = objId + "@" + String.join("+", groups);
-                            vbo.draw(groupCache.get(groupCacheId));
+                            for (String group : groupCache.get(groupCacheId)) {
+                                vbo.draw(Collections.singletonList(group), renderState -> renderState.model_view().multiply(animatrix.getMatrix(group, 10, false)));
+                            }
                         }
 
                     } catch (Exception e) {
