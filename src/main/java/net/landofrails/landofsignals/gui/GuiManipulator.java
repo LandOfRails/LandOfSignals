@@ -2,6 +2,7 @@ package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
+import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.*;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
@@ -19,6 +20,8 @@ public class GuiManipulator implements IScreen {
     private CheckBox heightBox;
     private CheckBox rotationBox;
     private CheckBox scalingBox;
+
+
 
     private Slider rotationSlider;
     private Button rotationAddition;
@@ -355,6 +358,10 @@ public class GuiManipulator implements IScreen {
             send();
         }
 
+        if(!rotationBox.isChecked()){
+            GUIHelpers.drawCenteredString(GuiText.LABEL_LEFTCLICK.toString(), builder.getWidth() / 2 + 155, builder.getHeight() / 2 - 80, 0xFFFFFF);
+            GUIHelpers.drawCenteredString(GuiText.LABEL_RIGHTCLICK.toString(), builder.getWidth() / 2 + 155, builder.getHeight() / 2 - 70, 0xFFFFFF);
+        }
     }
 
     private void send() {

@@ -18,6 +18,8 @@ gui.landofsignals:manipulator.editrotation=Bearbeite Rotation
 gui.landofsignals:manipulator.editscaling=Bearbeite Skalierung
 gui.landofsignals:manipulator.rotationslider=Rotation
 gui.landofsignals:manipulator.cascade=Kaskadiere Änderungen
+gui.landofsignals:manipulator.leftclick=Linksklick +/- 1.0
+gui.landofsignals:manipulator.rightclick=Rechtsklick +/- 0.1
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signalhebel
