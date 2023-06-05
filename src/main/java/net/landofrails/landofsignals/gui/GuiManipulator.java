@@ -21,8 +21,6 @@ public class GuiManipulator implements IScreen {
     private CheckBox rotationBox;
     private CheckBox scalingBox;
 
-
-
     private Slider rotationSlider;
     private Button rotationAddition;
     private Button rotationSubtraction;
@@ -137,6 +135,13 @@ public class GuiManipulator implements IScreen {
                 scalingZField.setVisible(true);
                 scalingZAddition.setVisible(true);
                 scalingZSubtraction.setVisible(true);
+            }
+        };
+
+        new Button(screen, screen.getWidth() / 2 - screen.getWidth() + 50, -30, 60, 20, "Reset all") {
+            @Override
+            public void onClick(Player.Hand hand) {
+                resetAll(screen);
             }
         };
 
@@ -432,6 +437,19 @@ public class GuiManipulator implements IScreen {
     }
     private double getModifier(Player.Hand hand){
         return hand == Player.Hand.PRIMARY ? 1.0 : 0.1;
+    }
+
+    private void resetAll(IScreenBuilder screen){
+
+        scalingXField.setText("1");
+        scalingYField.setText("1");
+        scalingZField.setText("1");
+
+        positionXField.setText("0");
+        heightYField.setText("0");
+        positionZField.setText("0");
+
+        screen.close();
     }
 
 }
