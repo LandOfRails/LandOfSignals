@@ -13,12 +13,14 @@ public class LOSGuis {
 
     }
 
+    @SuppressWarnings("unused")
     public static final GuiRegistry.GUI TICKET_MACHINE_DB = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "TICKET_MACHINE_DB"), GuiTicketMachine::new);
     // INFO: Replace GuiRegistry.BlockGUI with GuiRegistry.GUI to be able to open both on the same block.
     public static final GuiRegistry.GUI SIGNAL_BOX_COMPLEX_SIGNAL = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_BOX_COMPLEX_SIGNAL"), GuiSignalBoxComplexSignal::new);
     public static final GuiRegistry.GUI SIGNAL_BOX_SIGNAL_PART = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_BOX_SIGNAL_PART"), GuiSignalBoxSignalPart::new);
+    @SuppressWarnings("unused")
     public static final GuiRegistry.BlockGUI SIGNAL_ANIMATED_BOX = null;
-    public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipualtor::new);
+    public static final GuiRegistry.BlockGUI MANIPULATOR = GuiRegistry.registerBlock(BlockEntity.class, GuiManipulator::new);
     public static final GuiRegistry.GUI SIGN_TEXTEDITOR = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGN_TEXTEDTIOR"), GuiSignTextEditor::new);
     public static final GuiRegistry.GUI SIGNAL_PRIORITIZATION = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_PRIORITIZATION"), GuiSignalPrioritization::new);
 
@@ -27,5 +29,4 @@ public class LOSGuis {
     public static void register() {
         // loads static classes and ctrs
     }
-
 }

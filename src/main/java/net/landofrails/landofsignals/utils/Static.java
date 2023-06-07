@@ -1,5 +1,7 @@
 package net.landofrails.landofsignals.utils;
 
+import cam72cam.mod.math.Vec3d;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -15,6 +17,10 @@ public class Static {
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public static Vec3d multiply(final Vec3d first, final Vec3d second){
+        return new Vec3d(first.x * second.x, first.y * second.y, first.z * second.z);
     }
 
     // Missing ID

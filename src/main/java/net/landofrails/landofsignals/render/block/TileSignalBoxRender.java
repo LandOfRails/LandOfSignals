@@ -83,6 +83,8 @@ public class TileSignalBoxRender {
 
     private static void renderBase(final String blockId, final TileSignalBox tile) {
 
+        final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
         ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
 
         if(contentPackSignalboxes == null) contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(Static.MISSING);
@@ -97,8 +99,8 @@ public class TileSignalBoxRender {
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
                 final ContentPackBlock block = baseModel.getBlock();
-                final Vec3d translate = block.getAsVec3d(block::getTranslation);
-                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                 try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
