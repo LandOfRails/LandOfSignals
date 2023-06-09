@@ -17,6 +17,8 @@ public class TileDeco extends BlockEntity implements IManipulate {
     private String id;
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
+    @TagField("scaling")
+    private Vec3d scaling = new Vec3d(1,1,1);
 
     public TileDeco(String id, int rot) {
         this.blockRotate = rot;
@@ -34,7 +36,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setVec3d("offset", vec));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -72,7 +74,7 @@ public class TileDeco extends BlockEntity implements IManipulate {
         try {
             save(new TagCompound().setInteger("blockRotation", rotation));
         } catch (Exception ignored) {
-
+            // Can be ignored
         }
     }
 
@@ -80,5 +82,15 @@ public class TileDeco extends BlockEntity implements IManipulate {
     public int getRotation() {
         return getBlockRotate();
     }
-    
+
+    @Override
+    public void setScaling(Vec3d scaling) {
+        this.scaling = scaling;
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return scaling;
+    }
+
 }

@@ -82,6 +82,8 @@ public class TileSignPartRender {
 
     private static void renderBase(String blockId, TileSignPart tile, RenderState state) {
 
+        Vec3d offset = tile.getOffset();
+        Vec3d customScaling = tile.getScaling();
         ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId);
 
         if(contentPackSign == null) contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(Static.MISSING);
@@ -99,8 +101,8 @@ public class TileSignPartRender {
                 RenderState iterationState = state.clone();
 
                 ContentPackBlock block = baseModel.getBlock();
-                Vec3d translate = block.getAsVec3d(block::getTranslation);
-                Vec3d scale = block.getAsVec3d(block::getScaling);
+                Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                 iterationState.scale(scale);

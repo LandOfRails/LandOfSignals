@@ -109,6 +109,7 @@ public class TileComplexSignalRender {
     private static void renderBase(String blockId, TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
 
         checkCache(blockId, LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getBase(), "/base/", true);
 
@@ -126,7 +127,7 @@ public class TileComplexSignalRender {
 
                 final ContentPackBlock block = baseModel.getBlock();
                 final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
-                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                 iterationState.scale(scale);
@@ -159,6 +160,7 @@ public class TileComplexSignalRender {
     private static void renderSignals(final String blockId, final TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
 
         final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getSignals();
 
@@ -188,7 +190,7 @@ public class TileComplexSignalRender {
 
                     ContentPackBlock block = signalModel.getBlock();
                     final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
-                    final Vec3d scale = block.getAsVec3d(block::getScaling);
+                    final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                     final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                     iterationState.scale(scale);

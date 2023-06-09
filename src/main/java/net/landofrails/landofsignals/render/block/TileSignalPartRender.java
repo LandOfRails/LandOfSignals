@@ -56,6 +56,7 @@ public class TileSignalPartRender {
     private static void renderBase(String blockId, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
         final String base = signal.getBase();
         final String objPath = signal.getModel();
 
@@ -71,7 +72,10 @@ public class TileSignalPartRender {
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
-        final float[] scale = signal.getScaling();
+        final float[] scale = signal.getScaling().clone();
+        scale[0] *= customScaling.x;
+        scale[1] *= customScaling.y;
+        scale[2] *= customScaling.z;
 
         state.scale(scale[0], scale[1], scale[2]);
         state.translate(translate.x, translate.y, translate.z);
@@ -94,6 +98,7 @@ public class TileSignalPartRender {
     private static void renderSignals(String blockId, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
         final String signalState = tile.getState();
         final String objPath = signal.getModel();
 
@@ -109,7 +114,10 @@ public class TileSignalPartRender {
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
-        final float[] scale = signal.getScaling();
+        final float[] scale = signal.getScaling().clone();
+        scale[0] *= customScaling.x;
+        scale[1] *= customScaling.y;
+        scale[2] *= customScaling.z;
 
 
         state.scale(scale[0], scale[1], scale[2]);

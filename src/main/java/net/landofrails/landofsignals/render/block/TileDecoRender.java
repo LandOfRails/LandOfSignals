@@ -81,6 +81,8 @@ public class TileDecoRender {
     }
 
     private static void renderBase(String blockId, TileDeco tile, RenderState state) {
+        Vec3d offset = tile.getOffset();
+        Vec3d customScaling = tile.getScaling();
 
         ContentPackDeco contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(blockId);
 
@@ -100,8 +102,8 @@ public class TileDecoRender {
                 RenderState iterationState = state.clone();
 
                 ContentPackBlock block = baseModel.getBlock();
-                Vec3d translate = block.getAsVec3d(block::getTranslation);
-                Vec3d scale = block.getAsVec3d(block::getScaling);
+                Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                 iterationState.scale(scale);
