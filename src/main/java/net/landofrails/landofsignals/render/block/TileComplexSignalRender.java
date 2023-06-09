@@ -3,9 +3,9 @@ package net.landofrails.landofsignals.render.block;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState;
@@ -15,7 +15,6 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.utils.Static;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -27,7 +26,7 @@ public class TileComplexSignalRender {
 
     }
 
-    private static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
@@ -68,14 +67,14 @@ public class TileComplexSignalRender {
                 final String objId = blockId + identifier + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getObjTextures().get(path);
-                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
-                cache.putIfAbsent(objId, renderer);
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
                     String[] groups = signalModel.getObj_groups();
                     if (groups.length > 0) {
                         Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).filter(Objects::nonNull).anyMatch(renderOBJGroup::startsWith);
-                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                        List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);
                         groupCache.put(groupCacheId, modes);
@@ -90,10 +89,10 @@ public class TileComplexSignalRender {
     }
 
     public static StandardModel render(final TileComplexSignal tsp) {
-        return new StandardModel().addCustom(() -> renderStuff(tsp));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(final TileComplexSignal tsp) {
+    private static void renderStuff(final TileComplexSignal tsp, RenderState state) {
 
         String id = tsp.getId();
 
@@ -101,13 +100,13 @@ public class TileComplexSignalRender {
             id = Static.MISSING;
         }
 
-        renderBase(id, tsp);
-        renderSignals(id, tsp);
+        renderBase(id, tsp, state);
+        renderSignals(id, tsp, state);
 
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderBase(String blockId, TileComplexSignal tile) {
+    private static void renderBase(String blockId, TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
@@ -120,28 +119,31 @@ public class TileComplexSignalRender {
 
             // Needs to be split from signal
             final String objId = blockId + "/base/" + path;
-            final OBJRender renderer = cache.get(objId);
+            final OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
+
+                RenderState iterationState = state.clone();
+
                 final ContentPackBlock block = baseModel.getBlock();
                 final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                 final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
-                try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
+
+                iterationState.scale(scale);
+                iterationState.translate(translate);
+                iterationState.rotate(rotation.x,1, 0, 0);
+                iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
+                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
 
                     // Render
-                    GL11.glScaled(scale.x, scale.y, scale.z);
-                    GL11.glTranslated(translate.x, translate.y, translate.z);
-                    GL11.glRotated(rotation.x, 1, 0, 0);
-                    GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                    GL11.glRotated(rotation.z, 0, 0, 1);
-
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        renderer.draw();
+                        vbo.draw();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        renderer.drawGroups(groupCache.get(groupCacheId));
+                        vbo.draw(groupCache.get(groupCacheId));
                     }
 
                 } catch (Exception e) {
@@ -155,7 +157,7 @@ public class TileComplexSignalRender {
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderSignals(final String blockId, final TileComplexSignal tile) {
+    private static void renderSignals(final String blockId, final TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
@@ -180,31 +182,32 @@ public class TileComplexSignalRender {
 
                 // Needs to be split from base
                 final String objId = blockId + "/signals/" + path;
-                final OBJRender renderer = cache.get(objId);
+                final OBJModel model = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
+
+                    RenderState iterationState = state.clone();
+
                     ContentPackBlock block = signalModel.getBlock();
                     final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                     final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                     final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
-                    try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(signalModel.getTextures())) {
-
-                        // Render
-                        GL11.glScaled(scale.x, scale.y, scale.z);
-                        GL11.glTranslated(translate.x, translate.y, translate.z);
-                        GL11.glRotated(rotation.x, 1, 0, 0);
-                        GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                        GL11.glRotated(rotation.z, 0, 0, 1);
+                    iterationState.scale(scale);
+                    iterationState.translate(translate);
+                    iterationState.rotate(rotation.x,1, 0, 0);
+                    iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                    iterationState.rotate(rotation.z, 0, 0, 1);
+                    try (OBJRender.Binding vbo = model.binder().texture(signalModel.getTextures()).bind(iterationState)) {
 
                         String[] groups = signalModel.getObj_groups();
 
                         if (groups.length == 0) {
-                            renderer.draw();
+                            vbo.draw();
                         } else {
 
                             String groupCacheId = objId + "@" + String.join("+", groups);
-                            renderer.drawGroups(groupCache.get(groupCacheId));
+                            vbo.draw(groupCache.get(groupCacheId));
                         }
 
                     } catch (Exception e) {
@@ -216,7 +219,6 @@ public class TileComplexSignalRender {
                 }
 
             }
-
 
         }
     }

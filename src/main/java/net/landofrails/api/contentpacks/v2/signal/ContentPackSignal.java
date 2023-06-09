@@ -57,6 +57,23 @@ public class ContentPackSignal {
         this.itemScaling = itemScaling;
     }
 
+    public static ContentPackSignal fromJson(InputStream inputStream) {
+        StringBuilder s = new StringBuilder();
+        byte[] buffer = new byte[1024];
+        int read;
+
+        try {
+            while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
+                s.append(new String(buffer, 0, read));
+            }
+        } catch (IOException e) {
+            throw new ContentPackException("Cant read ContentPackSignal: " + e.getMessage());
+        }
+
+        String json = s.toString();
+        return GSON.fromJson(json, ContentPackSignal.class);
+    }
+
     public String getName() {
         return name;
     }
@@ -173,23 +190,6 @@ public class ContentPackSignal {
         return uniqueId;
     }
 
-    public static ContentPackSignal fromJson(InputStream inputStream) {
-        StringBuilder s = new StringBuilder();
-        byte[] buffer = new byte[1024];
-        int read;
-
-        try {
-            while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {
-                s.append(new String(buffer, 0, read));
-            }
-        } catch (IOException e) {
-            throw new ContentPackException("Cant read ContentPackSignal: " + e.getMessage());
-        }
-
-        String json = s.toString();
-        return GSON.fromJson(json, ContentPackSignal.class);
-    }
-
     public void validate(Consumer<String> invalid, ContentPack contentPack) {
 
         defaultMissing();
@@ -221,9 +221,12 @@ public class ContentPackSignal {
 
     private void defaultMissing() {
 
-        if (states == null || Arrays.stream(states).noneMatch(Objects::isNull)) {
+        if (states != null && Arrays.stream(states).anyMatch(Objects::isNull)) {
+            //Replace null with empty string
+            states = Arrays.stream(states).map(s -> s == null ? "" : s).toArray(String[]::new);
+        } else if (states == null || Arrays.stream(states).noneMatch(String::isEmpty)) {
             String[] tempStates = new String[1 + (this.states != null ? this.states.length : 0)];
-            tempStates[0] = null;
+            tempStates[0] = "";
             if (this.states != null && this.states.length > 0) {
                 System.arraycopy(this.states, 0, tempStates, 1, this.states.length);
             }

@@ -36,7 +36,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("id")
     private final String id;
     @TagField("texturePath")
-    private String texturePath;
+    private String texturePath = "";
     @TagField(value = "orderedStates", mapper = StringArrayMapper.class)
     private String[] orderedStates;
     // for server only
@@ -91,7 +91,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     }
 
     public String getState() {
-        if ("null".equals(texturePath)) return null;
+        if ("null".equals(texturePath)) return "";
         else return texturePath;
     }
 

@@ -3,9 +3,9 @@ package net.landofrails.landofsignals.render.block;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -13,7 +13,6 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ItemRenderException;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.Static;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,13 +24,13 @@ public class TileSignalPartRender {
 
     }
 
-    private static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
-        return new StandardModel().addCustom(() -> renderStuff(tsp));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(final TileSignalPart tsp) {
+    private static void renderStuff(final TileSignalPart tsp, RenderState state) {
 
         String id = tsp.getId();
 
@@ -43,18 +42,18 @@ public class TileSignalPartRender {
 
         if(signal == null) {
             signal = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(Static.MISSING);
-            tsp.setState(null);
+            tsp.setState("");
         }
 
         if (signal.getUseBase()) {
-            renderBase(id, signal, tsp);
+            renderBase(id, signal, tsp, state);
         }
-        renderSignals(id, signal, tsp);
+        renderSignals(id, signal, tsp, state);
 
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderBase(String blockId, ContentPackSignal signal, TileSignalPart tile) {
+    private static void renderBase(String blockId, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
@@ -64,12 +63,12 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJRender renderer = cache.get(objPath);
+        final OBJModel model = cache.get(objPath);
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
@@ -78,14 +77,13 @@ public class TileSignalPartRender {
         scale[1] *= customScaling.y;
         scale[2] *= customScaling.z;
 
-        try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(base)) {
+        state.scale(scale[0], scale[1], scale[2]);
+        state.translate(translate.x, translate.y, translate.z);
+        state.rotate(tile.getBlockRotate(), 0, 1, 0);
 
+        try (OBJRender.Binding vbo = model.binder().texture(base).bind(state)) {
             // Render
-            GL11.glScaled(scale[0], scale[1], scale[2]);
-            GL11.glTranslated(translate.x, translate.y, translate.z);
-            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
-
+            vbo.draw();
         } catch (Exception e) {
             // Removes TileEntity on client-side, prevents crash
             ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
@@ -97,7 +95,7 @@ public class TileSignalPartRender {
 
 
     @SuppressWarnings("java:S1134")
-    private static void renderSignals(String blockId, ContentPackSignal signal, TileSignalPart tile) {
+    private static void renderSignals(String blockId, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
@@ -107,12 +105,12 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
+                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJRender renderer = cache.get(objPath);
+        final OBJModel model = cache.get(objPath);
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
@@ -121,14 +119,14 @@ public class TileSignalPartRender {
         scale[1] *= customScaling.y;
         scale[2] *= customScaling.z;
 
-        try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(signalState)) {
 
+        state.scale(scale[0], scale[1], scale[2]);
+        state.translate(translate);
+        state.rotate(tile.getBlockRotate(), 0, 1, 0);
+
+        try (OBJRender.Binding vbo = model.binder().texture(signalState).bind(state)) {
             // Render
-            GL11.glScaled(scale[0], scale[1], scale[2]);
-            GL11.glTranslated(translate.x, translate.y, translate.z);
-            GL11.glRotated(tile.getBlockRotate(), 0, 1, 0);
-            renderer.draw();
-
+            vbo.draw();
         } catch (Exception e) {
             // Removes TileEntity on client-side, prevents crash
             ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
@@ -137,7 +135,7 @@ public class TileSignalPartRender {
         }
     }
 
-    public static Map<String, OBJRender> cache(){
+    public static Map<String, OBJModel> cache(){
         return cache;
     }
 

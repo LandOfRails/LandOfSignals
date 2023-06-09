@@ -1,0 +1,34 @@
+//BUILDSCRIPT//
+
+//PLUGINS//
+apply plugin: 'maven-publish'
+
+
+version = '#MINECRAFT#-#LOADER#-#VERSION#'
+if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
+    try {
+        version += "-" + 'git rev-parse --verify --short=7 HEAD'.execute().text.trim()
+    } catch (Exception ex) {
+        version += "-unknown"
+    }
+}
+group = "net.landofrails.landofsignals"
+archivesBaseName = "LandOfSignals"
+
+//MINECRAFT//
+
+//DEPENDENCIES//
+
+//JAR//
+
+task('showBuildInfo') {
+    doLast {
+        String minecraftString = "#MINECRAFT#"
+        String minecraftLoader = "#LOADER#"
+        String umcVersionString = "#MINECRAFT#-#LOADER#-#UMC_VERSION#"
+        System.out.println("Build for MC #MINECRAFT# (#LOADER#)")
+        System.out.println("https://teamopenindustry.cc/maven/cam72cam/universalmodcore/UniversalModCore/${umcVersionString}/UniversalModCore-${umcVersionString}.jar")
+    }
+}
+
+build.finalizedBy showBuildInfo

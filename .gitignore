@@ -135,6 +135,10 @@ hs_err_pid*
 .gradle
 build/
 
+## Built JARs
+*.jar
+!UMCSetup.jar
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -152,3 +156,10 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,forgegradle
 /bin/
+
+## Generated
+build.gradle
+UMC.md
+gradle/wrapper/gradle-wrapper.properties
+src/main/java/net/landofrails/landofsignals/Mod.java
+src/main/resources/mcmod.info

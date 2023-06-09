@@ -4,7 +4,6 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
@@ -31,7 +30,6 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
     public static final String MISSING = "missing";
 
     protected static Map<String, OBJModel> models = new HashMap<>();
-    protected static Map<String, OBJRender> renderers = new HashMap<>();
     protected static Map<String, float[]> rotations = new HashMap<>();
     protected static Map<String, float[]> translations = new HashMap<>();
     protected static Map<String, DirectionType[]> directionFrom = new HashMap<>();
@@ -172,24 +170,12 @@ public class BlockSenderStorageEntity extends BlockSenderFunctionEntity {
         return models;
     }
 
-    public static Map<String, OBJRender> getRenderers() {
-        return renderers;
-    }
-
     public static Map<String, float[]> getRotations() {
         return rotations;
     }
 
     public static Map<String, float[]> getTranslations() {
         return translations;
-    }
-
-    /**
-     * Releases the renderer in to the wild and frees the cache preventing a deadlock situation
-     */
-    public static void releaseRenderersIntoTheWild() {
-        getRenderers().forEach((k, v) -> v.free());
-        getRenderers().clear();
     }
 
     // Map old versions to newer ones
