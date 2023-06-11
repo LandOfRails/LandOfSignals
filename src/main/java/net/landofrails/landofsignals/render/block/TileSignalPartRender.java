@@ -12,6 +12,7 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ItemRenderException;
 import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -50,6 +51,10 @@ public class TileSignalPartRender {
             renderBase(id, signal, tsp);
         }
         renderSignals(id, signal, tsp);
+
+        if(tsp.isHighlighting()){
+            HighlightingUtil.renderHighlighting();
+        }
 
     }
 

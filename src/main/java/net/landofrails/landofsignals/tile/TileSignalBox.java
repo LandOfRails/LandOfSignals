@@ -66,6 +66,9 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     private TileSignalPart tileSignalPart;
     private TileComplexSignal tileComplexSignal;
 
+    // client-only
+    private boolean highlighting = false;
+
     public TileSignalBox(String id, int rot) {
         this.id = id;
         this.blockRotate = rot;
@@ -434,5 +437,24 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @Override
     public Vec3d getScaling() {
         return scaling;
+    }
+
+    public void toggleHighlighting() {
+        this.highlighting = !this.highlighting;
+        if(signalType != null && 0 == signalType){
+            TileSignalPart signal = getWorld().getBlockEntity(tileSignalPartPos, TileSignalPart.class);
+            if(signal != null){
+                signal.setHighlighting(this.highlighting);
+            }
+        }else if(signalType != null && 1 == signalType){
+            TileComplexSignal signal = getWorld().getBlockEntity(tileSignalPartPos, TileComplexSignal.class);
+            if(signal != null){
+                signal.setHighlighting(this.highlighting);
+            }
+        }
+    }
+
+    public boolean isHighlighting(){
+        return this.highlighting;
     }
 }

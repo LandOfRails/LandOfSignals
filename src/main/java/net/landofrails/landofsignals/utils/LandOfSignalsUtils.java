@@ -36,6 +36,7 @@ public class LandOfSignalsUtils {
     public static boolean isLandOfSignalsItem(final ItemStack itemStack){
         return itemStack.is(LOSItems.ITEM_CONNECTOR)
                 || itemStack.is(LOSItems.ITEM_MANIPULATOR)
+                || itemStack.is(LOSItems.ITEM_MAGNIFYING_GLASS)
                 || itemStack.is(LOSItems.ITEM_COMPLEX_SIGNAL)
                 || itemStack.is(LOSItems.ITEM_DECO)
                 || itemStack.is(LOSItems.ITEM_SIGN_PART)

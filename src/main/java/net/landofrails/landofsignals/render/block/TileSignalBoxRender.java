@@ -13,6 +13,7 @@ import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -79,6 +80,9 @@ public class TileSignalBoxRender {
 
         renderBase(id, tsp);
 
+        if(tsp.isHighlighting()){
+            HighlightingUtil.renderHighlighting();
+        }
     }
 
     private static void renderBase(final String blockId, final TileSignalBox tile) {
