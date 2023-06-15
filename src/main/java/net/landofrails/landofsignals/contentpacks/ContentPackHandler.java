@@ -395,11 +395,15 @@ public class ContentPackHandler {
     private static float[] rescaleItem(OBJModel model, float[] itemScaling) {
         double height = model.heightOfGroups(model.groups());
 
-        if(height <= 1 || !(itemScaling[0] == itemScaling[1] && itemScaling[1] == itemScaling[2])){
+        if(itemScaling[0] != itemScaling[1] || itemScaling[1] != itemScaling[2]){
             return itemScaling;
         }
 
         float rescale = (float) Static.round(1 / height, 4);
+
+        if(rescale > 4){
+            return new float[]{0.5f, 0.5f, 0.5f};
+        }
 
         return new float[]{rescale, rescale, rescale};
     }
