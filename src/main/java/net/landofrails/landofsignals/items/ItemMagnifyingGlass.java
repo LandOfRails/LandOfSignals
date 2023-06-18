@@ -33,15 +33,14 @@ public class ItemMagnifyingGlass extends CustomItem {
         if (!world.isClient) {
             return ClickResult.REJECTED;
         }
-        if(hand.equals(Player.Hand.SECONDARY)){
+        if (hand.equals(Player.Hand.SECONDARY)) {
             return ClickResult.PASS;
         }
-        if(!world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_BOX)){
+        if (!world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_BOX)) {
             return ClickResult.PASS;
         }
 
-        List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
-        signalBoxes.stream().filter(TileSignalBox::isHighlighting).forEach(TileSignalBox::toggleHighlighting);
+        toggleHighlighting(world);
 
         TileSignalBox signalBox = world.getBlockEntity(pos, TileSignalBox.class);
         signalBox.toggleHighlighting();
@@ -50,13 +49,13 @@ public class ItemMagnifyingGlass extends CustomItem {
     }
 
     @Override
-    public void onClickAir(Player player, World world, Player.Hand hand) {
+    public void onClickAir(final Player player, final World world, final Player.Hand hand) {
+        if (!world.isClient || hand.equals(Player.Hand.SECONDARY)) return;
+        toggleHighlighting(world);
+    }
 
-        if(!world.isClient || hand.equals(Player.Hand.SECONDARY)){
-            return;
-        }
-
-        List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
+    private void toggleHighlighting(final World world) {
+        final List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
         signalBoxes.stream().filter(TileSignalBox::isHighlighting).forEach(TileSignalBox::toggleHighlighting);
     }
 }
