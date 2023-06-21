@@ -237,6 +237,11 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
         return this.signalType;
     }
 
+    @Nullable
+    public Vec3i getTileSignalPartPos() {
+        return this.tileSignalPartPos;
+    }
+
     /**
      * @return old textureIndex for active redstone signal
      * @deprecated (1.0.0, Only here for backwards compatability)
