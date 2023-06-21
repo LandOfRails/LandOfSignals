@@ -143,7 +143,8 @@ public class ContentPackHandler {
 
         LandOfSignals.info("Starting preloading models");
 
-        Progress.Bar topProgressBar = Progress.push("LandOfSignals", 2);
+        boolean rescaleItems = LandOfSignalsConfig.Experimental.rescaleItems;
+        Progress.Bar topProgressBar = Progress.push("LandOfSignals", rescaleItems ? 3 : 2);
         topProgressBar.step("Preloading models");
 
         // Signalpart
@@ -275,22 +276,22 @@ public class ContentPackHandler {
 
         }
         Progress.pop(progressBar);
-        topProgressBar.step("Finishing");
-        Progress.pop(topProgressBar);
 
         LandOfSignals.info("Finished preloading models");
 
-        if(LandOfSignalsConfig.Experimental.rescaleItems)
+        if(rescaleItems) {
+            topProgressBar.step("Rescaling items");
             rescaleItemsToSlotSize();
+        }
 
+
+        topProgressBar.step("Finishing");
+        Progress.pop(topProgressBar);
     }
 
     private static void rescaleItemsToSlotSize(){
 
         LandOfSignals.info("Starting item rescaling");
-
-        Progress.Bar topProgressBar = Progress.push("LandOfSignals", 2);
-        topProgressBar.step("Rescaling items");
 
         // Signalpart
         Progress.Bar progressBar = Progress.push("Signalpart", LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().size());
@@ -385,8 +386,6 @@ public class ContentPackHandler {
             }
         }
         Progress.pop(progressBar);
-        topProgressBar.step("Finishing");
-        Progress.pop(topProgressBar);
 
         LandOfSignals.info("Finished rescaling items");
 
