@@ -139,7 +139,7 @@ public class ContentPackHandler {
         }
     }
 
-    public static void preloadModels(){
+    public static void preloadModels() {
 
         LandOfSignals.info("Starting preloading models");
 
@@ -177,7 +177,7 @@ public class ContentPackHandler {
 
         // Complexsignals
         progressBar = Progress.push("Complexsignal", LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().size());
-        for(String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()){
+        for (String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()) {
             ModCore.info("Preloading complexsignal %s", id);
             progressBar.step(LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getName());
 
@@ -185,10 +185,10 @@ public class ContentPackHandler {
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemComplexSignalRender.checkCache(id, base, BASE_IDENTIFIER, false);
                 ItemComplexSignalRender.checkCache(id, signalGroups.values());
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
 
@@ -196,7 +196,7 @@ public class ContentPackHandler {
             try {
                 TileComplexSignalRender.checkCache(id, base, BASE_IDENTIFIER, true);
                 TileComplexSignalRender.checkCache(id, signalGroups.values(), "/signals/");
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
 
@@ -205,23 +205,23 @@ public class ContentPackHandler {
 
         // Blockdeco
         progressBar = Progress.push("Deco", LOSBlocks.BLOCK_DECO.getContentpackDeco().size());
-        for(String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()){
+        for (String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()) {
             ModCore.info("Preloading deco %s", id);
             progressBar.step(LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getName());
 
             final Map<String, ContentPackModel[]> models = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemDecoRender.checkCache(id, models);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
 
             // Cache blocks
             try {
                 TileDecoRender.checkCache(id, models);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
         }
@@ -229,23 +229,23 @@ public class ContentPackHandler {
 
         // Signparts
         progressBar = Progress.push("Sign", LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().size());
-        for(String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()){
+        for (String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()) {
             ModCore.info("Preloading sign %s", id);
             progressBar.step(LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getName());
 
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemSignPartRender.checkCache(id, base);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
 
             // Cache blocks
             try {
                 TileSignPartRender.checkCache(id, base);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
 
@@ -254,23 +254,23 @@ public class ContentPackHandler {
 
         // Signalboxes
         progressBar = Progress.push("Signalbox", LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().size());
-        for(String id : LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet()){
+        for (String id : LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet()) {
             ModCore.info("Preloading signalbox %s", id);
             progressBar.step(LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(id).getName());
 
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemSignalBoxRender.checkCache(id, base);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
 
             // Cache blocks
             try {
                 TileSignalBoxRender.checkCache(id, base);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
 
@@ -289,7 +289,7 @@ public class ContentPackHandler {
         Progress.pop(topProgressBar);
     }
 
-    private static void rescaleItemsToSlotSize(){
+    private static void rescaleItemsToSlotSize() {
 
         LandOfSignals.info("Starting item rescaling");
 
@@ -319,7 +319,7 @@ public class ContentPackHandler {
 
         // Complexsignals
         progressBar = Progress.push("Complexsignal", LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().size());
-        for(String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()){
+        for (String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()) {
             ModCore.info("Rescaling complexsignal %s", id);
             progressBar.step(LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getName());
 
@@ -327,10 +327,10 @@ public class ContentPackHandler {
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemComplexSignalRender.checkCache(id, base, BASE_IDENTIFIER, false);
                 ItemComplexSignalRender.checkCache(id, signalGroups.values());
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
         }
@@ -338,16 +338,16 @@ public class ContentPackHandler {
 
         // Blockdeco
         progressBar = Progress.push("Deco", LOSBlocks.BLOCK_DECO.getContentpackDeco().size());
-        for(String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()){
+        for (String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()) {
             ModCore.info("Rescaling deco %s", id);
             progressBar.step(LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getName());
 
             final Map<String, ContentPackModel[]> models = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemDecoRender.checkCache(id, models);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
         }
@@ -355,16 +355,16 @@ public class ContentPackHandler {
 
         // Signparts
         progressBar = Progress.push("Sign", LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().size());
-        for(String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()){
+        for (String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()) {
             ModCore.info("Rescaling sign %s", id);
             progressBar.step(LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getName());
 
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemSignPartRender.checkCache(id, base);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
         }
@@ -372,16 +372,16 @@ public class ContentPackHandler {
 
         // Signalboxes
         progressBar = Progress.push("Signalbox", LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().size());
-        for(String id : LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet()){
+        for (String id : LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().keySet()) {
             ModCore.info("Rescaling signalbox %s", id);
             progressBar.step(LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(id).getName());
 
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(id).getBase();
 
             // Cache items
-            try{
+            try {
                 ItemSignalBoxRender.checkCache(id, base);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
         }
@@ -394,13 +394,13 @@ public class ContentPackHandler {
     private static float[] rescaleItem(OBJModel model, float[] itemScaling) {
         double height = model.heightOfGroups(model.groups());
 
-        if(itemScaling[0] != itemScaling[1] || itemScaling[1] != itemScaling[2]){
+        if (itemScaling[0] != itemScaling[1] || itemScaling[1] != itemScaling[2]) {
             return itemScaling;
         }
 
         float rescale = (float) Static.round(1 / height, 4);
 
-        if(rescale > 4){
+        if (rescale > 4) {
             return new float[]{0.5f, 0.5f, 0.5f};
         }
 
@@ -412,7 +412,7 @@ public class ContentPackHandler {
         double height = model.heightOfGroups(model.groups());
         float[] newTranslation = Arrays.copyOf(itemTranslation, itemTranslation.length);
 
-        if(Objects.deepEquals(newScale, oldScale)){
+        if (Objects.deepEquals(newScale, oldScale)) {
             return itemTranslation;
         }
 
