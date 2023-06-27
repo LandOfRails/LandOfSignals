@@ -45,6 +45,9 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @TagField("scaling")
     private Vec3d scaling = new Vec3d(1, 1, 1);
 
+    // client-only
+    private boolean highlighting = false;
+
     public TileComplexSignal(final String id, final int rot) {
         blockRotate = rot;
         this.id = id;
@@ -240,4 +243,13 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
 
         return foundActiveState && foundInactiveState;
     }
+
+    public void setHighlighting(boolean highlighting) {
+        this.highlighting = highlighting;
+    }
+
+    public boolean isHighlighting(){
+        return this.highlighting;
+    }
+
 }
