@@ -152,8 +152,6 @@ public class ContentPackComplexSignal {
         Consumer<String> referencesConsumer = text -> invalid.accept("references" + ": [" + text + "]");
         references.validate(referencesConsumer);
 
-        defaultMissing();
-
         StringJoiner joiner = new StringJoiner(",", "[", "]");
         if (name == null)
             joiner.add("name");
@@ -166,6 +164,8 @@ public class ContentPackComplexSignal {
         if (joiner.length() > 2) {
             invalid.accept(joiner.toString());
         } else {
+
+            defaultMissing();
 
             if (!"MISSING".equalsIgnoreCase(id)) {
                 uniqueId = contentPack.getId() + ":" + id;
