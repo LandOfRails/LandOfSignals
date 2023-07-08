@@ -207,7 +207,7 @@ public class ContentPackHandlerV2 {
                             loadSignal(zip, entryPath, contentPack, isUTF8);
                             break;
                         case BLOCKCOMPLEXSIGNAL:
-                            loadComplexSignal(zip, path, contentPack, isUTF8);
+                            loadComplexSignal(zip, entryPath, contentPack, isUTF8);
                             break;
                         case BLOCKSIGN:
                             loadSign(zip, entryPath, contentPack, isUTF8);
