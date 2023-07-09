@@ -15,7 +15,7 @@ public class LandOfSignalsConfig {
     @ConfigFile.Comment("Experimental features - activate at own risk")
     public static class Experimental {
 
-        @ConfigFile.Comment("Rescale items to slot size")
+        @ConfigFile.Comment("Rescale items to slot size - needs \"preloadModels\" to be activated | Default: false")
         public static boolean rescaleItems = false;
 
     }
