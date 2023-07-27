@@ -56,7 +56,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -77,6 +77,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void setAnimationOrStateTexture(final String name) {
         if (name == null) animationOrTextureName = "null";
         else animationOrTextureName = name;
@@ -113,6 +114,17 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
         return getBlockRotate();
     }
 
+    @Override
+    public void setScaling(Vec3d scaling) {
+        throw new UnsupportedOperationException("Not yet implemented.");
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return new Vec3d(1, 1, 1);
+    }
+
+    @SuppressWarnings("unused")
     public void setActive(final boolean active) {
         this.active = active;
         markDirty();

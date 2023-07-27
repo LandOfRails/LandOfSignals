@@ -1,3 +1,19 @@
+#### Release 1.1.0
+
+Fixed #109 : ContentPackComplexSignal can now be added to a contentpackset
+
+Improved #88 : Removed redundant cache
+
+Added #91  : 90 degree variants for stellwand blocks\
+Added #98  : Preloading option for models (see config)\
+Added #103 : Reimplemented ItemManipulator\
+Added #106 : Reimplemented MagnifyingGlass\
+Added #108 : Implemented dynamic scaling (see config)
+
+#### Release 1.0.4
+
+Fixed missing logging parameter in ContentPackHandlerV2#load
+
 #### Release 1.0.3
 
 Fixed #82 | 1.7.10 - 1.16.5:\

@@ -13,6 +13,7 @@ import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
+import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 import org.lwjgl.opengl.GL11;
 
@@ -29,7 +30,7 @@ public class TileSignalBoxRender {
     private static final Map<String, OBJRender> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    private static void checkCache(String blockId, Map<String, ContentPackModel[]> models) {
+    public static void checkCache(String blockId, Map<String, ContentPackModel[]> models) {
         Optional<String> firstPath = models.keySet().stream().findFirst();
         if (!firstPath.isPresent())
             return;
@@ -79,10 +80,15 @@ public class TileSignalBoxRender {
 
         renderBase(id, tsp);
 
+        if(tsp.isHighlighting()){
+            HighlightingUtil.renderHighlighting();
+        }
     }
 
     private static void renderBase(final String blockId, final TileSignalBox tile) {
 
+        final Vec3d offset = tile.getOffset();
+        final Vec3d customScaling = tile.getScaling();
         ContentPackSignalbox contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId);
 
         if(contentPackSignalboxes == null) contentPackSignalboxes = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(Static.MISSING);
@@ -97,8 +103,8 @@ public class TileSignalBoxRender {
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
                 final ContentPackBlock block = baseModel.getBlock();
-                final Vec3d translate = block.getAsVec3d(block::getTranslation);
-                final Vec3d scale = block.getAsVec3d(block::getScaling);
+                final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
+                final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
                 try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {

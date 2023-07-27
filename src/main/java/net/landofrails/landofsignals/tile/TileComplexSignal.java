@@ -42,6 +42,12 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @TagField("offset")
     private Vec3d offset = Vec3d.ZERO;
 
+    @TagField("scaling")
+    private Vec3d scaling = new Vec3d(1, 1, 1);
+
+    // client-only
+    private boolean highlighting = false;
+
     public TileComplexSignal(final String id, final int rot) {
         blockRotate = rot;
         this.id = id;
@@ -50,7 +56,7 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @Override
     public boolean onClick(Player player, Player.Hand hand, Facing facing, Vec3d hit) {
 
-        if (player.isCrouching() || LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(hand))) {
+        if (player.isCrouching() || LandOfSignalsUtils.isLandOfSignalsItem(player.getHeldItem(Player.Hand.PRIMARY))) {
             return false;
         }
         if (!getWorld().isServer) {
@@ -73,7 +79,7 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.offset(offset);
+        return IBoundingBox.BLOCK;
     }
 
     @Override
@@ -117,6 +123,16 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @Override
     public int getRotation() {
         return getBlockRotate();
+    }
+
+    @Override
+    public void setScaling(Vec3d scaling) {
+        this.scaling = scaling;
+    }
+
+    @Override
+    public Vec3d getScaling() {
+        return scaling;
     }
 
     public Map<String, String[]> getOrderedGroupStates() {
@@ -227,4 +243,13 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
 
         return foundActiveState && foundInactiveState;
     }
+
+    public void setHighlighting(boolean highlighting) {
+        this.highlighting = highlighting;
+    }
+
+    public boolean isHighlighting(){
+        return this.highlighting;
+    }
+
 }

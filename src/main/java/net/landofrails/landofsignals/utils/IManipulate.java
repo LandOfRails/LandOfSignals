@@ -4,9 +4,6 @@ import cam72cam.mod.math.Vec3d;
 
 public interface IManipulate {
 
-    /**
-     * Provide new Vec3d for offset
-     */
     void setOffset(Vec3d vec);
 
     Vec3d getOffset();
@@ -14,5 +11,9 @@ public interface IManipulate {
     void setRotation(int rotation);
 
     int getRotation();
+
+    void setScaling(Vec3d scaling);
+
+    Vec3d getScaling();
 
 }

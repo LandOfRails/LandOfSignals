@@ -15,8 +15,11 @@ gui.landofsignals:manipulator.unattach=Press shift to return to GUI
 gui.landofsignals:manipulator.editingame=Edit ingame
 gui.landofsignals:manipulator.editposition=Edit position
 gui.landofsignals:manipulator.editrotation=Edit rotation
-gui.landofsignals:manipulator.edithitbox=Edit hitbox
+gui.landofsignals:manipulator.editscaling=Edit scaling
 gui.landofsignals:manipulator.rotationslider=Rotation
+gui.landofsignals:manipulator.cascade=Cascade changes
+gui.landofsignals:manipulator.leftclick=Left click +/- 1.0
+gui.landofsignals:manipulator.rightclick=Right click +/- 0.1
 
 item.landofsignals:item_signal_so12.name=SO12
 item.landofsignals:item_signal_lever.name=Signal Lever

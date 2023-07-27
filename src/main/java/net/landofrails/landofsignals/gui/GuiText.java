@@ -21,9 +21,12 @@ public enum GuiText {
     LABEL_UNATTACH("manipulator.unattach"),
     LABEL_EDITINGAME("manipulator.editingame"),
     LABEL_EDITROTATION("manipulator.editrotation"),
-    LABEL_EDITHITBOX("manipulator.edithitbox"),
     LABEL_ROTATIONSLIDER("manipulator.rotationslider"),
-    LABEL_EDITPOSITION("manipulator.editposition");
+    LABEL_EDITPOSITION("manipulator.editposition"),
+    LABEL_EDITSCALING("manipulator.editscaling"),
+    LABEL_CASCADE("manipulator.cascade"),
+    LABEL_LEFTCLICK("manipulator.leftclick"),
+    LABEL_RIGHTCLICK("manipulator.rightclick");
 
     private final String value;
 

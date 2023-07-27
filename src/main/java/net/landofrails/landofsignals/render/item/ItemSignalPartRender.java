@@ -21,8 +21,7 @@ import java.util.Map;
 
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
-    protected static final Map<String, OBJRender> cache = new HashMap<>();
-    protected static final Map<String, Boolean> cacheInfoOldContentPack = new HashMap<>();
+    private static final Map<String, OBJRender> cache = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
@@ -61,7 +60,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
                 cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
-                cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
@@ -74,13 +72,8 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseState)) {
 
             // Render
-            if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
-                GL11.glScaled(scale[0], scale[1], scale[2]);
-                GL11.glTranslated(translate[0], translate[1], translate[2]);
-            } else {
-                GL11.glTranslated(translate[0], translate[1], translate[2]);
-                GL11.glScaled(scale[0], scale[1], scale[2]);
-            }
+            GL11.glTranslated(translate[0], translate[1], translate[2]);
+            GL11.glScaled(scale[0], scale[1], scale[2]);
 
             renderer.draw();
         }
@@ -94,7 +87,6 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
                 cache.put(objPath, new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states))));
-                cacheInfoOldContentPack.putIfAbsent(itemId, LOSBlocks.BLOCK_SIGNAL_PART.isOldContentPack(itemId));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
@@ -107,16 +99,15 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(itemState)) {
 
             // Render
-            if (Boolean.FALSE.equals(cacheInfoOldContentPack.get(itemId))) {
-                GL11.glScaled(scale[0], scale[1], scale[2]);
-                GL11.glTranslated(translate[0], translate[1], translate[2]);
-            } else {
-                GL11.glTranslated(translate[0], translate[1], translate[2]);
-                GL11.glScaled(scale[0], scale[1], scale[2]);
-            }
+            GL11.glTranslated(translate[0], translate[1], translate[2]);
+            GL11.glScaled(scale[0], scale[1], scale[2]);
 
             renderer.draw();
         }
+    }
+
+    public static Map<String, OBJRender> cache(){
+        return cache;
     }
 
 }

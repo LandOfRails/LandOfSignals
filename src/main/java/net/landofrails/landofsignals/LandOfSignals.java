@@ -28,7 +28,8 @@ public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
     // Current version
-    public static final String VERSION = "1.0.3";
+    @SuppressWarnings("unused")
+    public static final String VERSION = "1.1.0";
 
     @Override
     public String modID() {
@@ -66,6 +67,7 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
+            Packet.register(GuiItemManipulatorToClient::new, PacketDirection.ServerToClient);
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -92,6 +94,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
                 ItemRender.register(LOSItems.ITEM_CONNECTOR, new Identifier(LandOfSignals.MODID, "items/itemconnector1"));
                 ItemRender.register(LOSItems.ITEM_MANIPULATOR, new Identifier(LandOfSignals.MODID, "items/manipulator"));
+                ItemRender.register(LOSItems.ITEM_MAGNIFYING_GLASS, new Identifier(LandOfSignals.MODID, "items/magnifyingglass"));
 
                 //SignalPart : Block
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_PART, TileSignalPartRender::render, TileSignalPart.class);
@@ -117,9 +120,12 @@ public class LandOfSignals extends ModCore.Mod {
                 break;
             case SETUP:
                 GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
+
+                if(LandOfSignalsConfig.preloadModels) {
+                    ContentPackHandler.preloadModels();
+                }
+
                 break;
-            case RELOAD:
-            case FINALIZE:
             default:
                 break;
         }
