@@ -107,7 +107,7 @@ jobs:
           name: LandOfSignals ${{matrix.branch}}
           path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload ${{matrix.branch}}
-        uses: Kir-Antipov/mc-publish@master
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # Modrinth
           modrinth-id: r7aBIx6Q
