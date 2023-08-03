@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew build
       - name: Download UMC version used for build
         run: |
-          umc_llink=$(./gradlew showBuildLink)
+          umc_link=$(./gradlew showBuildLink)
           wget $umc_link -P build/libs/
       - uses: actions/upload-artifact@v3
         with:
