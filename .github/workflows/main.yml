@@ -40,7 +40,13 @@ jobs:
         run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
       - name: Gradle build
         run: ./gradlew build
+      - name: Download UMC version used for build
+        run: |
+          umc_llink=$(./gradlew showBuildLink)
+          wget $umc_link -P build/libs/
       - uses: actions/upload-artifact@v3
         with:
           name: LandOfSignals ${{matrix.branch}}
-          path: build/libs/LandOfSignals-${{matrix.branch}}-*
+          path: |
+            build/libs/LandOfSignals-${{matrix.branch}}-*
+            build/libs/UniversalModCore-*
