@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew build
       - name: Download UMC version used for build
         run: |
-          umc_link=$(./gradlew showBuildLink)
+          umc_link=$(./gradlew showBuildInfo | grep "universalmodcore")
           wget $umc_link -P build/libs/
       - uses: actions/upload-artifact@v3
         with:
