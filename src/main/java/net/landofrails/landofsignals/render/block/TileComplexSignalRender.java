@@ -105,7 +105,7 @@ public class TileComplexSignalRender {
         renderSignals(id, tsp, state);
 
         if(tsp.isHighlighting()){
-            HighlightingUtil.renderHighlighting();
+            HighlightingUtil.renderHighlighting(state.clone());
         }
 
     }

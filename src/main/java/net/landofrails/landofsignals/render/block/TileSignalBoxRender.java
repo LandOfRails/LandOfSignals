@@ -80,7 +80,7 @@ public class TileSignalBoxRender {
         renderBase(id, tsp, state);
 
         if(tsp.isHighlighting()){
-            HighlightingUtil.renderHighlighting();
+            HighlightingUtil.renderHighlighting(state.clone());
         }
     }
 

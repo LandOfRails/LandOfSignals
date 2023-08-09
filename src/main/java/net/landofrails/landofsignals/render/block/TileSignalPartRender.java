@@ -47,12 +47,12 @@ public class TileSignalPartRender {
         }
 
         if (signal.getUseBase()) {
-            renderBase(id, signal, tsp, state);
+            renderBase(id, signal, tsp, state.clone());
         }
-        renderSignals(id, signal, tsp, state);
+        renderSignals(id, signal, tsp, state.clone());
 
         if(tsp.isHighlighting()){
-            HighlightingUtil.renderHighlighting();
+            HighlightingUtil.renderHighlighting(state.clone());
         }
 
     }
