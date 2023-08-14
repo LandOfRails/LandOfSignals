@@ -12,6 +12,7 @@ import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.item.ItemRenderException;
 import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.Arrays;
@@ -46,9 +47,13 @@ public class TileSignalPartRender {
         }
 
         if (signal.getUseBase()) {
-            renderBase(id, signal, tsp, state);
+            renderBase(id, signal, tsp, state.clone());
         }
-        renderSignals(id, signal, tsp, state);
+        renderSignals(id, signal, tsp, state.clone());
+
+        if(tsp.isHighlighting()){
+            HighlightingUtil.renderHighlighting(state.clone());
+        }
 
     }
 

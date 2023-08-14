@@ -14,6 +14,7 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
+import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
@@ -102,6 +103,10 @@ public class TileComplexSignalRender {
 
         renderBase(id, tsp, state);
         renderSignals(id, tsp, state);
+
+        if(tsp.isHighlighting()){
+            HighlightingUtil.renderHighlighting(state.clone());
+        }
 
     }
 
