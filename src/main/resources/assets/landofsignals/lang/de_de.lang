@@ -30,6 +30,7 @@ item.landofsignals:item_connector.name=Verbindungstool
 item.landofsignals:item_manipulator.name=Manipulierungstool
 item.landofsignals:item_signal_selector.name=Signal-Auswahl-Tool
 item.landofsignals:item_sign_selector.name=Schild-Auswahl-Tool
+item.landofsignals:item_magnifying_glass.name=Lupe
 
 message.landofsignals:item.manipulator.disabled=§4Dieses Werkzeug ist derzeit nicht verfügbar. §cEs wird mit dem nächsten Update wieder aktiviert.
 message.landofsignals:sign.texteditor.needs.new.umc.version=§6Warnung: §eTextrendering kommt erst mit der nächsten UMC Version, bis dahin wird er nicht gerendert.
