@@ -30,7 +30,7 @@ jobs:
       - name: Replace version number with new version
         run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
-          sed -i '0,/"version":/s//"version": "${{ steps.getversion.outputs.version }}",/' ./umc.json
+          sed -i '0,/"version":*/s//"version": "${{ steps.getversion.outputs.version }}",/' ./umc.json
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
