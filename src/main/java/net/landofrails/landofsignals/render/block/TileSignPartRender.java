@@ -1,6 +1,7 @@
 package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
+import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.StandardModel;
@@ -76,6 +77,14 @@ public class TileSignPartRender {
             id = Static.MISSING;
         }
 
+        // Textrendering
+        ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id);
+        if(contentPackSign.isWriteable()){
+            // Does not work because its fixed to the players screen and not the block
+            GUIHelpers.drawCenteredString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz", 10, 10, 0xFFFFFF);
+        }
+        //
+
         renderBase(id, tsp, state);
 
     }
@@ -122,13 +131,6 @@ public class TileSignPartRender {
                         vbo.draw(groupCache.get(groupCacheId));
                     }
 
-                    /*
-                    when
-                        contentPackSign->isWriteable
-                    then
-                        GlobalRender->drawText
-                    */
-
                 } catch (Exception e) {
                     // Removes TileEntity on client-side, prevents crash
                     ModCore.error("Removing local SignPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
@@ -138,6 +140,7 @@ public class TileSignPartRender {
 
             }
         }
+
     }
 
 }
