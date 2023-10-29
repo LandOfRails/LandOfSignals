@@ -89,6 +89,7 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_LEVER, TileSignalLeverRender::render, TileSignalLever.class);
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_BOX, TileSignalBoxRender::render, TileSignalBox.class);
                 BlockRender.register(LOSBlocks.BLOCK_DECO, TileDecoRender::render, TileDeco.class);
+                BlockRender.register(LOSBlocks.BLOCK_CUSTOM_LEVER, TileCustomLeverRender::render, TileCustomLever.class);
 
                 // Items
                 ItemRender.register(LOSItems.ITEM_SIGNAL_LEVER, ObjItemRender.getModelFor(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/signalslever/signalslever.obj"), new Vec3d(0.5, 0.6, 0.5), 1));
@@ -109,6 +110,7 @@ public class LandOfSignals extends ModCore.Mod {
                 ItemRender.register(LOSItems.ITEM_SIGN_PART, new ItemSignPartRender());
                 ItemRender.register(LOSItems.ITEM_SIGNAL_BOX, new ItemSignalBoxRender());
                 ItemRender.register(LOSItems.ITEM_DECO, new ItemDecoRender());
+                ItemRender.register(LOSItems.ITEM_CUSTOM_LEVER, new ItemCustomLeverRender());
 
                 // Deprecated: Only for compatability - Removes warnings
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);

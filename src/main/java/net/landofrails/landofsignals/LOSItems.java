@@ -20,6 +20,7 @@ public class LOSItems {
     public static final ItemSignPart ITEM_SIGN_PART = new ItemSignPart(LandOfSignals.MODID, "item_sign");
     public static final ItemSignalBox ITEM_SIGNAL_BOX = new ItemSignalBox(LandOfSignals.MODID, "item_signal_box");
     public static final ItemDeco ITEM_DECO = new ItemDeco(LandOfSignals.MODID, "item_deco");
+    public static final ItemCustomLever ITEM_CUSTOM_LEVER = new ItemCustomLever(LandOfSignals.MODID, "item_custom_lever");
 
     public static void register() {
         // loads static classes and ctrs
