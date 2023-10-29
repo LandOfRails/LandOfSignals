@@ -1,9 +1,9 @@
 package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
-import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.render.opengl.RenderState;
@@ -81,7 +81,7 @@ public class TileSignPartRender {
         ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id);
         if(contentPackSign.isWriteable()){
             // Does not work because its fixed to the players screen and not the block
-            GUIHelpers.drawCenteredString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz", 10, 10, 0xFFFFFF);
+            GlobalRender.drawFixedText(tsp.getText(), state.clone(), new Vec3d(.7, 1.2, .5), 0.15f, new Vec3d(180, tsp.getBlockRotate() + 180, 0));
         }
         //
 
