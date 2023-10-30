@@ -26,6 +26,7 @@ import java.util.Optional;
 public class ItemCustomLever extends CustomItem {
     private static final String ITEMIDKEY = "itemId";
     private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
+    private static final String MSG_WO_ANIMATION = "message.landofsignals:without.animation";
 
     public ItemCustomLever(String modID, String name) {
         super(modID, name);
@@ -89,6 +90,7 @@ public class ItemCustomLever extends CustomItem {
     public List<String> getTooltip(ItemStack itemStack) {
         String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
         List<String> tooltips = new ArrayList<>();
+        tooltips.add(TextUtil.translate(MSG_WO_ANIMATION));
         if (itemId != null) {
             String delimiter = ":";
             if (itemId.split(delimiter).length == 2) {
