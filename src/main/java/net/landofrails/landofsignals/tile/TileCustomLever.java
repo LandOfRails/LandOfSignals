@@ -54,12 +54,12 @@ public class TileCustomLever extends BlockEntity implements IManipulate, IRedsto
 
     @Override
     public IBoundingBox getBoundingBox() {
-        return IBoundingBox.BLOCK.expand(new Vec3d(0,1,0));
+        return IBoundingBox.BLOCK;
     }
 
     @Override
     public IBoundingBox getRenderBoundingBox() {
-        return IBoundingBox.BLOCK.expand(new Vec3d(0,1,0)).offset(offset);
+        return IBoundingBox.BLOCK.offset(offset);
     }
 
     public int getBlockRotate() {
