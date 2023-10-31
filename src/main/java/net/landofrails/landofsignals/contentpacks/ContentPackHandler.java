@@ -277,6 +277,34 @@ public class ContentPackHandler {
         }
         Progress.pop(progressBar);
 
+        // Levers
+        progressBar = Progress.push("Levers", LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().size());
+        for (String id : LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().keySet()) {
+            ModCore.info("Preloading lever %s", id);
+            progressBar.step(LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getName());
+
+            final Map<String, ContentPackModel[]> active = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getActive();
+            final Map<String, ContentPackModel[]> inactive = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getInactive();
+
+            // Cache items
+            try {
+                ItemCustomLeverRender.checkCache(id, active);
+                ItemCustomLeverRender.checkCache(id, inactive);
+            } catch (Exception e) {
+                throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
+            }
+
+            // Cache blocks
+            try {
+                TileCustomLeverRender.checkCache(id, active);
+                TileCustomLeverRender.checkCache(id, inactive);
+            } catch (Exception e) {
+                throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
+            }
+
+        }
+        Progress.pop(progressBar);
+
         LandOfSignals.info("Finished preloading models");
 
         if(rescaleItems) {
@@ -381,6 +409,25 @@ public class ContentPackHandler {
             // Cache items
             try {
                 ItemSignalBoxRender.checkCache(id, base);
+            } catch (Exception e) {
+                throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
+            }
+        }
+        Progress.pop(progressBar);
+
+        // Levers
+        progressBar = Progress.push("Lever", LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().size());
+        for (String id : LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().keySet()) {
+            ModCore.info("Rescaling lever %s", id);
+            progressBar.step(LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getName());
+
+            final Map<String, ContentPackModel[]> active = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getActive();
+            final Map<String, ContentPackModel[]> inactive = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getActive();
+
+            // Cache items
+            try {
+                ItemCustomLeverRender.checkCache(id, active);
+                ItemCustomLeverRender.checkCache(id, inactive);
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_ITEM_ERRMSG, id), e);
             }
