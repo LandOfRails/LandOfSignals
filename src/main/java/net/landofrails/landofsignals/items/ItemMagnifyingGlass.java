@@ -11,7 +11,6 @@ import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.utils.HighlightingUtil;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ public class ItemMagnifyingGlass extends CustomItem {
     @Override
     @SuppressWarnings({"java:S2696", "java:S1134"})
     public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
-        HighlightingUtil.renderHighlighting();
         if (!world.isClient) {
             return ClickResult.REJECTED;
         }

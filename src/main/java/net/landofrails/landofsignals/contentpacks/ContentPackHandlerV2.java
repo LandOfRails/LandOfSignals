@@ -5,6 +5,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
+import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackSet;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -53,6 +54,9 @@ public class ContentPackHandlerV2 {
                         break;
                     case BLOCKDECO:
                         loadDeco(zip, path, contentPack, isUTF8);
+                        break;
+                    case BLOCKLEVER:
+                        loadCustomLever(zip, path, contentPack, isUTF8);
                         break;
                     default:
                         ModCore.error("Type %s is currently not implemented in V2!", type.name());
@@ -176,7 +180,7 @@ public class ContentPackHandlerV2 {
                 ContentPackDeco contentPackDeco = ContentPackDeco.fromJson(zip.getInputStream(zipEntry.get()));
                 contentPackDeco.setUTF8(isUTF8);
                 contentPackDeco.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
-                ModCore.info("Signalbox: %s", contentPackDeco.getName());
+                ModCore.info("Deco: %s", contentPackDeco.getName());
 
                 LOSBlocks.BLOCK_DECO.add(contentPackDeco);
             } else {
@@ -185,6 +189,31 @@ public class ContentPackHandlerV2 {
 
         } catch (Exception e) {
             ModCore.error("Couldn't load ContentPackDeco in path %s\nError: %s", path, e.getMessage());
+            if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
+                writeStacktraceHead();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void loadCustomLever(ZipFile zip, String path, ContentPack contentPack, boolean isUTF8) {
+        try {
+            Predicate<ZipEntry> filterRelevantZipEntry = zipEntry -> zipEntry.getName().equalsIgnoreCase(path);
+            Optional<? extends ZipEntry> zipEntry = zip.stream().filter(filterRelevantZipEntry).findFirst();
+
+            if (zipEntry.isPresent()) {
+                ContentPackLever contentPackLever = ContentPackLever.fromJson(zip.getInputStream(zipEntry.get()));
+                contentPackLever.setUTF8(isUTF8);
+                contentPackLever.validate(MISSINGATTRIBUTESEXCEPTION, contentPack);
+                ModCore.info("CustomLever: %s", contentPackLever.getName());
+
+                LOSBlocks.BLOCK_CUSTOM_LEVER.add(contentPackLever);
+            } else {
+                ModCore.error("Couldn't find ContetnPackLever under path %s!", path);
+            }
+
+        } catch (Exception e) {
+            ModCore.error("Couldn't load ContetnPackLever in path %s\nError: %s", path, e.getMessage());
             if (!e.getMessage().startsWith(THEREAREMISSINGATTRIBUTESSNIPPET)) {
                 writeStacktraceHead();
                 e.printStackTrace();
@@ -217,6 +246,9 @@ public class ContentPackHandlerV2 {
                             break;
                         case BLOCKDECO:
                             loadDeco(zip, entryPath, contentPack, isUTF8);
+                            break;
+                        case BLOCKLEVER:
+                            loadCustomLever(zip, entryPath, contentPack, isUTF8);
                             break;
                         default:
                             ModCore.error("Type %s is currently not implemented in V2!", type.name());

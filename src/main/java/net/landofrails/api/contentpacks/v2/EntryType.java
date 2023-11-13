@@ -12,7 +12,8 @@ public enum EntryType {
     BLOCKCOMPLEXSIGNAL(() -> LOSItems.ITEM_COMPLEX_SIGNAL),
     BLOCKSIGN(() -> LOSItems.ITEM_SIGN_PART),
     BLOCKSIGNALBOX(() -> LOSItems.ITEM_SIGNAL_BOX),
-    BLOCKDECO(() -> LOSItems.ITEM_DECO);
+    BLOCKDECO(() -> LOSItems.ITEM_DECO),
+    BLOCKLEVER(() -> LOSItems.ITEM_CUSTOM_LEVER);
     // @formatter:on
 
     private final Supplier<CustomItem> itemSupplier;
