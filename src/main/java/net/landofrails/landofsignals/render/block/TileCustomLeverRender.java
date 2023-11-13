@@ -109,14 +109,14 @@ public class TileCustomLeverRender {
                 final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
 
-                try (OBJRender.Binding vbo = model.binder().texture(activeModel.getTextures()).bind(iterationState)) {
+                // Render
+                iterationState.scale(scale.x, scale.y, scale.z);
+                iterationState.translate(translate.x, translate.y, translate.z);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
-                    // Render
-                    iterationState.scale(scale.x, scale.y, scale.z);
-                    iterationState.translate(translate.x, translate.y, translate.z);
-                    iterationState.rotate(rotation.x, 1, 0, 0);
-                    iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                    iterationState.rotate(rotation.z, 0, 0, 1);
+                try (OBJRender.Binding vbo = model.binder().texture(activeModel.getTextures()).bind(iterationState)) {
 
                     String[] groups = activeModel.getObj_groups();
                     if (groups.length == 0) {
@@ -163,14 +163,14 @@ public class TileCustomLeverRender {
                 final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 Vec3d rotation = block.getAsVec3d(block::getRotation);
 
-                try (OBJRender.Binding vbo = model.binder().texture(inactiveModel.getTextures()).bind(iterationState)) {
+                // Render
+                iterationState.scale(scale.x, scale.y, scale.z);
+                iterationState.translate(translate.x, translate.y, translate.z);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
-                    // Render
-                    iterationState.scale(scale.x, scale.y, scale.z);
-                    iterationState.translate(translate.x, translate.y, translate.z);
-                    iterationState.rotate(rotation.x, 1, 0, 0);
-                    iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                    iterationState.rotate(rotation.z, 0, 0, 1);
+                try (OBJRender.Binding vbo = model.binder().texture(inactiveModel.getTextures()).bind(iterationState)) {
 
                     String[] groups = inactiveModel.getObj_groups();
                     if (groups.length == 0) {

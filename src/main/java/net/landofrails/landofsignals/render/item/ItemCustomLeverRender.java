@@ -104,14 +104,14 @@ public class ItemCustomLeverRender implements ItemRender.IItemModel {
                 Vec3d scale = item.getAsVec3d(item::getScaling);
                 Vec3d rotation = item.getAsVec3d(item::getRotation);
 
-                try (OBJRender.Binding vbo = model.binder().texture(inactiveModel.getTextures()).bind(iterationState)) {
+                // Render
+                iterationState.scale(scale.x, scale.y, scale.z);
+                iterationState.translate(translate.x, translate.y, translate.z);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
-                    // Render
-                    iterationState.scale(scale.x, scale.y, scale.z);
-                    iterationState.translate(translate.x, translate.y, translate.z);
-                    iterationState.rotate(rotation.x, 1, 0, 0);
-                    iterationState.rotate(rotation.y, 0, 1, 0);
-                    iterationState.rotate(rotation.z, 0, 0, 1);
+                try (OBJRender.Binding vbo = model.binder().texture(inactiveModel.getTextures()).bind(iterationState)) {
 
                     String[] groups = inactiveModel.getObj_groups();
                     if (groups.length == 0) {
