@@ -39,6 +39,8 @@ message.landogsignals:signs.writeable=Writeable: %s
 message.landofsignals:true=§atrue
 message.landofsignals:false=§cfalse
 message.landofsignals:non.utf.eight.items=§6WARNING: §eThis Item/Block was loaded with ISO_8859_1 encoding instead of UTF-8 due to illegal characters. This item/block may not work as intended.
+message.landofsignals:without.animation=§ew/o animation
+message.landofsignals:with.animation=§aw/ animation
 
 label.landofsignals:signtexteditor.savebutton=Save
 

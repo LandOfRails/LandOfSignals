@@ -4,8 +4,10 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.item.ClickResult;
 import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.CustomItem;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.text.TextUtil;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -13,10 +15,14 @@ import net.landofrails.landofsignals.LOSTabs;
 import net.landofrails.landofsignals.blocks.BlockSignalLever;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class ItemSignalLever extends CustomItem {
+
+    private static final String MSG_W_ANIMATION = "message.landofsignals:with.animation";
+
     public ItemSignalLever(final String modID, final String name) {
         super(modID, name);
     }
@@ -35,5 +41,10 @@ public class ItemSignalLever extends CustomItem {
         block.setRot(-player.getRotationYawHead() + 180);
         world.setBlock(target.get(), block);
         return ClickResult.ACCEPTED;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack itemStack) {
+        return Collections.singletonList(TextUtil.translate(MSG_W_ANIMATION));
     }
 }

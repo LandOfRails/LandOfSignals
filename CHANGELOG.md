@@ -1,3 +1,10 @@
+#### Release 1.2.0
+
+* Added [#125] : Levers w/o animation (extendable via contentpacks)
+
+
+* Fixed [#127] : Magnifyingglass crashes server
+
 ### BACKUP YOUR WORLD BEFORE UPDATING!
 #### Release 1.1.0
 
