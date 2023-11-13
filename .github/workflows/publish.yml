@@ -101,7 +101,7 @@ jobs:
         id: getsuffix
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Rename with suffix
-        run: mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+        run: ls ./build/libs/; mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - uses: actions/upload-artifact@v3
         with:
           name: LandOfSignals ${{matrix.branch}}
