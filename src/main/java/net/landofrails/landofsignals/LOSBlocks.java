@@ -5,6 +5,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
+import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signalbox.ContentPackSignalbox;
@@ -26,6 +27,7 @@ public class LOSBlocks {
     public static final BlockTicketMachineSBB BLOCK_TICKET_MACHINE_SBB = new BlockTicketMachineSBB(LandOfSignals.MODID, "BlockTicketMachineSBB");
     public static final BlockSignalBox BLOCK_SIGNAL_BOX = new BlockSignalBox(LandOfSignals.MODID, "BlockSignalBox");
     public static final BlockDeco BLOCK_DECO = new BlockDeco(LandOfSignals.MODID, "BlockDeco");
+    public static final BlockCustomLever BLOCK_CUSTOM_LEVER = new BlockCustomLever(LandOfSignals.MODID, "BlockCustomLever");
 
     // Contentpack
     private static final ContentPack CONTENTPACK = new ContentPack("LandOfSignals", "LandOfSignals", "1.0", "2", null, null);
@@ -407,6 +409,22 @@ public class LOSBlocks {
         registerDecoContentPackStellwand("deco_trackdiag_up_left", "Diagonal track (up - left)", models("models/block/stellwand/blockfiller/trackdiag/ul/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
         registerDecoContentPackStellwand("deco_trackdiag_up_right", "Diagonal track (up - right)", models("models/block/stellwand/blockfiller/trackdiag/ur/trackdiag.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}));
 
+        // Lever
+
+        registerLeverContentPack(
+                Static.MISSING,
+                Static.MISSING_NAME,
+                models(Static.MISSING_OBJ, new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})}),
+                models(Static.MISSING_OBJ, new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.5f, 0.5f}, new float[]{0.5f, 0.5f, 0.5f}, new float[]{1f, 1f, 1f})})
+        );
+
+        registerLeverContentPack(
+                "switchstand_jake",
+                "Switch stand by Jake Steampson",
+                models("models/block/landofsignals/switchstand_jake/switch_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
+                models("models/block/landofsignals/switchstand_jake/switch_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
+        );
+
     }
 
     private static void registerStreckenblock() {
@@ -485,6 +503,21 @@ public class LOSBlocks {
         }, CONTENTPACK);
 
         BLOCK_DECO.add(contentPackDeco);
+    }
+
+    private static void registerLeverContentPack(String id, String name, Map<String, ContentPackModel[]> active, Map<String, ContentPackModel[]> inactive) {
+        ContentPackLever contentPackLever = new ContentPackLever();
+        contentPackLever.setId(id);
+        contentPackLever.setName(name);
+        contentPackLever.setActive(active);
+        contentPackLever.setInactive(inactive);
+        contentPackLever.setUTF8(true);
+
+        contentPackLever.validate(missing -> {
+            throw new ContentPackException(String.format(Static.MISSING_ATTRIBUTES, missing));
+        }, CONTENTPACK);
+
+        BLOCK_CUSTOM_LEVER.add(contentPackLever);
     }
 
     private static void registerDecoContentPackStellwand(String id, String name, Map<String, ContentPackModel[]> models) {
