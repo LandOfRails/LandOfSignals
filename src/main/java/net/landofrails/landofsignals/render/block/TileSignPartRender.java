@@ -80,8 +80,21 @@ public class TileSignPartRender {
         // Textrendering
         ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id);
         if(contentPackSign.isWriteable()){
-            // Does not work because its fixed to the players screen and not the block
-            GlobalRender.drawFixedText(tsp.getText(), state.clone(), new Vec3d(.7, 1.2, .5), 0.15f, new Vec3d(180, tsp.getBlockRotate() + 180, 0));
+            RenderState textState  = state.clone()
+                    .lighting(false)
+                    .depth_test(true)
+                    .color(0, 0, 0, 1)
+                    .translate(0.5, 0.675, 0.5)
+                    .rotate(180, 1.0F, 0.0F, 0.0F) // X
+                    .rotate(-tsp.getBlockRotate(), 0.0F, 1.0F, 0.0F) // Y
+                    .rotate(0, 0.0F, 0.0F, 1.0F) // Z
+                    .translate(0.025, 0, -0.065)
+                    .scale(0.05f, 0.05f, 0.05f);
+            GlobalRender.drawRawCenteredText(tsp.getText(), textState.clone());
+            textState.translate(0,-10, 0);
+            GlobalRender.drawRawLeftOrientedText(tsp.getText(), textState.clone());
+            textState.translate(0, 20, 0);
+            GlobalRender.drawRawRightOrientedText(tsp.getText(), textState.clone());
         }
         //
 
