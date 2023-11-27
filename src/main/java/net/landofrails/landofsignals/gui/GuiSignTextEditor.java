@@ -1,11 +1,13 @@
 package net.landofrails.landofsignals.gui;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.TextField;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.text.TextUtil;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.packet.SignTextPacket;
@@ -36,6 +38,7 @@ public class GuiSignTextEditor implements IScreen {
             @Override
             public void onClick(Player.Hand hand) {
                 SignTextPacket.sendTextToServer(signPos, textField.getText());
+                MinecraftClient.getPlayer().sendActionBarMessage(PlayerMessage.direct("Text updated!"));
                 screen.close();
             }
         };
