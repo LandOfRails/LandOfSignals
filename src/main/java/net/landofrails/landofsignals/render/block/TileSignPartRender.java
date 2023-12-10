@@ -83,18 +83,18 @@ public class TileSignPartRender {
             RenderState textState  = state.clone()
                     .lighting(false)
                     .depth_test(true)
-                    .color(0, 0, 0, 1)
                     .translate(0.5, 0.675, 0.5)
                     .rotate(180, 1.0F, 0.0F, 0.0F) // X
                     .rotate(-tsp.getBlockRotate(), 0.0F, 1.0F, 0.0F) // Y
                     .rotate(0, 0.0F, 0.0F, 1.0F) // Z
                     .translate(0.025, 0, -0.065)
                     .scale(0.05f, 0.05f, 0.05f);
-            GlobalRender.drawRawCenteredText(tsp.getText(), textState.clone());
+
+            GlobalRender.drawRawCenteredText(tsp.getText(), textState.clone(), GlobalRender.rgbToInt(255, 0, 0));
             textState.translate(0,-10, 0);
-            GlobalRender.drawRawLeftOrientedText(tsp.getText(), textState.clone());
+            GlobalRender.drawRawLeftOrientedText(tsp.getText(), textState.clone(), GlobalRender.rgbToInt(0, 255, 0));
             textState.translate(0, 20, 0);
-            GlobalRender.drawRawRightOrientedText(tsp.getText(), textState.clone());
+            GlobalRender.drawRawRightOrientedText(tsp.getText(), textState.clone(), GlobalRender.rgbToInt(0, 0, 255));
         }
         //
 
