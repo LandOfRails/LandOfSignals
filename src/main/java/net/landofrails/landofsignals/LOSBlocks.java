@@ -110,6 +110,11 @@ public class LOSBlocks {
                 "an"
         }));
 
+        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_light_flare", "Ampel (Off, Red)", "models/block/landofsignals/light_flare/lightflare.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                "",
+                "red"
+        }));
+
         // Animated Signals
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(MISSING_SIGNAL);
 
