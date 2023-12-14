@@ -5,7 +5,10 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.BlendMode;
+import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
+import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -18,6 +21,8 @@ import net.landofrails.landofsignals.utils.Static;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
@@ -50,6 +55,11 @@ public class TileSignalPartRender {
             renderBase(id, signal, tsp, state.clone());
         }
         renderSignals(id, signal, tsp, state.clone());
+
+        // TODO remove/adjust when generalized
+        if(id.contains("block_signal_part_light_flare"))
+            renderFlares(id, signal, tsp, state.clone());
+        //
 
         if(tsp.isHighlighting()){
             HighlightingUtil.renderHighlighting(state.clone());
@@ -142,6 +152,53 @@ public class TileSignalPartRender {
 
     public static Map<String, OBJModel> cache(){
         return cache;
+    }
+
+
+    private static void renderFlares(String id, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
+
+        // TODO remove when generalized
+        final String signalState = tile.getState();
+        if(!signalState.equalsIgnoreCase("red"))
+            return;
+        //
+
+        float red = 165f / 255f; // TODO Should come from contentpack
+        float green = 32f / 255f; // TODO Should come from contentpack
+        float blue = 25f / 255f; // TODO Should come from contentpack
+        float intensity = 2f; // TODO Should be calculated
+
+        Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
+
+        state.texture(Texture.wrap(lightTex))
+                .lightmap(1, 1)
+                .depth_test(true)
+                .depth_mask(false)
+                .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
+
+        state.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
+
+        final String objPath = signal.getModel();
+        final OBJModel model = cache.get(objPath);
+        Vec3d centerOfModel = model.centerOfGroups(model.groups());
+        Predicate<String> isLightFlare = group -> group.startsWith("lightflare_1"); // TODO Should come from the contentpack
+        Vec3d centerOfLightFlare = model.centerOfGroups(model.groups().stream().filter(isLightFlare).collect(Collectors.toSet()));
+
+        Vec3d flareOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
+        state.translate(flareOffset);
+        state.rotate(tile.getBlockRotate() - 180,0,1,0); // TODO Needs to use the value from the element in the obj later on.
+
+        Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
+        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - 0.45);
+        state.translate(modelOffset); // move it towards the position of the light flare
+
+        DirectDraw buffer = new DirectDraw();
+        buffer.vertex(-1, -1, 0).uv(0, 0);
+        buffer.vertex(-1, 1, 0).uv(0, 1);
+        buffer.vertex(1, 1, 0).uv(1, 1);
+        buffer.vertex(1, -1, 0).uv(1, 0);
+        buffer.draw(state);
+
     }
 
 }
