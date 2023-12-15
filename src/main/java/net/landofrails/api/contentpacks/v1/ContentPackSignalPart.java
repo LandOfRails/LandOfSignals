@@ -2,6 +2,7 @@ package net.landofrails.api.contentpacks.v1;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
@@ -13,6 +14,11 @@ public class ContentPackSignalPart {
     private String id;
     private String name;
     private String model;
+
+    /**
+     * FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
+     */
+    private Flare[] flares;
 
     private float[] translation;
     private float[] itemTranslation;
@@ -59,6 +65,16 @@ public class ContentPackSignalPart {
 
     public void setModel(final String model) {
         this.model = model;
+    }
+
+    // FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    // FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public float[] getTranslation() {

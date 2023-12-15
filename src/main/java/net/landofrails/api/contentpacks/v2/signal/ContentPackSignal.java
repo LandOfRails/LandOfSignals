@@ -3,6 +3,7 @@ package net.landofrails.api.contentpacks.v2.signal;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.landofsignals.LOSTabs;
 
 import java.io.IOException;
@@ -23,11 +24,13 @@ public class ContentPackSignal {
     private String base;
     private String[] states;
     private String itemState;
+    private Flare[] flares;
 
     private float[] translation;
     private float[] itemTranslation;
     private float[] scaling;
     private float[] itemScaling;
+
 
     // metadataId : data
     private Map<String, Object> metadata;
@@ -142,8 +145,16 @@ public class ContentPackSignal {
         return itemState;
     }
 
-    public void setItemGroupStates(String itemState) {
+    public void setItemState(String itemState) {
         this.itemState = itemState;
+    }
+
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public float[] getTranslation() {
@@ -253,6 +264,10 @@ public class ContentPackSignal {
 
         if (itemState == null && states.length > 0) {
             itemState = states[0];
+        }
+
+        if(flares == null){
+            flares = new Flare[0];
         }
 
         if (translation == null) {

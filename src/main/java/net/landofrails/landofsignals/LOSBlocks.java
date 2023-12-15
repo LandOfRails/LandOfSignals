@@ -5,6 +5,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
@@ -110,10 +111,12 @@ public class LOSBlocks {
                 "an"
         }));
 
-        registerSignalContentPack(new ContentPackSignalPart("block_signal_part_light_flare", "Ampel (Off, Red)", "models/block/landofsignals/light_flare/lightflare.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+        ContentPackSignalPart light_flare = new ContentPackSignalPart("block_signal_part_light_flare", "Ampel (Off, Red)", "models/block/landofsignals/light_flare/lightflare.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
                 "",
                 "red"
-        }));
+        });
+        light_flare.setFlares(new Flare[]{new Flare("lightflare_1", "165;32;25", 2f, false, new String[]{"red"})});
+        registerSignalContentPack(light_flare);
 
         // Animated Signals
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(MISSING_SIGNAL);

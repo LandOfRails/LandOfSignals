@@ -10,6 +10,7 @@ import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -18,11 +19,11 @@ import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TileSignalPartRender {
 
@@ -31,6 +32,7 @@ public class TileSignalPartRender {
     }
 
     private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, Map<String, Flare[]>> flareCache = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
@@ -155,49 +157,100 @@ public class TileSignalPartRender {
     }
 
 
-    private static void renderFlares(String id, ContentPackSignal signal, TileSignalPart tile, RenderState state) {
+    private static void renderFlares(String id, ContentPackSignal signal, TileSignalPart tile, RenderState renderState) {
 
-        // TODO remove when generalized
+        // TODO Do it sooner. And maybe there is a better implementation?
+        if (!flareCache.containsKey(id)) {
+            try {
+                Map<String, List<Flare>> dynStateFlares = new HashMap<>();
+                Flare[] flares = signal.getFlares();
+                for(Flare flare : flares){
+                    String[] flareStates = flare.getStates();
+                    for(String state : flareStates){
+                        dynStateFlares.putIfAbsent(state, new ArrayList<>());
+                        dynStateFlares.get(state).add(flare);
+                    }
+                }
+                Map<String, Flare[]> stateFlares = new HashMap<>();
+                dynStateFlares.forEach((dynState, dynFlares) -> stateFlares.put(dynState, dynFlares.toArray(new Flare[0])));
+                flareCache.put(id, stateFlares);
+            } catch (Exception e) {
+                throw new ItemRenderException("Error loading item model/renderer...", e);
+            }
+        }
+
         final String signalState = tile.getState();
-        if(!signalState.equalsIgnoreCase("red"))
+        Flare[] flares = flareCache.get(id).get(signalState);
+
+        if(flares == null) {
+            // No flares - no rendering
             return;
-        //
+        }
 
-        float red = 165f / 255f; // TODO Should come from contentpack
-        float green = 32f / 255f; // TODO Should come from contentpack
-        float blue = 25f / 255f; // TODO Should come from contentpack
-        float intensity = 2f; // TODO Should be calculated
+        Pattern rotationPattern = Pattern.compile("rot\\d{1,3}");
+        UnaryOperator<String> retrieveRotation = flareGroup -> {
+            Matcher matcher = rotationPattern.matcher(flareGroup);
+            matcher.find();
+            return matcher.group().replace("rot", "");
+        };
 
-        Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
+        Pattern pitchPattern = Pattern.compile("pitch\\d{1,3}");
+        UnaryOperator<String> retrievePitch = flareGroup -> {
+            Matcher matcher = pitchPattern.matcher(flareGroup);
+            matcher.find();
+            return matcher.group().replace("pitch", "");
+        };
 
-        state.texture(Texture.wrap(lightTex))
-                .lightmap(1, 1)
-                .depth_test(true)
-                .depth_mask(false)
-                .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
+        for(Flare flare : flares){
+            RenderState flareState = renderState.clone();
+            String flareId = flare.getId();
 
-        state.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
+            final String objPath = signal.getModel();
+            final OBJModel model = cache.get(objPath);
+            Predicate<String> isLightFlare = group -> group.startsWith(flareId); // TODO Preload this as well?
+            String errMsg = String.format("Uh oh. Did not find %s in model %s", flareId, objPath);
+            String flareGroup = model.groups().stream().filter(isLightFlare).findFirst().orElseThrow(() -> new RuntimeException(errMsg));
 
-        final String objPath = signal.getModel();
-        final OBJModel model = cache.get(objPath);
-        Vec3d centerOfModel = model.centerOfGroups(model.groups());
-        Predicate<String> isLightFlare = group -> group.startsWith("lightflare_1"); // TODO Should come from the contentpack
-        Vec3d centerOfLightFlare = model.centerOfGroups(model.groups().stream().filter(isLightFlare).collect(Collectors.toSet()));
+            float red = flare.getRenderColor()[0];
+            float green = flare.getRenderColor()[1];
+            float blue = flare.getRenderColor()[2];
+            float intensity = flare.getIntensity();
 
-        Vec3d flareOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
-        state.translate(flareOffset);
-        state.rotate(tile.getBlockRotate() - 180,0,1,0); // TODO Needs to use the value from the element in the obj later on.
+            int flareRotation = Integer.parseInt(retrieveRotation.apply(flareGroup));
+            int flarePitch = Integer.parseInt(retrievePitch.apply(flareGroup));
 
-        Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - 0.45);
-        state.translate(modelOffset); // move it towards the position of the light flare
+            Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
 
-        DirectDraw buffer = new DirectDraw();
-        buffer.vertex(-1, -1, 0).uv(0, 0);
-        buffer.vertex(-1, 1, 0).uv(0, 1);
-        buffer.vertex(1, 1, 0).uv(1, 1);
-        buffer.vertex(1, -1, 0).uv(1, 0);
-        buffer.draw(state);
+            //
+
+            flareState.texture(Texture.wrap(lightTex))
+                    .lightmap(1, 1)
+                    .depth_test(true)
+                    .depth_mask(false)
+                    .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
+
+            flareState.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
+
+            Vec3d centerOfModel = model.centerOfGroups(model.groups());
+            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup));
+
+            Vec3d flareOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
+            flareState.translate(flareOffset);
+
+            flareState.rotate(flarePitch, 0, 0, 1);
+            flareState.rotate(tile.getBlockRotate() + flareRotation,0,1,0);
+
+            Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
+            modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - 0.45); // 0.45 implement custom offset?
+            flareState.translate(modelOffset); // move it towards the position of the light flare
+
+            DirectDraw buffer = new DirectDraw();
+            buffer.vertex(-1, -1, 0).uv(0, 0);
+            buffer.vertex(-1, 1, 0).uv(0, 1);
+            buffer.vertex(1, 1, 0).uv(1, 1);
+            buffer.vertex(1, -1, 0).uv(1, 0);
+            buffer.draw(flareState);
+        }
 
     }
 
