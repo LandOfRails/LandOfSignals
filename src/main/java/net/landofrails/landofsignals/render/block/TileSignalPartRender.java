@@ -2,6 +2,7 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.model.obj.OBJGroup;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
@@ -207,17 +208,17 @@ public class TileSignalPartRender {
 
             final String objPath = signal.getModel();
             final OBJModel model = cache.get(objPath);
-            Predicate<String> isLightFlare = group -> group.startsWith(flareId); // TODO Preload this as well?
+            Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId); // TODO Preload this as well?
             String errMsg = String.format("Uh oh. Did not find %s in model %s", flareId, objPath);
-            String flareGroup = model.groups().stream().filter(isLightFlare).findFirst().orElseThrow(() -> new RuntimeException(errMsg));
+            Map.Entry<String, OBJGroup> flareGroup = model.groups.entrySet().stream().filter(isLightFlare).findFirst().orElseThrow(() -> new RuntimeException(errMsg));
 
             float red = flare.getRenderColor()[0];
             float green = flare.getRenderColor()[1];
             float blue = flare.getRenderColor()[2];
             float intensity = flare.getIntensity();
 
-            int flareRotation = Integer.parseInt(retrieveRotation.apply(flareGroup));
-            int flarePitch = Integer.parseInt(retrievePitch.apply(flareGroup));
+            int flareRotation = Integer.parseInt(retrieveRotation.apply(flareGroup.getKey()));
+            int flarePitch = Integer.parseInt(retrievePitch.apply(flareGroup.getKey()));
 
             Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
 
@@ -232,7 +233,7 @@ public class TileSignalPartRender {
             flareState.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
 
             Vec3d centerOfModel = model.centerOfGroups(model.groups());
-            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup));
+            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup.getKey()));
 
             Vec3d flareOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
             flareState.translate(flareOffset);
@@ -243,6 +244,9 @@ public class TileSignalPartRender {
             Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
             modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - 0.45); // 0.45 implement custom offset?
             flareState.translate(modelOffset); // move it towards the position of the light flare
+
+            double scale = Math.max(flareGroup.getValue().max.z - flareGroup.getValue().min.z, flareGroup.getValue().max.x - flareGroup.getValue().min.x);
+            flareState.scale(scale, scale, scale);
 
             DirectDraw buffer = new DirectDraw();
             buffer.vertex(-1, -1, 0).uv(0, 0);
