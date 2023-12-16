@@ -113,9 +113,13 @@ public class LOSBlocks {
 
         ContentPackSignalPart light_flare = new ContentPackSignalPart("block_signal_part_light_flare", "Ampel (Off, Red)", "models/block/landofsignals/light_flare/lightflare.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
                 "",
+                "yellow",
                 "red"
         });
-        light_flare.setFlares(new Flare[]{new Flare("lightflare_1", "165;32;25", 2f, false, new String[]{"red"})});
+        light_flare.setFlares(new Flare[]{
+                new Flare("lightflare_1", "165;32;25", 2f, false, new String[]{"red"}),
+                new Flare("lightflare_2", "229;189;1", 2f, false, new String[]{"yellow"})
+        });
         registerSignalContentPack(light_flare);
 
         // Animated Signals
