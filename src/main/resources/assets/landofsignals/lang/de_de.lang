@@ -66,6 +66,6 @@ message.stellwand:connector.newsenderselected=Neuer Sender ausgewählt! (%s, %s,
 message.stellwand:connector.blocknotconnectable=Dieser Block lässt sich nicht verbinden!
 message.stellwand:connector.notthesameworld=Blöcke aus unterschiedlichen Welten lassen sich nicht verbinden!
 
-message.stellwand:deprecated=Dieser Block/Dieses Item wird zukünftig entfernt. Du kannst Ersatz finden unter "LOS | Signale" und "LOS | Assets".
+message.stellwand:deprecated=Dieser Block/Dieses Item wird zukünftig entfernt. Du kannst Ersatz finden unter \"LOS | Signale\" und \"LOS | Assets\".
 
 gui.stellwand:selectsendermodes.group=Gruppe: %s
