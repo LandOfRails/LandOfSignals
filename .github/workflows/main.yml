@@ -45,7 +45,7 @@ jobs:
         run: |
           umc_link=$(./gradlew showBuildInfo | grep "universalmodcore")
           wget $umc_link -P build/libs/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: LandOfSignals ${{matrix.branch}}
           path: |
