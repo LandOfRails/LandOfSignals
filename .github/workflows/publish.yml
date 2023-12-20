@@ -1,5 +1,4 @@
 name: LandOfSignals Publish Pipeline
-
 on:
   workflow_dispatch:
     inputs:
@@ -30,8 +29,7 @@ jobs:
       - name: Replace version number with new version
         run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
-          sed -i "s/String version =.*/String version = '${{ steps.getversion.outputs.version }}'/" ./build.gradle
-          sed -i 's/"version":.*/"version": "${{ steps.getversion.outputs.version }}",/' src/main/resources/mcmod.info
+          sed -i '0,/"version":.*/s//"version": "${{ steps.getversion.outputs.version }}",/' ./umc.json
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
@@ -39,14 +37,13 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
-
   build:
     runs-on: ubuntu-latest
     needs: [ versioncommit ]
     strategy:
       max-parallel: 1
       matrix:
-        branch: [ 1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge ]
+        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
         include:
           - branch: 1.7.10-forge
             version: 1.7.10
@@ -71,16 +68,10 @@ jobs:
           java-version: '8'
       - name: Install deps
         run: sudo apt install -y pngquant findutils xvfb
-      - name: Hack Forge Gradle
-        run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
       - name: Setup Universal Mod Core (and helpers)
         env:
           BRANCH: ${{ matrix.branch }}
-        run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true -Dtarget=release
-      - name: Hack Forge Gradle Part Two
-        env:
-          BRANCH: ${{ matrix.branch }}
-        run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
+        run: java -jar UMCSetup.jar ${BRANCH} https
       - name: Gradle compile
         run: ./gradlew classes
       - name: Process images
@@ -104,7 +95,7 @@ jobs:
         run: |
           ls ./build/libs/
           mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: LandOfSignals ${{matrix.branch}}
           path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
@@ -116,7 +107,6 @@ jobs:
           modrinth-featured: true
           modrinth-unfeature-mode: subset
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           # CurseForge
           curseforge-id: 434307
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -136,11 +126,9 @@ jobs:
             ${{ matrix.version }}
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
-
   package:
     runs-on: ubuntu-latest
     needs: [ build ]
@@ -184,7 +172,6 @@ jobs:
             1.16.5
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail

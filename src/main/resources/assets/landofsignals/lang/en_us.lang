@@ -44,8 +44,6 @@ message.landofsignals:with.animation=§aw/ animation
 
 label.landofsignals:signtexteditor.savebutton=Save
 
-# -- Stellwand --
-
 item.landofsignals:stellwand.itemblockfiller.name=Block Filler (deprecated)
 item.landofsignals:stellwand.itemblocksender.name=Block Sender (deprecated)
 item.landofsignals:stellwand.itemblocksignal.name=Block Signal (deprecated)
@@ -68,6 +66,6 @@ message.stellwand:connector.newsenderselected=New sender selected! (%s, %s, %s)
 message.stellwand:connector.blocknotconnectable=This block is not connectable!
 message.stellwand:connector.notthesameworld=Can't connect blocks between different worlds!
 
-message.stellwand:deprecated=This block/item will be removed in the future. You can find replacements under "LOS | Signals" and "LOS | Assets".
+message.stellwand:deprecated=This block/item will be removed in the future. You can find replacements under \"LOS | Signals\" and \"LOS | Assets\".
 
 gui.stellwand:selectsendermodes.group=Group: %s

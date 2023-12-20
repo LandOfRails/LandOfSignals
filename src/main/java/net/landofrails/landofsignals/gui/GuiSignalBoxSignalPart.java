@@ -7,7 +7,6 @@ import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
@@ -15,7 +14,7 @@ import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.lwjgl.opengl.GL11;
+import util.Matrix4;
 
 import java.util.Objects;
 
@@ -40,9 +39,9 @@ public class GuiSignalBoxSignalPart implements IScreen {
 
         states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(tsp.getId());
 
-        originalRightState = tsb.getActiveGroupState(new String[]{null});
+        originalRightState = tsb.getActiveGroupState("");
         rightState = originalRightState;
-        originalLeftState = tsb.getInactiveGroupState(new String[]{null});
+        originalLeftState = tsb.getInactiveGroupState("");
         leftState = originalLeftState;
 
 
@@ -62,6 +61,13 @@ public class GuiSignalBoxSignalPart implements IScreen {
     public static void open(final TileSignalBox tileSignalBox) {
         tsb = tileSignalBox;
         LOSGuis.SIGNAL_BOX_SIGNAL_PART.open(MinecraftClient.getPlayer());
+    }
+
+    @SuppressWarnings("java:S1751")
+    private static <T> T getFirstValue(T[] values) {
+        for (T object : values)
+            return object;
+        return null;
     }
 
     @Override
@@ -115,21 +121,20 @@ public class GuiSignalBoxSignalPart implements IScreen {
         rightTag.setString("itemState", rightState);
         itemStackRight.setTagCompound(rightTag);
 
-        try (final OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackRight, 0, 0);
-        }
+        Matrix4 matrix = new Matrix4();
+        matrix.translate((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 4, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackRight, 0, 0, matrix);
 
         final TagCompound leftTag = itemStackLeft.getTagCompound();
         leftTag.setString("itemState", leftState);
         itemStackLeft.setTagCompound(leftTag);
 
-        try (final OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(itemStackLeft, 0, 0);
-        }
+        matrix = new Matrix4();
+        matrix.translate(((double) GUIHelpers.getScreenWidth() / 2 - (double) builder.getWidth() / 4) - 120, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(itemStackLeft, 0, 0, matrix);
+
 
         groupButton.setText(GuiText.LABEL_SIGNALGROUP.toString("default"));
     }
@@ -143,13 +148,6 @@ public class GuiSignalBoxSignalPart implements IScreen {
                 return state;
         }
         return getFirstValue(states);
-    }
-
-    @SuppressWarnings("java:S1751")
-    private static <T> T getFirstValue(T[] values) {
-        for (T object : values)
-            return object;
-        return null;
     }
 
 }

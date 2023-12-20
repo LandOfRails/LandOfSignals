@@ -17,7 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [ 1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge ]
+        branch: [ 1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge, 1.17.1-forge, 1.18.2-forge, 1.19.4-forge, 1.20.1-forge ]
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
@@ -28,16 +29,10 @@ jobs:
           java-version: '8'
       - name: Install deps
         run: sudo apt install -y pngquant findutils xvfb
-      - name: Hack Forge Gradle
-        run: mkdir -p ~/.gradle/caches/minecraft/; wget 'https://teamopenindustry.cc/maven/hack/ForgeGradleVersion.json' -O ~/.gradle/caches/minecraft/ForgeGradleVersion.json
       - name: Setup Universal Mod Core (and helpers)
         env:
           BRANCH: ${{ matrix.branch }}
-        run: ./gradlew umc -D umc.loader=${BRANCH} -D ssh.http=true
-      - name: Hack Forge Gradle Part Two
-        env:
-          BRANCH: ${{ matrix.branch }}
-        run: git apply --ignore-space-change --ignore-whitespace ${BRANCH}.patch || true
+        run: java -jar UMCSetup.jar ${BRANCH} https
       - name: Gradle compile
         run: ./gradlew classes
       - name: Process images
@@ -46,7 +41,13 @@ jobs:
         run: xvfb-run --auto-servernum ./gradlew runData || xvfb-run --auto-servernum ./gradlew runData || true
       - name: Gradle build
         run: ./gradlew build
-      - uses: actions/upload-artifact@v3
+      - name: Download UMC version used for build
+        run: |
+          umc_link=$(./gradlew showBuildInfo | grep "universalmodcore")
+          wget $umc_link -P build/libs/
+      - uses: actions/upload-artifact@v4
         with:
           name: LandOfSignals ${{matrix.branch}}
-          path: build/libs/LandOfSignals-${{matrix.branch}}-*
+          path: |
+            build/libs/LandOfSignals-${{matrix.branch}}-*
+            build/libs/UniversalModCore-*

@@ -29,7 +29,7 @@ public class LandOfSignals extends ModCore.Mod {
     public static final String MODID = "landofsignals";
     // Current version
     @SuppressWarnings("unused")
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.3.0";
 
     @Override
     public String modID() {
@@ -121,7 +121,7 @@ public class LandOfSignals extends ModCore.Mod {
 
                 break;
             case SETUP:
-                GlobalRender.registerOverlay(pt -> new ManipualtorOverlay().draw());
+                GlobalRender.registerOverlay((state, partialticks) -> new ManipualtorOverlay().draw());
 
                 if(LandOfSignalsConfig.preloadModels) {
                     ContentPackHandler.preloadModels();

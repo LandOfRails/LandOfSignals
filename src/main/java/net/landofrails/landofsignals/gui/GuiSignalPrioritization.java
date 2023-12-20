@@ -10,7 +10,6 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.Slider;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -20,7 +19,7 @@ import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToServerPacke
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
-import org.lwjgl.opengl.GL11;
+import util.Matrix4;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -155,12 +154,13 @@ public class GuiSignalPrioritization implements IScreen {
         refreshItem();
 
         final int scale = 8;
-        try (final OpenGL.With ignored = OpenGL.matrix()) {
-            GL11.glTranslated((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 6, (double) builder.getHeight() / 4, 0);
-            GL11.glScaled(scale, scale, 1);
-            GUIHelpers.drawItem(item, 0, 0);
-        }
+        Matrix4 matrix = new Matrix4();
+        matrix.translate((double) GUIHelpers.getScreenWidth() / 2 + (double) builder.getWidth() / 6, (double) builder.getHeight() / 4, 0);
+        matrix.scale(scale, scale, 1);
+        GUIHelpers.drawItem(item, 0, 0, matrix);
 
+
+        // TODO: Check if still needed
         // Slider and GUIHelper.drawItem() are interacting with each other. Fix background:
         // Has no effect, but makes slider work :)
         GUIHelpers.drawRect(-175, 120, 200, 20, 0x616161);
@@ -210,7 +210,7 @@ public class GuiSignalPrioritization implements IScreen {
     private String getTextForIndex(int indexOffset) {
         int index = entriesIndex + indexOffset;
         if (states.length > index) {
-            return MessageFormat.format("{0}. {1}", index + 1, states[index]);
+            return MessageFormat.format("{0}. {1}", index + 1, states[index].isEmpty() ? "Default" : states[index]);
         } else {
             return "-";
         }
@@ -276,7 +276,7 @@ public class GuiSignalPrioritization implements IScreen {
             groups = new String[0];
         } else {
             groupStates = tileComplexSignal.getOrderedGroupStates();
-            if (groupStates == null || groupStates.size() == 0) {
+            if (groupStates == null || groupStates.isEmpty()) {
                 screen.close();
                 return false;
             }
