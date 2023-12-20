@@ -1,5 +1,4 @@
 name: LandOfSignals Publish Pipeline
-
 on:
   workflow_dispatch:
     inputs:
@@ -12,15 +11,6 @@ on:
           - alpha
           - beta
           - release
-      version:
-        description: 'Version number for this release'
-        required: true
-        default: '1.2.0'
-        type: string
-      suffix:
-        description: 'Suffix to this release'
-        required: false
-        type: string
 
 jobs:
   versioncommit:
@@ -29,10 +19,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
+
+      - name: Read VERSION file
+        id: getversion
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+      - name: Read SUFFIX file
+        id: getsuffix
+        run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Replace version number with new version
         run: |
-          sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ inputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
-          sed -i '0,/"version":.*/s//"version": "${{ inputs.version }}",/' ./umc.json
+          sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ steps.getversion.outputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
+          sed -i '0,/"version":.*/s//"version": "${{ steps.getversion.outputs.version }}",/' ./umc.json
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
@@ -40,7 +37,6 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
-
   build:
     runs-on: ubuntu-latest
     needs: [ versioncommit ]
@@ -89,14 +85,20 @@ jobs:
         uses: juliangruber/read-file-action@v1.1.6
         with:
           path: ./CHANGELOG.md
+      - name: Read VERSION file
+        id: getversion
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+      - name: Read SUFFIX file
+        id: getsuffix
+        run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - name: Rename with suffix
         run: |
           ls ./build/libs/
-          mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ inputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ inputs.version }}${{ inputs.suffix }}.jar
+          mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - uses: actions/upload-artifact@v3
         with:
           name: LandOfSignals ${{matrix.branch}}
-          path: build/libs/LandOfSignals-${{matrix.branch}}-${{ inputs.version }}${{ inputs.suffix }}.jar
+          path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
       - name: Upload ${{matrix.branch}}
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -105,17 +107,16 @@ jobs:
           modrinth-featured: true
           modrinth-unfeature-mode: subset
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           # CurseForge
           curseforge-id: 434307
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           curseforge-dependencies: |
             universal-mod-core | depends | *
           
-          files: build/libs/LandOfSignals-${{matrix.branch}}-${{ inputs.version }}${{ inputs.suffix }}.jar
+          files: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
 
-          name: LandOfSignals-${{matrix.branch}}-${{ inputs.version }}${{ inputs.suffix }}
-          version: ${{ inputs.version }}${{ inputs.suffix }}
+          name: LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
+          version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
           version-type: ${{ inputs.type }}
           changelog-file: ./CHANGELOG.md
 
@@ -125,16 +126,20 @@ jobs:
             ${{ matrix.version }}
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
-
   package:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
       - uses: actions/checkout@v3
+      - name: Read VERSION file
+        id: getversion
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+      - name: Read SUFFIX file
+        id: getsuffix
+        run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
       - uses: actions/download-artifact@v3
       - run: mkdir upload
       - run: cp **/LandOfSignals-*.jar upload
@@ -142,7 +147,7 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           # GitHub
-          github-tag: v${{ inputs.version }}${{ inputs.suffix }}
+          github-tag: v${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
           github-generate-changelog: true
           github-draft: false
           github-prerelease: false
@@ -151,7 +156,7 @@ jobs:
 
           files: upload/LandOfSignals-*.jar
 
-          version: ${{ inputs.version }}${{ inputs.suffix }}
+          version: ${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}
           version-type: ${{ inputs.type }}
           changelog-file: ./CHANGELOG.md
 
@@ -167,7 +172,6 @@ jobs:
             1.16.5
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
