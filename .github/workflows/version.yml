@@ -24,8 +24,8 @@ jobs:
         run: |
           sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ inputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
           sed -i '0,/"version":.*/s//"version": "${{ inputs.version }}",/' ./umc.json
-          echo ${{ inputs.version }} > .\VERSION
-          echo ${{ inputs.suffix }} > .\SUFFIX
+          echo ${{ inputs.version }} > VERSION
+          echo ${{ inputs.suffix }} > SUFFIX
       - name: Commit and push changes
         run: |
           git config --global user.name "MarkenJaden"
