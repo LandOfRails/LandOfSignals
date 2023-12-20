@@ -1,3 +1,13 @@
+### Release 1.3.0
+
+We have officially released LandOfSignals 1.3.0 supporting the new UMC 1.2.0 version.
+
+* Added [#140] : Preparations for official release supporting UMC 1.2
+
+* Fixed : The issues regarding the lang-files not working with 1.14 and above.
+
+* Removed : The LandOfSignalsAPI as it was deprecated by now and broke the builds for 1.17 and above (not yet working!)
+
 #### Release 1.2.0
 
 * Added [#125] : Levers w/o animation (extendable via contentpacks)

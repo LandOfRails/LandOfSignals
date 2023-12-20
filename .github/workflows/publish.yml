@@ -1,5 +1,4 @@
 name: LandOfSignals Publish Pipeline
-
 on:
   workflow_dispatch:
     inputs:
@@ -38,28 +37,26 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Updated mod version"
           git push
-
   build:
     runs-on: ubuntu-latest
     needs: [ versioncommit ]
     strategy:
       max-parallel: 1
       matrix:
-        #        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
-        branch: [ 1.12.2-forge, 1.16.5-forge ]
+        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
         include:
-          #          - branch: 1.7.10-forge
-          #            version: 1.7.10
-          #          - branch: 1.10.2-forge
-          #            version: 1.10.2
-          #          - branch: 1.11.2-forge
-          #            version: 1.11.2
+          - branch: 1.7.10-forge
+            version: 1.7.10
+          - branch: 1.10.2-forge
+            version: 1.10.2
+          - branch: 1.11.2-forge
+            version: 1.11.2
           - branch: 1.12.2-forge
             version: 1.12.2
-    #          - branch: 1.14.4-forge
-    #            version: 1.14.4
-    #          - branch: 1.15.2-forge
-    #            version: 1.15.2
+          - branch: 1.14.4-forge
+            version: 1.14.4
+          - branch: 1.15.2-forge
+            version: 1.15.2
           - branch: 1.16.5-forge
             version: 1.16.5
     steps:
@@ -98,7 +95,7 @@ jobs:
         run: |
           ls ./build/libs/
           mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: LandOfSignals ${{matrix.branch}}
           path: build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
@@ -110,7 +107,6 @@ jobs:
           modrinth-featured: true
           modrinth-unfeature-mode: subset
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           # CurseForge
           curseforge-id: 434307
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -130,11 +126,9 @@ jobs:
             ${{ matrix.version }}
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
-
   package:
     runs-on: ubuntu-latest
     needs: [ build ]
@@ -146,7 +140,7 @@ jobs:
       - name: Read SUFFIX file
         id: getsuffix
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - run: mkdir upload
       - run: cp **/LandOfSignals-*.jar upload
       - name: Upload to GitHub
@@ -178,7 +172,6 @@ jobs:
             1.16.5
           java: |
             8
-
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
