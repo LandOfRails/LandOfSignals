@@ -45,21 +45,20 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        #        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
-        branch: [ 1.12.2-forge, 1.16.5-forge ]
+        branch: [1.7.10-forge, 1.10.2-forge, 1.11.2-forge, 1.12.2-forge, 1.14.4-forge, 1.15.2-forge, 1.16.5-forge]
         include:
-          #          - branch: 1.7.10-forge
-          #            version: 1.7.10
-          #          - branch: 1.10.2-forge
-          #            version: 1.10.2
-          #          - branch: 1.11.2-forge
-          #            version: 1.11.2
+          - branch: 1.7.10-forge
+            version: 1.7.10
+          - branch: 1.10.2-forge
+            version: 1.10.2
+          - branch: 1.11.2-forge
+            version: 1.11.2
           - branch: 1.12.2-forge
             version: 1.12.2
-    #          - branch: 1.14.4-forge
-    #            version: 1.14.4
-    #          - branch: 1.15.2-forge
-    #            version: 1.15.2
+          - branch: 1.14.4-forge
+            version: 1.14.4
+          - branch: 1.15.2-forge
+            version: 1.15.2
           - branch: 1.16.5-forge
             version: 1.16.5
     steps:
