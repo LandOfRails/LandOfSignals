@@ -1,0 +1,35 @@
+name: Change version pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number for this release'
+        required: true
+        default: '1.2.0'
+        type: string
+      suffix:
+        description: 'Suffix to this release'
+        required: false
+        type: string
+
+jobs:
+  versioncommit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Replace version number with new version
+        run: |
+          sed -i 's/public static final String VERSION.*/public static final String VERSION = "${{ inputs.version }}";/' src/main/java/net/landofrails/landofsignals/LandOfSignals.java
+          sed -i '0,/"version":.*/s//"version": "${{ inputs.version }}",/' ./umc.json
+          echo ${{ inputs.version }} > .\VERSION
+          echo ${{ inputs.suffix }} > .\SUFFIX
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "MarkenJaden"
+          git config --global user.email "jjsch1410@gmail.com"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Updated mod version"
+          git push
