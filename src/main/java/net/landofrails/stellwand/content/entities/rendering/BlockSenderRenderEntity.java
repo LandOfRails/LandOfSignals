@@ -1,11 +1,9 @@
 package net.landofrails.stellwand.content.entities.rendering;
 
-import org.lwjgl.opengl.GL11;
-
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import net.landofrails.stellwand.content.entities.storage.BlockSenderStorageEntity;
 import net.landofrails.stellwand.utils.compact.IRotatableBlockEntity;
 
@@ -43,25 +41,6 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 		return model;
 	}
 
-	public OBJRender getRenderer() {
-		if (renderer == null) {
-			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getModels().containsKey(entity.contentPackBlockId)) {
-				if (!BlockSenderStorageEntity.getRenderers().containsKey(entity.contentPackBlockId)) {
-					OBJModel m = BlockSenderStorageEntity.getModels().get(entity.contentPackBlockId);
-					BlockSenderStorageEntity.getRenderers().put(entity.contentPackBlockId, new OBJRender(m));
-				}
-				renderer = BlockSenderStorageEntity.getRenderers().get(entity.contentPackBlockId);
-			} else {
-				if (BlockSenderStorageEntity.getRenderers().containsKey(BlockSenderStorageEntity.MISSING)) {
-					OBJModel m = BlockSenderStorageEntity.getModels().get(BlockSenderStorageEntity.MISSING);
-					BlockSenderStorageEntity.getRenderers().put(BlockSenderStorageEntity.MISSING, new OBJRender(m));
-				}
-				renderer = BlockSenderStorageEntity.getRenderers().get(BlockSenderStorageEntity.MISSING);
-			}
-		}
-		return renderer;
-	}
-
 	public float[] getTranslation() {
 		if (defaultTranslation == null) {
 			if (entity.contentPackBlockId != null && BlockSenderStorageEntity.getTranslations().containsKey(entity.contentPackBlockId))
@@ -83,25 +62,24 @@ public class BlockSenderRenderEntity implements IRotatableBlockEntity {
 	}
 
 	public static StandardModel render(BlockSenderStorageEntity entity) {
-		return new StandardModel().addCustom(partialTicks -> renderStuff(entity, partialTicks));
+		return new StandardModel().addCustom((state, partialTicks) -> renderStuff(entity, state));
 	}
 
-	private static void renderStuff(BlockSenderStorageEntity entity, float partialTicks) {
+	private static void renderStuff(BlockSenderStorageEntity entity, RenderState state) {
 
-		OBJRender renderer = entity.renderEntity.getRenderer();
+		OBJModel model = entity.renderEntity.getModel();
 		float[] translation = entity.renderEntity.getTranslation();
 		float[] rotation = entity.renderEntity.getRotation();
 
+		state.translate(translation[0], translation[1], translation[2]);
+
+		state.rotate(rotation[0], 1, 0, 0);
+		state.rotate(entity.blockRotation + rotation[1], 0, 1, 0);
+		state.rotate(rotation[2], 0, 0, 1);
+
 		try {
-			try (OpenGL.With matrix = OpenGL.matrix(); OpenGL.With tex = renderer.bindTexture()) {
-				GL11.glTranslated(translation[0], translation[1], translation[2]);
-
-				GL11.glRotated(rotation[0], 1, 0, 0);
-				GL11.glRotated(entity.blockRotation + rotation[1], 0, 1, 0);
-				GL11.glRotated(rotation[2], 0, 0, 1);
-
-				renderer.draw();
-
+			try (OBJRender.Binding vbo = model.binder().bind(state)) {
+				vbo.draw();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

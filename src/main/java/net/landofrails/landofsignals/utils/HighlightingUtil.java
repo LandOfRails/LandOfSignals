@@ -1,11 +1,10 @@
 package net.landofrails.landofsignals.utils;
 
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LandOfSignals;
-import org.lwjgl.opengl.GL11;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class HighlightingUtil {
 
-    private static OBJRender render;
+    private static OBJModel model;
     private static final Random RANDOM = new Random();
 
     private static LocalDateTime colortime = LocalDateTime.now();
@@ -26,18 +25,23 @@ public class HighlightingUtil {
     }
 
     @SuppressWarnings("java:S1141")
-    public static void renderHighlighting() {
+    public static void renderHighlighting(RenderState state) {
         try {
-            OBJRender render = getOBJRender();
-            try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = render.bindTexture(getColor())) {
-                GL11.glTranslated(0.5,0,0.5);
-                render.draw();
+
+            OBJModel model = getOBJModel();
+            state.translate(0.5, 0, 0.5);
+            try (OBJRender.Binding vbo = model.binder().texture(getColor()).bind(state)) {
+
+                vbo.draw();
+
             } catch (Exception e) {
                 // Not good, not bad enough to fail
             }
+
         } catch (Exception e) {
             // Not good, not bad enough to fail
         }
+
     }
 
     private static String getColor(){
@@ -53,17 +57,16 @@ public class HighlightingUtil {
         return color.getFolder();
     }
 
-    private static OBJRender getOBJRender() throws Exception {
-        if(render == null){
-            OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/connection-box/connection-box.obj"), 0, HighlightingColors.getAllColorsAsStrings());
-            render = new OBJRender(model);
+    private static OBJModel getOBJModel() throws Exception {
+        if(model == null){
+            model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/connection-box/connection-box.obj"), 0, HighlightingColors.getAllColorsAsStrings());
         }
-        return render;
+        return model;
     }
 
     private enum HighlightingColors {
 
-        WHITE(null),
+        WHITE(""),
         AMBER("amber"),
         BLACK("black"),
         BLUE_LIGHT("blue_light"),

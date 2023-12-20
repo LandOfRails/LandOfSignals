@@ -62,7 +62,7 @@ Adds different signalblocks used in a railway lane plan. Preexisting laneblocks 
 **IntelliJ | Eclipse**
 
 1. Get the project from GitHub (via git)
-2. ``gradle umc -D umc.loader=1.12.2-forge``
+2. ``java -jar UMCSetup.jar 1.12.2-forge https``
 3. Load gradle changes
 
 You should be ready to go ^^

@@ -1,0 +1,13 @@
+{
+  "mod": {
+    "pkg": "net.landofrails.landofsignals",
+    "cls": "LandOfSignals",
+    "name": "LandOfSignals",
+    "id": "landofsignals",
+    "version": "1.2.0",
+    "dependencies": {}
+  },
+  "umc": {
+    "version": "latest"
+  }
+}

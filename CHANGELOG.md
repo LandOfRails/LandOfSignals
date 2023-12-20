@@ -5,6 +5,7 @@
 
 * Fixed [#127] : Magnifyingglass crashes server
 
+### BACKUP YOUR WORLD BEFORE UPDATING!
 #### Release 1.1.0
 
 Fixed #109 : ContentPackComplexSignal can now be added to a contentpackset
@@ -19,7 +20,18 @@ Added #108 : Implemented dynamic scaling (see config)
 
 #### Release 1.0.4
 
+#### Alpha 1.0.4-UMC-testbuild
+
+Fix crash due to some contentpacks still containing null. Improved logic to prevent this from happening again.
 Fixed missing logging parameter in ContentPackHandlerV2#load
+
+#### Alpha 1.0.3-UMC-testbuild
+
+This build is compatible with current UMC testbuilds in combination with Immersive Railroading testbuilds.
+
+We encourage you to backup your world before updating to this build as it is not excluded that there are still major
+bugs in it. Please report any bugs you find to our [issue tracker](https://github.com/LandOfRails/LandOfSignals/issues)
+or our [discord](https://discord.gg/ykAqHKYjVM).
 
 #### Release 1.0.3
 

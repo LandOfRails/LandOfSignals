@@ -3,9 +3,9 @@ package net.landofrails.landofsignals.render.block;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.OpenGL;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
@@ -15,7 +15,6 @@ import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -27,7 +26,7 @@ public class TileSignalBoxRender {
 
     }
 
-    private static final Map<String, OBJRender> cache = new HashMap<>();
+    private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String blockId, Map<String, ContentPackModel[]> models) {
@@ -45,14 +44,14 @@ public class TileSignalBoxRender {
                 final String objId = blockId + "/" + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId).getObjTextures().get(path);
-                OBJRender renderer = new OBJRender(new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures));
-                cache.putIfAbsent(objId, renderer);
+                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signalboxModel : modelEntry.getValue()) {
                     String[] groups = signalboxModel.getObj_groups();
                     if (groups.length > 0) {
                         Predicate<String> targetGroup = renderOBJGroup -> Arrays.stream(groups).anyMatch(renderOBJGroup::startsWith);
-                        List<String> modes = renderer.model.groups().stream().filter(targetGroup)
+                        List<String> modes = model.groups().stream().filter(targetGroup)
                                 .collect(Collectors.toCollection(ArrayList::new));
                         String groupCacheId = objId + "@" + String.join("+", groups);
                         groupCache.put(groupCacheId, modes);
@@ -67,10 +66,10 @@ public class TileSignalBoxRender {
     }
 
     public static StandardModel render(final TileSignalBox tsp) {
-        return new StandardModel().addCustom(() -> renderStuff(tsp));
+        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
     }
 
-    private static void renderStuff(final TileSignalBox tsp) {
+    private static void renderStuff(final TileSignalBox tsp, RenderState state) {
 
         String id = tsp.getId();
 
@@ -78,14 +77,14 @@ public class TileSignalBoxRender {
             id = Static.MISSING;
         }
 
-        renderBase(id, tsp);
+        renderBase(id, tsp, state);
 
         if(tsp.isHighlighting()){
-            HighlightingUtil.renderHighlighting();
+            HighlightingUtil.renderHighlighting(state.clone());
         }
     }
 
-    private static void renderBase(final String blockId, final TileSignalBox tile) {
+    private static void renderBase(final String blockId, final TileSignalBox tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
@@ -99,29 +98,32 @@ public class TileSignalBoxRender {
             final String path = baseModels.getKey();
 
             final String objId = blockId + "/" + path;
-            final OBJRender renderer = cache.get(objId);
+            final OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
+
+                RenderState iterationState = state.clone();
+
                 final ContentPackBlock block = baseModel.getBlock();
                 final Vec3d translate = block.getAsVec3d(block::getTranslation).add(offset);
                 final Vec3d scale = Static.multiply(block.getAsVec3d(block::getScaling), customScaling);
                 final Vec3d rotation = block.getAsVec3d(block::getRotation);
 
-                try (OpenGL.With ignored1 = OpenGL.matrix(); OpenGL.With ignored2 = renderer.bindTexture(baseModel.getTextures())) {
+                iterationState.scale(scale);
+                iterationState.translate(translate);
+                iterationState.rotate(rotation.x,1, 0, 0);
+                iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
+
+                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
 
                     // Render
-                    GL11.glScaled(scale.x, scale.y, scale.z);
-                    GL11.glTranslated(translate.x, translate.y, translate.z);
-                    GL11.glRotated(rotation.x, 1, 0, 0);
-                    GL11.glRotated(tile.getBlockRotate() + rotation.y, 0, 1, 0);
-                    GL11.glRotated(rotation.z, 0, 0, 1);
-
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        renderer.draw();
+                        vbo.draw();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        renderer.drawGroups(groupCache.get(groupCacheId));
+                        vbo.draw(groupCache.get(groupCacheId));
                     }
 
                 } catch (Exception e) {
