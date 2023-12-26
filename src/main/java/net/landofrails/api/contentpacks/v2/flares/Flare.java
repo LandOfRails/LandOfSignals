@@ -9,14 +9,11 @@ public class Flare {
      * Required. Needs to be named after the element in the model.
      */
     private String id;
+
     /**
      * Optional. Will set the color of the flare. Default: OxFFFFFF (white)
      */
     private String color = "#FFFFFF";
-    /**
-     * Optional. Will set the intensity of the light flare. Range 0-2. Default 2.
-     */
-    private float intensity = 2f;
 
     /**
      * Optional. Will always activate light flare. Default: false
@@ -33,18 +30,16 @@ public class Flare {
      */
     private Map<String, String> groupStates;
 
-    public Flare(String id, String color, float intensity, boolean alwaysOn, String[] states) {
+    public Flare(String id, String color, boolean alwaysOn, String[] states) {
         this.id = id;
         this.color = color;
-        this.intensity = intensity;
         this.alwaysOn = alwaysOn;
         this.states = states;
     }
 
-    public Flare(String id, String color, float intensity, boolean alwaysOn, Map<String, String> groupStates) {
+    public Flare(String id, String color, boolean alwaysOn, Map<String, String> groupStates) {
         this.id = id;
         this.color = color;
-        this.intensity = intensity;
         this.alwaysOn = alwaysOn;
         this.groupStates = groupStates;
     }
@@ -63,14 +58,6 @@ public class Flare {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public float getIntensity() {
-        return intensity;
-    }
-
-    public void setIntensity(float intensity) {
-        this.intensity = intensity;
     }
 
     public boolean isAlwaysOn() {
@@ -100,13 +87,13 @@ public class Flare {
     public float[] getRenderColor(){
         float[] rgb = new float[3];
 
-        // 80;160;240 or 010:020:030 or 0-050-230
-        Predicate<String> isRGB = rawColor -> rawColor.matches("((\\d{1,3}[;:-]){2}\\d{1,3})");
+        // 33,66,99 or 80;160;240 or 010:020:030 or 0-050-230
+        Predicate<String> isRGB = rawColor -> rawColor.matches("((\\d{1,3}[,;:-]){2}\\d{1,3})");
         // #123DEF or 0xFFAA00
         Predicate<String> isHEX = rawColor -> rawColor.matches("(#|0x)[A-Z\\d]{6}");
 
         if(isRGB.test(color)){
-            String[] rawColors = color.split("[;:-]");
+            String[] rawColors = color.split("[,;:-]");
             rgb[0] = Integer.parseInt(rawColors[0]) / 255f;
             rgb[1] = Integer.parseInt(rawColors[1]) / 255f;
             rgb[2] = Integer.parseInt(rawColors[2]) / 255f;

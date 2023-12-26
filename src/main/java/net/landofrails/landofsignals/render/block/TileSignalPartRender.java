@@ -1,5 +1,6 @@
 package net.landofrails.landofsignals.render.block;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJGroup;
@@ -19,6 +20,7 @@ import net.landofrails.landofsignals.render.item.ItemRenderException;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
+import net.landofrails.landofsignals.utils.VecUtil;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -202,6 +204,13 @@ public class TileSignalPartRender {
             return matcher.group().replace("pitch", "");
         };
 
+        Pattern offsetPattern = Pattern.compile("offset\\d{1,5}");
+        UnaryOperator<String> retrieveOffset = flareGroup -> {
+            Matcher matcher = offsetPattern.matcher(flareGroup);
+            matcher.find();
+            return matcher.group().replace("offset", "");
+        };
+
         for(Flare flare : flares){
             RenderState flareState = renderState.clone();
             String flareId = flare.getId();
@@ -215,12 +224,33 @@ public class TileSignalPartRender {
             float red = flare.getRenderColor()[0];
             float green = flare.getRenderColor()[1];
             float blue = flare.getRenderColor()[2];
-            float intensity = flare.getIntensity();
 
             int flareRotation = Integer.parseInt(retrieveRotation.apply(flareGroup.getKey()));
             int flarePitch = Integer.parseInt(retrievePitch.apply(flareGroup.getKey()));
+            float flareOffset = Float.parseFloat(retrieveOffset.apply(flareGroup.getKey())) / 1000f;
 
             Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
+
+            double scale = Math.max(flareGroup.getValue().max.z - flareGroup.getValue().min.z, flareGroup.getValue().max.x - flareGroup.getValue().min.x);
+
+            // Translation and Intensity calculations
+
+            Vec3d centerOfModel = model.centerOfGroups(model.groups());
+            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup.getKey()));
+            Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
+            modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
+            Vec3d flareCenterOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
+            Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
+
+            Vec3d playerOffset = VecUtil.rotateWrongYaw(
+                            new Vec3d(tile.getPos()).subtract(MinecraftClient.getPlayer().getPosition()),
+                            tile.getBlockRotate() + 180).
+                            subtract(combinedOffset);
+
+            int viewAngle = 45;
+            float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
+            intensity *= Math.abs(playerOffset.x/50);
+            intensity = Math.min(intensity, 1.5f);
 
             //
 
@@ -230,22 +260,35 @@ public class TileSignalPartRender {
                     .depth_mask(false)
                     .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
 
-            flareState.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
-
-            Vec3d centerOfModel = model.centerOfGroups(model.groups());
-            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup.getKey()));
-
-            Vec3d flareOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
-            flareState.translate(flareOffset);
+            flareState.translate(flareCenterOffset);
 
             flareState.rotate(flarePitch, 0, 0, 1);
-            flareState.rotate(tile.getBlockRotate() + flareRotation,0,1,0);
+            flareState.rotate((double) tile.getBlockRotate() + flareRotation,0,1,0);
 
-            Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-            modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - 0.45); // 0.45 implement custom offset?
             flareState.translate(modelOffset); // move it towards the position of the light flare
 
-            double scale = Math.max(flareGroup.getValue().max.z - flareGroup.getValue().min.z, flareGroup.getValue().max.x - flareGroup.getValue().min.x);
+            // Moving flare
+
+            if (intensity > 0.01) {
+                RenderState matrix = flareState.clone();
+                matrix.translate(0, 0, -((intensity / 2) * 3));
+                double scale2 = Math.max(scale * 0.5, intensity * 2);
+                matrix.scale(scale2, scale2, scale2);
+
+                matrix.color(red, green, blue, 1 - (intensity/3f));
+
+                DirectDraw buffer = new DirectDraw();
+                buffer.vertex(-1, -1, 0).uv(0, 0);
+                buffer.vertex(-1, 1, 0).uv(0, 1);
+                buffer.vertex(1, 1, 0).uv(1, 1);
+                buffer.vertex(1, -1, 0).uv(1, 0);
+                buffer.draw(matrix);
+            }
+
+            //
+
+            flareState.color((float)Math.sqrt(red), (float)Math.sqrt(green), (float)Math.sqrt(blue), 1 - (intensity/3f));
+
             flareState.scale(scale, scale, scale);
 
             DirectDraw buffer = new DirectDraw();
