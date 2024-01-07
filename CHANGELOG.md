@@ -1,3 +1,7 @@
+### Release 1.3.1
+
+* Fixed [#143] : Manipulator didn't work on multiplayer (NullPointerException on client)
+
 ### Release 1.3.0
 
 We have officially released LandOfSignals 1.3.0 supporting the new UMC 1.2.0 version.
