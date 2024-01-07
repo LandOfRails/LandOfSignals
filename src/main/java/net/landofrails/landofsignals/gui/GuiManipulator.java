@@ -1,12 +1,14 @@
 package net.landofrails.landofsignals.gui;
 
+import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.*;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
-import net.landofrails.landofsignals.packet.ManipulatorToClientPacket;
+import cam72cam.mod.render.opengl.RenderState;
+import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
@@ -50,7 +52,7 @@ public class GuiManipulator implements IScreen {
     private String scalingYBefore;
     private String scalingZBefore;
 
-    private final Vec3d offset;
+    private Vec3d offset;
     private Vec3d scaling;
     private int rotation;
     private final Vec3i blockPos;
@@ -151,7 +153,7 @@ public class GuiManipulator implements IScreen {
             public void onClick(Player.Hand hand) {
                 rotation--;
                 renewSlider(screen);
-                send();
+                updateClientBlock();
             }
         };
         rotationAddition = new Button(screen, screen.getWidth() / 2 - 50, 100, 20, 20, "+") {
@@ -159,7 +161,7 @@ public class GuiManipulator implements IScreen {
             public void onClick(Player.Hand hand) {
                 rotation++;
                 renewSlider(screen);
-                send();
+                updateClientBlock();
             }
         };
 
@@ -301,25 +303,20 @@ public class GuiManipulator implements IScreen {
     @SuppressWarnings("java:S125")
     @Override
     public void onClose() {
-        scaling = new Vec3d(
-                Double.parseDouble(scalingXField.getText()),
-                Double.parseDouble(scalingYField.getText()),
-                Double.parseDouble(scalingZField.getText())
-        );
-        send();
-        //Server
+        refreshScalingAndOffset();
+
         ManipulatorToServerPacket serverPacket = new ManipulatorToServerPacket(
-                new Vec3d(Double.parseDouble(positionXField.getText()), Double.parseDouble(heightYField.getText()), Double.parseDouble(positionZField.getText())),
+                blockPos,
+                offset,
                 rotation,
                 scaling,
-                blockPos,
                 cascadeBox.isChecked()
         );
         serverPacket.sendToServer();
     }
 
     @Override
-    public void draw(final IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder, final RenderState state) {
         final String tempX = positionXField.getText();
         final String tempY = heightYField.getText();
         final String tempZ = positionZField.getText();
@@ -330,37 +327,37 @@ public class GuiManipulator implements IScreen {
         if (!positionXField.getText().isEmpty() && !tempX.equals(textXBefore)) {
             positionXField.setText(String.valueOf(Static.round(Double.parseDouble(tempX), 3)));
             textXBefore = tempX;
-            send();
+            updateClientBlock();
         }
 
         if (!heightYField.getText().isEmpty() && !tempY.equals(textYBefore)) {
             heightYField.setText(String.valueOf(Static.round(Double.parseDouble(tempY), 3)));
             textYBefore = tempY;
-            send();
+            updateClientBlock();
         }
 
         if (!positionZField.getText().isEmpty() && !tempZ.equals(textZBefore)) {
             positionZField.setText(String.valueOf(Static.round(Double.parseDouble(tempZ), 3)));
             textZBefore = tempZ;
-            send();
+            updateClientBlock();
         }
 
         if(!scalingXField.getText().isEmpty() && !tempScalingX.equals(scalingXBefore)){
             scalingXField.setText(String.valueOf(Static.round(Double.parseDouble(tempScalingX), 3)));
             scalingXBefore = tempScalingX;
-            send();
+            updateClientBlock();
         }
 
         if(!scalingYField.getText().isEmpty() && !tempScalingY.equals(scalingYBefore)){
             scalingYField.setText(String.valueOf(Static.round(Double.parseDouble(tempScalingY), 3)));
             scalingYBefore = tempScalingY;
-            send();
+            updateClientBlock();
         }
 
         if(!scalingZField.getText().isEmpty() && !tempScalingZ.equals(scalingZBefore)){
             scalingZField.setText(String.valueOf(Static.round(Double.parseDouble(tempScalingZ), 3)));
             scalingZBefore = tempScalingZ;
-            send();
+            updateClientBlock();
         }
 
         if(!rotationBox.isChecked()){
@@ -369,25 +366,27 @@ public class GuiManipulator implements IScreen {
         }
     }
 
-    private void send() {
-        //Client
+    private void refreshScalingAndOffset(){
         scaling = new Vec3d(
                 Double.parseDouble(scalingXField.getText()),
                 Double.parseDouble(scalingYField.getText()),
                 Double.parseDouble(scalingZField.getText())
         );
 
-        final ManipulatorToClientPacket clientPacket = new ManipulatorToClientPacket(
-                new Vec3d(
-                        Double.parseDouble(positionXField.getText()),
-                        Double.parseDouble(heightYField.getText()),
-                        Double.parseDouble(positionZField.getText())),
-                rotation,
-                blockPos,
-                scaling,
-                cascadeBox.isChecked()
+        offset = new Vec3d(
+                Double.parseDouble(positionXField.getText()),
+                Double.parseDouble(heightYField.getText()),
+                Double.parseDouble(positionZField.getText())
         );
-        clientPacket.sendToAll();
+    }
+
+    private void updateClientBlock() {
+        refreshScalingAndOffset();
+
+        //Client
+        World world = MinecraftClient.getPlayer().getWorld();
+        IManipulate.applyChanges(world, blockPos, cascadeBox.isChecked(), offset, rotation, scaling);
+
     }
 
     private void setAllInvisible() {
@@ -431,7 +430,7 @@ public class GuiManipulator implements IScreen {
             @Override
             public void onSlider() {
                 rotation = rotationSlider.getValueInt();
-                send();
+                updateClientBlock();
             }
         };
     }
