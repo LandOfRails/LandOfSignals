@@ -7,8 +7,6 @@ newmtl m_2
 map_Kd upper_lamp.png 
 newmtl m_4
 map_Kd gray.png 
-newmtl m_5
-map_Kd clear.png 
 newmtl m_6
 map_Kd pole.png 
 newmtl none
