@@ -33,7 +33,7 @@ public class TileSignalPartRender {
     }
 
     private static final Map<String, OBJModel> cache = new HashMap<>();
-    private static final Map<String, Map<String, Flare[]>> flareCache = new HashMap<>();
+    private static final Map<String, Map<String, List<Flare>>> flareCache = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
@@ -163,17 +163,17 @@ public class TileSignalPartRender {
         // TODO Do it sooner. And maybe there is a better implementation?
         if (!flareCache.containsKey(id)) {
             try {
-                Map<String, List<Flare>> dynStateFlares = new HashMap<>();
+                Map<String, List<Flare>> stateFlares = new HashMap<>();
                 Flare[] flares = signal.getFlares();
                 for(Flare flare : flares){
                     String[] flareStates = flare.getStates();
+                    if(flare.isAlwaysOn())
+                        flareStates = signal.getStates(); // All states
                     for(String state : flareStates){
-                        dynStateFlares.putIfAbsent(state, new ArrayList<>());
-                        dynStateFlares.get(state).add(flare);
+                        stateFlares.putIfAbsent(state, new ArrayList<>());
+                        stateFlares.get(state).add(flare);
                     }
                 }
-                Map<String, Flare[]> stateFlares = new HashMap<>();
-                dynStateFlares.forEach((dynState, dynFlares) -> stateFlares.put(dynState, dynFlares.toArray(new Flare[0])));
                 flareCache.put(id, stateFlares);
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
@@ -181,7 +181,7 @@ public class TileSignalPartRender {
         }
 
         final String signalState = tile.getState();
-        Flare[] flares = flareCache.get(id).get(signalState);
+        List<Flare> flares = flareCache.get(id).get(signalState);
 
         if(flares == null) {
             // No flares - no rendering
