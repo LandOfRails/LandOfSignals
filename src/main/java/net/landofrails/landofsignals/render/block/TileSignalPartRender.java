@@ -24,6 +24,7 @@ import net.landofrails.landofsignals.utils.VecUtil;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
@@ -194,8 +195,10 @@ public class TileSignalPartRender {
             final String objPath = signal.getModel();
             final OBJModel model = cache.get(objPath);
             Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId); // TODO Preload this as well?
-            String errMsg = String.format("Uh oh. Did not find %s in model %s", flareId, objPath);
-            Map.Entry<String, OBJGroup> flareGroup = model.groups.entrySet().stream().filter(isLightFlare).findFirst().orElseThrow(() -> new RuntimeException(errMsg));
+            String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
+            Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            if(flareGroups.isEmpty())
+                throw new RuntimeException(errMsg);
 
             float red = flare.getRenderColor()[0];
             float green = flare.getRenderColor()[1];
@@ -207,12 +210,19 @@ public class TileSignalPartRender {
 
             Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
 
-            double scale = Math.max(flareGroup.getValue().max.z - flareGroup.getValue().min.z, flareGroup.getValue().max.x - flareGroup.getValue().min.x);
+            Collection<OBJGroup> flareGroupsOBJGroups = flareGroups.values();
+            double maxZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.z).max().getAsDouble();
+            double minZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.z).min().getAsDouble();
+            double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
+            double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
+
+            double scale = Math.max(maxZ - minZ, maxX - minX);
+
 
             // Translation and Intensity calculations
 
             Vec3d centerOfModel = model.centerOfGroups(model.groups());
-            Vec3d centerOfLightFlare = model.centerOfGroups(Collections.singleton(flareGroup.getKey()));
+            Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
             Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
             modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
             Vec3d flareCenterOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block

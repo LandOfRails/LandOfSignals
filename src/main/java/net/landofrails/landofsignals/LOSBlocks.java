@@ -117,7 +117,7 @@ public class LOSBlocks {
                 "red"
         });
         light_flare.setFlares(new Flare[]{
-                new Flare("lightflare_1", "165;32;25", 180, 0, 0.44f, false, new String[]{"red"}),
+                new Flare("ul", "165;32;25", 180, 0, 0.426f, false, new String[]{"red"}),
                 new Flare("lightflare_2", "229;189;1", 180, 0, 0.44f, false, new String[]{"yellow"})
         });
         registerSignalContentPack(light_flare);
