@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
+    private static final Identifier LIGHT_TEX = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
+
     private TileSignalPartRender() {
 
     }
@@ -59,10 +61,8 @@ public class TileSignalPartRender {
         }
         renderSignals(id, signal, tsp, state.clone());
 
-        // TODO remove/adjust when generalized
-        if(id.contains("block_signal_part_light_flare"))
+        if(signal.getFlares().length > 0)
             renderFlares(id, signal, tsp, state.clone());
-        //
 
         if(tsp.isHighlighting()){
             HighlightingUtil.renderHighlighting(state.clone());
@@ -162,22 +162,7 @@ public class TileSignalPartRender {
 
         // TODO Do it sooner. And maybe there is a better implementation?
         if (!flareCache.containsKey(id)) {
-            try {
-                Map<String, List<Flare>> stateFlares = new HashMap<>();
-                Flare[] flares = signal.getFlares();
-                for(Flare flare : flares){
-                    String[] flareStates = flare.getStates();
-                    if(flare.isAlwaysOn())
-                        flareStates = signal.getStates(); // All states
-                    for(String state : flareStates){
-                        stateFlares.putIfAbsent(state, new ArrayList<>());
-                        stateFlares.get(state).add(flare);
-                    }
-                }
-                flareCache.put(id, stateFlares);
-            } catch (Exception e) {
-                throw new ItemRenderException("Error loading item model/renderer...", e);
-            }
+            cacheFlares(id, signal);
         }
 
         final String signalState = tile.getState();
@@ -190,15 +175,6 @@ public class TileSignalPartRender {
 
         for(Flare flare : flares){
             RenderState flareState = renderState.clone();
-            String flareId = flare.getId();
-
-            final String objPath = signal.getModel();
-            final OBJModel model = cache.get(objPath);
-            Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId); // TODO Preload this as well?
-            String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
-            Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            if(flareGroups.isEmpty())
-                throw new RuntimeException(errMsg);
 
             float red = flare.getRenderColor()[0];
             float green = flare.getRenderColor()[1];
@@ -206,32 +182,15 @@ public class TileSignalPartRender {
 
             int flareRotation = flare.getRotation();
             int flarePitch = flare.getPitch();
-            float flareOffset = flare.getOffset();
 
-            Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
-
-            Collection<OBJGroup> flareGroupsOBJGroups = flareGroups.values();
-            double maxZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.z).max().getAsDouble();
-            double minZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.z).min().getAsDouble();
-            double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
-            double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
-
-            double scale = Math.max(maxZ - minZ, maxX - minX);
-
+            double scale = flare.getPrecalculatedData().scale;
 
             // Translation and Intensity calculations
-
-            Vec3d centerOfModel = model.centerOfGroups(model.groups());
-            Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
-            Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-            modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
-            Vec3d flareCenterOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
-            Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
 
             Vec3d playerOffset = VecUtil.rotateWrongYaw(
                             new Vec3d(tile.getPos()).subtract(MinecraftClient.getPlayer().getPosition()),
                             tile.getBlockRotate() + 180).
-                            subtract(combinedOffset);
+                            subtract(flare.getPrecalculatedData().combinedOffset);
 
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
@@ -240,18 +199,18 @@ public class TileSignalPartRender {
 
             //
 
-            flareState.texture(Texture.wrap(lightTex))
+            flareState.texture(Texture.wrap(LIGHT_TEX))
                     .lightmap(1, 1)
                     .depth_test(true)
                     .depth_mask(false)
                     .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
 
-            flareState.translate(flareCenterOffset);
+            flareState.translate(flare.getPrecalculatedData().flareCenterOffset);
 
             flareState.rotate(flarePitch, 0, 0, 1);
             flareState.rotate((double) tile.getBlockRotate() + flareRotation,0,1,0);
 
-            flareState.translate(modelOffset); // move it towards the position of the light flare
+            flareState.translate(flare.getPrecalculatedData().modelOffset); // move it towards the position of the light flare
 
             // Moving flare
 
@@ -283,6 +242,66 @@ public class TileSignalPartRender {
             buffer.vertex(1, 1, 0).uv(1, 1);
             buffer.vertex(1, -1, 0).uv(1, 0);
             buffer.draw(flareState);
+        }
+
+    }
+
+    private static void cacheFlares(String id, ContentPackSignal signal){
+        try {
+            Map<String, List<Flare>> stateFlares = new HashMap<>();
+            Flare[] flares = signal.getFlares();
+            for(Flare flare : flares){
+                cacheFlare(flare, stateFlares, signal);
+            }
+            flareCache.put(id, stateFlares);
+        } catch (Exception e) {
+            throw new ItemRenderException("Error loading item model/renderer...", e);
+        }
+    }
+
+    private static void cacheFlare(Flare flare, Map<String, List<Flare>> stateFlares, ContentPackSignal signal){
+
+        final String flareId = flare.getId();
+        final String objPath = signal.getModel();
+        final OBJModel model = cache.get(objPath);
+        Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId);
+        String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
+        Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if(flareGroups.isEmpty())
+            throw new RuntimeException(errMsg);
+
+        //
+
+        Collection<OBJGroup> flareGroupsOBJGroups = flareGroups.values();
+        double maxZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.z).max().getAsDouble();
+        double minZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.z).min().getAsDouble();
+        double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
+        double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
+
+        double scale = Math.max(maxZ - minZ, maxX - minX);
+
+        //
+
+        float flareOffset = flare.getOffset();
+        Vec3d centerOfModel = model.centerOfGroups(model.groups());
+        Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
+        Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
+        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
+        Vec3d flareCenterOffset = new Vec3d(0.5f, 0.5f,0.5f); // Set position to center of block
+        Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
+
+        //
+
+        flare.savePrecalculatedData(flareGroups, scale, modelOffset, flareCenterOffset, combinedOffset);
+
+        //
+
+        String[] flareStates = flare.getStates();
+        if(flare.isAlwaysOn())
+            flareStates = signal.getStates(); // All states
+        for(String state : flareStates){
+            stateFlares.putIfAbsent(state, new ArrayList<>());
+            stateFlares.get(state).add(flare);
         }
 
     }

@@ -1,5 +1,8 @@
 package net.landofrails.api.contentpacks.v2.flares;
 
+import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.model.obj.OBJGroup;
+
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -45,6 +48,8 @@ public class Flare {
      * Required for: ContentPackComplexSignal. Groups+States that will trigger this light flare.
      */
     private Map<String, String> groupStates;
+
+    private PrecalculatedData precalculatedData;
 
     public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, String[] states) {
         this.id = id;
@@ -154,6 +159,39 @@ public class Flare {
         }
 
         return rgb;
+    }
+
+    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, double scale, Vec3d modelOffset, Vec3d flareCenterOffset, Vec3d combinedOffset) {
+        if(this.precalculatedData != null)
+            return;
+        this.precalculatedData = new PrecalculatedData(flareGroups, scale, modelOffset, flareCenterOffset, combinedOffset);
+    }
+
+    public PrecalculatedData getPrecalculatedData() {
+        return precalculatedData;
+    }
+
+    public class PrecalculatedData {
+
+        public final Map<String, OBJGroup> flareGroups;
+
+        public final double scale;
+
+        public final Vec3d modelOffset;
+
+        public final Vec3d flareCenterOffset;
+
+        public final Vec3d combinedOffset;
+
+        public PrecalculatedData(Map<String, OBJGroup> flareGroups, double scale, Vec3d modelOffset, Vec3d flareCenterOffset, Vec3d combinedOffset){
+            this.flareGroups = flareGroups;
+            this.scale = scale;
+            this.modelOffset = modelOffset;
+            this.flareCenterOffset = flareCenterOffset;
+            this.combinedOffset = combinedOffset;
+        }
+
+
     }
 
 }
