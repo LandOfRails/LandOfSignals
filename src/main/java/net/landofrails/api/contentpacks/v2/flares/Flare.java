@@ -16,6 +16,22 @@ public class Flare {
     private String color = "#FFFFFF";
 
     /**
+     * Required. Will set the rotation of the flare.
+     */
+    private Integer rotation;
+
+    /**
+     * Optional. Will set the pitch of the flare. Default: 0
+     */
+    private Integer pitch = 0;
+
+    /**
+     * Required. Will set the offset of the flare.
+     */
+    private Float offset;
+
+
+    /**
      * Optional. Will always activate light flare. Default: false
      */
     private boolean alwaysOn = false;
@@ -30,16 +46,22 @@ public class Flare {
      */
     private Map<String, String> groupStates;
 
-    public Flare(String id, String color, boolean alwaysOn, String[] states) {
+    public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, String[] states) {
         this.id = id;
         this.color = color;
+        this.rotation = rotation;
+        this.pitch = pitch;
+        this.offset = offset;
         this.alwaysOn = alwaysOn;
         this.states = states;
     }
 
-    public Flare(String id, String color, boolean alwaysOn, Map<String, String> groupStates) {
+    public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, Map<String, String> groupStates) {
         this.id = id;
         this.color = color;
+        this.rotation = rotation;
+        this.pitch = pitch;
+        this.offset = offset;
         this.alwaysOn = alwaysOn;
         this.groupStates = groupStates;
     }
@@ -58,6 +80,30 @@ public class Flare {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Integer getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(Integer rotation) {
+        this.rotation = rotation;
+    }
+
+    public Integer getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(Integer pitch) {
+        this.pitch = pitch;
+    }
+
+    public Float getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Float offset) {
+        this.offset = offset;
     }
 
     public boolean isAlwaysOn() {

@@ -24,9 +24,6 @@ import net.landofrails.landofsignals.utils.VecUtil;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TileSignalPartRender {
 
@@ -190,27 +187,6 @@ public class TileSignalPartRender {
             return;
         }
 
-        Pattern rotationPattern = Pattern.compile("rot\\d{1,3}");
-        UnaryOperator<String> retrieveRotation = flareGroup -> {
-            Matcher matcher = rotationPattern.matcher(flareGroup);
-            matcher.find();
-            return matcher.group().replace("rot", "");
-        };
-
-        Pattern pitchPattern = Pattern.compile("pitch\\d{1,3}");
-        UnaryOperator<String> retrievePitch = flareGroup -> {
-            Matcher matcher = pitchPattern.matcher(flareGroup);
-            matcher.find();
-            return matcher.group().replace("pitch", "");
-        };
-
-        Pattern offsetPattern = Pattern.compile("offset\\d{1,5}");
-        UnaryOperator<String> retrieveOffset = flareGroup -> {
-            Matcher matcher = offsetPattern.matcher(flareGroup);
-            matcher.find();
-            return matcher.group().replace("offset", "");
-        };
-
         for(Flare flare : flares){
             RenderState flareState = renderState.clone();
             String flareId = flare.getId();
@@ -225,9 +201,9 @@ public class TileSignalPartRender {
             float green = flare.getRenderColor()[1];
             float blue = flare.getRenderColor()[2];
 
-            int flareRotation = Integer.parseInt(retrieveRotation.apply(flareGroup.getKey()));
-            int flarePitch = Integer.parseInt(retrievePitch.apply(flareGroup.getKey()));
-            float flareOffset = Float.parseFloat(retrieveOffset.apply(flareGroup.getKey())) / 1000f;
+            int flareRotation = flare.getRotation();
+            int flarePitch = flare.getPitch();
+            float flareOffset = flare.getOffset();
 
             Identifier lightTex = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
 
