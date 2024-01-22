@@ -34,6 +34,9 @@ public class ItemSignalPart extends CustomItem {
 
     private static final String ITEMIDKEY = "itemId";
     private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
+    private static final String MSG_HAS_FLARES = "message.landofsignals:signalpart.hasflares";
+    private static final String MSG_LOS_TRUE = "message.landofsignals:true";
+    private static final String MSG_LOS_FALSE = "message.landofsignals:false";
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
@@ -142,6 +145,10 @@ public class ItemSignalPart extends CustomItem {
                 tooltips.add(TextUtil.translate(MSG_NOT_UTF8));
             }
 
+            boolean hasFlares = LOSBlocks.BLOCK_SIGNAL_PART.getContentpackSignals().get(itemId).getFlares().length > 0;
+            String hasFlaresRawText = TextUtil.translate(hasFlares ? MSG_LOS_TRUE : MSG_LOS_FALSE);
+            // String has to be converted by us, build pipeline is not able to do it itself.
+            tooltips.add(TextUtil.translate(MSG_HAS_FLARES, new Object[]{hasFlaresRawText}));
         }
         return tooltips;
     }

@@ -26,7 +26,7 @@ import java.util.Optional;
 public class ItemSignPart extends CustomItem {
 
     private static final String ITEMIDKEY = "itemId";
-    private static final String MSG_LOS_SIGNS_WRITEABLE = "message.landogsignals:signs.writeable";
+    private static final String MSG_LOS_SIGNS_WRITEABLE = "message.landofsignals:signs.writeable";
     private static final String MSG_LOS_TRUE = "message.landofsignals:true";
     private static final String MSG_LOS_FALSE = "message.landofsignals:false";
     private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
