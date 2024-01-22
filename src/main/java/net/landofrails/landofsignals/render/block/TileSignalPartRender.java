@@ -160,7 +160,6 @@ public class TileSignalPartRender {
 
     private static void renderFlares(String id, ContentPackSignal signal, TileSignalPart tile, RenderState renderState) {
 
-        // TODO Do it sooner. And maybe there is a better implementation?
         if (!flareCache.containsKey(id)) {
             cacheFlares(id, signal);
         }
@@ -204,6 +203,8 @@ public class TileSignalPartRender {
                     .depth_test(true)
                     .depth_mask(false)
                     .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
+
+            flareState.translate(tile.getOffset());
 
             flareState.translate(flare.getPrecalculatedData().flareCenterOffset);
 
