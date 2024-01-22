@@ -246,7 +246,7 @@ public class TileSignalPartRender {
 
     }
 
-    private static void cacheFlares(String id, ContentPackSignal signal){
+    public static void cacheFlares(String id, ContentPackSignal signal){
         try {
             Map<String, List<Flare>> stateFlares = new HashMap<>();
             Flare[] flares = signal.getFlares();

@@ -167,6 +167,7 @@ public class ContentPackHandler {
             // Cache blocks
             try {
                 TileSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                TileSignalPartRender.cacheFlares(id, signal);
             } catch (Exception e) {
                 String errmsg = "Couldn't preload block with id \"%s\" (objPath: %s). Cause:";
                 throw new ContentPackException(String.format(errmsg, id, objPath), e);
