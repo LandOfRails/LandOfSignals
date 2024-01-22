@@ -137,7 +137,6 @@ public class TileSignalPartRender {
         scale[1] *= customScaling.y;
         scale[2] *= customScaling.z;
 
-
         state.scale(scale[0], scale[1], scale[2]);
         state.translate(translate);
         state.rotate(tile.getBlockRotate(), 0, 1, 0);
@@ -204,6 +203,7 @@ public class TileSignalPartRender {
                     .depth_mask(false)
                     .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
 
+            flareState.scale(tile.getScaling());
             flareState.translate(tile.getOffset());
 
             flareState.translate(flare.getPrecalculatedData().flareCenterOffset);
