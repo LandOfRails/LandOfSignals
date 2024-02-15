@@ -422,16 +422,30 @@ public class LOSBlocks {
 
         registerLeverContentPack(
                 "switchstand_jake",
-                "Switch stand by Jake Steampson (left)",
-                models("models/block/landofsignals/switchstand_jake/left/switch_left_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
-                models("models/block/landofsignals/switchstand_jake/left/switch_left_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
+                "Switch stand by Jake Steampson (right side, left turn)",
+                models("models/block/landofsignals/switchstand_jake/right_side_left_turn/right_side_left_turn_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
+                models("models/block/landofsignals/switchstand_jake/right_side_left_turn/right_side_left_turn_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
         );
 
         registerLeverContentPack(
-                "switchstand_jake_right",
-                "Switch stand by Jake Steampson (right)",
-                models("models/block/landofsignals/switchstand_jake/right/switch_right_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
-                models("models/block/landofsignals/switchstand_jake/right/switch_right_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
+                "switchstand_jake_right_side_left_turn",
+                "Switch stand by Jake Steampson (right side, right turn)",
+                models("models/block/landofsignals/switchstand_jake/right_side_right_turn/right_side_right_turn_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
+                models("models/block/landofsignals/switchstand_jake/right_side_right_turn/right_side_right_turn_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
+        );
+
+        registerLeverContentPack(
+                "switchstand_jake_left_side_left_turn",
+                "Switch stand by Jake Steampson (left side, left turn)",
+                models("models/block/landofsignals/switchstand_jake/left_side_left_turn/left_side_left_turn_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
+                models("models/block/landofsignals/switchstand_jake/left_side_left_turn/left_side_left_turn_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
+        );
+
+        registerLeverContentPack(
+                "switchstand_jake_left_side_right_turn",
+                "Switch stand by Jake Steampson (left side, right turn)",
+                models("models/block/landofsignals/switchstand_jake/left_side_right_turn/left_side_right_turn_on.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})}),
+                models("models/block/landofsignals/switchstand_jake/left_side_right_turn/left_side_right_turn_off.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0f, 180f, 0f})})
         );
 
     }
