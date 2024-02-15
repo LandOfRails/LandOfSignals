@@ -140,7 +140,7 @@ jobs:
       - name: Read SUFFIX file
         id: getsuffix
         run: echo "suffix=$(cat SUFFIX)" >> $GITHUB_OUTPUT
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - run: mkdir upload
       - run: cp **/LandOfSignals-*.jar upload
       - name: Upload to GitHub
