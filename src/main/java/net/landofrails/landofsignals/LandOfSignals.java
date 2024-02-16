@@ -11,7 +11,7 @@ import cam72cam.mod.render.GlobalRender;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.text.Command;
-import net.landofrails.landofsignals.commands.ConfigCommand;
+import net.landofrails.landofsignals.commands.LandOfSignalsCommand;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.contentpacks.ContentPackHandler;
 import net.landofrails.landofsignals.gui.overlay.ManipualtorOverlay;
@@ -29,7 +29,7 @@ public class LandOfSignals extends ModCore.Mod {
     public static final String MODID = "landofsignals";
     // Current version
     @SuppressWarnings("unused")
-    public static final String VERSION = "1.3.1";
+    public static final String VERSION = "1.3.2";
 
     @Override
     public String modID() {
@@ -64,10 +64,12 @@ public class LandOfSignals extends ModCore.Mod {
             Packet.register(SignalUpdatePacket::new, PacketDirection.ServerToClient);
             Packet.register(SignTextPacket::new, PacketDirection.ClientToServer);
             Packet.register(SignTextPacket::new, PacketDirection.ServerToClient);
-            Packet.register(ConfigGuiPacket::new, PacketDirection.ServerToClient);
+            Packet.register(CommandClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToClientPacket::new, PacketDirection.ServerToClient);
             Packet.register(GuiSignalPrioritizationToServerPacket::new, PacketDirection.ClientToServer);
             Packet.register(GuiItemManipulatorToClient::new, PacketDirection.ServerToClient);
+
+            Command.register(new LandOfSignalsCommand());
         } else if (event == ModEvent.INITIALIZE) {
             // LandOfSignals Config
             ConfigFile.sync(LandOfSignalsConfig.class);
@@ -116,8 +118,6 @@ public class LandOfSignals extends ModCore.Mod {
                 BlockRender.register(LOSBlocks.BLOCK_SIGNAL_SO_12, TileMissingRender::render, TileSignalSO12.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_DB, TileMissingRender::render, TileTicketMachineDB.class);
                 BlockRender.register(LOSBlocks.BLOCK_TICKET_MACHINE_SBB, TileMissingRender::render, TileTicketMachineSBB.class);
-
-                Command.register(new ConfigCommand());
 
                 break;
             case SETUP:

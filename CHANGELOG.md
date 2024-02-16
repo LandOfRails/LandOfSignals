@@ -1,3 +1,12 @@
+### Release 1.3.2
+
+* Fixed [#151] : Rail switch always points left from either perspective
+* Added [#151] : Added three more versions of the switch stand
+
+
+* Added : SH2 with light as top and full version
+* Improved : LF1 model (fixed lights)
+
 ### Release 1.3.1
 
 * Fixed [#143] : Manipulator didn't work on multiplayer (NullPointerException on client)

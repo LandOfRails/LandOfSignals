@@ -34,6 +34,8 @@ public class ContentPackHandler {
 
     private static final String BASE_IDENTIFIER = "/base/";
 
+    private static final Map<GenericContentPack, Map.Entry<Boolean, String>> contentpackHeaders = new HashMap<>();
+
     private ContentPackHandler() {
 
     }
@@ -108,6 +110,7 @@ public class ContentPackHandler {
                     zip.getInputStream(zip.getEntry(landofsignalsJson.getName())));
 
             if (!genericContentPack.isValid()) {
+                contentpackHeaders.put(genericContentPack, new AbstractMap.SimpleEntry<>(isUTF8, "FAILED"));
                 LandOfSignals.error("Failed loading ZIP named %s!\nNot all required fields have been set.", zip.getName());
                 return;
             }
@@ -122,14 +125,15 @@ public class ContentPackHandler {
 
             if ("1".equals(addonversion)) {
                 ContentPackHandlerV1.load(zip, landofsignalsJson.getName(), isUTF8);
-
+                contentpackHeaders.put(genericContentPack, new AbstractMap.SimpleEntry<>(isUTF8, "HEAD OK - v1"));
             } else if ("2".equals(addonversion)) {
                 ContentPackHandlerV2.load(zip, landofsignalsJson.getName(), isUTF8);
-
+                contentpackHeaders.put(genericContentPack, new AbstractMap.SimpleEntry<>(isUTF8, "HEAD OK - v2"));
             } else {
                 LandOfSignals.error("Failed loading Contentpack named %s!\nUnsupported addonversion: %s." +
                         " Either your version of LandOfSignals is not up-to-date" +
                         " or the author used an invalid addonversion.", genericContentPack.getName(), addonversion);
+                contentpackHeaders.put(genericContentPack, new AbstractMap.SimpleEntry<>(isUTF8, "UNSUPPORTED ADDONVERSION - " + addonversion));
             }
 
 
@@ -468,6 +472,10 @@ public class ContentPackHandler {
         newTranslation[2] = 0.5f;
 
         return newTranslation;
+    }
+
+    public static Map<GenericContentPack, Map.Entry<Boolean, String>> getContentpackHeaders(){
+        return Collections.unmodifiableMap(contentpackHeaders);
     }
 
     // For method references
