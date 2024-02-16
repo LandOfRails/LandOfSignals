@@ -82,4 +82,8 @@ public final class GenericContentPack {
         return gson.fromJson(json, GenericContentPack.class);
     }
 
+    public String toShortString(){
+        return String.format("[Addonversion: %s; Name: %s; Packversion: %s; Author: %s]", addonversion, name, packversion, author);
+    }
+
 }
