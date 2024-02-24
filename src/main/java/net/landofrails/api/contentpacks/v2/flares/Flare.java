@@ -49,6 +49,16 @@ public class Flare {
      */
     private Map<String, String> groupStates;
 
+    /**
+     * Required if: signal/sign/signalbox/asset contains more than one OBJ. Maps the flare to the specified obj
+     */
+    private String objPath;
+
+    /**
+     * Required if: Only parts of the OBJ are used. Needed to calculate accurate center of model
+     */
+    private String[] objGroups;
+
     private PrecalculatedData precalculatedData;
 
     public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, String[] states) {
@@ -69,6 +79,15 @@ public class Flare {
         this.offset = offset;
         this.alwaysOn = alwaysOn;
         this.groupStates = groupStates;
+    }
+
+    public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn) {
+        this.id = id;
+        this.color = color;
+        this.rotation = rotation;
+        this.pitch = pitch;
+        this.offset = offset;
+        this.alwaysOn = alwaysOn;
     }
 
     public String getId() {
@@ -133,6 +152,22 @@ public class Flare {
 
     public void setGroupStates(Map<String, String> groupStates) {
         this.groupStates = groupStates;
+    }
+
+    public String getObjPath() {
+        return objPath;
+    }
+
+    public void setObjPath(String objPath) {
+        this.objPath = objPath;
+    }
+
+    public String[] getObjGroups() {
+        return objGroups;
+    }
+
+    public void setObjGroups(String[] objGroups) {
+        this.objGroups = objGroups;
     }
 
     public float[] getRenderColor(){

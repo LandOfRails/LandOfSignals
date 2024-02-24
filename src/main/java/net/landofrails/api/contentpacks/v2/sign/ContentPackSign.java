@@ -3,6 +3,7 @@ package net.landofrails.api.contentpacks.v2.sign;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 import net.landofrails.landofsignals.LOSTabs;
@@ -24,6 +25,7 @@ public class ContentPackSign {
     private Boolean writeable;
     // objPath : objProperties
     private Map<String, ContentPackModel[]> base;
+    private Flare[] flares;
     private ContentPackReferences references;
     // metadataId : data
     private Map<String, Object> metadata;
@@ -47,6 +49,14 @@ public class ContentPackSign {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public Float getRotationSteps() {
@@ -157,6 +167,8 @@ public class ContentPackSign {
                 Consumer<String> signConsumer = text -> invalid.accept(signModelEntry.getKey() + ": [" + text + "]");
                 Stream.of(signModelEntry.getValue()).forEach(model -> model.validate(signConsumer, references));
             }
+        }else if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
+            invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
         }
 
         if (objTextures.isEmpty()) {
@@ -194,10 +206,25 @@ public class ContentPackSign {
             base = new HashMap<>();
         }
 
-
         if (objTextures == null) {
             objTextures = new HashMap<>();
         }
+
+        if(flares == null){
+            flares = new Flare[0];
+        }
+
+        for(Flare flare : flares){
+            if(flare.getObjPath() == null && base.size() == 1){
+                String firstEntryKey = base.keySet().iterator().next();
+                flare.setObjPath(firstEntryKey);
+                String[] groups = base.get(firstEntryKey)[0].getObj_groups();
+                if(groups == null)
+                    groups = new String[0];
+                flare.setObjGroups(groups);
+            }
+        }
+
     }
 
     public void setUTF8(boolean isUTF8) {
