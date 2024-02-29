@@ -246,7 +246,8 @@ public class FlareUtils {
         Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
         Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
         modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
-        Vec3d flareCenterOffset = new Vec3d(modelTranslation[0], modelTranslation[1], modelTranslation[2]);
+        float yCorrection = 0.5f;
+        Vec3d flareCenterOffset = new Vec3d(modelTranslation[0], modelTranslation[1] + yCorrection, modelTranslation[2]);
         Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
 
         //
