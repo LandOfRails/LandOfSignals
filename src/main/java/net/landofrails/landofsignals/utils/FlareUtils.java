@@ -105,14 +105,16 @@ public class FlareUtils {
         final String flareId = flare.getId();
         final OBJModel model = TileSignPartRender.cache().get(objPath);
 
-        // TODO hopefully this work :O
+        float[] modelTranslation = sign.getBase().get(flare.getObjPath())[0].getBlock().getTranslation();
+        float[] modelScaling = sign.getBase().get(flare.getObjPath())[0].getBlock().getScaling();
+
         String errMsg = String.format("Uh oh. Did not find obj_path %s in model %s for flare %s", flare.getObjPath(), sign.getUniqueId(), flareId);
         if(model == null)
             throw new RuntimeException(errMsg);
 
         //
 
-        cacheFlare(flare, flareId, model, objPath);
+        cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
         cachedFlares.add(flare);
     }
 
@@ -122,11 +124,12 @@ public class FlareUtils {
         final String objPath = signal.getModel();
         final OBJModel model = TileSignalPartRender.cache().get(objPath);
 
+        float[] modelTranslation = signal.getTranslation();
+        float[] modelScaling = signal.getScaling();
+
         //
 
-        cacheFlare(flare, flareId, model, objPath);
-
-        //
+        cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
 
         String[] flareStates = flare.getStates();
         if(flare.isAlwaysOn())
@@ -216,7 +219,7 @@ public class FlareUtils {
         }
     }
 
-    private static void cacheFlare(Flare flare, String flareId, OBJModel model, String objPath){
+    private static void cacheFlare(Flare flare, String flareId, OBJModel model, String objPath, float[] modelTranslation, float[] modelScaling){
         Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId);
         String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
         Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -231,7 +234,7 @@ public class FlareUtils {
         double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
         double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
 
-        double scale = Math.max(maxZ - minZ, maxX - minX);
+        double scale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]);
 
         //
 
@@ -243,7 +246,7 @@ public class FlareUtils {
         Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
         Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
         modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
-        Vec3d flareCenterOffset = new Vec3d(0.5f, centerOfModel.y,0.5f);; // new Vec3d(0.5f, 0.5f,0.5f); // FIXME Set position to center of block => Is this correct for blocks with a height of over 1?
+        Vec3d flareCenterOffset = new Vec3d(modelTranslation[0], modelTranslation[1], modelTranslation[2]);
         Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
 
         //

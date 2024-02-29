@@ -169,6 +169,8 @@ public class ContentPackSign {
             }
         }else if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
             invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
+        }else if(Arrays.stream(flares).anyMatch(flare -> base.get(flare.getObjPath()).length != 1)){
+            invalid.accept("Flare has obj path that is not distinct (exists more than once), this sadly doesn't work.");
         }
 
         if (objTextures.isEmpty()) {
