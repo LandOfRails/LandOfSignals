@@ -163,6 +163,8 @@ public class Flare {
     }
 
     public String[] getObjGroups() {
+        if(objGroups == null)
+            objGroups = new String[0];
         return objGroups;
     }
 
@@ -196,10 +198,10 @@ public class Flare {
         return rgb;
     }
 
-    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, double scale, Vec3d modelOffset, Vec3d flareCenterOffset, Vec3d combinedOffset) {
+    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d offset, Vec3d rotation) {
         if(this.precalculatedData != null)
             return;
-        this.precalculatedData = new PrecalculatedData(flareGroups, scale, modelOffset, flareCenterOffset, combinedOffset);
+        this.precalculatedData = new PrecalculatedData(flareGroups, scale, lampScale, offset, rotation);
     }
 
     public PrecalculatedData getPrecalculatedData() {
@@ -210,22 +212,21 @@ public class Flare {
 
         public final Map<String, OBJGroup> flareGroups;
 
-        public final double scale;
+        public final Vec3d scale;
 
-        public final Vec3d modelOffset;
+        public final double lampScale;
 
-        public final Vec3d flareCenterOffset;
+        public final Vec3d rotation;
 
-        public final Vec3d combinedOffset;
+        public final Vec3d offset;
 
-        public PrecalculatedData(Map<String, OBJGroup> flareGroups, double scale, Vec3d modelOffset, Vec3d flareCenterOffset, Vec3d combinedOffset){
+        public PrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d offset, Vec3d rotation){
             this.flareGroups = flareGroups;
             this.scale = scale;
-            this.modelOffset = modelOffset;
-            this.flareCenterOffset = flareCenterOffset;
-            this.combinedOffset = combinedOffset;
+            this.lampScale = lampScale;
+            this.offset = offset;
+            this.rotation = rotation;
         }
-
 
     }
 

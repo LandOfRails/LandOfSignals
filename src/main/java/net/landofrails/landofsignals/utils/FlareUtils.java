@@ -151,17 +151,16 @@ public class FlareUtils {
             float green = flare.getRenderColor()[1];
             float blue = flare.getRenderColor()[2];
 
-            int flareRotation = flare.getRotation();
-            int flarePitch = flare.getPitch();
+            Vec3d flareRotation = flare.getPrecalculatedData().rotation;
 
-            double scale = flare.getPrecalculatedData().scale;
+            double scale = flare.getPrecalculatedData().lampScale;
 
             // Translation and Intensity calculations
 
             Vec3d playerOffset = VecUtil.rotateWrongYaw(
                             new Vec3d(pos).subtract(MinecraftClient.getPlayer().getPosition()),
                             blockRotate + 180).
-                    subtract(flare.getPrecalculatedData().combinedOffset);
+                    subtract(flare.getPrecalculatedData().offset);
 
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
@@ -177,14 +176,13 @@ public class FlareUtils {
                     .alpha_test(false).blend(new BlendMode(BlendMode.GL_SRC_ALPHA, BlendMode.GL_ONE_MINUS_SRC_ALPHA));
 
             flareState.scale(scaling);
+
             flareState.translate(offset);
+            flareState.translate(flare.getPrecalculatedData().offset);
 
-            flareState.translate(flare.getPrecalculatedData().flareCenterOffset);
-
-            flareState.rotate(flarePitch, 0, 0, 1);
-            flareState.rotate((double) blockRotate + flareRotation,0,1,0);
-
-            flareState.translate(flare.getPrecalculatedData().modelOffset); // move it towards the position of the light flare
+            flareState.rotate(flareRotation.x, 1,0,0);
+            flareState.rotate(flareRotation.y + blockRotate,0,1,0);
+            flareState.rotate(flareRotation.z, 0,0, 1);
 
             // Moving flare
 
@@ -234,9 +232,9 @@ public class FlareUtils {
         double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
         double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
 
-        double scale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]);
+        double lampScale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]);
 
-        //
+        /*
 
         float flareOffset = flare.getOffset();
         Set<String> groups = flare.getObjGroups() != null && flare.getObjGroups().length > 0
@@ -250,9 +248,30 @@ public class FlareUtils {
         Vec3d flareCenterOffset = new Vec3d(modelTranslation[0], modelTranslation[1] + yCorrection, modelTranslation[2]);
         Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
 
-        //
+        */
 
-        flare.savePrecalculatedData(flareGroups, scale, modelOffset, flareCenterOffset, combinedOffset);
+        // Scaling for the flare from the block in the contentpack
+        Vec3d scaling = new Vec3d(modelScaling[0], modelScaling[1], modelScaling[2]);
+
+        Set<String> groups = flare.getObjGroups().length > 0
+                ? Arrays.stream(flare.getObjGroups()).collect(Collectors.toSet())
+                : model.groups();
+        Vec3d centerOfModel = model.centerOfGroups(groups);
+
+        double xCorrection = centerOfModel.x;
+        double yCorrection = centerOfModel.y;
+        double zCorrection= -(centerOfModel.z + flare.getOffset());
+        Vec3d offset = new Vec3d(modelTranslation[0] + xCorrection, modelTranslation[1] + yCorrection, modelTranslation[2] + zCorrection);
+
+        Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
+        Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
+        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z);
+        offset = offset.add(modelOffset);
+
+        // Rotation for the flare from the contentpack
+        Vec3d rotation = new Vec3d(0, flare.getRotation(), flare.getPitch());
+
+        flare.savePrecalculatedData(flareGroups, scaling, lampScale, offset, rotation);
     }
 
 }

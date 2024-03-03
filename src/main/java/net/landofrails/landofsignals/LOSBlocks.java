@@ -117,8 +117,8 @@ public class LOSBlocks {
                 "red"
         });
         light_flare.setFlares(new Flare[]{
-                new Flare("ul", "165;32;25", 180, 0, 0.426f, false, new String[]{"red"}),
-                new Flare("ll", "229;189;1", 180, 0, 0.426f, false, new String[]{"yellow"})
+                new Flare("ul", "165;32;25", 180, 0, 0.019f, false, new String[]{"red"}),
+                new Flare("ll", "229;189;1", 180, 0, 0.019f, false, new String[]{"yellow"})
         });
         registerSignalContentPack(light_flare);
 
@@ -137,10 +137,10 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_sh2_full_wo_light", "GSAR Schutzsignal SH2 (Full, w/o light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02"})}));
         registerSignContentPack("block_sign_part_gsar_sh2_top_wo_light", "GSAR Schutzsignal SH2 (Top, w/o light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01"})}));
         registerSignContentPack("block_sign_part_gsar_sh2_full_w_light", "GSAR Schutzsignal SH2 (Full, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02", "RedLightOn_RLOn", "RedLightOff_RLOff"})}), new Flare[]{
-                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.0025f, true)
+                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.001f, true)
         });
         registerSignContentPack("block_sign_part_gsar_sh2_top_w_light", "GSAR Schutzsignal SH2 (Top, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01", "RedLightOn_RLOn", "RedLightOff_RLOff"})}), new Flare[]{
-                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.0925f, true)
+                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.001f, true)
         });
 
         // Signs: Hecto Signs
