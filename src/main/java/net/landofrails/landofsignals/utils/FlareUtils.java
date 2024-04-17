@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class FlareUtils {
 
-    private static final Identifier LIGHT_TEX = new Identifier(LandOfSignals.MODID, "textures/light/antivignette.png");
+    private static final Identifier LIGHT_TEX = new Identifier(LandOfSignals.MODID, "textures/light/light.png");
 
     private static final Map<String, Map<String, List<Flare>>> signalpartFlareCache = new HashMap<>();
     private static final Map<String, List<Flare>> signFlareCache = new HashMap<>();
@@ -165,7 +165,8 @@ public class FlareUtils {
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
             intensity *= (float) Math.abs(playerOffset.x/50);
-            intensity = Math.min(intensity, 1.5f);
+            intensity *= 0.5f;
+            intensity = Math.min(intensity, 0.25f);
 
             //
 
@@ -232,23 +233,7 @@ public class FlareUtils {
         double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
         double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
 
-        double lampScale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]);
-
-        /*
-
-        float flareOffset = flare.getOffset();
-        Set<String> groups = flare.getObjGroups() != null && flare.getObjGroups().length > 0
-                ? Arrays.stream(flare.getObjGroups()).collect(Collectors.toSet())
-                : model.groups();
-        Vec3d centerOfModel = model.centerOfGroups(groups);
-        Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
-        Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z - flareOffset);
-        float yCorrection = 0.5f;
-        Vec3d flareCenterOffset = new Vec3d(modelTranslation[0], modelTranslation[1] + yCorrection, modelTranslation[2]);
-        Vec3d combinedOffset = flareCenterOffset.add(modelOffset);
-
-        */
+        double lampScale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]) * 0.65d;
 
         // Scaling for the flare from the block in the contentpack
         Vec3d scaling = new Vec3d(modelScaling[0], modelScaling[1], modelScaling[2]);
