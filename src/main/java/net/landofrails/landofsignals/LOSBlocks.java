@@ -122,6 +122,32 @@ public class LOSBlocks {
         });
         registerSignalContentPack(light_flare);
 
+        ContentPackSignalPart light_flare2 = new ContentPackSignalPart("block_signal_part_light_flare2", "Lightflare 5middle", "models/block/landofsignals/lightflare_test/5middle_grouped.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                "",
+                "xgxwx",
+                "xgxwy",
+                "xgxxx",
+                "xgxxy",
+                "xxrwx",
+                "xxrxx",
+                "xxxwx",
+                "xxxwy",
+                "xxxxy",
+                "yxxwx",
+                "yxxwy",
+                "yxxxx",
+                "yxxxy"
+        });
+        light_flare2.setFlares(new Flare[]{
+                new Flare("lamp5_Cube.005", "#FFDA26", 180, 0, 0.05f, false, new String[]{"yxxwx", "yxxwy", "yxxxx", "yxxxy"}),
+                new Flare("lamp4_Cube.004", "#00FF8C", 180, 0, 0.05f, false, new String[]{"xgxwx", "xgxwy", "xgxxx", "xgxxy"}),
+                new Flare("lamp3_Cube.003", "#FF0000", 180, 0, 0.05f, false, new String[]{"xxrwx", "xxrxx"}),
+                new Flare("lamp2_Cube.001", "#FFFFFF", 180, 0, 0.05f, false, new String[]{"xgxwx", "xgxwy", "xxrwx", "xxxwx", "xxxwy", "yxxwx", "yxxwy"}),
+                new Flare("lamp1_Cube.000", "#FFDA26", 180, 0, 0.05f, false, new String[]{"xgxwy", "xgxxy", "xxxwy", "xxxxy", "yxxwy", "yxxxy"})
+        });
+        registerSignalContentPack(light_flare2);
+
+
         // Animated Signals
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(MISSING_SIGNAL);
 
