@@ -10,7 +10,6 @@ import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
-import com.google.common.collect.Sets;
 import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -160,7 +159,7 @@ public class FlareUtils {
             Vec3d playerOffset = VecUtil.rotateWrongYaw(
                             new Vec3d(pos).subtract(MinecraftClient.getPlayer().getPosition()),
                             blockRotate + 180).
-                    subtract(flare.getPrecalculatedData().offset);
+                    subtract(flare.getPrecalculatedData().postOffset);
 
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
@@ -179,11 +178,13 @@ public class FlareUtils {
             flareState.scale(scaling);
 
             flareState.translate(offset);
-            flareState.translate(flare.getPrecalculatedData().offset);
+            flareState.translate(flare.getPrecalculatedData().preOffset);
 
             flareState.rotate(flareRotation.x, 1,0,0);
             flareState.rotate(flareRotation.y + blockRotate,0,1,0);
             flareState.rotate(flareRotation.z, 0,0, 1);
+
+            flareState.translate(flare.getPrecalculatedData().postOffset);
 
             // Moving flare
 
@@ -245,18 +246,19 @@ public class FlareUtils {
 
         double xCorrection = centerOfModel.x;
         double yCorrection = centerOfModel.y;
-        double zCorrection= -(centerOfModel.z + flare.getOffset());
-        Vec3d offset = new Vec3d(modelTranslation[0] + xCorrection, modelTranslation[1] + yCorrection, modelTranslation[2] + zCorrection);
+        double zCorrection = -centerOfModel.z;
+        Vec3d preOffset = new Vec3d(modelTranslation[0], modelTranslation[1], modelTranslation[2]);
+        Vec3d postOffset = new Vec3d(xCorrection, yCorrection, zCorrection);
 
         Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
         Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -modelOffset.z);
-        offset = offset.add(modelOffset);
+        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -(modelOffset.z + flare.getOffset()));
+        postOffset = postOffset.add(modelOffset);
 
         // Rotation for the flare from the contentpack
         Vec3d rotation = new Vec3d(0, flare.getRotation(), flare.getPitch());
 
-        flare.savePrecalculatedData(flareGroups, scaling, lampScale, offset, rotation);
+        flare.savePrecalculatedData(flareGroups, scaling, lampScale, preOffset, postOffset, rotation);
     }
 
 }
