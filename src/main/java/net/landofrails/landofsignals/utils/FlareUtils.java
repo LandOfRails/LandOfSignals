@@ -244,7 +244,7 @@ public class FlareUtils {
                 : model.groups();
         Vec3d centerOfModel = model.centerOfGroups(groups);
 
-        double xCorrection = centerOfModel.x;
+        double xCorrection = -centerOfModel.x;
         double yCorrection = centerOfModel.y;
         double zCorrection = -centerOfModel.z;
         Vec3d preOffset = new Vec3d(modelTranslation[0], modelTranslation[1], modelTranslation[2]);
@@ -252,7 +252,7 @@ public class FlareUtils {
 
         Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
         Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-        modelOffset = new Vec3d(modelOffset.x, modelOffset.y, -(modelOffset.z + flare.getOffset()));
+        modelOffset = new Vec3d(-modelOffset.x, modelOffset.y, -(modelOffset.z + flare.getOffset()));
         postOffset = postOffset.add(modelOffset);
 
         // Rotation for the flare from the contentpack
