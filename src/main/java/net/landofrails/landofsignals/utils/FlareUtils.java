@@ -159,7 +159,7 @@ public class FlareUtils {
             Vec3d playerOffset = VecUtil.rotateWrongYaw(
                             new Vec3d(pos).subtract(MinecraftClient.getPlayer().getPosition()),
                             blockRotate + 180).
-                    subtract(flare.getPrecalculatedData().postOffset);
+                    subtract(flare.getPrecalculatedData().preOffset);
 
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
