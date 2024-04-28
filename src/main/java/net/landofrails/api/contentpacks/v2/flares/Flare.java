@@ -2,6 +2,7 @@ package net.landofrails.api.contentpacks.v2.flares;
 
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJGroup;
+import cam72cam.mod.resource.Identifier;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -58,6 +59,11 @@ public class Flare {
      * Required if: Only parts of the OBJ are used. Needed to calculate accurate center of model
      */
     private String[] objGroups;
+
+    /**
+     * Optional. If left empty the default flare-image will be used.
+     */
+    private String texture;
 
     private PrecalculatedData precalculatedData;
 
@@ -172,6 +178,14 @@ public class Flare {
         this.objGroups = objGroups;
     }
 
+    public String getTexture() {
+        return texture;
+    }
+
+    public void setTexture(String texture) {
+        this.texture = texture;
+    }
+
     public float[] getRenderColor(){
         float[] rgb = new float[3];
 
@@ -198,10 +212,10 @@ public class Flare {
         return rgb;
     }
 
-    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation) {
+    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier) {
         if(this.precalculatedData != null)
             return;
-        this.precalculatedData = new PrecalculatedData(flareGroups, scale, lampScale, preOffset, postOffset, rotation);
+        this.precalculatedData = new PrecalculatedData(flareGroups, scale, lampScale, preOffset, postOffset, rotation, flareTextureIdentifier);
     }
 
     public PrecalculatedData getPrecalculatedData() {
@@ -222,13 +236,16 @@ public class Flare {
 
         public final Vec3d postOffset;
 
-        public PrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation){
+        public final Identifier flareTextureIdentifier;
+
+        public PrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier){
             this.flareGroups = flareGroups;
             this.scale = scale;
             this.lampScale = lampScale;
             this.preOffset = preOffset;
             this.postOffset = postOffset;
             this.rotation = rotation;
+            this.flareTextureIdentifier = flareTextureIdentifier;
         }
 
     }

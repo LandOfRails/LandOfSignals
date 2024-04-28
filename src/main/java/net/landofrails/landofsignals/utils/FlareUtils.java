@@ -145,21 +145,22 @@ public class FlareUtils {
     public static void renderFlares(Flare[] flares, Vec3i pos, int blockRotate, Vec3d scaling, Vec3d offset, RenderState renderState) {
         for(Flare flare : flares){
             RenderState flareState = renderState.clone();
+            Flare.PrecalculatedData precalculatedData = flare.getPrecalculatedData();
 
             float red = flare.getRenderColor()[0];
             float green = flare.getRenderColor()[1];
             float blue = flare.getRenderColor()[2];
 
-            Vec3d flareRotation = flare.getPrecalculatedData().rotation;
+            Vec3d flareRotation = precalculatedData.rotation;
 
-            double scale = flare.getPrecalculatedData().lampScale;
+            double scale = precalculatedData.lampScale;
 
             // Translation and Intensity calculations
 
             Vec3d playerOffset = VecUtil.rotateWrongYaw(
                             new Vec3d(pos).subtract(MinecraftClient.getPlayer().getPosition()),
                             blockRotate + 180).
-                    subtract(flare.getPrecalculatedData().preOffset);
+                    subtract(precalculatedData.preOffset);
 
             int viewAngle = 45;
             float intensity = 1 - Math.abs(Math.max(-viewAngle, Math.min(viewAngle, VecUtil.toWrongYaw(playerOffset) - 90))) / viewAngle;
@@ -169,7 +170,7 @@ public class FlareUtils {
 
             //
 
-            flareState.texture(Texture.wrap(LIGHT_TEX))
+            flareState.texture(Texture.wrap(precalculatedData.flareTextureIdentifier))
                     .lightmap(1, 1)
                     .depth_test(true)
                     .depth_mask(false)
@@ -178,13 +179,13 @@ public class FlareUtils {
             flareState.scale(scaling);
 
             flareState.translate(offset);
-            flareState.translate(flare.getPrecalculatedData().preOffset);
+            flareState.translate(precalculatedData.preOffset);
 
             flareState.rotate(flareRotation.x, 1,0,0);
             flareState.rotate(flareRotation.y + blockRotate,0,1,0);
             flareState.rotate(flareRotation.z, 0,0, 1);
 
-            flareState.translate(flare.getPrecalculatedData().postOffset);
+            flareState.translate(precalculatedData.postOffset);
 
             // Moving flare
 
@@ -258,7 +259,10 @@ public class FlareUtils {
         // Rotation for the flare from the contentpack
         Vec3d rotation = new Vec3d(0, flare.getRotation(), flare.getPitch());
 
-        flare.savePrecalculatedData(flareGroups, scaling, lampScale, preOffset, postOffset, rotation);
+        // Identifier for the flare texture
+        Identifier flareTextureIdentifier = flare.getTexture() != null ? new Identifier(LandOfSignals.MODID, flare.getTexture()) : LIGHT_TEX;
+
+        flare.savePrecalculatedData(flareGroups, scaling, lampScale, preOffset, postOffset, rotation, flareTextureIdentifier);
     }
 
 }
