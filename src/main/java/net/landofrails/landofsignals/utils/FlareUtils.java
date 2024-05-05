@@ -191,7 +191,7 @@ public class FlareUtils {
 
             // Moving flare
 
-            if (intensity > 0.01) {
+            if (flare.getScaleWithDistance() && intensity > 0.01) {
                 RenderState matrix = flareState.clone();
                 matrix.translate(0, 0, -((intensity / 2) * 3));
                 double scale2 = Math.max(scale * 0.5, intensity * 2);

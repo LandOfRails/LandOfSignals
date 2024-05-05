@@ -65,6 +65,11 @@ public class Flare {
      */
     private String texture;
 
+    /**
+     * Optional. Should the flare be scaled with distance? Default: true
+     */
+    private boolean scaleWithDistance = true;
+
     private PrecalculatedData precalculatedData;
 
     public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, String[] states) {
@@ -184,6 +189,14 @@ public class Flare {
 
     public void setTexture(String texture) {
         this.texture = texture;
+    }
+
+    public boolean getScaleWithDistance() {
+        return scaleWithDistance;
+    }
+
+    public void setScaleWithDistance(boolean scaleWithDistance) {
+        this.scaleWithDistance = scaleWithDistance;
     }
 
     public float[] getRenderColor(){
