@@ -187,6 +187,8 @@ public class FlareUtils {
 
             flareState.translate(precalculatedData.postOffset);
 
+            flareState.rotate(180, 0,0, 1);
+
             // Moving flare
 
             if (intensity > 0.01) {
