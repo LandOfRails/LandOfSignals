@@ -167,7 +167,8 @@ public class ContentPackSign {
                 Consumer<String> signConsumer = text -> invalid.accept(signModelEntry.getKey() + ": [" + text + "]");
                 Stream.of(signModelEntry.getValue()).forEach(model -> model.validate(signConsumer, references));
             }
-        }else if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
+        }
+        if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
             invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
         }else if(Arrays.stream(flares).anyMatch(flare -> base.get(flare.getObjPath()).length != 1)){
             invalid.accept("Flare has obj path that is not distinct (exists more than once), this sadly doesn't work.");
@@ -178,10 +179,9 @@ public class ContentPackSign {
                 for (ContentPackModel model : modelEntry.getValue()) {
                     String objPath = modelEntry.getKey();
                     objTextures.putIfAbsent(objPath, new HashSet<>());
-                    objTextures.computeIfPresent(objPath, (key, value) -> {
-                        value.addAll(Arrays.asList(model.getTextures()));
-                        return value;
-                    });
+                    Set<String> value = objTextures.get(objPath);
+                    value.add("");
+                    value.add(model.getTextures());
                 }
             }
         }

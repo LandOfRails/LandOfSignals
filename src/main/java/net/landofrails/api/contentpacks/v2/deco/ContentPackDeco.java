@@ -3,6 +3,7 @@ package net.landofrails.api.contentpacks.v2.deco;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 
@@ -22,6 +23,7 @@ public class ContentPackDeco {
     private Float rotationSteps;
     // objPath : objProperties
     private Map<String, ContentPackModel[]> base;
+    private Flare[] flares;
     private ContentPackReferences references;
     // metadataId : data
     private Map<String, Object> metadata;
@@ -45,6 +47,14 @@ public class ContentPackDeco {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public Float getRotationSteps() {
@@ -141,16 +151,20 @@ public class ContentPackDeco {
                 Stream.of(decoModelEntry.getValue()).forEach(model -> model.validate(decoConsumer, references));
             }
         }
+        if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
+            invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
+        }else if(Arrays.stream(flares).anyMatch(flare -> base.get(flare.getObjPath()).length != 1)){
+            invalid.accept("Flare has obj path that is not distinct (exists more than once), this sadly doesn't work.");
+        }
 
         if (objTextures.isEmpty()) {
             for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
                 for (ContentPackModel model : modelEntry.getValue()) {
                     String objPath = modelEntry.getKey();
                     objTextures.putIfAbsent(objPath, new HashSet<>());
-                    objTextures.computeIfPresent(objPath, (key, value) -> {
-                        value.addAll(Arrays.asList(model.getTextures()));
-                        return value;
-                    });
+                    Set<String> value = objTextures.get(objPath);
+                    value.add("");
+                    value.add(model.getTextures());
                 }
             }
         }
@@ -176,6 +190,22 @@ public class ContentPackDeco {
         if (objTextures == null) {
             objTextures = new HashMap<>();
         }
+
+        if(flares == null){
+            flares = new Flare[0];
+        }
+
+        for(Flare flare : flares){
+            if(flare.getObjPath() == null && base.size() == 1){
+                String firstEntryKey = base.keySet().iterator().next();
+                flare.setObjPath(firstEntryKey);
+                String[] groups = base.get(firstEntryKey)[0].getObj_groups();
+                if(groups == null)
+                    groups = new String[0];
+                flare.setObjGroups(groups);
+            }
+        }
+
     }
 
     public void setUTF8(boolean isUTF8) {

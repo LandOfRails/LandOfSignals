@@ -10,13 +10,16 @@ import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.flares.Flare;
+import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
+import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LandOfSignals;
-import net.landofrails.landofsignals.render.block.TileSignPartRender;
-import net.landofrails.landofsignals.render.block.TileSignalPartRender;
-import net.landofrails.landofsignals.render.item.ItemRenderException;
+import net.landofrails.landofsignals.render.block.*;
+import net.landofrails.landofsignals.tile.TileCustomLever;
+import net.landofrails.landofsignals.tile.TileDeco;
 import net.landofrails.landofsignals.tile.TileSignPart;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 
@@ -24,13 +27,19 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("java:S1075")
 public class FlareUtils {
+
+    private static final String ACTIVE = "active";
+    private static final String INACTIVE = "inactive";
+    public static final String ERR_LOAD_BLOCK_MODEL_RENDER = "Error loading block model/renderer...";
 
     private static final Identifier LIGHT_TEX = new Identifier(LandOfSignals.MODID, "textures/light/light.png");
 
     private static final Map<String, Map<String, List<Flare>>> signalpartFlareCache = new HashMap<>();
     private static final Map<String, List<Flare>> signFlareCache = new HashMap<>();
-
+    private static final Map<String, List<Flare>> decoFlareCache = new HashMap<>();
+    private static final Map<String, Map<String, List<Flare>>> leverFlareCache = new HashMap<>();
 
     private FlareUtils(){
 
@@ -67,6 +76,35 @@ public class FlareUtils {
 
     }
 
+    public static void renderFlares(String id, ContentPackDeco deco, TileDeco tile, RenderState renderState) {
+
+        if(!decoFlareCache.containsKey(id)){
+            cacheFlares(id, deco);
+        }
+
+        List<Flare> flares = decoFlareCache.get(id);
+        renderFlares(flares.toArray(new Flare[0]), tile.getPos(), tile.getBlockRotate(), tile.getScaling(), tile.getOffset(), renderState);
+
+    }
+
+    public static void renderFlares(String id, ContentPackLever lever, TileCustomLever tile, RenderState renderState) {
+
+        if (!leverFlareCache.containsKey(id)) {
+            cacheFlares(id, lever);
+        }
+
+        final String signalState = tile.isActive() ? ACTIVE : INACTIVE;
+        List<Flare> flares = leverFlareCache.get(id).get(signalState);
+
+        if(flares == null) {
+            // No flares - no rendering
+            return;
+        }
+
+        renderFlares(flares.toArray(new Flare[0]), tile.getPos(), tile.getBlockRotate(), tile.getScaling(), tile.getOffset(), renderState);
+
+    }
+
     // Cache multiple flares
 
     public static void cacheFlares(String signalId, ContentPackSignal signal){
@@ -79,7 +117,7 @@ public class FlareUtils {
             }
             signalpartFlareCache.put(signalId, stateFlares);
         } catch (Exception e) {
-            throw new ItemRenderException("Error loading item model/renderer...", e);
+            throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
         }
     }
 
@@ -92,7 +130,34 @@ public class FlareUtils {
             }
             signFlareCache.put(signId, cachedFlares);
         } catch (Exception e) {
-            throw new ItemRenderException("Error loading item model/renderer...", e);
+            throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
+        }
+    }
+
+    public static void cacheFlares(String signId, ContentPackDeco deco){
+        if(deco.getFlares().length == 0) return;
+        try {
+            List<Flare> cachedFlares = new ArrayList<>();
+            for(Flare flare : deco.getFlares()){
+                cacheFlare(flare, cachedFlares, deco);
+            }
+            decoFlareCache.put(signId, cachedFlares);
+        } catch (Exception e) {
+            throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
+        }
+    }
+
+    public static void cacheFlares(String signalId, ContentPackLever lever){
+        if(lever.getFlares().length == 0) return;
+        try {
+            Map<String, List<Flare>> stateFlares = new HashMap<>();
+            Flare[] flares = lever.getFlares();
+            for(Flare flare : flares){
+                cacheFlare(flare, stateFlares, lever);
+            }
+            leverFlareCache.put(signalId, stateFlares);
+        } catch (Exception e) {
+            throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
         }
     }
 
@@ -109,7 +174,7 @@ public class FlareUtils {
 
         String errMsg = String.format("Uh oh. Did not find obj_path %s in model %s for flare %s", flare.getObjPath(), sign.getUniqueId(), flareId);
         if(model == null)
-            throw new RuntimeException(errMsg);
+            throw new BlockRenderException(errMsg);
 
         //
 
@@ -134,6 +199,50 @@ public class FlareUtils {
         if(flare.isAlwaysOn())
             flareStates = signal.getStates(); // All states
         for(String state : flareStates){
+            stateFlares.putIfAbsent(state, new ArrayList<>());
+            stateFlares.get(state).add(flare);
+        }
+
+    }
+
+    private static void cacheFlare(Flare flare, List<Flare> cachedFlares, ContentPackDeco deco) {
+
+        final String objPath = deco.getUniqueId() + "/" + flare.getObjPath();
+        final String flareId = flare.getId();
+        final OBJModel model = TileDecoRender.cache().get(objPath);
+
+        float[] modelTranslation = deco.getBase().get(flare.getObjPath())[0].getBlock().getTranslation();
+        float[] modelScaling = deco.getBase().get(flare.getObjPath())[0].getBlock().getScaling();
+
+        String errMsg = String.format("Uh oh. Did not find obj_path %s in model %s for flare %s", flare.getObjPath(), deco.getUniqueId(), flareId);
+        if(model == null)
+            throw new BlockRenderException(errMsg);
+
+        //
+
+        cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
+        cachedFlares.add(flare);
+    }
+
+    private static void cacheFlare(Flare flare, Map<String, List<Flare>> stateFlares, ContentPackLever lever){
+
+        String[] flareStates = flare.getStates();
+        if(flare.isAlwaysOn())
+            flareStates = new String[]{ACTIVE, INACTIVE}; // All states
+        for(String state : flareStates){
+            final String flareId = flare.getId();
+            final String objPath = lever.getUniqueId() + "/" + flare.getObjPath() + ":" + state;
+            final OBJModel model = TileCustomLeverRender.cache().get(objPath);
+
+            Map<String, ContentPackModel[]> models =
+                    state.equalsIgnoreCase(ACTIVE) ? lever.getActive() : lever.getInactive();
+            float[] modelTranslation = models.get(flare.getObjPath())[0].getBlock().getTranslation();
+            float[] modelScaling = models.get(flare.getObjPath())[0].getBlock().getScaling();
+
+            //
+
+            cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
+
             stateFlares.putIfAbsent(state, new ArrayList<>());
             stateFlares.get(state).add(flare);
         }
@@ -227,7 +336,7 @@ public class FlareUtils {
         String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
         Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         if(flareGroups.isEmpty())
-            throw new RuntimeException(errMsg);
+            throw new BlockRenderException(errMsg);
 
         //
 

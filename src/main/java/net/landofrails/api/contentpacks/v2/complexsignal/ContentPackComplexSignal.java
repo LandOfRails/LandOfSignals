@@ -201,10 +201,9 @@ public class ContentPackComplexSignal {
                     for (ContentPackModel model : modelEntry.getValue()) {
                         String objPath = modelEntry.getKey();
                         objTextures.putIfAbsent(objPath, new HashSet<>());
-                        objTextures.computeIfPresent(objPath, (key, value) -> {
-                            value.addAll(Arrays.asList(model.getTextures()));
-                            return value;
-                        });
+                        Set<String> value = objTextures.get(objPath);
+                        value.add("");
+                        value.add(model.getTextures());
                     }
                 }
             }
@@ -213,10 +212,9 @@ public class ContentPackComplexSignal {
             for (ContentPackModel model : modelEntry.getValue()) {
                 String objPath = modelEntry.getKey();
                 objTextures.putIfAbsent(objPath, new HashSet<>());
-                objTextures.computeIfPresent(objPath, (key, value) -> {
-                    value.addAll(Arrays.asList(model.getTextures()));
-                    return value;
-                });
+                Set<String> value = objTextures.get(objPath);
+                value.add("");
+                value.add(model.getTextures());
             }
         }
     }

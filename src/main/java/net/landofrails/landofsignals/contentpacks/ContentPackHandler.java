@@ -305,8 +305,8 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileCustomLeverRender.checkCache(id, active);
-                TileCustomLeverRender.checkCache(id, inactive);
+                TileCustomLeverRender.checkCache(id, active, "active");
+                TileCustomLeverRender.checkCache(id, inactive, "inactive");
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }

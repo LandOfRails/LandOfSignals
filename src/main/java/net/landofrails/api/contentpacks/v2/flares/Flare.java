@@ -101,6 +101,21 @@ public class Flare {
         this.alwaysOn = alwaysOn;
     }
 
+    public Flare(Flare other) {
+        this.id = other.getId();
+        this.color = other.getColor();
+        this.rotation = other.getRotation();
+        this.pitch = other.getPitch();
+        this.offset = other.getOffset();
+        this.alwaysOn = other.isAlwaysOn();
+        this.states = other.getStates();
+        this.texture = other.getTexture();
+        this.objPath = other.getObjPath();
+        this.objGroups = other.getObjGroups();
+        this.scaleWithDistance = other.getScaleWithDistance();
+        this.groupStates = other.getGroupStates();
+    }
+
     public String getId() {
         return id;
     }
@@ -150,6 +165,8 @@ public class Flare {
     }
 
     public String[] getStates() {
+        if(states == null)
+            states = new String[0];
         return states;
     }
 
@@ -235,7 +252,7 @@ public class Flare {
         return precalculatedData;
     }
 
-    public class PrecalculatedData {
+    public static class PrecalculatedData {
 
         public final Map<String, OBJGroup> flareGroups;
 
