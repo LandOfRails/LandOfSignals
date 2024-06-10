@@ -151,10 +151,8 @@ public class ContentPackDeco {
                 Stream.of(decoModelEntry.getValue()).forEach(model -> model.validate(decoConsumer, references));
             }
         }
-        if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
+        if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null || base.get(flare.getObjPath()).length == 0)){
             invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
-        }else if(Arrays.stream(flares).anyMatch(flare -> base.get(flare.getObjPath()).length != 1)){
-            invalid.accept("Flare has obj path that is not distinct (exists more than once), this sadly doesn't work.");
         }
 
         if (objTextures.isEmpty()) {
@@ -195,11 +193,14 @@ public class ContentPackDeco {
             flares = new Flare[0];
         }
 
+        List<String> baseList = new ArrayList<>(base.keySet());
         for(Flare flare : flares){
-            if(flare.getObjPath() == null && base.size() == 1){
-                String firstEntryKey = base.keySet().iterator().next();
+            String firstEntryKey = baseList.get(flare.getObjPathIndex());
+            if(flare.getObjPath() == null){
                 flare.setObjPath(firstEntryKey);
-                String[] groups = base.get(firstEntryKey)[0].getObj_groups();
+            }
+            if(flare.getObjGroups() == null){
+                String[] groups = base.get(flare.getObjPath())[flare.getObjPathIndex()].getObj_groups();
                 if(groups == null)
                     groups = new String[0];
                 flare.setObjGroups(groups);

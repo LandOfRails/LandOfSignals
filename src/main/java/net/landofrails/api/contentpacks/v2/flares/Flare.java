@@ -56,6 +56,11 @@ public class Flare {
     private String objPath;
 
     /**
+     * Required if: signal/sign/signalbox/asset contains an OBJ that is used multiple times. Default: 0
+     */
+    private Integer objPathIndex = 0;
+
+    /**
      * Required if: Only parts of the OBJ are used. Needed to calculate accurate center of model
      */
     private String[] objGroups;
@@ -190,6 +195,14 @@ public class Flare {
         this.objPath = objPath;
     }
 
+    public Integer getObjPathIndex() {
+        return objPathIndex;
+    }
+
+    public void setObjPathIndex(Integer objPathIndex) {
+        this.objPathIndex = objPathIndex;
+    }
+
     public String[] getObjGroups() {
         if(objGroups == null)
             objGroups = new String[0];
@@ -223,6 +236,11 @@ public class Flare {
         Predicate<String> isRGB = rawColor -> rawColor.matches("((\\d{1,3}[,;:-]){2}\\d{1,3})");
         // #123DEF or 0xFFAA00
         Predicate<String> isHEX = rawColor -> rawColor.matches("(#|0x)[A-Z\\d]{6}");
+
+        if(color == null){
+            // Why?
+            color = "#FFFFFF";
+        }
 
         if(isRGB.test(color)){
             String[] rawColors = color.split("[,;:-]");
