@@ -30,7 +30,7 @@ public class TileComplexSignal extends BlockEntity implements IManipulate {
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
-    private final String id;
+    private String id;
     @TagField(value = "signalGroupStates", mapper = MapStringStringMapper.class)
     private Map<String, String> signalGroupStates = new HashMap<>();
     // for server only
