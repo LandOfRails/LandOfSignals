@@ -5,49 +5,60 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.net.Packet;
 import cam72cam.mod.serialization.TagField;
 import net.landofrails.landofsignals.gui.GuiSignalPrioritization;
+import net.landofrails.landofsignals.serialization.MapStringStringArrayMapper;
+import net.landofrails.landofsignals.serialization.StringArrayMapper;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalPart;
 
+import java.util.Map;
+
 public class GuiSignalPrioritizationToClientPacket extends Packet {
+
+    public static final int SIGNAL_PART_ID = 1;
+    public static final int COMPLEX_SIGNAL_ID = 2;
 
     @TagField("signalPos")
     Vec3i signalPos;
-    @TagField("tileSignalPart")
-    TileSignalPart tileSignalPart;
-    @TagField("tileComplexSignal")
-    TileComplexSignal tileComplexSignal;
+    @TagField("signalType")
+    int signalType;
+    @TagField("signalId")
+    String signalId;
+    @TagField(value = "orderedStates", mapper = StringArrayMapper.class)
+    String[] orderedStates = null;
+    @TagField(value = "orderedGroupStates", mapper = MapStringStringArrayMapper.class)
+    Map<String, String[]> orderedGroupStates = null;
 
     public GuiSignalPrioritizationToClientPacket() {
 
     }
 
-    public GuiSignalPrioritizationToClientPacket(Vec3i signalPos, TileSignalPart tileSignalPart) {
-        this.signalPos = signalPos;
-        this.tileSignalPart = tileSignalPart;
+    public GuiSignalPrioritizationToClientPacket(TileSignalPart tileSignalPart) {
+        this.signalPos = tileSignalPart.getPos();
+        this.signalType = SIGNAL_PART_ID;
+        this.signalId = tileSignalPart.getId();
+        this.orderedStates = tileSignalPart.getOrderedStates();
     }
 
-    public GuiSignalPrioritizationToClientPacket(Vec3i signalPos, TileComplexSignal tileComplexSignal) {
-        this.signalPos = signalPos;
-        this.tileComplexSignal = tileComplexSignal;
+    public GuiSignalPrioritizationToClientPacket(TileComplexSignal tileComplexSignal) {
+        this.signalPos = tileComplexSignal.getPos();
+        this.signalType = COMPLEX_SIGNAL_ID;
+        this.signalId = tileComplexSignal.getId();
+        this.orderedGroupStates = tileComplexSignal.getOrderedGroupStates();
     }
 
     @Override
     protected void handle() {
-        if (tileSignalPart != null) {
-            getWorld().setBlockEntity(signalPos, tileSignalPart);
-            GuiSignalPrioritization.open(signalPos, tileSignalPart);
-        } else if (tileComplexSignal != null) {
-            getWorld().setBlockEntity(signalPos, tileComplexSignal);
-            GuiSignalPrioritization.open(signalPos, tileComplexSignal);
-        }
+        GuiSignalPrioritization.open(signalPos, signalType, signalId, orderedStates, orderedGroupStates);
     }
 
     public static void sendToPlayer(Player player, TileSignalPart tileSignalPart) {
-        new GuiSignalPrioritizationToClientPacket(tileSignalPart.getPos(), tileSignalPart).sendToPlayer(player);
+        tileSignalPart.markDirty();
+        new GuiSignalPrioritizationToClientPacket(tileSignalPart).sendToPlayer(player);
     }
 
     public static void sendToPlayer(Player player, TileComplexSignal tileComplexSignal) {
-        new GuiSignalPrioritizationToClientPacket(tileComplexSignal.getPos(), tileComplexSignal).sendToPlayer(player);
+        tileComplexSignal.markDirty();
+        new GuiSignalPrioritizationToClientPacket(tileComplexSignal).sendToPlayer(player);
     }
 
 }
