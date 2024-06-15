@@ -21,6 +21,7 @@ import java.util.Objects;
 public class GuiSignalBoxSignalPart implements IScreen {
 
     private static TileSignalBox tsb;
+    private static String signalId;
 
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
@@ -34,10 +35,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
 
     public GuiSignalBoxSignalPart() {
 
-        final TileSignalPart tsp = tsb.getTileSignalPart();
-        String itemId = tsp.getId();
-
-        states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(tsp.getId());
+        states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(signalId);
 
         originalRightState = tsb.getActiveGroupState("");
         rightState = originalRightState;
@@ -47,19 +45,20 @@ public class GuiSignalBoxSignalPart implements IScreen {
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         final TagCompound tag = itemStackLeft.getTagCompound();
-        tag.setString("itemId", itemId);
+        tag.setString("itemId", signalId);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
         final TagCompound tag2 = itemStackRight.getTagCompound();
-        tag2.setString("itemId", itemId);
+        tag2.setString("itemId", signalId);
         itemStackRight.setTagCompound(tag2);
 
 
     }
 
-    public static void open(final TileSignalBox tileSignalBox) {
+    public static void open(final TileSignalBox tileSignalBox, String signalId) {
         tsb = tileSignalBox;
+        GuiSignalBoxSignalPart.signalId = signalId;
         LOSGuis.SIGNAL_BOX_SIGNAL_PART.open(MinecraftClient.getPlayer());
     }
 
@@ -76,7 +75,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
         groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString("default")) {
             @Override
             public void onClick(Player.Hand hand) {
-
+                // Signal parts have only one group - so no logic needed here
             }
         };
         new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
