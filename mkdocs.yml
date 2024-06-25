@@ -1,17 +1,5 @@
 site_name: LandOfSignals Wiki
 theme:
   name: material
-  palette:
-    primary: 'blue'
-    accent: 'light blue'
-  font:
-    text: 'Roboto'
-    code: 'Roboto Mono'
-extra:
-  social:
-    - type: 'github'
-      link: 'https://github.com/LandOfRails/LandOfSignals'
-    - type: 'discord'
-      link: 'https://discord.gg/ykAqHKYjVM'
 plugins:
   - search
