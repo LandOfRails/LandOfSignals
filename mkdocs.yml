@@ -17,5 +17,3 @@ extra:
       link: 'https://discord.gg/ykAqHKYjVM'
 plugins:
   - search
-  - minify:
-      minify_html: true
