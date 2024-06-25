@@ -1,66 +1,64 @@
-# Creating Content Packs for LandOfSignals V1
+# Creating and Updating Content Packs for LandOfSignals V1
 
-Creating content packs for LandOfSignals V1 allows you to add your own custom signals, signs, and other assets to the game. This guide will walk you through the process of creating a basic content pack.
+This guide provides instructions for creating and updating content packs for version 1 of the LandOfSignals mod, ensuring compatibility and integration with the mod's features and theme.
 
-## Content Pack Structure
+## Content Pack Structure and Specifications
 
-A content pack for LandOfSignals V1 consists of a directory containing the following:
+A content pack for LandOfSignals V1 should include:
 
-- `pack.json`: A JSON file containing metadata about the content pack.
-- `assets`: A directory containing the models, textures, and other assets for your content pack.
+- `pack.json`: Contains metadata about the content pack, including name, version, author, and description.
+- `assets`: A directory with models, textures, and other necessary assets.
 
-### pack.json
+### pack.json Structure
 
-The `pack.json` file contains metadata about your content pack. Here is an example structure:
+Example `pack.json` file:
 
 ```json
 {
   "name": "My Custom Content Pack",
   "version": "1.0",
   "author": "YourName",
-  "description": "A description of your content pack."
+  "description": "A detailed description of your content pack."
 }
 ```
 
-### Assets Directory
+### Assets Organization
 
-The `assets` directory should contain all the models, textures, and other assets for your content pack. Organize your assets into subdirectories for better management. For example:
+Assets should be organized into subdirectories within the `assets` folder:
 
-- `assets/models`: Contains the 3D models for your signals and signs.
-- `assets/textures`: Contains the textures for your models.
+- `assets/models`: For 3D models of signals and signs.
+- `assets/textures`: For textures applicable to the models.
 
 ## Creating a Signal
 
-To create a signal, you need to:
+To create a custom signal:
 
-1. Model your signal using a 3D modeling software that can export to the OBJ format.
-2. Create textures for your model.
-3. Place your model and textures in the appropriate directories within the `assets` directory.
-4. Define your signal in a JSON file within the `assets/models` directory.
+1. Model your signal using 3D modeling software capable of exporting to the OBJ format.
+2. Create and apply textures to your model.
+3. Organize your model and textures in the `assets` directory accordingly.
+4. Define your signal in a JSON file within `assets/models`.
 
-### Signal Definition
+### Signal Definition Example
 
-A signal is defined using a JSON file. Here is an example definition:
+Example JSON definition for a signal:
 
 ```json
 {
-  "id": "custom_signal",
-  "name": "Custom Signal",
-  "model": "models/custom_signal.obj",
+  "id": "custom_signal_v1",
+  "name": "Custom Signal V1",
+  "model": "models/custom_signal_v1.obj",
   "textures": {
-    "texture": "textures/custom_signal.png"
+    "texture": "textures/custom_signal_v1.png"
   }
 }
 ```
 
-## Best Practices
+## Best Practices for Content Pack Creation
 
-- Keep your content pack organized to make it easier to manage.
-- Use descriptive names for your models, textures, and other assets.
-- Test your content pack thoroughly before releasing it.
+- Maintain organization within your content pack for ease of management.
+- Use descriptive names for models, textures, and assets.
+- Thoroughly test your content pack for compatibility and performance.
 
-## Sharing Your Content Pack
+## Sharing and Community Support
 
-Once you have created your content pack, you can share it with the community. Make sure to include a README file with instructions on how to install and use your content pack.
-
-Join our [Discord community](https://discord.gg/ykAqHKYjVM) to share your content packs and get feedback from other users.
+After creating your content pack, you can share it with the LandOfSignals community. Include a README file with installation and usage instructions. Join our [Discord community](https://discord.gg/ykAqHKYjVM) for support, feedback, and to share your content packs with other users.

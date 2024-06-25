@@ -1,6 +1,6 @@
-# Creating Content Packs for LandOfSignals V2
+# Creating and Customizing Content Packs for LandOfSignals V2
 
-Creating content packs for LandOfSignals V2 allows you to add your own custom signals, signs, and other assets to the game. This guide will walk you through the process of creating a basic content pack for version 2 of the mod.
+Creating and customizing content packs for LandOfSignals V2 allows mod users to add their own unique signals, signs, and other assets to the game, enhancing the immersive experience with the LandOfSignals theme. This guide will walk you through the process of creating a content pack for version 2 of the mod, ensuring consistency with the LandOfSignals theme.
 
 ## Content Pack Structure
 
@@ -18,7 +18,7 @@ The `pack.json` file contains metadata about your content pack. Here is an examp
   "name": "My Custom Content Pack",
   "version": "2.0",
   "author": "YourName",
-  "description": "A description of your content pack."
+  "description": "A description of your content pack, aligned with the LandOfSignals theme."
 }
 ```
 
@@ -61,6 +61,6 @@ A signal is defined using a JSON file. Here is an example definition:
 
 ## Sharing Your Content Pack
 
-Once you have created your content pack, you can share it with the community. Make sure to include a README file with instructions on how to install and use your content pack.
+Once you have created your content pack, you can share it with the community. Make sure to include a README file with instructions on how to install and use your content pack, ensuring it aligns with the LandOfSignals theme.
 
 Join our [Discord community](https://discord.gg/ykAqHKYjVM) to share your content packs and get feedback from other users.
