@@ -1,41 +1,56 @@
 # Welcome to the LandOfSignals Documentation
 
-This documentation aims to provide comprehensive guides and references for using LandOfSignals mod in Minecraft. Here you will find information on how to install the mod, use its features, and leverage the signals and items it adds to the game.
+Welcome to the official documentation for the LandOfSignals mod. This guide is designed to help you understand how to install, configure, and effectively use the mod and its content pack systems in your Minecraft world.
 
-## Getting Started
+## Table of Contents
 
-- **Installation**: Learn how to install LandOfSignals and its dependencies.
-- **Basic Usage**: Discover how to use signals and items added by the mod.
-- **Advanced Features**: Explore advanced functionalities and customization options.
+- [Installation](#installation)
+- [Getting Started with LandOfSignals](#getting-started-with-landofsignals)
+- [Using the Mod](#using-the-mod)
+- [Content Pack Systems](#content-pack-systems)
+  - [Creating Content Packs for V1](ContentPacksV1.md)
+  - [Creating Content Packs for V2](ContentPacksV2.md)
+- [Advanced Configuration](#advanced-configuration)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Support and Community](#support-and-community)
 
-## Features
+## Installation
 
-LandOfSignals adds a variety of signals and items to Minecraft, enhancing the game's railway systems. This section covers the different types of signals available, how to place and configure them, and the additional items that support railway construction and management.
+Learn how to install LandOfSignals and its dependencies to get started with enhancing your Minecraft railway systems.
 
-## Configuration
+## Getting Started with LandOfSignals
 
-Customize your experience with LandOfSignals by adjusting mod settings. This section provides details on configuration options and how to modify them to suit your gameplay.
+Discover the basics of using LandOfSignals, including an overview of its features and how to navigate the mod's interface.
+
+## Using the Mod
+
+Detailed instructions on how to use the various signals, items, and functionalities added by LandOfSignals.
+
+## Content Pack Systems
+
+Explore how to create and use content packs with LandOfSignals, enhancing the customization and variety of your railway systems.
+
+### Creating Content Packs for V1
+
+Step-by-step guide on creating content packs compatible with version 1 of the mod. [Learn more](ContentPacksV1.md).
+
+### Creating Content Packs for V2
+
+Instructions on developing content packs for version 2 of LandOfSignals, including advanced features and tips. [Learn more](ContentPacksV2.md).
+
+## Advanced Configuration
+
+Customize your experience with LandOfSignals by adjusting mod settings and exploring advanced features.
 
 ## Troubleshooting
 
-Encountered an issue? Check out the troubleshooting section for common problems and their solutions. If you need further assistance, visit our [GitHub repository](https://github.com/LandOfRails/LandOfSignals) or join our [Discord community](https://discord.gg/ykAqHKYjVM).
+Solutions to common issues encountered while using LandOfSignals. For further assistance, visit our [GitHub repository](https://github.com/LandOfRails/LandOfSignals) or join our [Discord community](https://discord.gg/ykAqHKYjVM).
 
 ## Contributing
 
-Interested in contributing to the LandOfSignals project? We welcome contributions of all kinds, from code improvements to documentation updates. Visit our [GitHub repository](https://github.com/LandOfRails/LandOfSignals) to get started.
+Interested in contributing to the LandOfSignals project? Find out how you can help improve the mod and its documentation.
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+## Support and Community
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Join our Discord community for support, to share content packs, and to connect with other LandOfSignals users.

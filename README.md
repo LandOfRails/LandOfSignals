@@ -41,7 +41,7 @@ Adds many different signals in different designs, so far without a consistent re
 <br> 
 
 * Huge thanks to [cam72cam](https://github.com/cam72cam) for
-  creating [UniversalModCore](https://github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
+  creating [UniversalModCore](https://www.github.com/TeamOpenIndustry/UniversalModCore), which makes the whole thing
   possible here
 
 </details>
