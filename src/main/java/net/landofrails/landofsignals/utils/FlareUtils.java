@@ -10,6 +10,7 @@ import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
 import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
@@ -18,20 +19,20 @@ import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.render.block.*;
-import net.landofrails.landofsignals.tile.TileCustomLever;
-import net.landofrails.landofsignals.tile.TileDeco;
-import net.landofrails.landofsignals.tile.TileSignPart;
-import net.landofrails.landofsignals.tile.TileSignalPart;
+import net.landofrails.landofsignals.tile.*;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static net.landofrails.landofsignals.utils.LandOfSignalsUtils.objIdWithGroup;
+import static net.landofrails.landofsignals.utils.LandOfSignalsUtils.objIdWithoutGroup;
+import static net.landofrails.landofsignals.utils.Static.ACTIVE;
+import static net.landofrails.landofsignals.utils.Static.INACTIVE;
+
 @SuppressWarnings("java:S1075")
 public class FlareUtils {
 
-    private static final String ACTIVE = "active";
-    private static final String INACTIVE = "inactive";
     public static final String ERR_LOAD_BLOCK_MODEL_RENDER = "Error loading block model/renderer...";
 
     private static final Identifier LIGHT_TEX = new Identifier(LandOfSignals.MODID, "textures/light/light.png");
@@ -40,6 +41,7 @@ public class FlareUtils {
     private static final Map<String, List<Flare>> signFlareCache = new HashMap<>();
     private static final Map<String, List<Flare>> decoFlareCache = new HashMap<>();
     private static final Map<String, Map<String, List<Flare>>> leverFlareCache = new HashMap<>();
+    private static final Map<String, Map<String, Map<String, List<Flare>>>> complexSignalFlareCache = new HashMap<>();
 
     private FlareUtils(){
 
@@ -105,6 +107,33 @@ public class FlareUtils {
 
     }
 
+    public static void renderFlares(String id, ContentPackComplexSignal signal, TileComplexSignal tile, RenderState renderState) {
+
+        if (!complexSignalFlareCache.containsKey(id)) {
+            cacheFlares(id, signal);
+        }
+
+        final Map<String, String> signalStates = tile.getSignalGroupStates();
+        // Signal-Flares
+        for(Map.Entry<String, String> groupState : signalStates.entrySet()){
+            List<Flare> flares = complexSignalFlareCache.get(id).get(groupState.getKey()).get(groupState.getValue());
+
+            if(flares == null) {
+                // No flares - no rendering for this group
+                continue;
+            }
+
+            renderFlares(flares.toArray(new Flare[0]), tile.getPos(), tile.getBlockRotate(), tile.getScaling(), tile.getOffset(), renderState);
+        }
+        // Base-Flares
+        Map<String, List<Flare>> baseGroup = complexSignalFlareCache.get(id).get(null);
+        if(baseGroup != null){
+            List<Flare> flares = baseGroup.get(null);
+            renderFlares(flares.toArray(new Flare[0]), tile.getPos(), tile.getBlockRotate(), tile.getScaling(), tile.getOffset(), renderState);
+        }
+
+    }
+
     // Cache multiple flares
 
     public static void cacheFlares(String signalId, ContentPackSignal signal){
@@ -156,6 +185,38 @@ public class FlareUtils {
                 cacheFlare(flare, stateFlares, lever);
             }
             leverFlareCache.put(signalId, stateFlares);
+        } catch (Exception e) {
+            throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
+        }
+    }
+
+    public static void cacheFlares(String signalId, ContentPackComplexSignal signal){
+        if(signal.getFlares().length == 0) return;
+        try {
+            Map<String, Map<String, List<Flare>>> groupStateFlares = new HashMap<>();
+            Flare[] flares = signal.getFlares();
+            for(String groupId : signal.getSignals().keySet()){
+                Map<String, List<Flare>> stateFlares = new HashMap<>();
+                for(Flare flare : flares){
+                    if(groupId.equals(flare.getGroupId())){
+                        cacheFlare(flare, stateFlares, signal);
+                    }
+                }
+
+                groupStateFlares.put(groupId, stateFlares);
+            }
+
+            // base = (groupId == null) && isAlwaysOn
+            Predicate<Flare> isBaseFlare = flare -> flare.isAlwaysOn() && flare.getGroupId() == null;
+            if(Arrays.stream(flares).anyMatch(isBaseFlare)){
+                Map<String, List<Flare>> stateFlares = new HashMap<>();
+                Arrays.stream(flares)
+                        .filter(isBaseFlare)
+                        .forEach(flare -> cacheFlare(flare, stateFlares, signal));
+                groupStateFlares.put(null, stateFlares);
+            }
+
+            complexSignalFlareCache.put(signalId, groupStateFlares);
         } catch (Exception e) {
             throw new BlockRenderException(ERR_LOAD_BLOCK_MODEL_RENDER, e);
         }
@@ -249,6 +310,54 @@ public class FlareUtils {
 
     }
 
+    private static void cacheFlare(Flare flare, Map<String, List<Flare>> stateFlares, ContentPackComplexSignal signal){
+
+        if(flare.isAlwaysOn() && flare.getGroupId() == null){
+            // Base flare
+
+            final String flareId = flare.getId();
+            final String objPath = objIdWithoutGroup(signal.getUniqueId(), "base", flare.getObjPath());
+            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+
+            ContentPackModel[] models = signal.getBase().get(flare.getObjPath());
+
+            float[] modelTranslation = models[flare.getObjPathIndex()].getBlock().getTranslation();
+            float[] modelScaling = models[flare.getObjPathIndex()].getBlock().getScaling();
+
+            //
+
+            cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
+
+            stateFlares.putIfAbsent(null, new ArrayList<>());
+            stateFlares.get(null).add(flare);
+
+            return;
+        }
+
+        // Group+State flare
+        String[] flareStates = flare.getStates();
+        for(String state : flareStates){
+            final String flareId = flare.getId();
+            final String objPath = flare.getGroupId() != null ?
+                    objIdWithGroup(signal.getUniqueId(), "signals", flare.getGroupId(), flare.getObjPath()) :
+                    objIdWithoutGroup(signal.getUniqueId(), "signals", flare.getObjPath());
+            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+
+            ContentPackModel[] models = signal.getSignals().get(flare.getGroupId()).getStates().get(state).getModels().get(flare.getObjPath());
+
+            float[] modelTranslation = models[flare.getObjPathIndex()].getBlock().getTranslation();
+            float[] modelScaling = models[flare.getObjPathIndex()].getBlock().getScaling();
+
+            //
+
+            cacheFlare(flare, flareId, model, objPath, modelTranslation, modelScaling);
+
+            stateFlares.putIfAbsent(state, new ArrayList<>());
+            stateFlares.get(state).add(flare);
+        }
+
+    }
+
     //// COMMON / SHARED LOGIC
 
     public static void renderFlares(Flare[] flares, Vec3i pos, int blockRotate, Vec3d scaling, Vec3d offset, RenderState renderState) {
@@ -288,6 +397,7 @@ public class FlareUtils {
             flareState.scale(scaling);
 
             flareState.translate(offset);
+
             flareState.translate(precalculatedData.preOffset);
 
             flareState.rotate(flareRotation.x, 1,0,0);
@@ -296,7 +406,9 @@ public class FlareUtils {
 
             flareState.translate(precalculatedData.postOffset);
 
-            flareState.rotate(180, 0,0, 1);
+            flareState.rotate(flare.getPostRotation(), 0,1, 0);
+
+            flareState.translate(0,0, -flare.getOffset());
 
             // Moving flare
 
@@ -346,14 +458,17 @@ public class FlareUtils {
         double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
         double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
 
+
         double lampScale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]) * 0.65d;
+        lampScale *= flare.getScalingMultiplier();
 
         // Scaling for the flare from the block in the contentpack
         Vec3d scaling = new Vec3d(modelScaling[0], modelScaling[1], modelScaling[2]);
 
-        Set<String> groups = flare.getObjGroups().length > 0
-                ? Arrays.stream(flare.getObjGroups()).collect(Collectors.toSet())
-                : model.groups();
+        Set<String> groups = model.groups();
+        if(flare.getObjGroups().length > 0){
+            groups.removeIf(group -> Arrays.stream(flare.getObjGroups()).noneMatch(group::startsWith));
+        }
         Vec3d centerOfModel = model.centerOfGroups(groups);
 
         double xCorrection = -centerOfModel.x;
@@ -364,7 +479,7 @@ public class FlareUtils {
 
         Vec3d centerOfLightFlare = model.centerOfGroups(flareGroups.keySet());
         Vec3d modelOffset = centerOfLightFlare.subtract(centerOfModel);
-        modelOffset = new Vec3d(-modelOffset.x, modelOffset.y, -(modelOffset.z + flare.getOffset()));
+        modelOffset = new Vec3d(-modelOffset.x, modelOffset.y, -(modelOffset.z));
         postOffset = postOffset.add(modelOffset);
 
         // Rotation for the flare from the contentpack

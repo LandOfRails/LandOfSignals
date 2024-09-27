@@ -3,10 +3,12 @@ package net.landofrails.api.contentpacks.v2.flares;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJGroup;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.landofsignals.render.block.BlockRenderException;
 
 import java.util.Map;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class Flare {
 
     /**
@@ -17,7 +19,7 @@ public class Flare {
     /**
      * Optional. Will set the color of the flare. Default: OxFFFFFF (white)
      */
-    private String color = "#FFFFFF";
+    private String color;
 
     /**
      * Required. Will set the rotation of the flare.
@@ -25,30 +27,39 @@ public class Flare {
     private Integer rotation;
 
     /**
+     * Optional. Will set the rotation after translation. Default: 0
+     */
+    private Integer postRotation;
+
+    /**
      * Optional. Will set the pitch of the flare. Default: 0
      */
-    private Integer pitch = 0;
+    private Integer pitch;
 
     /**
      * Required. Will set the offset of the flare.
      */
     private Float offset;
 
+    /**
+     * Optional. Scaling will be multiplied by the given value. Default: 1
+     */
+    private Float scalingMultiplier;
 
     /**
      * Optional. Will always activate light flare. Default: false
      */
-    private boolean alwaysOn = false;
+    private Boolean alwaysOn;
 
     /**
-     * Required for: ContentPackSignal. States that will trigger this light flare.
+     * Required for: ContentPackSignal & ContentPackComplexSignal. States that will trigger this light flare.
      */
     private String[] states;
 
     /**
-     * Required for: ContentPackComplexSignal. Groups+States that will trigger this light flare.
+     * Required for: ContentPackComplexSignal. Group+States that will trigger this light flare.
      */
-    private Map<String, String> groupStates;
+    private String groupId;
 
     /**
      * Required if: signal/sign/signalbox/asset contains more than one OBJ. Maps the flare to the specified obj
@@ -58,7 +69,8 @@ public class Flare {
     /**
      * Required if: signal/sign/signalbox/asset contains an OBJ that is used multiple times. Default: 0
      */
-    private Integer objPathIndex = 0;
+
+    private Integer objPathIndex;
 
     /**
      * Required if: Only parts of the OBJ are used. Needed to calculate accurate center of model
@@ -73,7 +85,7 @@ public class Flare {
     /**
      * Optional. Should the flare be scaled with distance? Default: true
      */
-    private boolean scaleWithDistance = true;
+    private Boolean scaleWithDistance;
 
     private PrecalculatedData precalculatedData;
 
@@ -87,14 +99,14 @@ public class Flare {
         this.states = states;
     }
 
-    public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, Map<String, String> groupStates) {
+    public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn, String groupId) {
         this.id = id;
         this.color = color;
         this.rotation = rotation;
         this.pitch = pitch;
         this.offset = offset;
         this.alwaysOn = alwaysOn;
-        this.groupStates = groupStates;
+        this.groupId = groupId;
     }
 
     public Flare(String id, String color, int rotation, int pitch, float offset, boolean alwaysOn) {
@@ -110,15 +122,20 @@ public class Flare {
         this.id = other.getId();
         this.color = other.getColor();
         this.rotation = other.getRotation();
+        this.postRotation = other.getPostRotation();
         this.pitch = other.getPitch();
         this.offset = other.getOffset();
+        this.scalingMultiplier = other.getScalingMultiplier();
         this.alwaysOn = other.isAlwaysOn();
         this.states = other.getStates();
         this.texture = other.getTexture();
         this.objPath = other.getObjPath();
         this.objGroups = other.getObjGroups();
+        this.objPathIndex = other.getObjPathIndex();
         this.scaleWithDistance = other.getScaleWithDistance();
-        this.groupStates = other.getGroupStates();
+        this.groupId = other.getGroupId();
+        this.precalculatedData = null;
+        validate();
     }
 
     public String getId() {
@@ -145,6 +162,14 @@ public class Flare {
         this.rotation = rotation;
     }
 
+    public Integer getPostRotation() {
+        return postRotation;
+    }
+
+    public void setPostRotation(Integer postRotation) {
+        this.postRotation = postRotation;
+    }
+
     public Integer getPitch() {
         return pitch;
     }
@@ -159,6 +184,14 @@ public class Flare {
 
     public void setOffset(Float offset) {
         this.offset = offset;
+    }
+
+    public Float getScalingMultiplier() {
+        return scalingMultiplier;
+    }
+
+    public void setScalingMultiplier(Float scalingMultiplier) {
+        this.scalingMultiplier = scalingMultiplier;
     }
 
     public boolean isAlwaysOn() {
@@ -179,12 +212,12 @@ public class Flare {
         this.states = states;
     }
 
-    public Map<String, String> getGroupStates() {
-        return groupStates;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setGroupStates(Map<String, String> groupStates) {
-        this.groupStates = groupStates;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public String getObjPath() {
@@ -222,6 +255,8 @@ public class Flare {
     }
 
     public boolean getScaleWithDistance() {
+        if(scaleWithDistance == null)
+            scaleWithDistance = true;
         return scaleWithDistance;
     }
 
@@ -237,11 +272,6 @@ public class Flare {
         // #123DEF or 0xFFAA00
         Predicate<String> isHEX = rawColor -> rawColor.matches("(#|0x)[A-Z\\d]{6}");
 
-        if(color == null){
-            // Why?
-            color = "#FFFFFF";
-        }
-
         if(isRGB.test(color)){
             String[] rawColors = color.split("[,;:-]");
             rgb[0] = Integer.parseInt(rawColors[0]) / 255f;
@@ -254,10 +284,39 @@ public class Flare {
             rgb[2] = Integer.valueOf( rawColors.substring( 4, 6 ), 16 ) / 255f;
         }else{
             String error = "Issues with flare \"%s\": \"%s\" is not rgb or hex!";
-            throw new RuntimeException(String.format(error, id, color));
+            throw new BlockRenderException(String.format(error, id, color));
         }
 
         return rgb;
+    }
+
+    public void validate(){
+
+        // Default values
+        if(color == null){
+            color = "#FFFFFF";
+        }
+
+        if(postRotation == null){
+            postRotation = 0;
+        }
+
+        if(pitch == null){
+            pitch = 0;
+        }
+
+        if(scalingMultiplier == null){
+            scalingMultiplier = 1f;
+        }
+
+        if(alwaysOn == null){
+            alwaysOn = false;
+        }
+
+        if(objPathIndex == null){
+            objPathIndex = 0;
+        }
+
     }
 
     public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier) {

@@ -1,18 +1,12 @@
 package net.landofrails.landofsignals.render.block;
 
-import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJGroup;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
-import cam72cam.mod.render.opengl.BlendMode;
-import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
-import cam72cam.mod.render.opengl.Texture;
 import cam72cam.mod.resource.Identifier;
-import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -21,11 +15,8 @@ import net.landofrails.landofsignals.tile.TileSignalPart;
 import net.landofrails.landofsignals.utils.FlareUtils;
 import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
-import net.landofrails.landofsignals.utils.VecUtil;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class TileSignalPartRender {
 
@@ -35,7 +26,6 @@ public class TileSignalPartRender {
     }
 
     private static final Map<String, OBJModel> cache = new HashMap<>();
-    private static final Map<String, Map<String, List<Flare>>> flareCache = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
         return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
@@ -91,9 +81,9 @@ public class TileSignalPartRender {
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
         final float[] scale = signal.getScaling().clone();
-        scale[0] *= customScaling.x;
-        scale[1] *= customScaling.y;
-        scale[2] *= customScaling.z;
+        scale[0] *= (float) customScaling.x;
+        scale[1] *= (float) customScaling.y;
+        scale[2] *= (float) customScaling.z;
 
         state.scale(scale[0], scale[1], scale[2]);
         state.translate(translate.x, translate.y, translate.z);
@@ -133,9 +123,9 @@ public class TileSignalPartRender {
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
         final float[] scale = signal.getScaling().clone();
-        scale[0] *= customScaling.x;
-        scale[1] *= customScaling.y;
-        scale[2] *= customScaling.z;
+        scale[0] *= (float) customScaling.x;
+        scale[1] *= (float) customScaling.y;
+        scale[2] *= (float) customScaling.z;
 
         state.scale(scale[0], scale[1], scale[2]);
         state.translate(translate);

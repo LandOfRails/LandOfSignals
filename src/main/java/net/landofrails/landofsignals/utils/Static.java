@@ -36,4 +36,6 @@ public class Static {
     // Default fully qualified SignalBox ID (including packId)
     public static final String SIGNALBOX_DEFAULT_FQ = "LandOfSignals:signalbox_default";
 
+    public static final String ACTIVE = "active";
+    public static final String INACTIVE = "inactive";
 }

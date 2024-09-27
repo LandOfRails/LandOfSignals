@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@SuppressWarnings("java:S2065")
+@SuppressWarnings({"java:S2065", "unused"})
 public class ContentPackDeco {
 
     private static final Gson GSON = new Gson();
@@ -193,6 +193,7 @@ public class ContentPackDeco {
             flares = new Flare[0];
         }
 
+        Arrays.stream(flares).forEach(Flare::validate);
         List<String> baseList = new ArrayList<>(base.keySet());
         for(Flare flare : flares){
             String firstEntryKey = baseList.get(flare.getObjPathIndex());

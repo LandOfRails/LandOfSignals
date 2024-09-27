@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public class ContentPackSignal {
 
     private static final Gson GSON = new Gson();
@@ -285,6 +286,8 @@ public class ContentPackSignal {
         if (itemScaling == null) {
             itemScaling = new float[]{1, 1, 1};
         }
+
+        Arrays.stream(flares).forEach(Flare::validate);
 
     }
 

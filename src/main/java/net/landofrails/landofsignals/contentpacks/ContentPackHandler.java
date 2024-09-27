@@ -200,8 +200,8 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileComplexSignalRender.checkCache(id, base, BASE_IDENTIFIER, true);
-                TileComplexSignalRender.checkCache(id, signalGroups.values(), "/signals/");
+                TileComplexSignalRender.checkCache(id, "", base, BASE_IDENTIFIER, true);
+                TileComplexSignalRender.checkCache(id, signalGroups, "signals");
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }

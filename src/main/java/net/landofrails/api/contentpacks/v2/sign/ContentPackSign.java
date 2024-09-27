@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class ContentPackSign {
 
     private static final Gson GSON = new Gson();
@@ -213,6 +214,8 @@ public class ContentPackSign {
         if(flares == null){
             flares = new Flare[0];
         }
+
+        Arrays.stream(flares).forEach(Flare::validate);
 
         List<String> baseList = new ArrayList<>(base.keySet());
         for(Flare flare : flares){

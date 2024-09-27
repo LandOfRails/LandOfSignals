@@ -3,6 +3,7 @@ package net.landofrails.api.contentpacks.v2.complexsignal;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 import net.landofrails.landofsignals.LOSTabs;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class ContentPackComplexSignal {
 
     private static final Gson GSON = new Gson();
@@ -31,7 +33,7 @@ public class ContentPackComplexSignal {
     private ContentPackReferences references;
     // metadataId : data
     private Map<String, Object> metadata;
-
+    private Flare[] flares;
     // Processed data
     private Map<String, Set<String>> objTextures;
     private String uniqueId;
@@ -119,6 +121,14 @@ public class ContentPackComplexSignal {
         this.metadata = metadata;
     }
 
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
+    }
+
     public Map<String, Set<String>> getObjTextures() {
         return objTextures;
     }
@@ -166,6 +176,23 @@ public class ContentPackComplexSignal {
         } else {
 
             defaultMissing();
+
+            if(Arrays.stream(flares).anyMatch(flare -> flare.isAlwaysOn() && base.isEmpty())){
+                invalid.accept("Flare alwaysOn and signal without base, either specify a groupId or add a base model");
+            }else if(Arrays.stream(flares).anyMatch(flare -> flare.isAlwaysOn() && flare.getObjPath() == null && base.size() > 1)){
+                invalid.accept("Flare alwaysOn and multiple entries in base, please specify an objPath");
+            }else if(Arrays.stream(flares).anyMatch(flare -> flare.isAlwaysOn() && !base.containsKey(flare.getObjPath()))){
+                invalid.accept("Flare specifies objPath that is not found in base.");
+            }else if(Arrays.stream(flares).anyMatch(flare -> !flare.isAlwaysOn() && !signals.containsKey(flare.getGroupId()))){
+                invalid.accept("Flare specifies groupId that is not found in signals.");
+            }else if(
+                Arrays.stream(flares).filter(flare -> !flare.isAlwaysOn() && flare.getObjPath() == null).anyMatch(flare ->
+                        Arrays.stream(flare.getStates()).anyMatch(state -> signals.get(flare.getGroupId()).getStates().get(state).getModels().size() > 1)
+                )
+            ){
+                invalid.accept("Flare specifies no objPath but has multiple available entries.");
+            }
+
 
             if (!"MISSING".equalsIgnoreCase(id)) {
                 uniqueId = contentPack.getId() + ":" + id;
@@ -219,6 +246,7 @@ public class ContentPackComplexSignal {
         }
     }
 
+    @SuppressWarnings("java:S6541")
     private void defaultMissing() {
 
         if (rotationSteps == null) {
@@ -260,6 +288,42 @@ public class ContentPackComplexSignal {
 
         if (objTextures == null) {
             objTextures = new HashMap<>();
+        }
+
+        if(flares == null){
+            flares = new Flare[0];
+        }
+
+        Arrays.stream(flares).forEach(Flare::validate);
+
+        for(Flare flare : flares){
+            if(flare.isAlwaysOn() && flare.getGroupId() == null && flare.getObjPath() == null && base.size() == 1) {
+                String firstEntryKey = base.keySet().iterator().next();
+                flare.setObjPath(firstEntryKey);
+                String[] groups = base.get(firstEntryKey)[0].getObj_groups();
+                if (groups == null)
+                    groups = new String[0];
+                flare.setObjGroups(groups);
+            }else if(flare.getGroupId() != null && flare.getObjPath() == null){
+                ContentPackSignalState firstState = signals.get(flare.getGroupId()).getStates().get(flare.getStates()[0]);
+                if(firstState.getModels().size() == 1){
+                    String firstObjPath = firstState.getModels().keySet().iterator().next();
+                    String[] firstObjGroups = firstState.getModels().get(firstObjPath)[flare.getObjPathIndex()].getObj_groups();
+                    if(
+                        Arrays.stream(flare.getStates()).allMatch(stateKey -> {
+                            ContentPackSignalState state = signals.get(flare.getGroupId()).getStates().get(stateKey);
+                            String stateObjPath = state.getModels().keySet().iterator().next();
+                            return state.getModels().size() == 1 &&
+                                    state.getModels().get(stateObjPath).length == 1 &&
+                                    firstObjPath.equalsIgnoreCase(stateObjPath) &&
+                                    Arrays.deepEquals(firstObjGroups, state.getModels().get(stateObjPath)[0].getObj_groups());
+                        })
+                    ){
+                        flare.setObjPath(firstObjPath);
+                        flare.setObjGroups(firstObjGroups == null ? new String[0] : firstObjGroups);
+                    }
+                }
+            }
         }
     }
 

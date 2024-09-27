@@ -16,6 +16,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static net.landofrails.landofsignals.utils.Static.ACTIVE;
+import static net.landofrails.landofsignals.utils.Static.INACTIVE;
+
+@SuppressWarnings("unused")
 public class ContentPackLever {
     private static final Gson GSON = new Gson();
 
@@ -186,8 +190,8 @@ public class ContentPackLever {
             }
         }
 
-        Predicate<String> isActive = "active"::equalsIgnoreCase;
-        Predicate<String> isInactive = "inactive"::equalsIgnoreCase;
+        Predicate<String> isActive = ACTIVE::equalsIgnoreCase;
+        Predicate<String> isInactive = INACTIVE::equalsIgnoreCase;
 
         if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null)){
             invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
@@ -221,6 +225,7 @@ public class ContentPackLever {
 
     }
 
+    @SuppressWarnings("java:S6541")
     private void defaultMissing() {
 
         if (rotationSteps == null) {
@@ -253,6 +258,8 @@ public class ContentPackLever {
             flares = new Flare[0];
         }
 
+        Arrays.stream(flares).forEach(Flare::validate);
+
         List<Flare> splitFlares = new ArrayList<>();
         for(Flare flare : flares){
             if(flare.isAlwaysOn() && flare.getObjPath() == null && active.size() == 1 && inactive.size() == 1){
@@ -267,7 +274,7 @@ public class ContentPackLever {
                         activeGroups = new String[0];
                     flare.setObjGroups(activeGroups);
                     flare.setAlwaysOn(false);
-                    flare.setStates(new String[]{"active"});
+                    flare.setStates(new String[]{ACTIVE});
 
                     // inactive flare
                     Flare splitFlare = new Flare(flare);
@@ -277,7 +284,7 @@ public class ContentPackLever {
                     if(inactiveGroups == null)
                         inactiveGroups = new String[0];
                     splitFlare.setObjGroups(inactiveGroups);
-                    splitFlare.setStates(new String[]{"inactive"});
+                    splitFlare.setStates(new String[]{INACTIVE});
                     splitFlares.add(splitFlare);
                 }else{
                     if(flare.getObjPath() == null && active.size() == 1){
@@ -289,7 +296,7 @@ public class ContentPackLever {
                         flare.setObjGroups(groups);
                     }
                 }
-            }else if(flare.getStates().length == 1 && "active".equalsIgnoreCase(flare.getStates()[0])){
+            }else if(flare.getStates().length == 1 && ACTIVE.equalsIgnoreCase(flare.getStates()[0])){
                 if(flare.getObjPath() == null && active.size() == 1){
                     String firstEntryKey = active.keySet().iterator().next();
                     flare.setObjPath(firstEntryKey);
@@ -298,7 +305,7 @@ public class ContentPackLever {
                         groups = new String[0];
                     flare.setObjGroups(groups);
                 }
-            }else if(flare.getStates().length == 1 && "inactive".equalsIgnoreCase(flare.getStates()[0]) && flare.getObjPath() == null && inactive.size() == 1){
+            }else if(flare.getStates().length == 1 && INACTIVE.equalsIgnoreCase(flare.getStates()[0]) && flare.getObjPath() == null && inactive.size() == 1){
                 String firstEntryKey = inactive.keySet().iterator().next();
                 flare.setObjPath(firstEntryKey);
                 String[] groups = inactive.get(firstEntryKey)[0].getObj_groups();
