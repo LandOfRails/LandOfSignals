@@ -83,7 +83,7 @@ public class Flare {
     private String texture;
 
     /**
-     * Optional. Should the flare be scaled with distance? Default: true
+     * Optional. Should the flare be scaled with distance? Default: false
      */
     private Boolean scaleWithDistance;
 
@@ -255,8 +255,6 @@ public class Flare {
     }
 
     public boolean getScaleWithDistance() {
-        if(scaleWithDistance == null)
-            scaleWithDistance = true;
         return scaleWithDistance;
     }
 
@@ -295,6 +293,10 @@ public class Flare {
         // Default values
         if(color == null){
             color = "#FFFFFF";
+        }
+
+        if(scaleWithDistance == null){
+            scaleWithDistance = false;
         }
 
         if(postRotation == null){
