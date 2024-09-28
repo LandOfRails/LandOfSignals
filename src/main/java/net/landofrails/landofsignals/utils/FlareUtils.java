@@ -230,8 +230,8 @@ public class FlareUtils {
         final String flareId = flare.getId();
         final OBJModel model = TileSignPartRender.cache().get(objPath);
 
-        float[] modelTranslation = sign.getBase().get(flare.getObjPath())[0].getBlock().getTranslation();
-        float[] modelScaling = sign.getBase().get(flare.getObjPath())[0].getBlock().getScaling();
+        float[] modelTranslation = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
+        float[] modelScaling = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
 
         String errMsg = String.format("Uh oh. Did not find obj_path %s in model %s for flare %s", flare.getObjPath(), sign.getUniqueId(), flareId);
         if(model == null)
@@ -272,8 +272,8 @@ public class FlareUtils {
         final String flareId = flare.getId();
         final OBJModel model = TileDecoRender.cache().get(objPath);
 
-        float[] modelTranslation = deco.getBase().get(flare.getObjPath())[0].getBlock().getTranslation();
-        float[] modelScaling = deco.getBase().get(flare.getObjPath())[0].getBlock().getScaling();
+        float[] modelTranslation = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
+        float[] modelScaling = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
 
         String errMsg = String.format("Uh oh. Did not find obj_path %s in model %s for flare %s", flare.getObjPath(), deco.getUniqueId(), flareId);
         if(model == null)
@@ -297,8 +297,8 @@ public class FlareUtils {
 
             Map<String, ContentPackModel[]> models =
                     state.equalsIgnoreCase(ACTIVE) ? lever.getActive() : lever.getInactive();
-            float[] modelTranslation = models.get(flare.getObjPath())[0].getBlock().getTranslation();
-            float[] modelScaling = models.get(flare.getObjPath())[0].getBlock().getScaling();
+            float[] modelTranslation = models.get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
+            float[] modelScaling = models.get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
 
             //
 
