@@ -1,0 +1,5 @@
+site_name: LandOfSignals Wiki
+theme:
+  name: material
+plugins:
+  - search

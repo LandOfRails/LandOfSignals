@@ -25,7 +25,7 @@ public class TileSignPart extends BlockEntity implements IManipulate {
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
-    private final String id;
+    private String id;
     @TagField
     private String signText;
     @TagField("offset")

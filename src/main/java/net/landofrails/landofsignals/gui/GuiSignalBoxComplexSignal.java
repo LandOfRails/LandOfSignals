@@ -23,6 +23,7 @@ import java.util.*;
 public class GuiSignalBoxComplexSignal implements IScreen {
 
     private static TileSignalBox tsb;
+    private static String signalId;
 
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
@@ -41,10 +42,8 @@ public class GuiSignalBoxComplexSignal implements IScreen {
     private String originalLeftState;
 
     public GuiSignalBoxComplexSignal() {
-        final TileComplexSignal tsp = tsb.getTileComplexSignal();
-        String itemId = tsp.getId();
 
-        modes = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tsp.getId());
+        modes = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(signalId);
         modeGroups = modes.keySet();
         originalSignalGroup = tsb.getGroupId(getFirstValue(modeGroups));
         signalGroup = originalSignalGroup;
@@ -56,19 +55,20 @@ public class GuiSignalBoxComplexSignal implements IScreen {
 
         itemStackLeft = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, 1);
         final TagCompound tag = itemStackLeft.getTagCompound();
-        tag.setString("itemId", itemId);
+        tag.setString("itemId", signalId);
         itemStackLeft.setTagCompound(tag);
 
         itemStackRight = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, 1);
         final TagCompound tag2 = itemStackRight.getTagCompound();
-        tag2.setString("itemId", itemId);
+        tag2.setString("itemId", signalId);
         itemStackRight.setTagCompound(tag2);
 
 
     }
 
-    public static void open(final TileSignalBox tileSignalBox) {
+    public static void open(final TileSignalBox tileSignalBox, String signalId) {
         tsb = tileSignalBox;
+        GuiSignalBoxComplexSignal.signalId = signalId;
         LOSGuis.SIGNAL_BOX_COMPLEX_SIGNAL.open(MinecraftClient.getPlayer());
     }
 

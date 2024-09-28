@@ -1,3 +1,8 @@
+### Release 1.3.3
+
+* Fixed [#159] : Mod crashed with java version 12 or higher due to "javalangnosuchfieldexception modifiers"
+* Fixed [#159] : Blocks would glitch in 1.14 - 1.16 after the GUI was opened on the signal or the signalbox. This resulted in the block not reacting to changed states and staying rendered even after the destruction of the block.
+
 ### Release 1.3.2
 
 * Fixed [#151] : Rail switch always points left from either perspective
