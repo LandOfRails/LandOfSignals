@@ -63,9 +63,6 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @Nullable
     private Integer lastRedstone;
 
-    private TileSignalPart tileSignalPart;
-    private TileComplexSignal tileComplexSignal;
-
     // client-only
     private boolean highlighting = false;
 
@@ -111,6 +108,7 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
                         clearPreviousData();
                     }
 
+                    this.markDirty();
                     new SignalBoxTileSignalPartPacket(tempSignalPart, this).sendToPlayer(player);
                     return true;
                 }
@@ -121,6 +119,7 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
                         clearPreviousData();
                     }
 
+                    this.markDirty();
                     new SignalBoxTileSignalPartPacket(tempComplexSignal, this).sendToPlayer(player);
                     return true;
                 }
@@ -210,26 +209,6 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
         tileSignalPartPos = pos;
         this.signalType = signalType;
         markDirty();
-    }
-
-    public void setTileSignalPart(final TileSignalPart tileSignalPart) {
-        this.tileComplexSignal = null;
-        this.tileSignalPart = tileSignalPart;
-        this.signalType = 0;
-    }
-
-    public TileSignalPart getTileSignalPart() {
-        return tileSignalPart;
-    }
-
-    public void setTileComplexSignal(TileComplexSignal tileComplexSignal) {
-        this.tileSignalPart = null;
-        this.tileComplexSignal = tileComplexSignal;
-        this.signalType = 1;
-    }
-
-    public TileComplexSignal getTileComplexSignal() {
-        return tileComplexSignal;
     }
 
     @Nullable

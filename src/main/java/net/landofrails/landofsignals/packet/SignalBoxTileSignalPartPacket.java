@@ -12,45 +12,34 @@ import net.landofrails.landofsignals.tile.TileSignalPart;
 
 public class SignalBoxTileSignalPartPacket extends Packet {
 
-    @TagField("tileSignalPart")
-    TileSignalPart tileSignalPart;
-    @TagField("tileComplexSignal")
-    TileComplexSignal tileComplexSignal;
-
-    @TagField("tileSignalBox")
-    TileSignalBox tileSignalBox;
     @TagField("posSignalBox")
     Vec3i posSignalBox;
     @TagField("signalType")
     Byte signalType;
+    @TagField("signalId")
+    String signalId;
 
     public SignalBoxTileSignalPartPacket() {
     }
 
     public SignalBoxTileSignalPartPacket(final TileSignalPart tileSignalPart, final TileSignalBox tileSignalBox) {
-        this.tileSignalPart = tileSignalPart;
-        this.tileSignalBox = tileSignalBox;
+        this.signalId = tileSignalPart.getId();
         this.posSignalBox = tileSignalBox.getPos();
         this.signalType = tileSignalBox.getSignalType();
     }
 
     public SignalBoxTileSignalPartPacket(final TileComplexSignal tileComplexSignal, final TileSignalBox tileSignalBox) {
-        this.tileComplexSignal = tileComplexSignal;
-        this.tileSignalBox = tileSignalBox;
+        this.signalId = tileComplexSignal.getId();
         this.posSignalBox = tileSignalBox.getPos();
         this.signalType = tileSignalBox.getSignalType();
     }
 
     @Override
     protected void handle() {
-        if (tileSignalPart != null) {
-            getWorld().setBlockEntity(posSignalBox, tileSignalBox);
-            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileSignalPart(tileSignalPart);
-            GuiSignalBoxSignalPart.open(tileSignalBox);
-        } else if (tileComplexSignal != null) {
-            getWorld().setBlockEntity(posSignalBox, tileSignalBox);
-            getWorld().getBlockEntity(posSignalBox, TileSignalBox.class).setTileComplexSignal(tileComplexSignal);
-            GuiSignalBoxComplexSignal.open(tileSignalBox);
+        if (signalType == 0) {
+            GuiSignalBoxSignalPart.open(getWorld().getBlockEntity(posSignalBox, TileSignalBox.class), signalId);
+        } else if (signalType == 1) {
+            GuiSignalBoxComplexSignal.open(getWorld().getBlockEntity(posSignalBox, TileSignalBox.class), signalId);
         } else {
             LandOfSignals.error("Can't open Signalbox, no tile entity given.");
         }

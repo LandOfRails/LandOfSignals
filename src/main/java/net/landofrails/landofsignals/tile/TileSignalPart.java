@@ -34,7 +34,7 @@ public class TileSignalPart extends BlockEntity implements IManipulate {
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
-    private final String id;
+    private String id;
     @TagField("texturePath")
     private String texturePath = "";
     @TagField(value = "orderedStates", mapper = StringArrayMapper.class)

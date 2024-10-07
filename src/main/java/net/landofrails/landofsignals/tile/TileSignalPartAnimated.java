@@ -16,7 +16,7 @@ public class TileSignalPartAnimated extends BlockEntityTickable implements IMani
     @TagField("blockRotation")
     private int blockRotate;
     @TagField("id")
-    private final String id;
+    private String id;
     @TagField("texturePath")
     private String animationOrTextureName;
 

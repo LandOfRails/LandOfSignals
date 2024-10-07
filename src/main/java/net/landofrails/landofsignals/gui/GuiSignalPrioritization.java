@@ -17,8 +17,6 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.GuiSignalPrioritizationToServerPacket;
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
-import net.landofrails.landofsignals.tile.TileComplexSignal;
-import net.landofrails.landofsignals.tile.TileSignalPart;
 import util.Matrix4;
 
 import java.text.MessageFormat;
@@ -26,11 +24,15 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.landofrails.landofsignals.packet.GuiSignalPrioritizationToClientPacket.SIGNAL_PART_ID;
+
 public class GuiSignalPrioritization implements IScreen {
 
-    private static TileSignalPart tileSignalPart;
-    private static TileComplexSignal tileComplexSignal;
+    private static Integer signalType;
     private static Vec3i signalPos;
+    private static String signalId;
+    private static String[] orderedStates;
+    private static Map<String, String[]> orderedGroupStates;
 
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.SIGNAL_PRIORITIZATION;
 
@@ -133,8 +135,7 @@ public class GuiSignalPrioritization implements IScreen {
             };
 
             actions[i] = indexOffset -> {
-                int index = entriesIndex + indexOffset;
-                itemIndex = index;
+                itemIndex = entriesIndex + indexOffset;
                 updateButtons();
             };
         }
@@ -176,7 +177,7 @@ public class GuiSignalPrioritization implements IScreen {
     @Override
     public void onClose() {
 
-        if (tileSignalPart != null) {
+        if (signalType == SIGNAL_PART_ID) {
             if (Arrays.deepEquals(originalStates, states)) {
                 return;
             }
@@ -242,29 +243,20 @@ public class GuiSignalPrioritization implements IScreen {
     }
 
     private static <T> T getFirstValue(T[] values) {
-        for (T object : values)
-            return object;
+        if(values != null && values.length >= 1)
+            return values[0];
         return null;
     }
 
     private static Map<String, String[]> cleanCopy(Map<String, String[]> map) {
         Map<String, String[]> val = new HashMap<>();
-        map.forEach((groupId, states) -> {
-            val.put(groupId, Arrays.copyOf(states, states.length));
-        });
+        map.forEach((groupId, states) -> val.put(groupId, Arrays.copyOf(states, states.length)));
         return val;
     }
 
-    // Getters for signal-dependent stuff
-    private String getId() {
-        if (tileSignalPart != null)
-            return tileSignalPart.getId();
-        return tileComplexSignal.getId();
-    }
-
     private boolean initStates(IScreenBuilder screen) {
-        if (tileSignalPart != null) {
-            states = tileSignalPart.getOrderedStates();
+        if (signalType == SIGNAL_PART_ID) {
+            states = orderedStates != null ? Arrays.copyOf(orderedStates, orderedStates.length) : null;
             if (states == null || states.length == 0) {
                 screen.close();
                 return false;
@@ -275,7 +267,7 @@ public class GuiSignalPrioritization implements IScreen {
 
             groups = new String[0];
         } else {
-            groupStates = tileComplexSignal.getOrderedGroupStates();
+            groupStates = orderedGroupStates != null? cleanCopy(orderedGroupStates) : null;
             if (groupStates == null || groupStates.isEmpty()) {
                 screen.close();
                 return false;
@@ -283,7 +275,7 @@ public class GuiSignalPrioritization implements IScreen {
 
             originalGroupStates = cleanCopy(groupStates);
 
-            Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(tileComplexSignal.getId());
+            Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getAllGroupStates(signalId);
             groups = signalGroups.keySet().toArray(new String[0]);
             groupNames = new HashMap<>();
             signalGroups.forEach((groupId, group) ->
@@ -296,22 +288,21 @@ public class GuiSignalPrioritization implements IScreen {
     }
 
     private void createItem() {
-        String blockId = getId();
-        if (tileSignalPart != null) {
+        if (signalType == SIGNAL_PART_ID) {
             item = new ItemStack(LOSItems.ITEM_SIGNAL_PART, 1);
             TagCompound tag = item.getTagCompound();
-            tag.setString("itemId", blockId);
+            tag.setString("itemId", signalId);
             item.setTagCompound(tag);
         } else {
             item = new ItemStack(LOSItems.ITEM_COMPLEX_SIGNAL, 1);
             TagCompound tag = item.getTagCompound();
-            tag.setString("itemId", blockId);
+            tag.setString("itemId", signalId);
             item.setTagCompound(tag);
         }
     }
 
     private void refreshItem() {
-        if (tileSignalPart != null) {
+        if (signalType == SIGNAL_PART_ID) {
             final TagCompound rightTag = item.getTagCompound();
             rightTag.setString("itemState", states[itemIndex]);
             item.setTagCompound(rightTag);
@@ -336,17 +327,13 @@ public class GuiSignalPrioritization implements IScreen {
 
     // Open-Functions
 
-    public static void open(Vec3i signalPos, TileSignalPart tileSignalPart) {
+    public static void open(Vec3i signalPos, int signalType, String signalId, String[] orderedStates, Map<String, String[]> orderedGroupStates) {
         GuiSignalPrioritization.signalPos = signalPos;
-        GuiSignalPrioritization.tileSignalPart = tileSignalPart;
-        GuiSignalPrioritization.tileComplexSignal = null;
-        GUI.get().open(MinecraftClient.getPlayer());
-    }
+        GuiSignalPrioritization.signalType = signalType;
+        GuiSignalPrioritization.signalId = signalId;
+        GuiSignalPrioritization.orderedStates = orderedStates;
+        GuiSignalPrioritization.orderedGroupStates = orderedGroupStates;
 
-    public static void open(Vec3i signalPos, TileComplexSignal tileComplexSignal) {
-        GuiSignalPrioritization.signalPos = signalPos;
-        GuiSignalPrioritization.tileSignalPart = null;
-        GuiSignalPrioritization.tileComplexSignal = tileComplexSignal;
         GUI.get().open(MinecraftClient.getPlayer());
     }
 
