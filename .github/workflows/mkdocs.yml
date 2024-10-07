@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/issue-133-testbuild-add-support-for-flareslighting
 permissions:
   contents: write
 jobs:
