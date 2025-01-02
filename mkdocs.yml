@@ -3,3 +3,7 @@ theme:
   name: material
 plugins:
   - search
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
