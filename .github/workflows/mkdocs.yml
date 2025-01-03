@@ -26,5 +26,6 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install $(mkdocs get-deps)
+      - run: mkdocs get-deps > mkdocs-deps.txt
+      - run: pip install -r mkdocs-deps.txt
       - run: mkdocs gh-deploy --force
