@@ -9,6 +9,8 @@ UMC.md
 .project
 .settings/
 
+# Mkdocs serve
+site/
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,forgegradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,java,gradle,forgegradle
@@ -136,7 +138,6 @@ hs_err_pid*
 build/
 
 ## Built JARs
-*.jar
 !UMCSetup.jar
 
 # Ignore Gradle GUI config
@@ -159,7 +160,6 @@ gradle-app.setting
 
 ## Generated
 build.gradle
-UMC.md
 gradle/wrapper/gradle-wrapper.properties
 src/main/java/net/landofrails/landofsignals/Mod.java
 src/main/resources/mcmod.info
