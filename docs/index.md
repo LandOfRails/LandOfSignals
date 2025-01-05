@@ -8,8 +8,8 @@ Welcome to the official documentation for the LandOfSignals mod. This guide is d
 - [Getting Started with LandOfSignals](#getting-started-with-landofsignals)
 - [Using the Mod](#using-the-mod)
 - [Content Pack Systems](#content-pack-systems)
-  - [Creating Content Packs for V1](ContentPacksV1.md)
-  - [Creating Content Packs for V2](ContentPacksV2.md)
+  - [Creating Content Packs for V1](ContentPackV1/ContentPacksV1.md)
+  - [Creating Content Packs for V2](ContentPackV2/ContentPacksV2.md)
 - [Advanced Configuration](#advanced-configuration)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -33,11 +33,11 @@ Explore how to create and use content packs with LandOfSignals, enhancing the cu
 
 ### Creating Content Packs for V1
 
-Step-by-step guide on creating content packs compatible with version 1 of the mod. [Learn more](ContentPacksV1.md).
+Step-by-step guide on creating content packs compatible with version 1 of the mod. [Learn more](ContentPackV1/ContentPacksV1.md).
 
 ### Creating Content Packs for V2
 
-Instructions on developing content packs for version 2 of LandOfSignals, including advanced features and tips. [Learn more](ContentPacksV2.md).
+Instructions on developing content packs for version 2 of LandOfSignals, including advanced features and tips. [Learn more](ContentPackV2/ContentPacksV2.md).
 
 ## Advanced Configuration
 

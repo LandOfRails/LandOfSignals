@@ -11,7 +11,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     This file contains the name, author, version of your contentpack.<br />
     It also contains links to your blocks or contentsets.
 
-    [:octicons-arrow-right-24: Header documentation](#)
+    [:octicons-arrow-right-24: Header documentation](./Content/Header.md)
 
 </div>
 
@@ -23,7 +23,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     ---
 
     ![](signal.png){ width="300" }
-- 
+
     This is a simple signal, it has a more strict and simpler structure.<br />
     It is more performance-friendly and requires fewer lines.<br />
     It has only one controllable group and the model can only be changed via its texture.<br />
@@ -45,28 +45,39 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
 
     [:octicons-arrow-right-24: Complex signal documentation](#)
 
--   :material-sign-caution:{ .lg .middle } __Sign__
-
-    ---
-
-    ![](sign.png){ width="300" }
-- 
-- 
-    Signs are similar to assets/deco blocks, they have their own creative tab.<br />
-    They are supposed to support text-input in the future. *(TBD see #120)*
-
-    [:octicons-arrow-right-24: Sign documentation](#)
-
 -   :material-traffic-cone:{ .lg .middle } __Asset/Deco__
 
     ---
 
     ![](deco.png){ width="300" }
-- 
+
     Blocks that are not supposed to have any functionality can be added as a DECO block.<br />
     They have their own creative tab.
 
     [:octicons-arrow-right-24: Asset/Deco documentation](#)
+
+-   :material-sign-caution:{ .lg .middle } __Sign__
+
+    ---
+
+    ![](sign.png){ width="300" }
+
+    Signs are similar to assets/deco blocks, they have their own creative tab.<br />
+    They are supposed to support text-input in the future. *(TBD see #120)*
+    
+    [:octicons-arrow-right-24: Sign documentation](#)
+
+-   :material-door-sliding:{ .lg .middle } __Signalbox__
+
+    ---
+
+    ![](signalbox.png){ width="300" }
+-
+
+    Signalboxes are similar to assets/deco blocks.<br />
+    They can be connected to (complex) signals to control them.
+    
+    [:octicons-arrow-right-24: Sign documentation](#)
 
 -   :material-electric-switch:{ .lg .middle } __Lever__
 
@@ -88,7 +99,8 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
 
     ---
 
-    ![](flares.png){ width="300" }
+    ![](flares_day.png){ width="300" }
+    ![](flares_night.png){ width="300" }
 
     If your model contains lamps or other parts that are supposed to glow, this is the right place.<br />
     Flares are oriented to your models and light up when the right state is set.<br />
@@ -100,13 +112,13 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
 
 <div class="grid cards" markdown>
 
--   :material-file:{ .lg .middle } __Contentsets__ *(optional)*
+-   :material-format-list-group:{ .lg .middle } __Contentsets__ *(optional)*
 
     ---
 
     This is its own file containing more blocks.<br />
     It does not contain any logic, the only advantage is that you can group different blocks in your contentpack that belong together.<br />
-    It can help with keeping an overview, depending on the amount of blocks your want to add.
+    It can help with keeping an overview, depending on the amount of blocks you want to add.
 
     [:octicons-arrow-right-24: Contentset documentation](#)
 
