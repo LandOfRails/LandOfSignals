@@ -17,7 +17,7 @@ It contains the name, author, packversion and addonversion of your pack as well 
 
 ``` json linenums="1" title="landofsignals.json"
 {
-    "name": "My contentpack (1)", // (1)!
+    "name": "My contentpack", // (1)!
     "packversion": "1.0", // (2)!
     "author" : "John Doe", // (3)!
     "addonversion": "2", // (4)!
