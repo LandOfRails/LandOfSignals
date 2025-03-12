@@ -11,7 +11,35 @@ The first thing you'll need to create a contentpack is the `landofsignals.json`.
 It contains all the vitale information needed for LandOfSignals to add your content to the game.<br />
 It contains the name, author, packversion and addonversion of your pack as well as the links to the blocks.
 
-!!! info "The first entries in your ZIP file should be `/landofsignals.json` (file) and `/assets/` (directory).<br />There can't be a folder above."
+??? abstract "Example folders and files"
+
+    ```
+    my-contentpack-v1.zip/
+        assets/
+            landofsignals/
+                folder1/
+                    complexsignal.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+                folder2/
+                    signal.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+                folder3/
+                    deco.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+                folder4/
+                    sign.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+                folder5/
+                    signalbox.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+                folder6/
+                    lever.json/
+                    ! TODO Expand with folders and/or OBJ/MTL/PNG files !
+        landofsignals.json
+    ```
+    !!! warning "The first entries in your ZIP file should be `/landofsignals.json` (file) and `/assets/` (directory).<br />There can't be a folder above."
+    !!! info "While creating and modifying your contentpack, it does not have to be a ZIP file.<br />You can just leave it as a normal folder in the `/config/` folder of your minecraft instance.<br />If you want to release your contentpack, you should ZIP it like the example shown here."
+
 
 ## Structure
 
@@ -60,10 +88,9 @@ It contains the name, author, packversion and addonversion of your pack as well 
 
 6.  
     
-    !!! info "Each entry (block) consists of the file path and type of block."
+    !!! info "Each entry (block) consists of the file path and type of block. The json files can be named freely. The shown names are for demonstration purposes."
 
     !!! abstract "Available types:<br />BLOCKCOMPLEXSIGNAL, BLOCKSIGNAL, BLOCKDECO, BLOCKSIGN, BLOCKSIGNALBOX and BLOCKLEVER<br /><br />Overview and further information<br / >[:octicons-arrow-right-24: ContentPacksV2](../ContentPacksV2.md)"
-
 
 
 
