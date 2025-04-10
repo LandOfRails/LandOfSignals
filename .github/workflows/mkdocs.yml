@@ -28,4 +28,5 @@ jobs:
             mkdocs-material-
       - run: pip install mkdocs
       - run: pip install $(mkdocs get-deps)
+      - run: pip install mkdocs-awesome-pages-plugin
       - run: mkdocs gh-deploy --force
