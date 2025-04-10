@@ -29,7 +29,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     It has only one controllable group and the model can only be changed via its texture.<br />
     If this suits your needs, this is the preferable option.
 
-    [:octicons-arrow-right-24: Signal documentation](#)
+    [:octicons-arrow-right-24: Signal documentation](./Content/Signal.md)
 
 -   :material-traffic-light:{ .lg .middle } __Complex signal__
 
@@ -43,7 +43,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     The state can be changed via texture, obj-groups or with different objs.<br />
     If you have a model/multiple models or want to create a complex block, this is your best option.
 
-    [:octicons-arrow-right-24: Complex signal documentation](#)
+    [:octicons-arrow-right-24: Complex signal documentation](./Content/ComplexSignal.md)
 
 -   :material-traffic-cone:{ .lg .middle } __Asset/Deco__
 
@@ -54,7 +54,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     Blocks that are not supposed to have any functionality can be added as a DECO block.<br />
     They have their own creative tab.
 
-    [:octicons-arrow-right-24: Asset/Deco documentation](#)
+    [:octicons-arrow-right-24: Asset/Deco documentation](./Content/Asset.md)
 
 -   :material-sign-caution:{ .lg .middle } __Sign__
 
@@ -65,7 +65,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     Signs are similar to assets/deco blocks, they have their own creative tab.<br />
     They are supposed to support text-input in the future. *(TBD see #120)*
     
-    [:octicons-arrow-right-24: Sign documentation](#)
+    [:octicons-arrow-right-24: Sign documentation](./Content/Sign.md)
 
 -   :material-door-sliding:{ .lg .middle } __Signalbox__
 
@@ -77,7 +77,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     Signalboxes are similar to assets/deco blocks.<br />
     They can be connected to (complex) signals to control them.
     
-    [:octicons-arrow-right-24: Sign documentation](#)
+    [:octicons-arrow-right-24: Sign documentation](./Content/Signalbox.md)
 
 -   :material-electric-switch:{ .lg .middle } __Lever__
 
@@ -89,7 +89,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     If you want to add a custom lever/switch that emits redstone when active, this is it.<br />
     It is similar to the signs and assets/deco - difference: You have to state an active and inactive state.
 
-    [:octicons-arrow-right-24: Lever documentation](#)
+    [:octicons-arrow-right-24: Lever documentation](./Content/Lever.md)
 
 </div>
 
@@ -106,7 +106,7 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     Flares are oriented to your models and light up when the right state is set.<br />
     They can be added to signals, complex signals, deco/assets, signs and levers.
 
-    > *Documentation to be created (#133)*
+    [:octicons-arrow-right-24: Header documentation](./Content/Flares.md)
 
 </div>
 
@@ -120,6 +120,6 @@ Your contentpacks is made up from multiple parts, you can find a short descripti
     It does not contain any logic, the only advantage is that you can group different blocks in your contentpack that belong together.<br />
     It can help with keeping an overview, depending on the amount of blocks you want to add.
 
-    [:octicons-arrow-right-24: Contentset documentation](#)
+    [:octicons-arrow-right-24: Contentset documentation](./Content/Contentset.md)
 
 </div>
