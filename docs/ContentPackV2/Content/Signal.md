@@ -111,12 +111,12 @@ This is the successor of the previous signals from ContentPacksV1
 
 9.  !!! info "The different states your signal has."
     !!! failure "Required field!"
-        !!! warning "Can be left away for backwards compatibility.<br />If your block only requires one state:<br />[:octicons-arrow-right-24: Asset](./Asset.md)"
-        !!! abstract "Default value: [null]"
+        !!! warning "Can be left away for backwards compatibility.<br />If your block only requires one state:<br />[:octicons-arrow-right-24: Asset](./Asset.md) [:octicons-arrow-right-24: Sign](./Sign.md)"
+        !!! abstract "Default value: [ "" ]"
 
     !!! tip "Important information!<br />[:octicons-arrow-down-24: States](#states)<br />Remove below."    
 
-    !!! info "`null` is a valid state.<br />Uses texture(s) that are within the same folder as the model (*.obj)."
+    !!! info "`""` or `null` is a valid state.<br />Uses texture(s) that are within the same folder as the model (*.obj)."
 
     !!! note "Can be changed later on."
         !!! info "Adding new states is no issue."
@@ -196,8 +196,9 @@ my-signal/
 
     !!! example "This texture would look like this: off"
     ![](signal/signal-off.png){ width=50% }
-    !!! info "This texture will be listed ingame as Default."
-    !!! warning "This texture must always be available!<br />This is not necessarily the default texture! See below."
+    !!! info "This texture will be listed ingame as "Default.""
+    !!! failure "This texture must always be available!"
+    !!! warning "This is not necessarily the default texture! See below."
 
 ``` json linenums="1"
 {
@@ -225,8 +226,9 @@ my-signal/
 
     !!! example "This texture would look like this: off"
     ![](signal/signal-off.png){ width=50% }
-    !!! info "This texture will be listed ingame as Default."
-    !!! warning "This texture must always be available!<br />This is not necessarily the default texture! See below."
+    !!! info "This texture will be listed ingame as "Default"."
+    !!! failure "This texture must always be available!"
+    !!! warning "This is not necessarily the default texture! See below."
 
 
 ### Sorting, priorities and overwriting of states
