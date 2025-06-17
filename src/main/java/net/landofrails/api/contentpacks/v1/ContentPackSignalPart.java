@@ -8,16 +8,13 @@ import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 import java.io.IOException;
 import java.io.InputStream;
 
-@SuppressWarnings({"java:S107"})
+@SuppressWarnings({"unused", "java:S107"})
 public class ContentPackSignalPart {
 
     private String id;
     private String name;
     private String model;
 
-    /**
-     * FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
-     */
     private Flare[] flares;
 
     private float[] translation;
@@ -67,12 +64,10 @@ public class ContentPackSignalPart {
         this.model = model;
     }
 
-    // FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
     public Flare[] getFlares() {
         return flares;
     }
 
-    // FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
     public void setFlares(Flare[] flares) {
         this.flares = flares;
     }
@@ -128,7 +123,7 @@ public class ContentPackSignalPart {
     public static ContentPackSignalPart fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
-        int read = 0;
+        int read;
 
         try {
             while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {

@@ -71,7 +71,7 @@ public class ContentPackHandlerV1 {
         contentPackSignal.setItemTranslation(contentPackSignalPart.getItemTranslation());
         contentPackSignal.setScaling(contentPackSignalPart.getScaling());
         contentPackSignal.setItemScaling(contentPackSignalPart.getItemScaling());
-        // FIXME Hack. Remove once LOSBlocks has been reworked with Builder-Pattern.
+
         contentPackSignal.setFlares(contentPackSignalPart.getFlares());
 
         ModCore.info("Signal (v1->v2): %s", contentPackSignal.getName());
