@@ -35,12 +35,12 @@ item.landofsignals:item_magnifying_glass.name=Lupe
 message.landofsignals:item.manipulator.disabled=§4Dieses Werkzeug ist derzeit nicht verfügbar. §cEs wird mit dem nächsten Update wieder aktiviert.
 message.landofsignals:sign.texteditor.needs.new.umc.version=§6Warnung: §eTextrendering kommt erst mit der nächsten UMC Version, bis dahin wird er nicht gerendert.
 message.landofsignals:item.signalanimated=§4Dieses Item ist derzeit nicht verfügbar. §cEs wird in einem zukünftigen Update aktiviert.
-message.landogsignals:signs.writeable=Beschriftbar: %s
+message.landofsignals:signs.writeable=Beschriftbar: %s
+message.landofsignals:signalpart.hasflares=Leuchtet: %s
+message.landofsignals:customlevers.hasanimation=Animation: %s
 message.landofsignals:true=§aJa
 message.landofsignals:false=§cNein
 message.landofsignals:non.utf.eight.items=§6WARNUNG: §eDieses Item wurde mit ISO_8859_1 dekodiert anstatt mit UTF-8 aufgrund illegaler Zeichen. Dieses Item funktioniert eventuell nicht wie angedacht.
-message.landofsignals:without.animation=§eOhne Animation
-message.landofsignals:with.animation=§aMit Animation
 
 label.landofsignals:signtexteditor.savebutton=Speichern
 

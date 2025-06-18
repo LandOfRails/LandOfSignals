@@ -13,6 +13,7 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileDeco;
+import net.landofrails.landofsignals.utils.FlareUtils;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
@@ -76,17 +77,21 @@ public class TileDecoRender {
             id = Static.MISSING;
         }
 
-        renderBase(id, tsp, state);
+
+        ContentPackDeco contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id);
+        if(contentPackDeco == null) contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(Static.MISSING);
+
+        renderBase(id, tsp, contentPackDeco, state);
+
+
+        if(contentPackDeco.getFlares().length > 0)
+            FlareUtils.renderFlares(id, contentPackDeco, tsp, state.clone());
 
     }
 
-    private static void renderBase(String blockId, TileDeco tile, RenderState state) {
+    private static void renderBase(String blockId, TileDeco tile, ContentPackDeco contentPackDeco, RenderState state) {
         Vec3d offset = tile.getOffset();
         Vec3d customScaling = tile.getScaling();
-
-        ContentPackDeco contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(blockId);
-
-        if(contentPackDeco == null) contentPackDeco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(Static.MISSING);
 
         checkCache(blockId, contentPackDeco.getBase());
 
@@ -134,4 +139,7 @@ public class TileDecoRender {
         }
     }
 
+    public static Map<String, OBJModel> cache() {
+        return cache;
+    }
 }

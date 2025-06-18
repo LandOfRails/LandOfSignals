@@ -13,6 +13,7 @@ import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileSignPart;
+import net.landofrails.landofsignals.utils.FlareUtils;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
@@ -72,21 +73,21 @@ public class TileSignPartRender {
 
         String id = tsp.getId();
 
-        if (id == null) {
-            id = Static.MISSING;
-        }
+        if (id == null) id = Static.MISSING;
+        ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id);
+        if(contentPackSign == null) contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(Static.MISSING);
 
-        renderBase(id, tsp, state);
+        renderBase(id, contentPackSign, tsp, state.clone());
+
+        if(contentPackSign.getFlares().length > 0)
+            FlareUtils.renderFlares(id, contentPackSign, tsp, state.clone());
 
     }
 
-    private static void renderBase(String blockId, TileSignPart tile, RenderState state) {
+    private static void renderBase(String blockId, ContentPackSign contentPackSign, TileSignPart tile, RenderState state) {
 
         Vec3d offset = tile.getOffset();
         Vec3d customScaling = tile.getScaling();
-        ContentPackSign contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId);
-
-        if(contentPackSign == null) contentPackSign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(Static.MISSING);
 
         checkCache(blockId, LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(blockId).getBase());
         for (Map.Entry<String, ContentPackModel[]> baseModels : contentPackSign.getBase().entrySet()) {
@@ -138,6 +139,10 @@ public class TileSignPartRender {
 
             }
         }
+    }
+
+    public static Map<String, OBJModel> cache(){
+        return cache;
     }
 
 }

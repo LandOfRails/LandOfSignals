@@ -10,6 +10,7 @@ import net.landofrails.landofsignals.LOSItems;
 import java.util.Optional;
 
 public class LandOfSignalsUtils {
+
     private LandOfSignalsUtils() {
     }
 
@@ -44,6 +45,14 @@ public class LandOfSignalsUtils {
                 || itemStack.is(LOSItems.ITEM_SIGNAL_LEVER)
                 || itemStack.is(LOSItems.ITEM_SIGNAL_PART)
                 || itemStack.is(LOSItems.ITEM_SIGNAL_PART_ANIMATED);
+    }
+
+    public static String objIdWithGroup(String blockId, String identifier, String groupId, String objPath){
+        return String.format("%s/%s/%s/%s", blockId, identifier, groupId, objPath);
+    }
+
+    public static String objIdWithoutGroup(String blockId, String identifier, String objPath){
+        return objIdWithGroup(blockId, identifier, "", objPath);
     }
 
 }

@@ -72,6 +72,8 @@ public class ContentPackHandlerV1 {
         contentPackSignal.setScaling(contentPackSignalPart.getScaling());
         contentPackSignal.setItemScaling(contentPackSignalPart.getItemScaling());
 
+        contentPackSignal.setFlares(contentPackSignalPart.getFlares());
+
         ModCore.info("Signal (v1->v2): %s", contentPackSignal.getName());
         // Validate
         contentPackSignal.validate(missing -> {

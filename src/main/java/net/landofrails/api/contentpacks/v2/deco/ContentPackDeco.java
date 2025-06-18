@@ -3,6 +3,7 @@ package net.landofrails.api.contentpacks.v2.deco;
 import com.google.gson.Gson;
 import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackReferences;
 
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@SuppressWarnings("java:S2065")
+@SuppressWarnings({"java:S2065", "unused"})
 public class ContentPackDeco {
 
     private static final Gson GSON = new Gson();
@@ -22,6 +23,7 @@ public class ContentPackDeco {
     private Float rotationSteps;
     // objPath : objProperties
     private Map<String, ContentPackModel[]> base;
+    private Flare[] flares;
     private ContentPackReferences references;
     // metadataId : data
     private Map<String, Object> metadata;
@@ -45,6 +47,14 @@ public class ContentPackDeco {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public Float getRotationSteps() {
@@ -141,16 +151,18 @@ public class ContentPackDeco {
                 Stream.of(decoModelEntry.getValue()).forEach(model -> model.validate(decoConsumer, references));
             }
         }
+        if(Arrays.stream(flares).anyMatch(flare -> flare.getObjPath() == null || base.get(flare.getObjPath()).length == 0)){
+            invalid.accept("Unable to determine obj path for the flares, add/check obj paths");
+        }
 
         if (objTextures.isEmpty()) {
             for (Map.Entry<String, ContentPackModel[]> modelEntry : base.entrySet()) {
                 for (ContentPackModel model : modelEntry.getValue()) {
                     String objPath = modelEntry.getKey();
                     objTextures.putIfAbsent(objPath, new HashSet<>());
-                    objTextures.computeIfPresent(objPath, (key, value) -> {
-                        value.addAll(Arrays.asList(model.getTextures()));
-                        return value;
-                    });
+                    Set<String> value = objTextures.get(objPath);
+                    value.add("");
+                    value.add(model.getTextures());
                 }
             }
         }
@@ -176,6 +188,26 @@ public class ContentPackDeco {
         if (objTextures == null) {
             objTextures = new HashMap<>();
         }
+
+        if(flares == null){
+            flares = new Flare[0];
+        }
+
+        Arrays.stream(flares).forEach(Flare::validate);
+        List<String> baseList = new ArrayList<>(base.keySet());
+        for(Flare flare : flares){
+            String firstEntryKey = baseList.get(flare.getObjPathIndex());
+            if(flare.getObjPath() == null){
+                flare.setObjPath(firstEntryKey);
+            }
+            if(flare.getObjGroups() == null){
+                String[] groups = base.get(flare.getObjPath())[flare.getObjPathIndex()].getObj_groups();
+                if(groups == null)
+                    groups = new String[0];
+                flare.setObjGroups(groups);
+            }
+        }
+
     }
 
     public void setUTF8(boolean isUTF8) {

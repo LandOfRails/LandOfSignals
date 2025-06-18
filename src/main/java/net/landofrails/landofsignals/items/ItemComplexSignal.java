@@ -19,21 +19,23 @@ import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S1192")
 public class ItemComplexSignal extends CustomItem {
 
-    public ItemComplexSignal(final String modID, final String name) {
-        super(modID, name);
-    }
+    private static final Map<String, List<String>> cacheTooltips = new HashMap<>();
 
     private static final String ITEMIDKEY = "itemId";
     private static final String MSG_NOT_UTF8 = "message.landofsignals:non.utf.eight.items";
+    private static final String MSG_HAS_FLARES = "message.landofsignals:signalpart.hasflares";
+    private static final String MSG_LOS_TRUE = "message.landofsignals:true";
+    private static final String MSG_LOS_FALSE = "message.landofsignals:false";
+
+    public ItemComplexSignal(final String modID, final String name) {
+        super(modID, name);
+    }
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
@@ -126,24 +128,37 @@ public class ItemComplexSignal extends CustomItem {
     @Override
     public List<String> getTooltip(ItemStack itemStack) {
         String itemId = itemStack.getTagCompound().getString(ITEMIDKEY);
-        List<String> tooltips = new ArrayList<>();
-        if (itemId != null) {
-            String delimiter = ":";
-            if (itemId.split(delimiter).length == 2) {
-                tooltips.add("Pack: " + itemId.split(delimiter)[0]);
-                tooltips.add("ID: " + itemId.split(delimiter)[1]);
-            } else {
-                tooltips.add("ID: " + itemId);
-            }
-
-            boolean isUTF8 = LOSBlocks.BLOCK_COMPLEX_SIGNAL.isUTF8(itemId);
-            if (!isUTF8) {
-                tooltips.add("");
-                tooltips.add(TextUtil.translate(MSG_NOT_UTF8));
-            }
-
+        if(itemId == null){
+            return new ArrayList<>();
         }
-        return tooltips;
+        if(!cacheTooltips.containsKey(itemId)){
+            cacheTooltip(itemId);
+        }
+        return cacheTooltips.get(itemId);
+    }
+
+    private void cacheTooltip(String itemId) {
+        List<String> tooltips = new ArrayList<>();
+        String delimiter = ":";
+        if (itemId.split(delimiter).length == 2) {
+            tooltips.add("Pack: " + itemId.split(delimiter)[0]);
+            tooltips.add("ID: " + itemId.split(delimiter)[1]);
+        } else {
+            tooltips.add("ID: " + itemId);
+        }
+
+        boolean hasFlares = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(itemId).getFlares().length > 0;
+        Object[] hasFlaresRawText = new Object[]{TextUtil.translate(hasFlares ? MSG_LOS_TRUE : MSG_LOS_FALSE)};
+        // String has to be converted to array by us, build pipeline is not able to do it itself.
+        tooltips.add(TextUtil.translate(MSG_HAS_FLARES, hasFlaresRawText));
+
+        boolean isUTF8 = LOSBlocks.BLOCK_COMPLEX_SIGNAL.isUTF8(itemId);
+        if (!isUTF8) {
+            tooltips.add("");
+            tooltips.add(TextUtil.translate(MSG_NOT_UTF8));
+        }
+
+        cacheTooltips.put(itemId, tooltips);
     }
 
 }

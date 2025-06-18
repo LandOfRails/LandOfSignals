@@ -5,6 +5,7 @@ import net.landofrails.api.contentpacks.v2.ContentPack;
 import net.landofrails.api.contentpacks.v2.ContentPackException;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
@@ -110,6 +111,43 @@ public class LOSBlocks {
                 "an"
         }));
 
+        ContentPackSignalPart light_flare = new ContentPackSignalPart("block_signal_part_light_flare", "Ampel (Off, Red)", "models/block/landofsignals/light_flare/lightflare.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                "",
+                "yellow",
+                "red"
+        });
+        light_flare.setFlares(new Flare[]{
+                new Flare("ul", "165;32;25", 180, 0, 0.019f, false, new String[]{"red"}),
+                new Flare("ll", "229;189;1", 180, 0, 0.019f, false, new String[]{"yellow"})
+        });
+        registerSignalContentPack(light_flare);
+
+        ContentPackSignalPart light_flare2 = new ContentPackSignalPart("block_signal_part_light_flare2", "Lightflare 5middle", "models/block/landofsignals/lightflare_test/5middle_grouped.obj", new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{
+                "",
+                "xgxwx",
+                "xgxwy",
+                "xgxxx",
+                "xgxxy",
+                "xxrwx",
+                "xxrxx",
+                "xxxwx",
+                "xxxwy",
+                "xxxxy",
+                "yxxwx",
+                "yxxwy",
+                "yxxxx",
+                "yxxxy"
+        });
+        light_flare2.setFlares(new Flare[]{
+                new Flare("lamp5_Cube.005", "#FFDA26", 180, 0, 0.05f, false, new String[]{"yxxwx", "yxxwy", "yxxxx", "yxxxy"}),
+                new Flare("lamp4_Cube.004", "#00FF8C", 180, 0, 0.05f, false, new String[]{"xgxwx", "xgxwy", "xgxxx", "xgxxy"}),
+                new Flare("lamp3_Cube.003", "#FF0000", 180, 0, 0.05f, false, new String[]{"xxrwx", "xxrxx"}),
+                new Flare("lamp2_Cube.001", "#FFFFFF", 180, 0, 0.05f, false, new String[]{"xgxwx", "xgxwy", "xxrwx", "xxxwx", "xxxwy", "yxxwx", "yxxwy"}),
+                new Flare("lamp1_Cube.000", "#FFDA26", 180, 0, 0.05f, false, new String[]{"xgxwy", "xgxxy", "xxxwy", "xxxxy", "yxxwy", "yxxxy"})
+        });
+        registerSignalContentPack(light_flare2);
+
+
         // Animated Signals
         LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.add(MISSING_SIGNAL);
 
@@ -124,8 +162,12 @@ public class LOSBlocks {
         // Signs: SH2
         registerSignContentPack("block_sign_part_gsar_sh2_full_wo_light", "GSAR Schutzsignal SH2 (Full, w/o light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02"})}));
         registerSignContentPack("block_sign_part_gsar_sh2_top_wo_light", "GSAR Schutzsignal SH2 (Top, w/o light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01"})}));
-        registerSignContentPack("block_sign_part_gsar_sh2_full_w_light", "GSAR Schutzsignal SH2 (Full, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02", "RedLightOn_RLOn", "RedLightOff_RLOff"})}));
-        registerSignContentPack("block_sign_part_gsar_sh2_top_w_light", "GSAR Schutzsignal SH2 (Top, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01", "RedLightOn_RLOn", "RedLightOff_RLOff"})}));
+        registerSignContentPack("block_sign_part_gsar_sh2_full_w_light", "GSAR Schutzsignal SH2 (Full, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new float[]{1f, 1f, 1f}, new float[]{0.5f, 0.5f, 0.5f}, new String[]{"Sign01_SI01", "MetalRodLong_MR02", "RedLightOn_RLOn", "RedLightOff_RLOff"})}), new Flare[]{
+                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.001f, true)
+        });
+        registerSignContentPack("block_sign_part_gsar_sh2_top_w_light", "GSAR Schutzsignal SH2 (Top, with light)", false, Collections.singletonMap("models/block/landofsignals/signs/gsar/sh2/signalsh2.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Sign01_SI01", "MetalRod_MR01", "RedLightOn_RLOn", "RedLightOff_RLOff"})}), new Flare[]{
+                new Flare("RedLightOn_RLOn", "#FF0000", 180,0, 0.001f, true)
+        });
 
         // Signs: Hecto Signs
         registerSignContentPack("block_sign_part_gsar_hecto_sign", "GSAR Hectosignal", true, models("models/block/landofsignals/signs/gsar/hectosign/hectosign.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
@@ -141,7 +183,11 @@ public class LOSBlocks {
         registerSignContentPack("block_sign_part_gsar_bu4_sign", "GSAR Pfeiftafel BU4", false, models("models/block/landofsignals/signs/gsar/bu4/signalbu4.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
         // Signs: LF
-        registerSignContentPack("block_sign_part_gsar_lf1_sign", "GSAR Langsamfahrscheibe LF1", false, models("models/block/landofsignals/signs/gsar/lf1/signallf1.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
+        registerSignContentPack("block_sign_part_gsar_lf1_sign", "GSAR Langsamfahrscheibe LF1", false, models("models/block/landofsignals/signs/gsar/lf1/signallf1.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()), new Flare[]{
+                new Flare("Cube_Cube.004", "#EFF208", 180,0, 0.031f, true),
+                new Flare("Cube_Cube.005", "#EFF208", 180,0, 0.031f, true)
+        });
+
         registerSignContentPack("block_sign_part_gsar_lf6_sign", "GSAR Geschwindigkeits-Ankuendesignal LF6", false, models("models/block/landofsignals/signs/gsar/lf6/signallf6.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0.2f, 0.5f}, new float[]{0.5f, 0.2f, 0.5f}, new float[]{1f, 1f, 1f}, new String[]{"Cube.001_Cube.002"})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
         registerSignContentPack("block_sign_part_gsar_lf7_sign", "GSAR Geschwindigkeitssignal LF7", false, models("models/block/landofsignals/signs/gsar/lf7/signallf7.obj", new ContentPackModel[]{new ContentPackModel(new float[]{0.5f, 0f, 0.5f}, new float[]{0.5f, 0f, 0.5f}, new float[]{1f, 1f, 1f})}, blockSignPartMetalRod.getKey(), blockSignPartMetalRod.getValue()));
 
@@ -500,11 +546,16 @@ public class LOSBlocks {
     }
 
     private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models) {
+        registerSignContentPack(id, name, writable, models, null);
+    }
+
+    private static void registerSignContentPack(String id, String name, boolean writable, Map<String, ContentPackModel[]> models, Flare[] flares) {
         ContentPackSign contentPackSign = new ContentPackSign();
         contentPackSign.setId(id);
         contentPackSign.setName(name);
         contentPackSign.setWriteable(writable);
         contentPackSign.setBase(models);
+        contentPackSign.setFlares(flares);
         contentPackSign.setUTF8(true);
 
         contentPackSign.validate(missing -> {
