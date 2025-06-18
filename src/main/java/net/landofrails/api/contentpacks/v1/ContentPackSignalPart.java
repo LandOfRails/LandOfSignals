@@ -2,17 +2,20 @@ package net.landofrails.api.contentpacks.v1;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.landofrails.api.contentpacks.v2.flares.Flare;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@SuppressWarnings({"java:S107"})
+@SuppressWarnings({"unused", "java:S107"})
 public class ContentPackSignalPart {
 
     private String id;
     private String name;
     private String model;
+
+    private Flare[] flares;
 
     private float[] translation;
     private float[] itemTranslation;
@@ -59,6 +62,14 @@ public class ContentPackSignalPart {
 
     public void setModel(final String model) {
         this.model = model;
+    }
+
+    public Flare[] getFlares() {
+        return flares;
+    }
+
+    public void setFlares(Flare[] flares) {
+        this.flares = flares;
     }
 
     public float[] getTranslation() {
@@ -112,7 +123,7 @@ public class ContentPackSignalPart {
     public static ContentPackSignalPart fromJson(InputStream inputStream) {
         StringBuilder s = new StringBuilder();
         byte[] buffer = new byte[1024];
-        int read = 0;
+        int read;
 
         try {
             while ((read = inputStream.read(buffer, 0, 1024)) >= 0) {

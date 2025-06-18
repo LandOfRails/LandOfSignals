@@ -6,14 +6,19 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.GenericContentPack;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
+import net.landofrails.api.contentpacks.v2.deco.ContentPackDeco;
+import net.landofrails.api.contentpacks.v2.lever.ContentPackLever;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
+import net.landofrails.api.contentpacks.v2.sign.ContentPackSign;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.configs.LandOfSignalsConfig;
 import net.landofrails.landofsignals.render.block.*;
 import net.landofrails.landofsignals.render.item.*;
+import net.landofrails.landofsignals.utils.FlareUtils;
 import net.landofrails.landofsignals.utils.Static;
 import net.landofrails.stellwand.utils.exceptions.ContentPackException;
 
@@ -171,6 +176,7 @@ public class ContentPackHandler {
             // Cache blocks
             try {
                 TileSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                FlareUtils.cacheFlares(id, signal);
             } catch (Exception e) {
                 String errmsg = "Couldn't preload block with id \"%s\" (objPath: %s). Cause:";
                 throw new ContentPackException(String.format(errmsg, id, objPath), e);
@@ -182,7 +188,9 @@ public class ContentPackHandler {
         progressBar = Progress.push("Complexsignal", LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().size());
         for (String id : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().keySet()) {
             ModCore.info("Preloading complexsignal %s", id);
-            progressBar.step(LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getName());
+
+            final ContentPackComplexSignal signal = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id);
+            progressBar.step(signal.getName());
 
             final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getSignals();
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id).getBase();
@@ -197,8 +205,9 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileComplexSignalRender.checkCache(id, base, BASE_IDENTIFIER, true);
-                TileComplexSignalRender.checkCache(id, signalGroups.values(), "/signals/");
+                TileComplexSignalRender.checkCache(id, "", base, BASE_IDENTIFIER, true);
+                TileComplexSignalRender.checkCache(id, signalGroups, "signals");
+                FlareUtils.cacheFlares(id, signal);
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
@@ -210,7 +219,9 @@ public class ContentPackHandler {
         progressBar = Progress.push("Deco", LOSBlocks.BLOCK_DECO.getContentpackDeco().size());
         for (String id : LOSBlocks.BLOCK_DECO.getContentpackDeco().keySet()) {
             ModCore.info("Preloading deco %s", id);
-            progressBar.step(LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getName());
+
+            final ContentPackDeco deco = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id);
+            progressBar.step(deco.getName());
 
             final Map<String, ContentPackModel[]> models = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(id).getBase();
 
@@ -224,6 +235,7 @@ public class ContentPackHandler {
             // Cache blocks
             try {
                 TileDecoRender.checkCache(id, models);
+                FlareUtils.cacheFlares(id, deco);
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
@@ -234,7 +246,9 @@ public class ContentPackHandler {
         progressBar = Progress.push("Sign", LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().size());
         for (String id : LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().keySet()) {
             ModCore.info("Preloading sign %s", id);
-            progressBar.step(LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getName());
+
+            final ContentPackSign sign = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id);
+            progressBar.step(sign.getName());
 
             final Map<String, ContentPackModel[]> base = LOSBlocks.BLOCK_SIGN_PART.getContentpackSigns().get(id).getBase();
 
@@ -248,6 +262,7 @@ public class ContentPackHandler {
             // Cache blocks
             try {
                 TileSignPartRender.checkCache(id, base);
+                FlareUtils.cacheFlares(id, sign);
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }
@@ -284,7 +299,9 @@ public class ContentPackHandler {
         progressBar = Progress.push("Levers", LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().size());
         for (String id : LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().keySet()) {
             ModCore.info("Preloading lever %s", id);
-            progressBar.step(LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getName());
+
+            final ContentPackLever lever = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id);
+            progressBar.step(lever.getName());
 
             final Map<String, ContentPackModel[]> active = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getActive();
             final Map<String, ContentPackModel[]> inactive = LOSBlocks.BLOCK_CUSTOM_LEVER.getContentpackLever().get(id).getInactive();
@@ -299,8 +316,9 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileCustomLeverRender.checkCache(id, active);
-                TileCustomLeverRender.checkCache(id, inactive);
+                TileCustomLeverRender.checkCache(id, active, "active");
+                TileCustomLeverRender.checkCache(id, inactive, "inactive");
+                FlareUtils.cacheFlares(id, lever);
             } catch (Exception e) {
                 throw new ContentPackException(String.format(GENERIC_BLOCK_ERRMSG, id), e);
             }

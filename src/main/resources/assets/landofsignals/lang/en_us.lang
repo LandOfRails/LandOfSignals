@@ -35,12 +35,12 @@ item.landofsignals:item_magnifying_glass.name=Magnifying glass
 message.landofsignals:item.manipulator.disabled=§4This tool is currently not available. §cIt will be reactivated with the next update.
 message.landofsignals:sign.texteditor.needs.new.umc.version=§6Warning: §eTextrendering will be implemented with new umc version, until then, this will not be displayed.
 message.landofsignals:item.signalanimated=§4This item is currently not available. §cIt will be implemented in a future version.
-message.landogsignals:signs.writeable=Writeable: %s
+message.landofsignals:signs.writeable=Writeable: %s
+message.landofsignals:signalpart.hasflares=Has flares: %s
+message.landofsignals:customlevers.hasanimation=Animated: %s
 message.landofsignals:true=§atrue
 message.landofsignals:false=§cfalse
 message.landofsignals:non.utf.eight.items=§6WARNING: §eThis Item/Block was loaded with ISO_8859_1 encoding instead of UTF-8 due to illegal characters. This item/block may not work as intended.
-message.landofsignals:without.animation=§ew/o animation
-message.landofsignals:with.animation=§aw/ animation
 
 label.landofsignals:signtexteditor.savebutton=Save
 

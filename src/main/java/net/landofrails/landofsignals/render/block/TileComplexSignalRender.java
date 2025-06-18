@@ -7,6 +7,7 @@ import cam72cam.mod.render.StandardModel;
 import cam72cam.mod.render.obj.OBJRender;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
+import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalState;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
@@ -14,12 +15,16 @@ import net.landofrails.api.contentpacks.v2.parent.ContentPackModel;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LandOfSignals;
 import net.landofrails.landofsignals.tile.TileComplexSignal;
+import net.landofrails.landofsignals.utils.FlareUtils;
 import net.landofrails.landofsignals.utils.HighlightingUtil;
 import net.landofrails.landofsignals.utils.Static;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static net.landofrails.landofsignals.utils.LandOfSignalsUtils.objIdWithGroup;
+import static net.landofrails.landofsignals.utils.LandOfSignalsUtils.objIdWithoutGroup;
 
 public class TileComplexSignalRender {
 
@@ -30,32 +35,34 @@ public class TileComplexSignalRender {
     private static final Map<String, OBJModel> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
-    public static void checkCache(String blockId, Collection<ContentPackSignalGroup> groups, String identifier) {
+    public static void checkCache(String blockId, Map<String, ContentPackSignalGroup> groups, String identifier) {
 
-        // Get first group, get first state, get first model
-        Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
+        // Get first group, get first state, get first
+        Map.Entry<String, ContentPackSignalGroup> firstGroup = groups.entrySet().iterator().next();
+        String firstGroupId = firstGroup.getKey();
+        Optional<String> firstPath = firstGroup.getValue().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
 
         if (!firstPath.isPresent())
             return;
-        final String firstObjId = blockId + identifier + firstPath.get();
+        final String firstObjId = objIdWithGroup(blockId, identifier, firstGroupId, firstPath.get());
         if (cache.containsKey(firstObjId)) {
             return;
         }
 
-        for (ContentPackSignalGroup group : groups) {
-            for (ContentPackSignalState state : group.getStates().values()) {
-                checkCache(blockId, state.getModels(), identifier, false);
+        for (Map.Entry<String, ContentPackSignalGroup> group : groups.entrySet()) {
+            for (ContentPackSignalState state : group.getValue().getStates().values()) {
+                checkCache(blockId, group.getKey(), state.getModels(), identifier, false);
             }
         }
 
     }
 
-    public static void checkCache(String blockId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
+    public static void checkCache(String blockId, String groupId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
             if (!firstPath.isPresent())
                 return;
-            final String firstObjId = blockId + identifier + firstPath.get();
+            final String firstObjId = objIdWithGroup(blockId, identifier, groupId, firstPath.get());
             if (cache.containsKey(firstObjId)) {
                 return;
             }
@@ -65,7 +72,7 @@ public class TileComplexSignalRender {
             try {
                 final String path = modelEntry.getKey();
                 // identifiers: /signals / and /base/
-                final String objId = blockId + identifier + path;
+                final String objId = objIdWithGroup(blockId, identifier, groupId, path);
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getObjTextures().get(path);
                 OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
@@ -101,8 +108,13 @@ public class TileComplexSignalRender {
             id = Static.MISSING;
         }
 
-        renderBase(id, tsp, state);
-        renderSignals(id, tsp, state);
+        ContentPackComplexSignal signal = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(id);
+
+        renderBase(signal, tsp, state);
+        renderSignals(signal, tsp, state);
+
+        if(signal.getFlares().length > 0)
+            FlareUtils.renderFlares(id, signal, tsp, state.clone());
 
         if(tsp.isHighlighting()){
             HighlightingUtil.renderHighlighting(state.clone());
@@ -111,19 +123,19 @@ public class TileComplexSignalRender {
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderBase(String blockId, TileComplexSignal tile, RenderState state) {
+    private static void renderBase(ContentPackComplexSignal signal, TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
 
-        checkCache(blockId, LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getBase(), "/base/", true);
+        checkCache(signal.getUniqueId(), "", signal.getBase(), "base", true);
 
-        for (Map.Entry<String, ContentPackModel[]> baseModels : LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getBase().entrySet()) {
+        for (Map.Entry<String, ContentPackModel[]> baseModels : signal.getBase().entrySet()) {
 
             final String path = baseModels.getKey();
 
             // Needs to be split from signal
-            final String objId = blockId + "/base/" + path;
+            final String objId = objIdWithoutGroup(signal.getUniqueId(), "base", path);
             final OBJModel model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
@@ -162,16 +174,16 @@ public class TileComplexSignalRender {
     }
 
     @SuppressWarnings("java:S1134")
-    private static void renderSignals(final String blockId, final TileComplexSignal tile, RenderState state) {
+    private static void renderSignals(final ContentPackComplexSignal signal, final TileComplexSignal tile, RenderState state) {
 
         final Vec3d offset = tile.getOffset();
         final Vec3d customScaling = tile.getScaling();
 
-        final Map<String, ContentPackSignalGroup> signalGroups = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getSignals();
+        final Map<String, ContentPackSignalGroup> signalGroups = signal.getSignals();
 
         final Map<String, String> tileSignalGroups = tile.getSignalGroupStates();
 
-        checkCache(blockId, signalGroups.values(), "/signals/");
+        checkCache(signal.getUniqueId(), signalGroups, "signals");
 
         for (Map.Entry<String, ContentPackSignalGroup> signalGroupEntry : signalGroups.entrySet()) {
 
@@ -186,7 +198,7 @@ public class TileComplexSignalRender {
                 final String path = signalModels.getKey();
 
                 // Needs to be split from base
-                final String objId = blockId + "/signals/" + path;
+                final String objId = objIdWithGroup(signal.getUniqueId(), "signals", groupId, path);
                 final OBJModel model = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
@@ -228,4 +240,7 @@ public class TileComplexSignalRender {
         }
     }
 
+    public static Map<String, OBJModel> cache() {
+        return cache;
+    }
 }
