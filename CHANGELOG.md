@@ -1,3 +1,7 @@
+### Release 1.4.0
+
+* Added [#133] : Flares! This version enables the use of flares for almost all types of LandOfSignal blocks! Check the tooltips to see which signals a.s.o support flares! (Best enjoyed at night)
+
 ### Release 1.3.3
 
 * Fixed [#159] : Mod crashed with java version 12 or higher due to "javalangnosuchfieldexception modifiers"
