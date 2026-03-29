@@ -21,6 +21,10 @@ public class ItemMagnifyingGlass extends CustomItem {
         super(modID, name);
     }
 
+    private static final String MESSAGE_ONLY_SIGNALBOXES = "message.landofsignals:item.magnifying_glass.signal";
+
+    private Vec3i lastClickedBlock;
+
     @Override
     public List<CreativeTab> getCreativeTabs() {
         return LOSTabs.getAsList(LOSTabs.ASSETS_TAB);
@@ -35,15 +39,15 @@ public class ItemMagnifyingGlass extends CustomItem {
         if (hand.equals(Player.Hand.SECONDARY)) {
             return ClickResult.PASS;
         }
-        if (world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_PART) || world.isBlock(pos, LOSBlocks.BLOCK_COMPLEX_SIGNAL)) {
-            onClickSignal(world, pos, player);
-            return ClickResult.ACCEPTED;
-        }
         if (!world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_BOX)) {
+            player.sendActionBarMessage(PlayerMessage.translate(MESSAGE_ONLY_SIGNALBOXES));
             return ClickResult.PASS;
         }
 
-        disableHighlighting(world, player);
+        if(!pos.equals(lastClickedBlock)){
+            disableHighlighting(world);
+            lastClickedBlock = pos;
+        }
 
         TileSignalBox signalBox = world.getBlockEntity(pos, TileSignalBox.class);
         toggleHighlighting(signalBox);
@@ -51,36 +55,19 @@ public class ItemMagnifyingGlass extends CustomItem {
         return ClickResult.ACCEPTED;
     }
 
-    private void onClickSignal(World world, Vec3i pos, Player player) {
-
-        disableHighlighting(world, player);
-
-        try {
-            final List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
-            signalBoxes.stream()
-                    .filter(box -> box.getTileSignalPartPos() != null)
-                    .filter(box -> box.getTileSignalPartPos().equals(pos))
-                    .forEach(this::toggleHighlighting);
-        } catch(UnsupportedOperationException ignored) {
-            player.sendMessage(PlayerMessage.direct("This action is currently unavailable."));
-        }
-
-    }
-
     @Override
     public void onClickAir(final Player player, final World world, final Player.Hand hand) {
         if (!world.isClient || hand.equals(Player.Hand.SECONDARY)) return;
-        disableHighlighting(world, player);
+        disableHighlighting(world);
     }
 
-    private void disableHighlighting(final World world, Player player) {
-        try {
-            final List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
-        signalBoxes.stream().filter(TileSignalBox::isHighlighting).forEach(TileSignalBox::toggleHighlighting);
-        }catch(UnsupportedOperationException ignored){
-            player.sendMessage(PlayerMessage.direct("This action is currently unavailable."));
+    private void disableHighlighting(final World world) {
+        if(lastClickedBlock != null){
+            final TileSignalBox signalBox = world.getBlockEntity(lastClickedBlock, TileSignalBox.class);
+            if(signalBox.isHighlighting()) {
+                signalBox.toggleHighlighting();
+            }
         }
-
     }
 
     private void toggleHighlighting(final TileSignalBox signalBox) {

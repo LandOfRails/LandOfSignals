@@ -69,3 +69,5 @@ message.stellwand:connector.notthesameworld=Can't connect blocks between differe
 message.stellwand:deprecated=This block/item will be removed in the future. You can find replacements under \"LOS | Signals\" and \"LOS | Assets\".
 
 gui.stellwand:selectsendermodes.group=Group: %s
+
+message.landofsignals:item.magnifying_glass.signal=§6This block is not supported. §eOnly Signal Boxes can be clicked on with this tool.
