@@ -10,6 +10,7 @@
 [![LandOfSignals Build Pipeline](https://github.com/LandOfRails/LandOfSignals/actions/workflows/main.yml/badge.svg)](https://github.com/LandOfRails/LandOfSignals/actions/workflows/main.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/landofrails/landofsignals/badge)](https://www.codefactor.io/repository/github/landofrails/landofsignals)
 [![wakatime](https://wakatime.com/badge/github/LandOfRails/LandOfSignals.svg)](https://wakatime.com/badge/github/LandOfRails/LandOfSignals)
+![GitHub Release](https://img.shields.io/github/v/release/LandOfRails/LandOfSignals?label=Latest%20stable%20version)
 
 ❗️All listed minecraft versions are still supported and up to date❗️
 
