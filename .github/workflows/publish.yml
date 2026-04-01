@@ -144,7 +144,11 @@ jobs:
       - name: Rename with suffix
         run: |
           ls ./build/libs/
-          mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+          if [ ! -z "${{ steps.getsuffix.outputs.suffix }}" ]; then
+            mv -n build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}.jar build/libs/LandOfSignals-${{matrix.branch}}-${{ steps.getversion.outputs.version }}${{ steps.getsuffix.outputs.suffix }}.jar
+          else
+            echo "SUFFIX is empty."
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: LandOfSignals ${{matrix.branch}}
@@ -157,6 +161,7 @@ jobs:
           modrinth-featured: true
           modrinth-unfeature-mode: subset
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          
           # CurseForge
           curseforge-id: 434307
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}

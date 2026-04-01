@@ -1,3 +1,11 @@
+### Release 1.4.1
+
+* Fixed stability issues : LoS 1.4.0 was built with the experimental UMC version 1.2.3 (in the future 1.3.0) instead of 1.2.2/1.2.1
+
+### Release 1.4.0
+
+* Added [#133] : Flares! This version enables the use of flares for almost all types of LandOfSignal blocks! Check the tooltips to see which signals a.s.o support flares! (Best enjoyed at night)
+
 ### Release 1.3.3
 
 * Fixed [#159] : Mod crashed with java version 12 or higher due to "javalangnosuchfieldexception modifiers"
