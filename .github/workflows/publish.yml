@@ -100,11 +100,6 @@ jobs:
             version: 1.20.1
             loader: forge
 
-          - branch: 1.20.4-neoforge
-            java-version: '17'
-            version: 1.20.4
-            loader: neoforge
-
           - branch: 1.21.1-neoforge
             java-version: '21'
             version: 1.21.1
@@ -230,7 +225,6 @@ jobs:
             1.18.2
             1.19.4
             1.20.1
-            1.20.4
             1.21.1
           java: |
             8
