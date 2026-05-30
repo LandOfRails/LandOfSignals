@@ -13,7 +13,8 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
     }
 }
 group = "net.landofrails.landofsignals"
-archivesBaseName = "LandOfSignals"
+String archivesBaseName = "LandOfSignals"
+base.archivesName = archivesBaseName
 
 //MINECRAFT//
 
