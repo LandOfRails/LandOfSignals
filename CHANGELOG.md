@@ -1,3 +1,13 @@
+### Release 1.5.0
+
+* Supporting UMC 1.3.x
+* Important: New dependency maybe needed:
+  - 1.7.10: Unimixins
+  - 1.10.2: MixinBooter
+  - 1.11.2: MixinBooter
+  - 1.12.2: MixinBooter
+  - 1.14.4: MixinBootstrap
+
 ### Release 1.4.1
 
 * Fixed stability issues : LoS 1.4.0 was built with the experimental UMC version 1.2.3 (in the future 1.3.0) instead of 1.2.2/1.2.1

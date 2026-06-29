@@ -1,11 +1,27 @@
 **LandOfSignals**
 ==================
-Currently accepted Minecraft versions: 1.7.10, 1.10.2 - 1.16.5
+Currently accepted Minecraft versions: 1.7.10, 1.10.2 - 1.12.2, 1.14.4 - 1.21.1 (Neoforge)
 
 This mod adds many different railroad signals, as well as railroad assets from different countries.
 
 ![](https://i.imgur.com/T22HdwX.png)    **Requires** [**Universal Mod
 Core**](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
+
+| MC Version       | Dependencies                                                                                                                                    |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.7.10, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core), [Unimixins](https://modrinth.com/mod/unimixins)           |
+| 1.10.2, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core), [MixinBooter](https://modrinth.com/mod/mixinbooter)       |
+| 1.11.2, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core), [MixinBooter](https://modrinth.com/mod/mixinbooter)       |
+| 1.12.2, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core), [MixinBooter](https://modrinth.com/mod/mixinbooter)       |
+| 1.14.4, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core), [MixinBootstrap](https://modrinth.com/mod/mixinbootstrap) |
+| 1.15.2, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.16.5, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.17.1, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.18.2, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.19.4, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.20.1, forge    | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+| 1.21.1, neoforge | [Universal ModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)                                                            |
+
 
 **Join our Discord!** You'll find exciting content packs and we'll keep you up to date.
 
