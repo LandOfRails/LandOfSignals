@@ -6,6 +6,7 @@ import cam72cam.mod.item.CreativeTab;
 import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.text.PlayerMessage;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -19,6 +20,10 @@ public class ItemMagnifyingGlass extends CustomItem {
     public ItemMagnifyingGlass(final String modID, final String name) {
         super(modID, name);
     }
+
+    private static final String MESSAGE_ONLY_SIGNALBOXES = "message.landofsignals:item.magnifying_glass.signal";
+
+    private Vec3i lastClickedBlock;
 
     @Override
     public List<CreativeTab> getCreativeTabs() {
@@ -34,32 +39,20 @@ public class ItemMagnifyingGlass extends CustomItem {
         if (hand.equals(Player.Hand.SECONDARY)) {
             return ClickResult.PASS;
         }
-        if (world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_PART) || world.isBlock(pos, LOSBlocks.BLOCK_COMPLEX_SIGNAL)) {
-            onClickSignal(world, pos);
-            return ClickResult.ACCEPTED;
-        }
         if (!world.isBlock(pos, LOSBlocks.BLOCK_SIGNAL_BOX)) {
+            player.sendActionBarMessage(PlayerMessage.translate(MESSAGE_ONLY_SIGNALBOXES));
             return ClickResult.PASS;
         }
 
-        disableHighlighting(world);
+        if(!pos.equals(lastClickedBlock)){
+            disableHighlighting(world);
+            lastClickedBlock = pos;
+        }
 
         TileSignalBox signalBox = world.getBlockEntity(pos, TileSignalBox.class);
         toggleHighlighting(signalBox);
 
         return ClickResult.ACCEPTED;
-    }
-
-    private void onClickSignal(World world, Vec3i pos) {
-
-        disableHighlighting(world);
-
-        final List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
-        signalBoxes.stream()
-                .filter(box -> box.getTileSignalPartPos() != null)
-                .filter(box -> box.getTileSignalPartPos().equals(pos))
-                .forEach(this::toggleHighlighting);
-
     }
 
     @Override
@@ -69,8 +62,12 @@ public class ItemMagnifyingGlass extends CustomItem {
     }
 
     private void disableHighlighting(final World world) {
-        final List<TileSignalBox> signalBoxes = world.getBlockEntities(TileSignalBox.class);
-        signalBoxes.stream().filter(TileSignalBox::isHighlighting).forEach(TileSignalBox::toggleHighlighting);
+        if(lastClickedBlock != null){
+            final TileSignalBox signalBox = world.getBlockEntity(lastClickedBlock, TileSignalBox.class);
+            if(signalBox.isHighlighting()) {
+                signalBox.toggleHighlighting();
+            }
+        }
     }
 
     private void toggleHighlighting(final TileSignalBox signalBox) {

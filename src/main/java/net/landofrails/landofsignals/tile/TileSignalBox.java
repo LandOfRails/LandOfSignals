@@ -17,7 +17,6 @@ import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.LandOfSignalsUtils;
 import net.landofrails.landofsignals.utils.Static;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +29,8 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @TagField("blockRotation")
     private int blockRotate;
 
+    // Nullable
     @TagField("UuidTileTop")
-    @Nullable
     private Vec3i tileSignalPartPos = Vec3i.ZERO;
 
     @TagField("offset")
@@ -40,12 +39,12 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @TagField("scaling")
     private Vec3d scaling = new Vec3d(1,1,1);
 
+    // Nullable
     @TagField("signalType")
-    @Nullable
     private Byte signalType; // null = none, 0 = simple (old), 1 = complex
 
+    // Nullable
     @TagField("signalGroupId")
-    @Nullable
     private String groupId;
 
     @TagField("activeGroupState")
@@ -60,7 +59,7 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     @TagField("noRedstone")
     private Integer noRedstone = null; // stays for backwards compatability
 
-    @Nullable
+    // Nullable
     private Integer lastRedstone;
 
     // client-only
@@ -211,12 +210,12 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
         markDirty();
     }
 
-    @Nullable
+    // Nullable
     public Byte getSignalType() {
         return this.signalType;
     }
 
-    @Nullable
+    // Nullable
     public Vec3i getTileSignalPartPos() {
         return this.tileSignalPartPos;
     }
@@ -267,7 +266,7 @@ public class TileSignalBox extends BlockEntity implements IManipulate {
     /**
      * @param groupId GroupId
      */
-    public void setGroupId(@Nullable String groupId) {
+    public void setGroupId(/* Nullable */ String groupId) {
         this.groupId = groupId;
     }
 

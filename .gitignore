@@ -160,6 +160,7 @@ gradle-app.setting
 
 ## Generated
 build.gradle
+settings.gradle
 gradle/wrapper/gradle-wrapper.properties
 src/main/java/net/landofrails/landofsignals/Mod.java
 src/main/resources/mcmod.info

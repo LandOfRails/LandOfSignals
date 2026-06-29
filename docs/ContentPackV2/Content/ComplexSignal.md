@@ -236,7 +236,7 @@ This is a more flexible signal, it is more complex but lets you do way more with
         !!! failure "Required field!"
             Atleast one entry is required!
         In this example only a single obj file is used.<br />
-        Look at ['+ multiple OBJs'](./#-multiple-objs) for another example.
+        Look at ['+ multiple OBJs'](#-multiple-objs) for another example.
 
         !!! note "Can be changed later on."
             !!! warning "This may cause the UniversalModCore cache to break.<br />You can try to delete the `/cache/landofsignals/` folder in your minecraft instance."
@@ -501,7 +501,7 @@ This is a more flexible signal, it is more complex but lets you do way more with
         !!! failure "Required field!"
             Atleast one entry is required!
         In this example only a single obj file is used.<br />
-        Look at ['+ multiple OBJs'](./#-multiple-objs) for another example.
+        Look at ['+ multiple OBJs'](#-multiple-objs) for another example.
 
         !!! note "Can be changed later on."
             !!! warning "This may cause the UniversalModCore cache to break.<br />You can try to delete the `/cache/landofsignals/` folder in your minecraft instance."

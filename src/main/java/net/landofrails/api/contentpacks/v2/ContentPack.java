@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.landofrails.api.contentpacks.v1.ContentPackHead;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -52,12 +51,12 @@ public class ContentPack {
         return addonversion;
     }
 
-    @Nullable
+    // Nullable
     public Map<String, EntryType> getContent() {
         return content;
     }
 
-    @Nullable
+    // Nullable
     public List<String> getContentSets() {
         return contentSets;
     }

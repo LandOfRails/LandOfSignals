@@ -69,3 +69,5 @@ message.stellwand:connector.notthesameworld=Blöcke aus unterschiedlichen Welten
 message.stellwand:deprecated=Dieser Block/Dieses Item wird zukünftig entfernt. Du kannst Ersatz finden unter \"LOS | Signale\" und \"LOS | Assets\".
 
 gui.stellwand:selectsendermodes.group=Gruppe: %s
+
+message.landofsignals:item.magnifying_glass.signal=§6This block is not supported. §eOnly Signal Boxes can be clicked on with this tool.
