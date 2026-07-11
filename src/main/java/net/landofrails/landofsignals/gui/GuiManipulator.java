@@ -423,8 +423,8 @@ public class GuiManipulator implements IScreen {
 
     private void renewSlider(IScreenBuilder screen){
         if(rotationSlider != null){
-            rotationSlider.setVisible(false);
-            rotationSlider = null;
+            rotationSlider.setValue(rotation);
+            return;
         }
         rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false) {
             @Override
