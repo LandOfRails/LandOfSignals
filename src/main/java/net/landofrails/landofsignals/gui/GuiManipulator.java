@@ -147,7 +147,14 @@ public class GuiManipulator implements IScreen {
             }
         };
 
-        renewSlider(screen);
+        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false) {
+            @Override
+            public void onSlider() {
+                rotation = rotationSlider.getValueInt();
+                setText(GuiText.LABEL_ROTATIONSLIDER + ": " + rotation);
+                updateClientBlock();
+            }
+        };
         rotationSubtraction = new Button(screen,screen.getWidth() / 2 - 220, 100, 20, 20, "-") {
             @Override
             public void onClick(Player.Hand hand) {
@@ -422,17 +429,8 @@ public class GuiManipulator implements IScreen {
     }
 
     private void renewSlider(IScreenBuilder screen){
-        if(rotationSlider != null){
-            rotationSlider.setValue(rotation);
-            return;
-        }
-        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false) {
-            @Override
-            public void onSlider() {
-                rotation = rotationSlider.getValueInt();
-                updateClientBlock();
-            }
-        };
+        rotationSlider.setValue(rotation);
+        rotationSlider.onSlider();
     }
     private double getModifier(Player.Hand hand){
         return hand == Player.Hand.PRIMARY ? 1.0 : 0.1;
