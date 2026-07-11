@@ -21,9 +21,6 @@ import net.landofrails.landofsignals.render.item.*;
 import net.landofrails.landofsignals.tile.*;
 import net.landofrails.stellwand.Stellwand;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 public class LandOfSignals extends ModCore.Mod {
     @SuppressWarnings({"java:S1845"})
     public static final String MODID = "landofsignals";
@@ -44,8 +41,7 @@ public class LandOfSignals extends ModCore.Mod {
 
         if (event == ModEvent.CONSTRUCT) {
             ModCore.Mod.info("Thanks for using LandOfSignals. Starting common construct now...");
-            final Optional<String> mcVersion = getMCVersion();
-            ModCore.Mod.info("Detected MC Version: " + mcVersion.orElse("Failed to receive"));
+            ModCore.Mod.info("Detected MC Version: " + ModCore.semanticVersion());
 
             ContentPackHandler.init();
 
@@ -131,23 +127,6 @@ public class LandOfSignals extends ModCore.Mod {
             default:
                 break;
         }
-    }
-
-    public Optional<String> getMCVersion() {
-        try {
-            Class<?> loader = Class.forName("net.minecraftforge.fml.common.Loader");
-            Method instanceMethod = loader.getMethod("instance");
-            Object loaderInstance = instanceMethod.invoke(null);
-            Method getMCVersionString = loader.getMethod("getMCVersionString");
-            String version = (String) getMCVersionString.invoke(loaderInstance);
-
-            return Optional.ofNullable(version);
-
-        } catch (Exception e) {
-
-            return Optional.empty();
-        }
-
     }
 
     @Override
