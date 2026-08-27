@@ -3,8 +3,8 @@ package net.landofrails.stellwand.utils.compact;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.content.messages.EMessage;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class LoSPlayer extends Player {
