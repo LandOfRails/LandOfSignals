@@ -16,6 +16,7 @@ import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import util.Matrix4;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class GuiSignalBoxSignalPart implements IScreen {
@@ -79,7 +80,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
     }
 
     @Override
-    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+    public void onKeyType(IScreenBuilder builder, @Nullable Keyboard.KeyCode keyCode) {
         if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
             builder.close();
         }

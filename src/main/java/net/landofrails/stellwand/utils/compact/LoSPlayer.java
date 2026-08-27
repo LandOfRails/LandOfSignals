@@ -4,11 +4,12 @@ import cam72cam.mod.entity.Player;
 import cam72cam.mod.text.PlayerMessage;
 import net.landofrails.stellwand.content.messages.EMessage;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class LoSPlayer extends Player {
 
-    private Player player;
+    private final Player player;
 
     public LoSPlayer(Player player) {
         super(player.internal);
@@ -49,7 +50,7 @@ public class LoSPlayer extends Player {
 
     }
 
-    // Nullable
+    @Nullable
     public EMessage getEMsg(String msg) {
         try {
             return EMessage.valueOf(msg);

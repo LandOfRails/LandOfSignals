@@ -14,6 +14,7 @@ import net.landofrails.landofsignals.packet.ManipulatorToServerPacket;
 import net.landofrails.landofsignals.utils.IManipulate;
 import net.landofrails.landofsignals.utils.Static;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class GuiManipulator implements IScreen {
@@ -195,7 +196,7 @@ public class GuiManipulator implements IScreen {
     }
 
     @Override
-    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+    public void onKeyType(IScreenBuilder builder, @Nullable Keyboard.KeyCode keyCode) {
         if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
             builder.close();
         }
