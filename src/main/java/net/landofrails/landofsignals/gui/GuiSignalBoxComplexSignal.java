@@ -1,12 +1,13 @@
 package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.MinecraftClient;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
+import cam72cam.mod.input.Keyboard;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -14,7 +15,6 @@ import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.serialization.EmptyStringMapper;
-import net.landofrails.landofsignals.tile.TileComplexSignal;
 import net.landofrails.landofsignals.tile.TileSignalBox;
 import util.Matrix4;
 
@@ -29,8 +29,8 @@ public class GuiSignalBoxComplexSignal implements IScreen {
     private final ItemStack itemStackLeft;
 
     // List of modes
-    private Map<String, ContentPackSignalGroup> modes;
-    private Set<String> modeGroups;
+    private final Map<String, ContentPackSignalGroup> modes;
+    private final Set<String> modeGroups;
 
     // Group
     private String signalGroup;
@@ -75,35 +75,24 @@ public class GuiSignalBoxComplexSignal implements IScreen {
     @Override
     public void init(final IScreenBuilder screen) {
         // Use first available group
-        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName())) {
-            @Override
-            public void onClick(Player.Hand hand) {
-                originalSignalGroup = nextMode(signalGroup);
-                signalGroup = originalSignalGroup;
-                originalRightState = modes.get(signalGroup).getStates().keySet().iterator().next();
-                rightState = originalRightState;
-                originalLeftState = modes.get(signalGroup).getStates().keySet().iterator().next();
-                leftState = originalLeftState;
-            }
-        };
-        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                leftState = nextState(leftState);
-            }
-        };
-        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->") {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                rightState = nextState(rightState);
-            }
-        };
+        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString(modes.get(signalGroup).getGroupName()), (_, _) -> {
+            originalSignalGroup = nextMode(signalGroup);
+            signalGroup = originalSignalGroup;
+            originalRightState = modes.get(signalGroup).getStates().keySet().iterator().next();
+            rightState = originalRightState;
+            originalLeftState = modes.get(signalGroup).getStates().keySet().iterator().next();
+            leftState = originalLeftState;
+        });
+        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE, (_, _) -> leftState = nextState(leftState));
+        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->", (_, _) -> rightState = nextState(rightState));
 
     }
 
     @Override
-    public void onEnterKey(final IScreenBuilder builder) {
-        builder.close();
+    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+        if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
+            builder.close();
+        }
     }
 
     @Override
@@ -121,7 +110,7 @@ public class GuiSignalBoxComplexSignal implements IScreen {
     }
 
     @Override
-    public void draw(final IScreenBuilder builder) {
+    public void draw(IScreenBuilder builder, RenderState state) {
         final int scale = 8;
 
         final TagCompound rightTag = itemStackRight.getTagCompound();

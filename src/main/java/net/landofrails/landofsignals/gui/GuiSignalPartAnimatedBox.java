@@ -1,10 +1,11 @@
 package net.landofrails.landofsignals.gui;
 
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
+import cam72cam.mod.input.Keyboard;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSItems;
@@ -63,37 +64,33 @@ public class GuiSignalPartAnimatedBox implements IScreen {
     @SuppressWarnings("java:S2696")
     @Override
     public void init(final IScreenBuilder screen) {
-        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                stateLeft++;
-                if (stateLeft == listTexureNames.length + listAnimationNames.length) {
-                    stateLeft = 0;
-                }
-                if (stateLeft < listTexureNames.length) nameLeft = listTexureNames[stateLeft];
-                else nameLeft = listAnimationNames[stateLeft - listTexureNames.length];
-
-                setText("<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft);
+        new Button(screen, -100, 0, "<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft, (_, button) -> {
+            stateLeft++;
+            if (stateLeft == listTexureNames.length + listAnimationNames.length) {
+                stateLeft = 0;
             }
-        };
-        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE + " : " + nameRight + " -->") {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                stateRight++;
-                if (stateRight == listTexureNames.length + listAnimationNames.length) {
-                    stateRight = 0;
-                }
-                if (stateRight < listTexureNames.length) nameRight = listTexureNames[stateRight];
-                else nameRight = listAnimationNames[stateRight - listTexureNames.length];
+            if (stateLeft < listTexureNames.length) nameLeft = listTexureNames[stateLeft];
+            else nameLeft = listAnimationNames[stateLeft - listTexureNames.length];
 
-                setText(GuiText.LABEL_REDSTONE + " : " + nameRight + " -->");
+            button.setText("<-- " + GuiText.LABEL_NOREDSTONE + " : " + nameLeft);
+        });
+        new Button(screen, -100, 50, GuiText.LABEL_REDSTONE + " : " + nameRight + " -->", (_, button) -> {
+            stateRight++;
+            if (stateRight == listTexureNames.length + listAnimationNames.length) {
+                stateRight = 0;
             }
-        };
+            if (stateRight < listTexureNames.length) nameRight = listTexureNames[stateRight];
+            else nameRight = listAnimationNames[stateRight - listTexureNames.length];
+
+            button.setText(GuiText.LABEL_REDSTONE + " : " + nameRight + " -->");
+        });
     }
 
     @Override
-    public void onEnterKey(final IScreenBuilder builder) {
-        builder.close();
+    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+        if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
+            builder.close();
+        }
     }
 
     @SuppressWarnings("java:S2696")
@@ -106,7 +103,7 @@ public class GuiSignalPartAnimatedBox implements IScreen {
 
     @SuppressWarnings({"java:S2696", "java:S125"})
     @Override
-    public void draw(final IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder, RenderState state) {
 //        int scale = 8;
 //        name = nameRight;
 //        try (OpenGL.With ignored = OpenGL.matrix()) {

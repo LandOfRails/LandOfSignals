@@ -1,19 +1,19 @@
 package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.MinecraftClient;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
+import cam72cam.mod.input.Keyboard;
 import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
 import net.landofrails.landofsignals.LOSGuis;
 import net.landofrails.landofsignals.LOSItems;
 import net.landofrails.landofsignals.packet.SignalBoxGuiToServerPacket;
 import net.landofrails.landofsignals.tile.TileSignalBox;
-import net.landofrails.landofsignals.tile.TileSignalPart;
 import util.Matrix4;
 
 import java.util.Objects;
@@ -26,12 +26,12 @@ public class GuiSignalBoxSignalPart implements IScreen {
     private final ItemStack itemStackRight;
     private final ItemStack itemStackLeft;
 
-    private String[] states;
+    private final String[] states;
     private Button groupButton;
     private String rightState;
     private String leftState;
-    private String originalRightState;
-    private String originalLeftState;
+    private final String originalRightState;
+    private final String originalLeftState;
 
     public GuiSignalBoxSignalPart() {
 
@@ -72,30 +72,17 @@ public class GuiSignalBoxSignalPart implements IScreen {
     @Override
     public void init(final IScreenBuilder screen) {
         // Use first available group
-        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString("default")) {
-            @Override
-            public void onClick(Player.Hand hand) {
-                // Signal parts have only one group - so no logic needed here
-            }
-        };
-        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                leftState = nextState(leftState);
-            }
-        };
-        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->") {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                rightState = nextState(rightState);
-            }
-        };
+        groupButton = new Button(screen, -100, 0, GuiText.LABEL_SIGNALGROUP.toString("default"), (_, _) -> {});
+        new Button(screen, -100, 50, "<-- " + GuiText.LABEL_NOREDSTONE, (_, _) -> leftState = nextState(leftState));
+        new Button(screen, -100, 100, GuiText.LABEL_REDSTONE + " -->", (_, _) -> rightState = nextState(rightState));
 
     }
 
     @Override
-    public void onEnterKey(final IScreenBuilder builder) {
-        builder.close();
+    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+        if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
+            builder.close();
+        }
     }
 
     @Override
@@ -113,7 +100,7 @@ public class GuiSignalBoxSignalPart implements IScreen {
     }
 
     @Override
-    public void draw(final IScreenBuilder builder) {
+    public void draw(final IScreenBuilder builder, RenderState state) {
         final int scale = 8;
 
         final TagCompound rightTag = itemStackRight.getTagCompound();

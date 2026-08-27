@@ -5,6 +5,7 @@ import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.*;
+import cam72cam.mod.input.Keyboard;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.render.opengl.RenderState;
@@ -58,7 +59,7 @@ public class GuiManipulator implements IScreen {
     private final Vec3i blockPos;
 
     private final Predicate<String> doubleFilter = inputString -> {
-        if (inputString == null || inputString.length() == 0) {
+        if (inputString == null || inputString.isEmpty()) {
             return true;
         }
         try {
@@ -82,18 +83,11 @@ public class GuiManipulator implements IScreen {
     @Override
     public void init(final IScreenBuilder screen) {
 
-        cascadeBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 0, GuiText.LABEL_CASCADE.toString(), true) {
-            @Override
-            public void onClick(Player.Hand hand) {
-                // Nothing to do
-            }
-        };
+        cascadeBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 0, GuiText.LABEL_CASCADE.toString(), true, (_, _) -> {});
         cascadeBox.setChecked(false);
 
-        positionBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 90, GuiText.LABEL_EDITPOSITION + " (X, Z)", true) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                uncheckOtherBoxes(this);
+        positionBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 90, GuiText.LABEL_EDITPOSITION + " (X, Z)", true, (_, checkbox) -> {
+                uncheckOtherBoxes(checkbox);
                 setAllInvisible();
                 positionXField.setVisible(true);
                 positionXAddition.setVisible(true);
@@ -101,32 +95,26 @@ public class GuiManipulator implements IScreen {
                 positionZField.setVisible(true);
                 positionZAddition.setVisible(true);
                 positionZSubtraction.setVisible(true);
-            }
-        };
-        heightBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 110, GuiText.LABEL_EDITPOSITION + " (Y)", false) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                uncheckOtherBoxes(this);
+        });
+
+        heightBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 110, GuiText.LABEL_EDITPOSITION + " (Y)", false, (_, checkbox) -> {
+                uncheckOtherBoxes(checkbox);
                 setAllInvisible();
                 heightYField.setVisible(true);
                 heightYAddition.setVisible(true);
                 heightYSubtraction.setVisible(true);
-            }
-        };
-        rotationBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 130, GuiText.LABEL_EDITROTATION.toString(), false) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                uncheckOtherBoxes(this);
+        });
+
+        rotationBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 130, GuiText.LABEL_EDITROTATION.toString(), false, (_, checkbox) -> {
+                uncheckOtherBoxes(checkbox);
                 setAllInvisible();
                 rotationSlider.setVisible(true);
                 rotationAddition.setVisible(true);
                 rotationSubtraction.setVisible(true);
-            }
-        };
-        scalingBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 150, GuiText.LABEL_EDITSCALING.toString(), false) {
-            @Override
-            public void onClick(final Player.Hand hand) {
-                uncheckOtherBoxes(this);
+        });
+
+        scalingBox = new CheckBox(screen, screen.getWidth() / 2 - screen.getWidth() + 50, 150, GuiText.LABEL_EDITSCALING.toString(), false, (_, checkbox) -> {
+                uncheckOtherBoxes(checkbox);
                 setAllInvisible();
                 scalingXField.setVisible(true);
                 scalingXAddition.setVisible(true);
@@ -137,139 +125,50 @@ public class GuiManipulator implements IScreen {
                 scalingZField.setVisible(true);
                 scalingZAddition.setVisible(true);
                 scalingZSubtraction.setVisible(true);
-            }
-        };
+        });
 
-        new Button(screen, screen.getWidth() / 2 - screen.getWidth() + 50, -30, 60, 20, "Reset all") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                resetAll(screen);
-            }
-        };
+        new Button(screen, screen.getWidth() / 2 - screen.getWidth() + 50, -30, 140, 20, "Reset offset and scaling", (_, _) -> resetAll(screen));
 
-        renewSlider(screen);
-        rotationSubtraction = new Button(screen,screen.getWidth() / 2 - 220, 100, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
+        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false, (_) -> {
+                rotation = rotationSlider.getValueInt();
+                updateClientBlock();
+        });
+        rotationSubtraction = new Button(screen,screen.getWidth() / 2 - 220, 100, 20, 20, "-", (_, _) -> {
                 rotation--;
-                renewSlider(screen);
+                rotationSlider.setValue(rotation);
+                rotationSlider.setText(GuiText.LABEL_ROTATIONSLIDER + ": " + rotation);
                 updateClientBlock();
-            }
-        };
-        rotationAddition = new Button(screen, screen.getWidth() / 2 - 50, 100, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
+        });
+        rotationAddition = new Button(screen, screen.getWidth() / 2 - 50, 100, 20, 20, "+", (_, _) -> {
                 rotation++;
-                renewSlider(screen);
+                rotationSlider.setValue(rotation);
+                rotationSlider.setText(GuiText.LABEL_ROTATIONSLIDER + ": " + rotation);
                 updateClientBlock();
-            }
-        };
+        });
 
         positionXField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 40, 20);
-        positionXAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double positionX = Static.round(Double.parseDouble(positionXField.getText()), 3);
-                positionX += getModifier(hand);
-                positionXField.setText(String.valueOf(positionX));
-            }
-        };
-        positionXSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double positionX = Static.round(Double.parseDouble(positionXField.getText()), 3);
-                positionX -= getModifier(hand);
-                positionXField.setText(String.valueOf(positionX));
-            }
-        };
+        positionXAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+", (hand, _) -> addition(hand, positionXField));
+        positionXSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-", (hand, _) -> subtraction(hand, positionXField));
 
         positionZField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 100, 40, 20);
-        positionZAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 100, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double positionZ = Static.round(Double.parseDouble(positionZField.getText()), 3);
-                positionZ += getModifier(hand);
-                positionZField.setText(String.valueOf(positionZ));
-            }
-        };
-        positionZSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 100, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double positionZ = Static.round(Double.parseDouble(positionZField.getText()), 3);
-                positionZ -= getModifier(hand);
-                positionZField.setText(String.valueOf(positionZ));
-            }
-        };
+        positionZAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 100, 20, 20, "+", (hand, _) -> addition(hand, positionZField));
+        positionZSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 100, 20, 20, "-", (hand, _) -> subtraction(hand, positionZField));
 
         heightYField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 40, 20);
-        heightYAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double heightY = Static.round(Double.parseDouble(heightYField.getText()), 3);
-                heightY += getModifier(hand);
-                heightYField.setText(String.valueOf(heightY));
-            }
-        };
-        heightYSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double heightY = Static.round(Double.parseDouble(heightYField.getText()), 3);
-                heightY -= getModifier(hand);
-                heightYField.setText(String.valueOf(heightY));
-            }
-        };
+        heightYAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+", (hand, _) -> addition(hand, heightYField));
+        heightYSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-", (hand, _) -> subtraction(hand, heightYField));
 
         scalingXField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 120, 40, 20);
-        scalingXAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingX = Static.round(Double.parseDouble(scalingXField.getText()), 3);
-                scalingX += getModifier(hand);
-                scalingXField.setText(String.valueOf(scalingX));
-            }
-        };
-        scalingXSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingX = Static.round(Double.parseDouble(scalingXField.getText()), 3);
-                scalingX -= getModifier(hand);
-                scalingXField.setText(String.valueOf(scalingX));
-            }
-        };
+        scalingXAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 120, 20, 20, "+", (hand, _) -> addition(hand, scalingXField));
+        scalingXSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 120, 20, 20, "-",  (hand, _) -> subtraction(hand,  scalingXField));
+
         scalingYField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 100, 40, 20);
-        scalingYAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 100, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingY = Static.round(Double.parseDouble(scalingYField.getText()), 3);
-                scalingY += getModifier(hand);
-                scalingYField.setText(String.valueOf(scalingY));
-            }
-        };
-        scalingYSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 100, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingY = Static.round(Double.parseDouble(scalingYField.getText()), 3);
-                scalingY -= getModifier(hand);
-                scalingYField.setText(String.valueOf(scalingY));
-            }
-        };
+        scalingYAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 100, 20, 20, "+",  (hand, _) -> addition(hand, scalingYField));
+        scalingYSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 100, 20, 20, "-", (hand, _) -> subtraction(hand, scalingYField));
+
         scalingZField = new TextField(screen, screen.getWidth() / 2 - 120, screen.getHeight() / 2 - 80, 40, 20);
-        scalingZAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 80, 20, 20, "+") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingZ = Static.round(Double.parseDouble(scalingZField.getText()), 3);
-                scalingZ += getModifier(hand);
-                scalingZField.setText(String.valueOf(scalingZ));
-            }
-        };
-        scalingZSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 80, 20, 20, "-") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                double scalingZ = Static.round(Double.parseDouble(scalingZField.getText()), 3);
-                scalingZ -= getModifier(hand);
-                scalingZField.setText(String.valueOf(scalingZ));
-            }
-        };
+        scalingZAddition = new Button(screen, screen.getWidth() / 2 - 79, screen.getHeight() / 2 - 80, 20, 20, "+", (hand, _) -> addition(hand, scalingZField));
+        scalingZSubtraction = new Button(screen, screen.getWidth() / 2 - 141, screen.getHeight() / 2 - 80, 20, 20, "-", (hand, _) -> subtraction(hand, scalingZField));
 
         positionXField.setValidator(doubleFilter);
         positionZField.setValidator(doubleFilter);
@@ -296,8 +195,10 @@ public class GuiManipulator implements IScreen {
     }
 
     @Override
-    public void onEnterKey(final IScreenBuilder builder) {
-        builder.close();
+    public void onKeyType(IScreenBuilder builder, Keyboard.KeyCode keyCode) {
+        if (keyCode == Keyboard.KeyCode.NUMPADENTER || keyCode == Keyboard.KeyCode.RETURN) {
+            builder.close();
+        }
     }
 
     @SuppressWarnings("java:S125")
@@ -368,15 +269,15 @@ public class GuiManipulator implements IScreen {
 
     private void refreshScalingAndOffset(){
         scaling = new Vec3d(
-                Double.parseDouble(scalingXField.getText()),
-                Double.parseDouble(scalingYField.getText()),
-                Double.parseDouble(scalingZField.getText())
+            Double.parseDouble(scalingXField.getText()),
+            Double.parseDouble(scalingYField.getText()),
+            Double.parseDouble(scalingZField.getText())
         );
 
         offset = new Vec3d(
-                Double.parseDouble(positionXField.getText()),
-                Double.parseDouble(heightYField.getText()),
-                Double.parseDouble(positionZField.getText())
+            Double.parseDouble(positionXField.getText()),
+            Double.parseDouble(heightYField.getText()),
+            Double.parseDouble(positionZField.getText())
         );
     }
 
@@ -421,19 +322,6 @@ public class GuiManipulator implements IScreen {
         box.setChecked(true);
     }
 
-    private void renewSlider(IScreenBuilder screen){
-        if(rotationSlider != null){
-            rotationSlider.setVisible(false);
-            rotationSlider = null;
-        }
-        rotationSlider = new Slider(screen, screen.getWidth() / 2 - 200, 100, GuiText.LABEL_ROTATIONSLIDER + ": ", 0, 360, rotation, false) {
-            @Override
-            public void onSlider() {
-                rotation = rotationSlider.getValueInt();
-                updateClientBlock();
-            }
-        };
-    }
     private double getModifier(Player.Hand hand){
         return hand == Player.Hand.PRIMARY ? 1.0 : 0.1;
     }
@@ -449,6 +337,18 @@ public class GuiManipulator implements IScreen {
         positionZField.setText("0");
 
         screen.close();
+    }
+
+    private void addition(Player.Hand hand, TextField textField){
+        double value = Static.round(Double.parseDouble(textField.getText()), 3);
+        value += getModifier(hand);
+        textField.setText(String.valueOf(value));
+    }
+
+    private void subtraction(Player.Hand hand, TextField textField){
+        double value = Static.round(Double.parseDouble(textField.getText()), 3);
+        value -= getModifier(hand);
+        textField.setText(String.valueOf(value));
     }
 
 }

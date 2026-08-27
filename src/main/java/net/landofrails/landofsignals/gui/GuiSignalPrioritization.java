@@ -1,7 +1,6 @@
 package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.MinecraftClient;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.GuiRegistry;
 import cam72cam.mod.gui.helpers.GUIHelpers;
 import cam72cam.mod.gui.screen.Button;
@@ -10,6 +9,7 @@ import cam72cam.mod.gui.screen.IScreenBuilder;
 import cam72cam.mod.gui.screen.Slider;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackSignalGroup;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -36,10 +36,11 @@ public class GuiSignalPrioritization implements IScreen {
 
     private static final Supplier<GuiRegistry.GUI> GUI = () -> LOSGuis.SIGNAL_PRIORITIZATION;
 
-    private Button[] upButtons = new Button[6];
-    private Button[] buttons = new Button[6];
-    private Button[] downButtons = new Button[6];
-    private Consumer<Integer>[] actions = new Consumer[6];
+    private final Button[] upButtons = new Button[6];
+    private final Button[] buttons = new Button[6];
+    private final Button[] downButtons = new Button[6];
+    @SuppressWarnings("unchecked")
+    private final Consumer<Integer>[] actions = new Consumer[6];
     private ItemStack item;
     private Slider slider;
     private Button groupButton;
@@ -66,22 +67,17 @@ public class GuiSignalPrioritization implements IScreen {
         if (!shouldContinue)
             return;
 
-        slider = new Slider(screen, -175, 120, GuiText.LABEL_PAGE + ": ", 0, Math.max(1, states.length - 6d), entriesIndex, false) {
-            @Override
-            public void onSlider() {
-                entriesIndex = slider.getValueInt();
-                updateButtons();
-            }
-        };
+        slider = new Slider(screen, -175, 120, GuiText.LABEL_PAGE + ": ", 0, Math.max(1, states.length - 6d), entriesIndex, false, (_) -> {
+            entriesIndex = slider.getValueInt();
+            updateButtons();
+        });
         slider.setEnabled(states.length > 6);
 
-        groupButton = new Button(screen, -190, -20, 180, 20, GuiText.LABEL_GROUP + ": -") {
-            @Override
-            public void onClick(Player.Hand hand) {
-                String newGroup = next(groups, groupId);
-                updateGroup(newGroup);
-            }
-        };
+        groupButton = new Button(screen, -190, -20, 180, 20, GuiText.LABEL_GROUP + ": -", (_, _) -> {
+            String newGroup = next(groups, groupId);
+            updateGroup(newGroup);
+        });
+
         if (groups.length > 1) {
             groupButton.setText(GuiText.LABEL_GROUP + ": " + groupNames.get(groupId));
         } else {
@@ -91,48 +87,37 @@ public class GuiSignalPrioritization implements IScreen {
         for (int i = 0; i < 6; i++) {
             int finalI = i;
 
-            upButtons[i] = new Button(screen, -220, finalI * 20, 20, 20, "^") {
-                @Override
-                public void onClick(Player.Hand hand) {
-                    int calcIndex = entriesIndex + finalI;
-                    String upState = states[calcIndex];
-                    states[calcIndex] = states[calcIndex - 1];
-                    states[calcIndex - 1] = upState;
+            upButtons[i] = new Button(screen, -220, finalI * 20, 20, 20, "^", (_, _) -> {
+                int calcIndex = entriesIndex + finalI;
+                String upState = states[calcIndex];
+                states[calcIndex] = states[calcIndex - 1];
+                states[calcIndex - 1] = upState;
 
-                    if (itemIndex == calcIndex) {
-                        itemIndex--;
-                    } else if (itemIndex + 1 == calcIndex) {
-                        itemIndex++;
-                    }
-
-                    updateButtons();
+                if (itemIndex == calcIndex) {
+                    itemIndex--;
+                } else if (itemIndex + 1 == calcIndex) {
+                    itemIndex++;
                 }
-            };
 
-            buttons[i] = new Button(screen, -200, finalI * 20, 200, 20, "") {
-                @Override
-                public void onClick(Player.Hand hand) {
-                    actions[finalI].accept(finalI);
+                updateButtons();
+            });
+
+            buttons[i] = new Button(screen, -200, finalI * 20, 200, 20, "", (_, _) -> actions[finalI].accept(finalI));
+
+            downButtons[i] = new Button(screen, 0, finalI * 20, 20, 20, "v", (_, _) -> {
+                int calcIndex = entriesIndex + finalI;
+                String downState = states[calcIndex];
+                states[calcIndex] = states[calcIndex + 1];
+                states[calcIndex + 1] = downState;
+
+                if (itemIndex == calcIndex) {
+                    itemIndex++;
+                } else if (itemIndex - 1 == calcIndex) {
+                    itemIndex--;
                 }
-            };
 
-            downButtons[i] = new Button(screen, 0, finalI * 20, 20, 20, "v") {
-                @Override
-                public void onClick(Player.Hand hand) {
-                    int calcIndex = entriesIndex + finalI;
-                    String downState = states[calcIndex];
-                    states[calcIndex] = states[calcIndex + 1];
-                    states[calcIndex + 1] = downState;
-
-                    if (itemIndex == calcIndex) {
-                        itemIndex++;
-                    } else if (itemIndex - 1 == calcIndex) {
-                        itemIndex--;
-                    }
-
-                    updateButtons();
-                }
-            };
+                updateButtons();
+            });
 
             actions[i] = indexOffset -> {
                 itemIndex = entriesIndex + indexOffset;
@@ -146,7 +131,7 @@ public class GuiSignalPrioritization implements IScreen {
     }
 
     @Override
-    public void draw(IScreenBuilder builder) {
+    public void draw(IScreenBuilder builder, RenderState state) {
         builder.drawCenteredString(GuiText.LABEL_PRIORITY.toString(), 0, -40, 0xFFFFFF);
 
         builder.drawCenteredString(GuiText.LABEL_LOW.toString(), 35, 6, 0xFFFFFF);
@@ -167,11 +152,6 @@ public class GuiSignalPrioritization implements IScreen {
         GUIHelpers.drawRect(-175, 120, 200, 20, 0x616161);
         //
 
-    }
-
-    @Override
-    public void onEnterKey(IScreenBuilder builder) {
-        // Nothing to do
     }
 
     @Override
@@ -302,15 +282,13 @@ public class GuiSignalPrioritization implements IScreen {
     }
 
     private void refreshItem() {
+        final TagCompound rightTag = item.getTagCompound();
         if (signalType == SIGNAL_PART_ID) {
-            final TagCompound rightTag = item.getTagCompound();
             rightTag.setString("itemState", states[itemIndex]);
-            item.setTagCompound(rightTag);
         } else {
-            final TagCompound rightTag = item.getTagCompound();
             rightTag.setMap("itemGroupState", Collections.singletonMap(groupId, states[itemIndex]), EmptyStringMapper::toNullString, value -> new TagCompound().setString("string", EmptyStringMapper.toNullString(value)));
-            item.setTagCompound(rightTag);
         }
+        item.setTagCompound(rightTag);
     }
 
     private void updateGroup(String newGroup) {

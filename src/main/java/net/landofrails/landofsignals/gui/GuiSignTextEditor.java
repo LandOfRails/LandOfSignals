@@ -1,7 +1,6 @@
 package net.landofrails.landofsignals.gui;
 
 import cam72cam.mod.MinecraftClient;
-import cam72cam.mod.entity.Player;
 import cam72cam.mod.gui.screen.Button;
 import cam72cam.mod.gui.screen.IScreen;
 import cam72cam.mod.gui.screen.IScreenBuilder;
@@ -34,22 +33,13 @@ public class GuiSignTextEditor implements IScreen {
         TextField textField = new TextField(screen, -100, 25, 200, 20);
         textField.setText(prevText != null ? prevText : "");
         textField.setFocused(true);
-        new Button(screen, -100, 55, 200, 20, TextUtil.translate(SAVEBUTTONLABELKEY)) {
-            @Override
-            public void onClick(Player.Hand hand) {
-
+        new Button(screen, -100, 55, 200, 20, TextUtil.translate(SAVEBUTTONLABELKEY), (_, _) -> {
                 // CHECK: Remove with new umc version
                 MinecraftClient.getPlayer().sendMessage(PlayerMessage.translate(TEXTEDITORNEEDSNEWVERSIONMESSAGEKEY));
                 //
                 SignTextPacket.sendTextToServer(signPos, textField.getText());
                 screen.close();
-            }
-        };
-    }
-
-    @Override
-    public void onEnterKey(IScreenBuilder builder) {
-
+        });
     }
 
     @Override
@@ -57,8 +47,4 @@ public class GuiSignTextEditor implements IScreen {
 
     }
 
-    @Override
-    public void draw(IScreenBuilder builder) {
-
-    }
 }

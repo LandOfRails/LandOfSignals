@@ -13,8 +13,6 @@ public class LOSGuis {
 
     }
 
-    @SuppressWarnings("unused")
-    public static final GuiRegistry.GUI TICKET_MACHINE_DB = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "TICKET_MACHINE_DB"), GuiTicketMachine::new);
     // INFO: Replace GuiRegistry.BlockGUI with GuiRegistry.GUI to be able to open both on the same block.
     public static final GuiRegistry.GUI SIGNAL_BOX_COMPLEX_SIGNAL = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_BOX_COMPLEX_SIGNAL"), GuiSignalBoxComplexSignal::new);
     public static final GuiRegistry.GUI SIGNAL_BOX_SIGNAL_PART = GuiRegistry.register(new Identifier(LandOfSignals.MODID, "SIGNAL_BOX_SIGNAL_PART"), GuiSignalBoxSignalPart::new);
