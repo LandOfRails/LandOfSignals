@@ -2,10 +2,12 @@ package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 
@@ -21,7 +23,7 @@ public class ObjItemRender {
     private ObjItemRender() {
     }
 
-    protected static final Map<Identifier, OBJModel> cache = new HashMap<>();
+    protected static final Map<Identifier, Model> cache = new HashMap<>();
 
     public static ItemRender.IItemModel getModelFor(final Identifier id, final Vec3d translate, final float scale) {
         return getModelFor(id, translate, Vec3d.ZERO, null, scale);
@@ -30,14 +32,14 @@ public class ObjItemRender {
     @SuppressWarnings("java:S112")
     public static ItemRender.IItemModel getModelFor(final Identifier id, final Vec3d translate, final Vec3d rotation,
                                                     final Collection<String> collection, final float scale) {
-        return (world, stack) -> new StandardModel().addCustom((state, partialTicks) -> {
+        return (_, stack) -> new StandardModel().addCustom((state, _) -> {
             if (!cache.containsKey(id)) {
                 try {
-                    final OBJModel model;
+                    final Model model;
                     if (collection != null) {
-                        model = new OBJModel(id, 0, collection);
+                        model = ModelLoader.load(id, collection);
                     } else {
-                        model = new OBJModel(id, 0);
+                        model = ModelLoader.load(id);
                     }
                     cache.put(id, model);
                 } catch (final FileNotFoundException e) {
@@ -51,7 +53,7 @@ public class ObjItemRender {
                     throw new RuntimeException("Error loading item model...", e);
                 }
             }
-            final OBJModel model = cache.get(id);
+            final Model model = cache.get(id);
             String textureName = null;
             final TagCompound tag = stack.getTagCompound();
             if (collection != null && tag.hasKey("textureName")) {
@@ -64,8 +66,9 @@ public class ObjItemRender {
             state.rotate(rotation.z, 0, 0, 1);
             state.scale(scale, scale, scale);
 
-            try (OBJRender.Binding vbo = model.binder().texture(textureName).bind(state)) {
-                vbo.draw();
+            ModelConfig cfg = new ModelConfig().variant(textureName);
+            try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
+                bound.enqueueOpaque();
             }
         });
     }

@@ -1,7 +1,9 @@
 package net.landofrails.landofsignals.utils;
 
-import cam72cam.mod.model.obj.OBJModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LandOfSignals;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class HighlightingUtil {
 
-    private static OBJModel model;
+    private static Model model;
     private static final Random RANDOM = new Random();
 
     private static LocalDateTime colortime = LocalDateTime.now();
@@ -28,11 +30,12 @@ public class HighlightingUtil {
     public static void renderHighlighting(RenderState state) {
         try {
 
-            OBJModel model = getOBJModel();
+            Model model = getModel();
             state.translate(0.5, 0, 0.5);
-            try (OBJRender.Binding vbo = model.binder().texture(getColor()).bind(state)) {
+            ModelConfig cfg = new ModelConfig().variant(getColor());
+            try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
 
-                vbo.draw();
+                bound.enqueueOpaque();
 
             } catch (Exception e) {
                 // Not good, not bad enough to fail
@@ -57,9 +60,9 @@ public class HighlightingUtil {
         return color.getFolder();
     }
 
-    private static OBJModel getOBJModel() throws Exception {
+    private static Model getModel() throws Exception {
         if(model == null){
-            model = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/connection-box/connection-box.obj"), 0, HighlightingColors.getAllColorsAsStrings());
+            model = ModelLoader.load(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/connection-box/connection-box.obj"), HighlightingColors.getAllColorsAsStrings());
         }
         return model;
     }

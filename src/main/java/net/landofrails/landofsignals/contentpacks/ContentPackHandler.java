@@ -4,7 +4,7 @@ import cam72cam.mod.ModCore;
 import cam72cam.mod.gui.Progress;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.model.common.ModelLoader;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.GenericContentPack;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
@@ -168,7 +168,7 @@ public class ContentPackHandler {
 
             // Cache items
             try {
-                ItemSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                ItemSignalPartRender.cache().put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
             } catch (Exception e) {
                 String errmsg = "Couldn't preload item with id \"%s\" (objPath: %s). Cause:";
                 throw new ContentPackException(String.format(errmsg, id, objPath), e);
@@ -355,7 +355,7 @@ public class ContentPackHandler {
 
             // Cache items
             try {
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states));
+                Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath),  Arrays.asList(states));
                 float[] scale = rescaleItem(model, signal.getItemScaling());
                 float[] translation = retranslateItem(model, scale, signal.getItemScaling(), signal.getItemTranslation());
                 signal.setItemScaling(scale);
@@ -460,7 +460,7 @@ public class ContentPackHandler {
 
     }
 
-    private static float[] rescaleItem(OBJModel model, float[] itemScaling) {
+    private static float[] rescaleItem(Model model, float[] itemScaling) {
         double height = model.heightOfGroups(model.groups());
 
         if (itemScaling[0] != itemScaling[1] || itemScaling[1] != itemScaling[2]) {
@@ -476,7 +476,7 @@ public class ContentPackHandler {
         return new float[]{rescale, rescale, rescale};
     }
 
-    private static float[] retranslateItem(OBJModel model, float[] newScale, float[] oldScale, float[] itemTranslation) {
+    private static float[] retranslateItem(Model model, float[] newScale, float[] oldScale, float[] itemTranslation) {
         Vec3d center = model.centerOfGroups(model.groups());
         double height = model.heightOfGroups(model.groups());
         float[] newTranslation = Arrays.copyOf(itemTranslation, itemTranslation.length);

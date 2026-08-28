@@ -1,10 +1,12 @@
 package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.item.ItemStack;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
@@ -20,11 +22,11 @@ import java.util.Map;
 
 @SuppressWarnings("java:S3252")
 public class ItemSignalPartRender implements ItemRender.IItemModel {
-    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, Model> cache = new HashMap<>();
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
-        return new StandardModel().addCustom((state, partialTicks) -> {
+        return new StandardModel().addCustom((state, _) -> {
 
             final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
@@ -61,12 +63,12 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
-                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                cache.put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJModel model = cache.get(objPath);
+        final Model model = cache.get(objPath);
 
         final float[] translate = signal.getItemTranslation();
         final float[] scale = signal.getItemScaling();
@@ -74,10 +76,11 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         state.translate(translate[0], translate[1], translate[2]);
         state.scale(scale[0], scale[1], scale[2]);
 
-        try (OBJRender.Binding vbo = model.binder().texture(baseState).bind(state)) {
+        ModelConfig cfg = new ModelConfig().variant(baseState);
+        try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
 
             // Render
-            vbo.draw();
+            bound.enqueueOpaque();
         }
     }
 
@@ -88,12 +91,12 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(itemId);
-                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                cache.put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJModel model = cache.get(objPath);
+        final Model model = cache.get(objPath);
 
         final float[] translate = signal.getItemTranslation();
         final float[] scale = signal.getItemScaling();
@@ -101,14 +104,15 @@ public class ItemSignalPartRender implements ItemRender.IItemModel {
         state.translate(translate[0], translate[1], translate[2]);
         state.scale(scale[0], scale[1], scale[2]);
 
-        try (OBJRender.Binding vbo = model.binder().texture(itemState).bind(state)) {
+        ModelConfig cfg = new ModelConfig().variant(itemState);
+        try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
 
             // Render
-            vbo.draw();
+            bound.enqueueOpaque();
         }
     }
 
-    public static Map<String, OBJModel> cache(){
+    public static Map<String, Model> cache(){
         return cache;
     }
 
