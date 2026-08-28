@@ -19,6 +19,13 @@ base.archivesName = archivesBaseName
 //MINECRAFT//
 
 //DEPENDENCIES//
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jspecify:jspecify:1.0.0'
+}
 
 //JAR//
 
