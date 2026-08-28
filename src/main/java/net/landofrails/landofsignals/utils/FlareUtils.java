@@ -228,7 +228,7 @@ public class FlareUtils {
 
         final String objPath = sign.getUniqueId() + "/" + flare.getObjPath();
         final String flareId = flare.getId();
-        final OBJModel model = TileSignPartRender.cache().get(objPath);
+        final OBJModel model = null; // FIXME TileSignPartRender.cache().get(objPath);
 
         float[] modelTranslation = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
         float[] modelScaling = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
@@ -247,7 +247,7 @@ public class FlareUtils {
 
         final String flareId = flare.getId();
         final String objPath = signal.getModel();
-        final OBJModel model = TileSignalPartRender.cache().get(objPath);
+        final OBJModel model = null; // FIXME TileSignalPartRender.cache().get(objPath);
 
         float[] modelTranslation = signal.getTranslation();
         float[] modelScaling = signal.getScaling();
@@ -270,7 +270,7 @@ public class FlareUtils {
 
         final String objPath = deco.getUniqueId() + "/" + flare.getObjPath();
         final String flareId = flare.getId();
-        final OBJModel model = TileDecoRender.cache().get(objPath);
+        final OBJModel model = null; // FIXME TileDecoRender.cache().get(objPath);
 
         float[] modelTranslation = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
         float[] modelScaling = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
@@ -293,7 +293,7 @@ public class FlareUtils {
         for(String state : flareStates){
             final String flareId = flare.getId();
             final String objPath = lever.getUniqueId() + "/" + flare.getObjPath() + ":" + state;
-            final OBJModel model = TileCustomLeverRender.cache().get(objPath);
+            final OBJModel model = null; // FIXME TileCustomLeverRender.cache().get(objPath);
 
             Map<String, ContentPackModel[]> models =
                     state.equalsIgnoreCase(ACTIVE) ? lever.getActive() : lever.getInactive();
@@ -317,7 +317,7 @@ public class FlareUtils {
 
             final String flareId = flare.getId();
             final String objPath = objIdWithoutGroup(signal.getUniqueId(), "base", flare.getObjPath());
-            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+            final OBJModel model = null; // FIXME TileComplexSignalRender.cache().get(objPath);
 
             ContentPackModel[] models = signal.getBase().get(flare.getObjPath());
 
@@ -341,7 +341,7 @@ public class FlareUtils {
             final String objPath = flare.getGroupId() != null ?
                     objIdWithGroup(signal.getUniqueId(), "signals", flare.getGroupId(), flare.getObjPath()) :
                     objIdWithoutGroup(signal.getUniqueId(), "signals", flare.getObjPath());
-            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+            final OBJModel model = null; // FIXME TileComplexSignalRender.cache().get(objPath);
 
             ContentPackModel[] models = signal.getSignals().get(flare.getGroupId()).getStates().get(state).getModels().get(flare.getObjPath());
 

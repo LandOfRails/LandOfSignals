@@ -3,6 +3,7 @@ package net.landofrails.landofsignals.contentpacks;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.gui.Progress;
 import cam72cam.mod.math.Vec3d;
+import cam72cam.mod.model.common.ModelLoader;
 import cam72cam.mod.model.obj.OBJModel;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.GenericContentPack;
@@ -55,7 +56,7 @@ public class ContentPackHandler {
         if (assetFolder.exists()) {
             LandOfSignals.info("Searching for assets..");
 
-            File[] assets = assetFolder.listFiles((dir, name) -> name.endsWith(".zip"));
+            File[] assets = assetFolder.listFiles((_, name) -> name.endsWith(".zip"));
 
             if (assets == null || assets.length == 0) {
                 LandOfSignals.info("No assets found.");
@@ -175,7 +176,7 @@ public class ContentPackHandler {
 
             // Cache blocks
             try {
-                TileSignalPartRender.cache().put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                TileSignalPartRender.cache().put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
                 FlareUtils.cacheFlares(id, signal);
             } catch (Exception e) {
                 String errmsg = "Couldn't preload block with id \"%s\" (objPath: %s). Cause:";

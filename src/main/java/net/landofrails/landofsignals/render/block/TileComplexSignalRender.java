@@ -2,9 +2,11 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.complexsignal.ContentPackComplexSignal;
@@ -32,7 +34,7 @@ public class TileComplexSignalRender {
 
     }
 
-    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, Model> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String blockId, Map<String, ContentPackSignalGroup> groups, String identifier) {
@@ -42,7 +44,7 @@ public class TileComplexSignalRender {
         String firstGroupId = firstGroup.getKey();
         Optional<String> firstPath = firstGroup.getValue().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
 
-        if (!firstPath.isPresent())
+        if (firstPath.isEmpty())
             return;
         final String firstObjId = objIdWithGroup(blockId, identifier, firstGroupId, firstPath.get());
         if (cache.containsKey(firstObjId)) {
@@ -60,7 +62,7 @@ public class TileComplexSignalRender {
     public static void checkCache(String blockId, String groupId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
-            if (!firstPath.isPresent())
+            if (firstPath.isEmpty())
                 return;
             final String firstObjId = objIdWithGroup(blockId, identifier, groupId, firstPath.get());
             if (cache.containsKey(firstObjId)) {
@@ -75,7 +77,7 @@ public class TileComplexSignalRender {
                 final String objId = objIdWithGroup(blockId, identifier, groupId, path);
 
                 Set<String> objTextures = LOSBlocks.BLOCK_COMPLEX_SIGNAL.getContentpackComplexSignals().get(blockId).getObjTextures().get(path);
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, path), objTextures);
                 cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
@@ -97,7 +99,7 @@ public class TileComplexSignalRender {
     }
 
     public static StandardModel render(final TileComplexSignal tsp) {
-        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
+        return new StandardModel().addCustom((state, _) -> renderStuff(tsp, state));
     }
 
     private static void renderStuff(final TileComplexSignal tsp, RenderState state) {
@@ -136,7 +138,7 @@ public class TileComplexSignalRender {
 
             // Needs to be split from signal
             final String objId = objIdWithoutGroup(signal.getUniqueId(), "base", path);
-            final OBJModel model = cache.get(objId);
+            final Model model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
 
@@ -152,15 +154,17 @@ public class TileComplexSignalRender {
                 iterationState.rotate(rotation.x,1, 0, 0);
                 iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                 iterationState.rotate(rotation.z, 0, 0, 1);
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
+
+                ModelConfig cfg = new ModelConfig().variant(baseModel.getTextures());
+                try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        vbo.draw();
+                        bound.enqueueOpaque();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        vbo.draw(groupCache.get(groupCacheId));
+                        bound.enqueueOpaque(groupCache.get(groupCacheId));
                     }
 
                 } catch (Exception e) {
@@ -199,7 +203,7 @@ public class TileComplexSignalRender {
 
                 // Needs to be split from base
                 final String objId = objIdWithGroup(signal.getUniqueId(), "signals", groupId, path);
-                final OBJModel model = cache.get(objId);
+                final Model model = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
 
@@ -215,16 +219,18 @@ public class TileComplexSignalRender {
                     iterationState.rotate(rotation.x,1, 0, 0);
                     iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                     iterationState.rotate(rotation.z, 0, 0, 1);
-                    try (OBJRender.Binding vbo = model.binder().texture(signalModel.getTextures()).bind(iterationState)) {
+
+                    ModelConfig cfg = new ModelConfig().variant(signalModel.getTextures());
+                    try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
 
                         String[] groups = signalModel.getObj_groups();
 
                         if (groups.length == 0) {
-                            vbo.draw();
+                            bound.enqueueOpaque();
                         } else {
 
                             String groupCacheId = objId + "@" + String.join("+", groups);
-                            vbo.draw(groupCache.get(groupCacheId));
+                            bound.enqueueOpaque(groupCache.get(groupCacheId));
                         }
 
                     } catch (Exception e) {
@@ -240,7 +246,7 @@ public class TileComplexSignalRender {
         }
     }
 
-    public static Map<String, OBJModel> cache() {
+    public static Map<String, Model> cache() {
         return cache;
     }
 }
