@@ -2,10 +2,12 @@ package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("java:S3252")
 public class ItemComplexSignalRender implements ItemRender.IItemModel {
-    protected static final Map<String, OBJModel> cache = new HashMap<>();
+    protected static final Map<String, Model> cache = new HashMap<>();
     protected static final Map<String, List<String>> groupCache = new HashMap<>();
 
     private static final String SIGNAL_IDENTIFIER = "/signals/";
@@ -36,7 +38,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
         // Get first group, get first state, get first model
         Optional<String> firstPath = groups.iterator().next().getStates().values().iterator().next().getModels().keySet().stream().findFirst();
 
-        if (!firstPath.isPresent())
+        if (firstPath.isEmpty())
             return;
         final String firstObjId = itemId + SIGNAL_IDENTIFIER + firstPath.get();
         if (cache.containsKey(firstObjId)) {
@@ -54,7 +56,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
     public static void checkCache(String itemId, Map<String, ContentPackModel[]> models, String identifier, boolean checkIfAlreadyExisting) {
         if (checkIfAlreadyExisting) {
             Optional<String> firstPath = models.keySet().stream().findFirst();
-            if (!firstPath.isPresent())
+            if (firstPath.isEmpty())
                 return;
             final String firstObjId = itemId + identifier + firstPath.get();
             if (cache.containsKey(firstObjId)) {
@@ -73,7 +75,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                     objTextures.remove(null);
                     objTextures.add("");
                 }
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, path), objTextures);
                 cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signalModel : modelEntry.getValue()) {
@@ -100,7 +102,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
-        return new StandardModel().addCustom((state, partialTicks) -> {
+        return new StandardModel().addCustom((state, _) -> {
 
             final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
@@ -112,7 +114,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
             if (tag.hasKey("itemGroupState")) {
                 itemGroupStates.putAll(tag.getMap("itemGroupState", EmptyStringMapper::fromNullString, value -> value.getString("string")));
             }
-            itemGroupStates.replaceAll((key, value) -> value == null ? "" : value);
+            itemGroupStates.replaceAll((_, value) -> value == null ? "" : value);
 
             renderBase(itemId, state);
             renderSignals(itemId, itemGroupStates, state);
@@ -138,7 +140,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
             final String path = baseModels.getKey();
 
             final String objId = itemId + "/base/" + path;
-            final OBJModel model = cache.get(objId);
+            final Model model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
 
@@ -155,15 +157,16 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 iterationState.rotate(rotation.y, 0, 1, 0);
                 iterationState.rotate(rotation.z, 0, 0, 1);
 
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
+                ModelConfig cfg = new ModelConfig().variant(baseModel.getTextures());
+                try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        vbo.draw();
+                        bound.enqueueOpaque();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        vbo.draw(groupCache.get(groupCacheId));
+                        bound.enqueueOpaque(groupCache.get(groupCacheId));
                     }
 
                 }
@@ -187,7 +190,7 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                 final String path = signalModels.getKey();
 
                 final String objId = itemId + SIGNAL_IDENTIFIER + path;
-                final OBJModel model = cache.get(objId);
+                final Model model = cache.get(objId);
 
                 for (ContentPackModel signalModel : signalModels.getValue()) {
 
@@ -204,14 +207,15 @@ public class ItemComplexSignalRender implements ItemRender.IItemModel {
                     iterationState.rotate(rotation.y, 0, 1, 0);
                     iterationState.rotate(rotation.z, 0, 0, 1);
 
-                    try (OBJRender.Binding vbo = model.binder().texture(signalModel.getTextures()).bind(iterationState)) {
+                    ModelConfig cfg =  new ModelConfig().variant(signalModel.getTextures());
+                    try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
                         // Render
                         String[] groups = signalModel.getObj_groups();
                         if (groups.length == 0) {
-                            vbo.draw();
+                            bound.enqueueOpaque();
                         } else {
                             String groupCacheId = objId + "@" + String.join("+", groups);
-                            vbo.draw(groupCache.get(groupCacheId));
+                            bound.enqueueOpaque(groupCache.get(groupCacheId));
                         }
 
                     }

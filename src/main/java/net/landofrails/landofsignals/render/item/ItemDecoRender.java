@@ -2,10 +2,12 @@ package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
@@ -23,12 +25,12 @@ import java.util.stream.Collectors;
 
 public class ItemDecoRender implements ItemRender.IItemModel {
 
-    protected static final Map<String, OBJModel> cache = new HashMap<>();
+    protected static final Map<String, Model> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String itemId, Map<String, ContentPackModel[]> models) {
         Optional<String> firstPath = models.keySet().stream().findFirst();
-        if (!firstPath.isPresent())
+        if (firstPath.isEmpty())
             return;
         final String firstObjId = itemId + "/" + firstPath.get();
         if (cache.containsKey(firstObjId)) {
@@ -43,7 +45,7 @@ public class ItemDecoRender implements ItemRender.IItemModel {
                 Set<String> objTextures = LOSBlocks.BLOCK_DECO.getContentpackDeco().get(itemId).getObjTextures().get(path);
                 objTextures.remove(null);
                 objTextures.add("");
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, path), objTextures);
                 cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel decoModel : modelEntry.getValue()) {
@@ -66,7 +68,7 @@ public class ItemDecoRender implements ItemRender.IItemModel {
 
     @Override
     public StandardModel getModel(World world, ItemStack stack) {
-        return new StandardModel().addCustom((state, partialTicks) -> {
+        return new StandardModel().addCustom((state, _) -> {
 
             TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
@@ -95,7 +97,7 @@ public class ItemDecoRender implements ItemRender.IItemModel {
             String path = baseModels.getKey();
 
             String objId = itemId + "/" + path;
-            OBJModel model = cache.get(objId);
+            Model model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
 
@@ -106,24 +108,26 @@ public class ItemDecoRender implements ItemRender.IItemModel {
                 Vec3d scale = item.getAsVec3d(item::getScaling);
                 Vec3d rotation = item.getAsVec3d(item::getRotation);
 
-                state.scale(scale);
-                state.translate(translate);
-                state.rotate(rotation.x, 1, 0, 0);
-                state.rotate(rotation.y, 0, 1, 0);
-                state.rotate(rotation.z, 0, 0, 1);
+                iterationState.scale(scale);
+                iterationState.translate(translate);
+                iterationState.rotate(rotation.x, 1, 0, 0);
+                iterationState.rotate(rotation.y, 0, 1, 0);
+                iterationState.rotate(rotation.z, 0, 0, 1);
 
                 String texture = baseModel.getTextures();
                 if(texture == null)
                     texture = "";
-                try (OBJRender.Binding vbo = model.binder().texture(texture).bind(state)) {
+
+                ModelConfig cfg = new ModelConfig().variant(texture);
+                try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        vbo.draw();
+                        bound.enqueueOpaque();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        vbo.draw(groupCache.get(groupCacheId));
+                        bound.enqueueOpaque(groupCache.get(groupCacheId));
                     }
 
                 }

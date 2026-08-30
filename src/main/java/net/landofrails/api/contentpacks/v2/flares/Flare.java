@@ -1,7 +1,7 @@
 package net.landofrails.api.contentpacks.v2.flares;
 
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJGroup;
+import cam72cam.mod.model.common.mesh.ModelGroup;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.render.block.BlockRenderException;
 
@@ -321,7 +321,7 @@ public class Flare {
 
     }
 
-    public void savePrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier) {
+    public void savePrecalculatedData(Map<String, ModelGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier) {
         if(this.precalculatedData != null)
             return;
         this.precalculatedData = new PrecalculatedData(flareGroups, scale, lampScale, preOffset, postOffset, rotation, flareTextureIdentifier);
@@ -333,7 +333,7 @@ public class Flare {
 
     public static class PrecalculatedData {
 
-        public final Map<String, OBJGroup> flareGroups;
+        public final Map<String, ModelGroup> flareGroups;
 
         public final Vec3d scale;
 
@@ -347,7 +347,7 @@ public class Flare {
 
         public final Identifier flareTextureIdentifier;
 
-        public PrecalculatedData(Map<String, OBJGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier){
+        public PrecalculatedData(Map<String, ModelGroup> flareGroups, Vec3d scale, double lampScale, Vec3d preOffset, Vec3d postOffset, Vec3d rotation, Identifier flareTextureIdentifier){
             this.flareGroups = flareGroups;
             this.scale = scale;
             this.lampScale = lampScale;

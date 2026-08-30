@@ -2,9 +2,11 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.signal.ContentPackSignal;
@@ -25,10 +27,10 @@ public class TileSignalPartRender {
 
     }
 
-    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, Model> cache = new HashMap<>();
 
     public static StandardModel render(final TileSignalPart tsp) {
-        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
+        return new StandardModel().addCustom((state, _) -> renderStuff(tsp, state));
     }
 
     private static void renderStuff(final TileSignalPart tsp, RenderState state) {
@@ -71,12 +73,12 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                cache.put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJModel model = cache.get(objPath);
+        final Model model = cache.get(objPath);
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
@@ -89,9 +91,10 @@ public class TileSignalPartRender {
         state.translate(translate.x, translate.y, translate.z);
         state.rotate(tile.getBlockRotate(), 0, 1, 0);
 
-        try (OBJRender.Binding vbo = model.binder().texture(base).bind(state)) {
+        ModelConfig cfg = new ModelConfig().variant(base);
+        try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
             // Render
-            vbo.draw();
+            bound.enqueueOpaque();
         } catch (Exception e) {
             // Removes TileEntity on client-side, prevents crash
             ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
@@ -113,12 +116,12 @@ public class TileSignalPartRender {
         if (!cache.containsKey(objPath)) {
             try {
                 String[] states = LOSBlocks.BLOCK_SIGNAL_PART.getAllStates(blockId);
-                cache.put(objPath, new OBJModel(new Identifier(LandOfSignals.MODID, objPath), 0, Arrays.asList(states)));
+                cache.put(objPath, ModelLoader.load(new Identifier(LandOfSignals.MODID, objPath), Arrays.asList(states)));
             } catch (Exception e) {
                 throw new ItemRenderException("Error loading item model/renderer...", e);
             }
         }
-        final OBJModel model = cache.get(objPath);
+        final Model model = cache.get(objPath);
 
         final float[] originalTranslate = signal.getTranslation();
         final Vec3d translate = new Vec3d(originalTranslate[0], originalTranslate[1], originalTranslate[2]).add(offset);
@@ -131,9 +134,10 @@ public class TileSignalPartRender {
         state.translate(translate);
         state.rotate(tile.getBlockRotate(), 0, 1, 0);
 
-        try (OBJRender.Binding vbo = model.binder().texture(signalState).bind(state)) {
+        ModelConfig cfg = new ModelConfig().variant(signalState);
+        try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
             // Render
-            vbo.draw();
+            bound.enqueueOpaque();
         } catch (Exception e) {
             // Removes TileEntity on client-side, prevents crash
             ModCore.error("Removing local SignalPart (x%d, y%d, z%d) due to exceptions: %s", tile.getPos().x, tile.getPos().y, tile.getPos().z, e.getMessage());
@@ -142,7 +146,7 @@ public class TileSignalPartRender {
         }
     }
 
-    public static Map<String, OBJModel> cache(){
+    public static Map<String, Model> cache(){
         return cache;
     }
 

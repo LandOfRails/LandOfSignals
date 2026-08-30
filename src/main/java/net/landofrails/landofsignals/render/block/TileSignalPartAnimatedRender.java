@@ -1,9 +1,11 @@
 package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -20,35 +22,34 @@ public class TileSignalPartAnimatedRender {
 
     }
 
-    private static final Map<String, OBJModel> cache = new HashMap<>();
-    private static final List<String> groupNames = Arrays.asList("wing");
+    private static final Map<String, Model> cache = new HashMap<>();
+    private static final List<String> groupNames = List.of("wing");
 
     public static StandardModel render(final TileSignalPartAnimated tsp) {
-        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
+        return new StandardModel().addCustom((state, _) -> renderStuff(tsp, state));
     }
 
     private static void renderStuff(final TileSignalPartAnimated tsp, RenderState state) {
         final String id = tsp.getId();
         if (!cache.containsKey("flare")) {
             try {
-                final OBJModel flareModel = new OBJModel(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"), 0);
+                final Model flareModel = ModelLoader.load(new Identifier(LandOfSignals.MODID, "models/block/landofsignals/lamp/flare.obj"));
                 cache.put("flare", flareModel);
             } catch (final Exception e) {
-                e.printStackTrace();
+                throw new BlockRenderException("Error within TileSignalPartAnimatedRender", e);
             }
         }
         if (!cache.containsKey(id)) {
             try {
-                final OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), 0, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
+                final Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(id)), LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getStates(id));
                 cache.put(id, model);
             } catch (final Exception e) {
-                e.printStackTrace();
+                throw new BlockRenderException("Error within TileSignalPartAnimatedRender", e);
             }
         }
-        final OBJModel model = cache.get(id);
-        final List<String> groupsWithoutWing = new ArrayList<>();
-        for (final String s : model.groups()) groupsWithoutWing.add(s);
-        final boolean wingsExist = groupsWithoutWing.containsAll(groupNames);
+        final Model model = cache.get(id);
+        final List<String> groupsWithoutWing = new ArrayList<>(model.groups());
+        final boolean wingsExist = new HashSet<>(groupsWithoutWing).containsAll(groupNames);
         groupsWithoutWing.removeAll(groupNames);
 
         final Vec3d scale = Vec3d.ZERO;
@@ -58,8 +59,9 @@ public class TileSignalPartAnimatedRender {
         state.translate(trans);
         state.rotate(tsp.getBlockRotate(), 0, 1, 0);
 
-        try (OBJRender.Binding vbo = model.binder().texture(tsp.getAnimationOrTextureName()).bind(state)) {
-            vbo.draw(groupsWithoutWing);
+        ModelConfig cfg = new ModelConfig().variant(tsp.getAnimationOrTextureName());
+        try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
+            bound.enqueueOpaque(groupsWithoutWing);
         }
 
         if (wingsExist) {
@@ -70,8 +72,8 @@ public class TileSignalPartAnimatedRender {
             state.translate(0, -center.y, 0);
             state.rotate(tsp.getPartRotate(), 1, 0, 0);
             state.translate(0, rotateYaw.y, 0);
-            try(OBJRender.Binding vbo = model.binder().texture(tsp.getAnimationOrTextureName()).bind(state)){
-                vbo.draw(groupNames);
+            try(ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
+                bound.enqueueOpaque(groupNames);
             }
         }
 
@@ -110,7 +112,7 @@ public class TileSignalPartAnimatedRender {
     }
 
 //    private Vec3d angleToDirection(Vec3d angle) {
-//// Convert angle to radians
+// // Convert angle to radians
 //        angle.x = angle.x * 3.14159265 / 180;
 //        angle.y = angle.y * 3.14159265 / 180;
 //

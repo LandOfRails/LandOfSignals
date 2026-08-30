@@ -2,10 +2,12 @@ package net.landofrails.landofsignals.render.item;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.ItemRender;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.resource.Identifier;
 import cam72cam.mod.serialization.TagCompound;
 import net.landofrails.landofsignals.LOSBlocks;
@@ -25,11 +27,11 @@ public class ItemSignalPartAnimatedRender {
     }
 
     public static final boolean IGNOREFNFEXCEPTION = true;
-    protected static final Map<String, OBJModel> cache = new HashMap<>();
+    protected static final Map<String, Model> cache = new HashMap<>();
 
     @SuppressWarnings("java:S112")
     public static ItemRender.IItemModel getModelFor() {
-        return (world, stack) -> new StandardModel().addCustom((state, partialTicks) -> {
+        return (_, stack) -> new StandardModel().addCustom((state, _) -> {
             final TagCompound tag = stack.getTagCompound();
             String itemId = tag.getString("itemId");
             if (itemId == null || !LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getSignalParts().containsKey(itemId)) {
@@ -39,11 +41,11 @@ public class ItemSignalPartAnimatedRender {
             // TODO collection/states: is null okay or should it be replaced with ""?
             if (!cache.containsKey(itemId)) {
                 try {
-                    final OBJModel model;
+                    final Model model;
                     if (collection != null)
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0, collection);
+                        model = ModelLoader.load(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), collection);
                     else
-                        model = new OBJModel(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)), 0);
+                        model = ModelLoader.load(new Identifier(LandOfSignals.MODID, LOSBlocks.BLOCK_SIGNAL_PART_ANIMATED.getPath(itemId)));
                     cache.put(itemId, model);
                 } catch (final FileNotFoundException e) {
                     if (IGNOREFNFEXCEPTION) {
@@ -56,7 +58,7 @@ public class ItemSignalPartAnimatedRender {
                     throw new RuntimeException("Error loading item model...", e);
                 }
             }
-            final OBJModel model = cache.get(itemId);
+            final Model model = cache.get(itemId);
             String textureName;
             if (collection != null) {
                 textureName = GuiSignalPartAnimatedBox.getTexureName();
@@ -69,8 +71,9 @@ public class ItemSignalPartAnimatedRender {
             state.translate(translate);
             state.scale(scale, scale, scale);
 
-            try (OBJRender.Binding vbo = model.binder().texture(textureName).bind(state)) {
-                vbo.draw();
+            ModelConfig cfg = new ModelConfig().variant(textureName);
+            try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, state)) {
+                bound.enqueueOpaque();
             }
         });
     }

@@ -2,9 +2,11 @@ package net.landofrails.landofsignals.render.block;
 
 import cam72cam.mod.ModCore;
 import cam72cam.mod.math.Vec3d;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.ModelLoader;
+import cam72cam.mod.model.common.mesh.Model;
 import cam72cam.mod.render.StandardModel;
-import cam72cam.mod.render.obj.OBJRender;
+import cam72cam.mod.render.common.ModelConfig;
+import cam72cam.mod.render.common.ModelRenderer;
 import cam72cam.mod.render.opengl.RenderState;
 import cam72cam.mod.resource.Identifier;
 import net.landofrails.api.contentpacks.v2.parent.ContentPackBlock;
@@ -26,12 +28,12 @@ public class TileSignalBoxRender {
 
     }
 
-    private static final Map<String, OBJModel> cache = new HashMap<>();
+    private static final Map<String, Model> cache = new HashMap<>();
     private static final Map<String, List<String>> groupCache = new HashMap<>();
 
     public static void checkCache(String blockId, Map<String, ContentPackModel[]> models) {
         Optional<String> firstPath = models.keySet().stream().findFirst();
-        if (!firstPath.isPresent())
+        if (firstPath.isEmpty())
             return;
         final String firstObjId = blockId + "/" + firstPath.get();
         if (cache.containsKey(firstObjId)) {
@@ -44,7 +46,7 @@ public class TileSignalBoxRender {
                 final String objId = blockId + "/" + path;
 
                 Set<String> objTextures = LOSBlocks.BLOCK_SIGNAL_BOX.getContentpackSignalboxes().get(blockId).getObjTextures().get(path);
-                OBJModel model = new OBJModel(new Identifier(LandOfSignals.MODID, path), 0, objTextures);
+                Model model = ModelLoader.load(new Identifier(LandOfSignals.MODID, path), objTextures);
                 cache.putIfAbsent(objId, model);
 
                 for (ContentPackModel signalboxModel : modelEntry.getValue()) {
@@ -66,7 +68,7 @@ public class TileSignalBoxRender {
     }
 
     public static StandardModel render(final TileSignalBox tsp) {
-        return new StandardModel().addCustom((state, partialTicks) -> renderStuff(tsp, state));
+        return new StandardModel().addCustom((state, _) -> renderStuff(tsp, state));
     }
 
     private static void renderStuff(final TileSignalBox tsp, RenderState state) {
@@ -98,7 +100,7 @@ public class TileSignalBoxRender {
             final String path = baseModels.getKey();
 
             final String objId = blockId + "/" + path;
-            final OBJModel model = cache.get(objId);
+            final Model model = cache.get(objId);
 
             for (ContentPackModel baseModel : baseModels.getValue()) {
 
@@ -115,15 +117,16 @@ public class TileSignalBoxRender {
                 iterationState.rotate(tile.getBlockRotate() + rotation.y, 0, 1, 0);
                 iterationState.rotate(rotation.z, 0, 0, 1);
 
-                try (OBJRender.Binding vbo = model.binder().texture(baseModel.getTextures()).bind(iterationState)) {
+                ModelConfig cfg = new ModelConfig().variant(baseModel.getTextures());
+                try (ModelRenderer.Binding bound = ModelRenderer.getRendererFor(model).bind(cfg, iterationState)) {
 
                     // Render
                     String[] groups = baseModel.getObj_groups();
                     if (groups.length == 0) {
-                        vbo.draw();
+                        bound.enqueueOpaque();
                     } else {
                         String groupCacheId = objId + "@" + String.join("+", groups);
-                        vbo.draw(groupCache.get(groupCacheId));
+                        bound.enqueueOpaque(groupCache.get(groupCacheId));
                     }
 
                 } catch (Exception e) {

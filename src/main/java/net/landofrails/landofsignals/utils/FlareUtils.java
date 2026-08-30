@@ -3,8 +3,8 @@ package net.landofrails.landofsignals.utils;
 import cam72cam.mod.MinecraftClient;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
-import cam72cam.mod.model.obj.OBJGroup;
-import cam72cam.mod.model.obj.OBJModel;
+import cam72cam.mod.model.common.mesh.Model;
+import cam72cam.mod.model.common.mesh.ModelGroup;
 import cam72cam.mod.render.opengl.BlendMode;
 import cam72cam.mod.render.opengl.DirectDraw;
 import cam72cam.mod.render.opengl.RenderState;
@@ -228,7 +228,7 @@ public class FlareUtils {
 
         final String objPath = sign.getUniqueId() + "/" + flare.getObjPath();
         final String flareId = flare.getId();
-        final OBJModel model = TileSignPartRender.cache().get(objPath);
+        final Model model = TileSignPartRender.cache().get(objPath);
 
         float[] modelTranslation = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
         float[] modelScaling = sign.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
@@ -247,7 +247,7 @@ public class FlareUtils {
 
         final String flareId = flare.getId();
         final String objPath = signal.getModel();
-        final OBJModel model = TileSignalPartRender.cache().get(objPath);
+        final Model model = TileSignalPartRender.cache().get(objPath);
 
         float[] modelTranslation = signal.getTranslation();
         float[] modelScaling = signal.getScaling();
@@ -270,7 +270,7 @@ public class FlareUtils {
 
         final String objPath = deco.getUniqueId() + "/" + flare.getObjPath();
         final String flareId = flare.getId();
-        final OBJModel model = TileDecoRender.cache().get(objPath);
+        final Model model = TileDecoRender.cache().get(objPath);
 
         float[] modelTranslation = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getTranslation();
         float[] modelScaling = deco.getBase().get(flare.getObjPath())[flare.getObjPathIndex()].getBlock().getScaling();
@@ -293,7 +293,7 @@ public class FlareUtils {
         for(String state : flareStates){
             final String flareId = flare.getId();
             final String objPath = lever.getUniqueId() + "/" + flare.getObjPath() + ":" + state;
-            final OBJModel model = TileCustomLeverRender.cache().get(objPath);
+            final Model model = TileCustomLeverRender.cache().get(objPath);
 
             Map<String, ContentPackModel[]> models =
                     state.equalsIgnoreCase(ACTIVE) ? lever.getActive() : lever.getInactive();
@@ -317,7 +317,7 @@ public class FlareUtils {
 
             final String flareId = flare.getId();
             final String objPath = objIdWithoutGroup(signal.getUniqueId(), "base", flare.getObjPath());
-            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+            final Model model = TileComplexSignalRender.cache().get(objPath);
 
             ContentPackModel[] models = signal.getBase().get(flare.getObjPath());
 
@@ -341,7 +341,7 @@ public class FlareUtils {
             final String objPath = flare.getGroupId() != null ?
                     objIdWithGroup(signal.getUniqueId(), "signals", flare.getGroupId(), flare.getObjPath()) :
                     objIdWithoutGroup(signal.getUniqueId(), "signals", flare.getObjPath());
-            final OBJModel model = TileComplexSignalRender.cache().get(objPath);
+            final Model model = TileComplexSignalRender.cache().get(objPath);
 
             ContentPackModel[] models = signal.getSignals().get(flare.getGroupId()).getStates().get(state).getModels().get(flare.getObjPath());
 
@@ -443,20 +443,20 @@ public class FlareUtils {
         }
     }
 
-    private static void cacheFlare(Flare flare, String flareId, OBJModel model, String objPath, float[] modelTranslation, float[] modelScaling){
-        Predicate<Map.Entry<String, OBJGroup>> isLightFlare = group -> group.getKey().startsWith(flareId);
+    private static void cacheFlare(Flare flare, String flareId, Model model, String objPath, float[] modelTranslation, float[] modelScaling){
+        Predicate<Map.Entry<String, ModelGroup>> isLightFlare = group -> group.getKey().startsWith(flareId);
         String errMsg = String.format("Uh oh. Did not find group(s) %s in model %s", flareId, objPath);
-        Map<String, OBJGroup> flareGroups = model.groups.entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, ModelGroup> flareGroups = model.getGroups().entrySet().stream().filter(isLightFlare).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         if(flareGroups.isEmpty())
             throw new BlockRenderException(errMsg);
 
         //
 
-        Collection<OBJGroup> flareGroupsOBJGroups = flareGroups.values();
-        double maxZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.z).max().getAsDouble();
-        double minZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.z).min().getAsDouble();
-        double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max.x).max().getAsDouble();
-        double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min.x).min().getAsDouble();
+        Collection<ModelGroup> flareGroupsOBJGroups = flareGroups.values();
+        double maxZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max().z).max().orElseThrow();
+        double minZ = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min().z).min().orElseThrow();
+        double maxX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.max().x).max().orElseThrow();
+        double minX = flareGroupsOBJGroups.stream().mapToDouble(g -> g.min().x).min().orElseThrow();
 
 
         double lampScale = Math.max((maxZ - minZ) * modelScaling[2], (maxX - minX) * modelScaling[0]) * 0.65d;
