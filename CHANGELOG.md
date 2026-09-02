@@ -1,3 +1,8 @@
+### Release 1.5.1
+
+* Bugfix: Removed code that is meant for the next UMC release 
+* Bugfix: Crash after rendering item or block. (NullPointerException / ClassNotFoundException)
+
 ### Release 1.5.0
 
 * Supporting UMC 1.3.x
